@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+/* Dexee design tokens (Manual de marca v1.0) */
+:root {
+  --navy: #011842;
+  --green: #02aa86;
+  --deep-green: #007a61;
+  --graphite: #333333;
+  --slate: #6b7280;
+  --mist: #eef2f6;
+  --mint: #ddf3ec;
+  --white: #ffffff;
+
+  --background: var(--white);
+  --foreground: var(--graphite);
+  --card: var(--white);
+  --card-foreground: var(--graphite);
+  --popover: var(--white);
+  --popover-foreground: var(--graphite);
+  --primary: var(--navy);
+  --primary-foreground: var(--white);
+  --accent: var(--green);
+  --accent-foreground: var(--navy);
+  --highlight: #f5a524;
+  --secondary: var(--mist);
+  --secondary-foreground: var(--navy);
+  --muted: var(--mist);
+  --muted-foreground: var(--slate);
+  --link: var(--deep-green);
+  --border: #d5dbe3;
+  --input: #d5dbe3;
+  --ring: var(--green);
+  --destructive: #b42318;
+  --destructive-foreground: var(--white);
+  --success: #007a61;
+  --success-soft: var(--mint);
+  --warning: #b54708;
+  --warning-soft: #fef0c7;
+  --danger: #b42318;
+  --danger-soft: #fee4e2;
+  --info: #175cd3;
+  --info-soft: #d1e9ff;
+
+  --radius: 12px;
+  --radius-chip: 999px;
+  --sidebar-width: 260px;
+  --topbar-height: 64px;
+  --marketing-max: 1200px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-highlight: var(--highlight);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-link: var(--link);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-navy: var(--navy);
+  --color-green: var(--green);
+  --color-deep-green: var(--deep-green);
+  --color-mist: var(--mist);
+  --color-mint: var(--mint);
+  --color-slate: var(--slate);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-montserrat), var(--font-inter), ui-sans-serif, sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-chip: 999px;
+
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-2xl: 24px;
+  --text-3xl: 32px;
+  --text-4xl: 40px;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    color: var(--navy);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    font-weight: 700;
+  }
+  a {
+    text-underline-offset: 3px;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--mint);
+    color: var(--navy);
+  }
+  [hidden] {
+    display: none !important;
+  }
+}
+
+@layer utilities {
+  .container-marketing {
+    width: 100%;
+    max-width: var(--marketing-max);
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-marketing {
+      padding-inline: 1.5rem;
+    }
+  }
+  .chevron-cut {
+    position: relative;
+    overflow: hidden;
+  }
+  .chevron-cut::after {
+    content: "";
+    position: absolute;
+    right: -6%;
+    top: 50%;
+    width: 42%;
+    aspect-ratio: 203 / 294;
+    transform: translateY(-50%);
+    background: url("/brand/dexee-isotype-white.svg") no-repeat center / contain;
+    opacity: 0.12;
+    pointer-events: none;
+  }
+  .prose-dexee h2 {
+    font-size: 24px;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-dexee h3 {
+    font-size: 18px;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose-dexee p, .prose-dexee li {
+    color: var(--graphite);
+    margin-bottom: 0.75rem;
+  }
+  .prose-dexee ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-dexee a {
+    color: var(--link);
+    text-decoration: underline;
+  }
+}
