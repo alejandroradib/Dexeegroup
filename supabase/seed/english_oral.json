@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "prompts": [
+    {
+      "id": "or-01",
+      "category": "introduce",
+      "prompt": "Introduce yourself to a hiring manager at a US company. Describe your current role, the industry you work in, and the two or three skills you rely on most. Explain what kind of position you are looking for and why you are interested in working with an international team.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    },
+    {
+      "id": "or-02",
+      "category": "introduce",
+      "prompt": "Walk us through your professional background in chronological order. Start with your education, then mention each role you have held, how long you stayed, and the main responsibility in each one. Close by pointing out the achievement you consider most relevant for a remote position.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    },
+    {
+      "id": "or-03",
+      "category": "introduce",
+      "prompt": "Imagine it is your first day working remotely with a team based in the United States. Introduce yourself during the welcome call. Mention your name, your role, the tools you already know, your working hours in Colombia, and one thing your new colleagues should know about how you like to collaborate.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    },
+    {
+      "id": "or-04",
+      "category": "situation",
+      "prompt": "Describe a time when a deadline at work was at risk because of a problem outside your control. Explain what the problem was, who you informed, what options you considered, and what you finally did. Finish by saying what the outcome was and what you would do differently today.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    },
+    {
+      "id": "or-05",
+      "category": "situation",
+      "prompt": "Tell us about a disagreement you had with a colleague or manager about how to handle a task. Describe both points of view, how you communicated your position, and how the two of you reached a decision. Explain what the experience taught you about working with others.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    },
+    {
+      "id": "or-06",
+      "category": "situation",
+      "prompt": "Think of a moment when you discovered an error in your own work after it had already been delivered, such as a wrong figure, a bug, or an incorrect order. Explain how you found it, how you reported it, and the steps you took to correct it and prevent it from happening again.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    },
+    {
+      "id": "or-07",
+      "category": "process",
+      "prompt": "A new team member has just joined your department and has no experience with your tools or procedures. Choose one routine process from your field and explain it step by step, in the order you would perform it. Mention the common mistakes a beginner should avoid.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    },
+    {
+      "id": "or-08",
+      "category": "process",
+      "prompt": "Explain to a newcomer how a request moves through your area from the moment it arrives until it is closed. For example, a customer ticket, a purchase order, a code change, a sales lead, or an expense report. Describe who is involved at each stage and how progress is tracked.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    },
+    {
+      "id": "or-09",
+      "category": "process",
+      "prompt": "Describe how quality is checked in your line of work before something is sent to a client or released to production. Explain the checklist or review steps you follow, who approves the final result, and what happens when a review finds a problem. Speak as if training a new hire.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    },
+    {
+      "id": "or-10",
+      "category": "complaint",
+      "prompt": "A client sends the following message: \"This is the second time this month that my request has been delayed and nobody told me. I need to know what is going on.\" Respond as if speaking to the client on a call. Acknowledge the issue, explain your next steps, and set clear expectations.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    },
+    {
+      "id": "or-11",
+      "category": "complaint",
+      "prompt": "You receive this message from a client: \"I was charged an amount that does not match what we agreed. I want this fixed today or I will cancel the service.\" Reply verbally as the account owner. Stay calm, explain how you will investigate, and describe what the client can expect and when.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    },
+    {
+      "id": "or-12",
+      "category": "complaint",
+      "prompt": "A client writes: \"The person I spoke with yesterday gave me different information from what you are telling me now. Which one is correct?\" Respond to the client out loud. Take responsibility for the confusion, clarify the correct information, and explain how you will make sure it does not happen again.",
+      "prep_seconds": 20,
+      "min_seconds": 60,
+      "max_seconds": 90
+    }
+  ]
+}

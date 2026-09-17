@@ -110,7 +110,13 @@
       "product": "Producto",
       "company": "Empresa"
     },
-    "consentNotice": "Los resultados de las evaluaciones son resultados de tamizaje de Dexee, no certificaciones ni evaluaciones clínicas."
+    "consentNotice": "Los resultados de las evaluaciones son resultados de tamizaje de Dexee, no certificaciones ni evaluaciones clínicas.",
+    "cookies": {
+      "title": "Cookies",
+      "body": "Este sitio usa cookies de analítica para entender cómo lo usan los visitantes.",
+      "link": "Política de privacidad",
+      "accept": "Aceptar"
+    }
   },
   "nav": {
     "marketing": {
@@ -1403,6 +1409,165 @@
       "invalidJson": "La configuración no es un JSON válido.",
       "consent": "Versión del texto de consentimiento",
       "consentBody": "Versión actual {version}. Cambie la constante CONSENT_VERSION en src/lib/legal.ts junto con el texto de la política de privacidad."
+    }
+  },
+  "assessments": {
+    "intro": {
+      "start": "Comenzar evaluación",
+      "starting": "Preparando tu intento",
+      "cooldown": "Podrás presentar esta evaluación de nuevo el {date}.",
+      "rules": "Antes de comenzar",
+      "back": "Todas las evaluaciones",
+      "english_written": {
+        "title": "Evaluación de inglés escrito",
+        "body": "40 preguntas de opción múltiple sobre gramática, vocabulario y lectura, más una tarea corta de escritura. Tienes 45 minutos desde que empiezas. Tus respuestas se guardan automáticamente.",
+        "rule1": "Busca un lugar tranquilo y 45 minutos sin interrupciones.",
+        "rule2": "No uses traductores ni ayuda externa. La tarea de escritura se califica según tu propio inglés.",
+        "rule3": "El cronómetro sigue corriendo si sales de la página. Los envíos después del límite excluyen la tarea de escritura.",
+        "rule4": "Tu resultado es un nivel CEFR de A1 a C2 y aparece en tu perfil como insignia de tamizaje Dexee."
+      },
+      "english_oral": {
+        "title": "Evaluación de inglés oral",
+        "body": "Cuatro consignas. En cada una lees la consigna, preparas durante 20 segundos y grabas una respuesta de 60 a 90 segundos. Puedes regrabar cada respuesta una vez. Un revisor de Dexee valida el nivel.",
+        "rule1": "Usa audífonos o un lugar silencioso y permite el acceso al micrófono cuando el navegador lo pida.",
+        "rule2": "Habla con naturalidad. La grabación se detiene automáticamente a los 90 segundos.",
+        "rule3": "Tienes 30 minutos para completar las cuatro respuestas.",
+        "rule4": "Los niveles validados aparecen en tu perfil como verificados por Dexee."
+      },
+      "psychometric": {
+        "title": "Perfil de estilo de trabajo",
+        "body": "Cincuenta afirmaciones sobre cómo te comportas habitualmente y diez situaciones cortas de trabajo remoto. No hay límite de tiempo ni personalidades correctas o incorrectas. Responde con honestidad.",
+        "rule1": "Califica cada afirmación de muy inexacta a muy exacta según te describa.",
+        "rule2": "Elige la respuesta que darías con mayor probabilidad en cada situación.",
+        "rule3": "Recibes un informe completo. Las empresas ven descriptores por rango solo si activas el uso compartido.",
+        "rule4": "Este es un tamizaje de Dexee, no una evaluación clínica ni certificada."
+      }
+    },
+    "runner": {
+      "timeLeft": "Tiempo restante",
+      "expired": "Se acabó el tiempo. Envía tus respuestas ahora; la tarea de escritura quedará excluida.",
+      "question": "Pregunta {current} de {total}",
+      "passage": "Texto de lectura",
+      "writingTask": "Tarea de escritura",
+      "wordCount": "{count} palabras",
+      "wordTarget": "Escribe entre {min} y {max} palabras.",
+      "saved": "Guardado",
+      "saving": "Guardando",
+      "unanswered": "{count, plural, =0 {Todas las preguntas respondidas} =1 {1 pregunta sin responder} other {# preguntas sin responder}}",
+      "submit": "Enviar evaluación",
+      "submitConfirm": "¿Enviar ahora? No podrás cambiar tus respuestas después.",
+      "submitting": "Calificando tus respuestas",
+      "submitted": "Evaluación enviada.",
+      "attemptClosed": "Este intento ya no está abierto.",
+      "likertScale": "¿Qué tan exactamente te describe esto?",
+      "sjtIntro": "Elige la respuesta que darías con mayor probabilidad.",
+      "section": {
+        "grammar": "Gramática",
+        "vocabulary": "Vocabulario",
+        "reading": "Lectura",
+        "writing": "Escritura",
+        "likert": "Sobre ti",
+        "situational": "Situaciones de trabajo remoto"
+      },
+      "next": "Siguiente",
+      "previous": "Anterior",
+      "tabLeaveNotice": "Salir de la página queda registrado en el intento."
+    },
+    "oral": {
+      "micCheck": "Prueba de micrófono",
+      "micCheckBody": "Permite el acceso al micrófono y di una frase corta. Cuando veas moverse el nivel, estás listo.",
+      "micAllow": "Permitir micrófono",
+      "micReady": "Micrófono listo",
+      "micDenied": "Se denegó el acceso al micrófono. Permítelo en la configuración del navegador y recarga.",
+      "unsupported": "Tu navegador no admite grabación de audio. Usa una versión reciente de Chrome, Firefox o Safari.",
+      "prompt": "Consigna {current} de {total}",
+      "prepare": "Prepara tu respuesta",
+      "prepareLeft": "La grabación empieza en {seconds} s",
+      "recording": "Grabando",
+      "recordingLeft": "Quedan {seconds} s",
+      "minReached": "Puedes detenerte después de 60 segundos",
+      "stop": "Detener grabación",
+      "startNow": "Empezar a grabar ahora",
+      "uploading": "Subiendo tu respuesta",
+      "uploaded": "Respuesta guardada",
+      "reRecord": "Grabar de nuevo (una vez)",
+      "reRecordUsed": "Ya usaste tu regrabación para esta consigna.",
+      "listen": "Escuchar",
+      "tooShort": "La grabación dura menos de 60 segundos. Graba de nuevo.",
+      "tooLarge": "La grabación supera 3 MB. Graba una respuesta más corta.",
+      "uploadFailed": "La carga falló. Revisa tu conexión e inténtalo de nuevo.",
+      "nextPrompt": "Siguiente consigna",
+      "finish": "Enviar a revisión",
+      "processingTitle": "Gracias. Tus respuestas se están procesando.",
+      "processingBody": "La transcripción y la calificación toman unos minutos. Luego un revisor de Dexee valida el nivel y recibes una notificación."
+    },
+    "result": {
+      "title": "Resultado",
+      "back": "Todas las evaluaciones",
+      "download": "Descargar PDF",
+      "level": "Tu nivel",
+      "levelPending": "Pendiente de validación por Dexee",
+      "mcq": "Opción múltiple",
+      "correctOf": "{correct} de {total} correctas",
+      "bands": {
+        "band1": "Base (A2 a B1)",
+        "band2": "Intermedio (B2)",
+        "band3": "Avanzado (C1 a C2)"
+      },
+      "writing": "Tarea de escritura",
+      "writingExcluded": "La tarea de escritura quedó excluida porque el intento se envió después del límite de tiempo.",
+      "criteria": {
+        "task_achievement": "Cumplimiento de la tarea",
+        "coherence": "Coherencia",
+        "lexical_range": "Vocabulario",
+        "grammatical_accuracy": "Gramática",
+        "fluency": "Fluidez"
+      },
+      "feedback": "Retroalimentación",
+      "validationNote": "Un revisor de Dexee verifica este resultado porque los niveles de opción múltiple y escritura difieren o el texto fue marcado. Te notificaremos.",
+      "oralPending": "Tus grabaciones se calificaron automáticamente. Un revisor de Dexee confirma el nivel antes de que aparezca como verificado.",
+      "reviewerComment": "Comentario del revisor",
+      "answers": "Tus respuestas",
+      "workstyle": {
+        "title": "Tu perfil de estilo de trabajo",
+        "factors": "Preferencias de trabajo",
+        "preferences": "Preferencias",
+        "environments": "Entornos donde sueles rendir bien",
+        "sjt": "Criterio en trabajo remoto",
+        "sjtScore": "{score} de {total} situaciones",
+        "strengths": "Fortalezas",
+        "visibility": "Compartir el resumen por rangos con las empresas",
+        "visibilityHint": "Las empresas nunca ven puntajes numéricos; solo los descriptores por rango."
+      },
+      "failed": "No pudimos procesar este intento. Dexee fue notificado y te contactará.",
+      "integrityNote": "Intento enviado el {date}."
+    },
+    "admin": {
+      "title": "Validar intento",
+      "candidate": "Candidato",
+      "aiLevel": "Nivel IA",
+      "finalLevel": "Nivel final",
+      "pronunciation": "Pronunciación (0-5)",
+      "intelligibility": "Inteligibilidad (0-5)",
+      "comment": "Comentario para el registro",
+      "validate": "Validar",
+      "validated": "Intento validado.",
+      "reject": "Rechazar (audio defectuoso)",
+      "rejectBody": "El intento se marca como fallido y se exime el periodo de espera para que el candidato lo repita.",
+      "rejected": "Intento rechazado.",
+      "retry": "Reintentar procesamiento",
+      "retried": "Procesamiento iniciado.",
+      "transcript": "Transcripción",
+      "noTranscript": "Aún no hay transcripción.",
+      "audio": "Grabación",
+      "answers": "Respuestas",
+      "wpm": "{wpm} palabras por minuto",
+      "integrity": "Integridad",
+      "tabLeaves": "{count, plural, =0 {Sin cambios de pestaña} =1 {1 cambio de pestaña} other {# cambios de pestaña}}",
+      "afterExpiry": "Enviado después del límite de tiempo",
+      "writingResponse": "Texto del candidato",
+      "mcqSummary": "Opción múltiple: {correct} de {total} ({level})",
+      "reasons": "Enviado a validación por: {reasons}"
     }
   }
 }

@@ -8,7 +8,7 @@ import type { PGlite } from "@electric-sql/pglite";
 let db: PGlite;
 
 beforeAll(async () => {
-  db = await createTestDatabase({ seed: true });
+  db = await createTestDatabase({ seed: true, banks: true });
 }, 120_000);
 
 afterAll(async () => {

@@ -110,7 +110,13 @@
       "product": "Product",
       "company": "Company"
     },
-    "consentNotice": "Assessment results are Dexee screening results, not certifications or clinical assessments."
+    "consentNotice": "Assessment results are Dexee screening results, not certifications or clinical assessments.",
+    "cookies": {
+      "title": "Cookies",
+      "body": "This site uses analytics cookies to understand how visitors use it.",
+      "link": "Privacy policy",
+      "accept": "Accept"
+    }
   },
   "nav": {
     "marketing": {
@@ -1403,6 +1409,165 @@
       "invalidJson": "The configuration is not valid JSON.",
       "consent": "Consent text version",
       "consentBody": "Current version {version}. Change the constant CONSENT_VERSION in src/lib/legal.ts together with the privacy policy text."
+    }
+  },
+  "assessments": {
+    "intro": {
+      "start": "Start assessment",
+      "starting": "Preparing your attempt",
+      "cooldown": "You can take this assessment again on {date}.",
+      "rules": "Before you start",
+      "back": "All assessments",
+      "english_written": {
+        "title": "English written assessment",
+        "body": "40 multiple-choice questions on grammar, vocabulary and reading, plus one short writing task. You have 45 minutes from the moment you start. Your answers save automatically.",
+        "rule1": "Find a quiet place and 45 uninterrupted minutes.",
+        "rule2": "Do not use translators or outside help. The writing task is graded for your own English.",
+        "rule3": "The timer keeps running if you leave the page. Submissions after the time limit exclude the writing task.",
+        "rule4": "Your result is a CEFR level from A1 to C2 and appears on your profile as a Dexee screening badge."
+      },
+      "english_oral": {
+        "title": "English oral assessment",
+        "body": "Four prompts. For each one you read the prompt, prepare for 20 seconds and record an answer of 60 to 90 seconds. You can re-record each answer once. A Dexee reviewer validates the level.",
+        "rule1": "Use a headset or a quiet room and allow microphone access when the browser asks.",
+        "rule2": "Speak naturally. The recording stops automatically at 90 seconds.",
+        "rule3": "You have 30 minutes to complete the four answers.",
+        "rule4": "Validated levels appear on your profile as verified by Dexee."
+      },
+      "psychometric": {
+        "title": "Work-style profile",
+        "body": "Fifty statements about how you usually behave and ten short remote-work situations. There is no time limit and no right or wrong personality. Answer honestly.",
+        "rule1": "Rate each statement from very inaccurate to very accurate as it describes you.",
+        "rule2": "Choose the response you would most likely give in each situation.",
+        "rule3": "You receive a full report. Companies see band descriptors only if you enable sharing.",
+        "rule4": "This is a Dexee screening, not a clinical or certified assessment."
+      }
+    },
+    "runner": {
+      "timeLeft": "Time left",
+      "expired": "Time is up. Submit your answers now; the writing task will be excluded.",
+      "question": "Question {current} of {total}",
+      "passage": "Reading passage",
+      "writingTask": "Writing task",
+      "wordCount": "{count} words",
+      "wordTarget": "Aim for {min} to {max} words.",
+      "saved": "Saved",
+      "saving": "Saving",
+      "unanswered": "{count, plural, =0 {All questions answered} =1 {1 question unanswered} other {# questions unanswered}}",
+      "submit": "Submit assessment",
+      "submitConfirm": "Submit now? You cannot change your answers afterwards.",
+      "submitting": "Scoring your answers",
+      "submitted": "Assessment submitted.",
+      "attemptClosed": "This attempt is no longer open.",
+      "likertScale": "How accurately does this describe you?",
+      "sjtIntro": "Choose the response you would most likely give.",
+      "section": {
+        "grammar": "Grammar",
+        "vocabulary": "Vocabulary",
+        "reading": "Reading",
+        "writing": "Writing",
+        "likert": "About you",
+        "situational": "Remote-work situations"
+      },
+      "next": "Next",
+      "previous": "Previous",
+      "tabLeaveNotice": "Leaving the page is recorded in the attempt."
+    },
+    "oral": {
+      "micCheck": "Microphone check",
+      "micCheckBody": "Allow microphone access and say a short sentence. When you see the level move, you are ready.",
+      "micAllow": "Allow microphone",
+      "micReady": "Microphone ready",
+      "micDenied": "Microphone access was denied. Allow it in your browser settings and reload.",
+      "unsupported": "Your browser does not support audio recording. Use a recent version of Chrome, Firefox or Safari.",
+      "prompt": "Prompt {current} of {total}",
+      "prepare": "Prepare your answer",
+      "prepareLeft": "Recording starts in {seconds} s",
+      "recording": "Recording",
+      "recordingLeft": "{seconds} s left",
+      "minReached": "You can stop after 60 seconds",
+      "stop": "Stop recording",
+      "startNow": "Start recording now",
+      "uploading": "Uploading your answer",
+      "uploaded": "Answer saved",
+      "reRecord": "Record again (once)",
+      "reRecordUsed": "You used your re-recording for this prompt.",
+      "listen": "Listen",
+      "tooShort": "The recording is shorter than 60 seconds. Record again.",
+      "tooLarge": "The recording exceeds 3 MB. Record a shorter answer.",
+      "uploadFailed": "Upload failed. Check your connection and try again.",
+      "nextPrompt": "Next prompt",
+      "finish": "Submit for review",
+      "processingTitle": "Thank you. Your answers are being processed.",
+      "processingBody": "Transcription and grading take a few minutes. A Dexee reviewer then validates the level and you receive a notification."
+    },
+    "result": {
+      "title": "Result",
+      "back": "All assessments",
+      "download": "Download PDF",
+      "level": "Your level",
+      "levelPending": "Pending Dexee validation",
+      "mcq": "Multiple choice",
+      "correctOf": "{correct} of {total} correct",
+      "bands": {
+        "band1": "Foundation (A2 to B1)",
+        "band2": "Intermediate (B2)",
+        "band3": "Advanced (C1 to C2)"
+      },
+      "writing": "Writing task",
+      "writingExcluded": "The writing task was excluded because the attempt was submitted after the time limit.",
+      "criteria": {
+        "task_achievement": "Task achievement",
+        "coherence": "Coherence",
+        "lexical_range": "Vocabulary",
+        "grammatical_accuracy": "Grammar",
+        "fluency": "Fluency"
+      },
+      "feedback": "Feedback",
+      "validationNote": "A Dexee reviewer checks this result because the multiple-choice and writing levels differ or the text was flagged. You will be notified.",
+      "oralPending": "Your recordings were graded automatically. A Dexee reviewer confirms the level before it appears as verified.",
+      "reviewerComment": "Reviewer comment",
+      "answers": "Your answers",
+      "workstyle": {
+        "title": "Your work-style profile",
+        "factors": "Working preferences",
+        "preferences": "Preferences",
+        "environments": "Environments where you tend to perform well",
+        "sjt": "Remote-work judgment",
+        "sjtScore": "{score} of {total} situations",
+        "strengths": "Strengths",
+        "visibility": "Share the band summary with companies",
+        "visibilityHint": "Companies never see numeric scores; only the band descriptors."
+      },
+      "failed": "We could not process this attempt. Dexee has been notified and will contact you.",
+      "integrityNote": "Attempt submitted {date}."
+    },
+    "admin": {
+      "title": "Validate attempt",
+      "candidate": "Candidate",
+      "aiLevel": "AI level",
+      "finalLevel": "Final level",
+      "pronunciation": "Pronunciation (0-5)",
+      "intelligibility": "Intelligibility (0-5)",
+      "comment": "Comment for the record",
+      "validate": "Validate",
+      "validated": "Attempt validated.",
+      "reject": "Reject (bad audio)",
+      "rejectBody": "The attempt is marked failed and the cooldown is waived so the candidate can retake it.",
+      "rejected": "Attempt rejected.",
+      "retry": "Retry processing",
+      "retried": "Processing started.",
+      "transcript": "Transcript",
+      "noTranscript": "No transcript yet.",
+      "audio": "Recording",
+      "answers": "Answers",
+      "wpm": "{wpm} words per minute",
+      "integrity": "Integrity",
+      "tabLeaves": "{count, plural, =0 {No tab changes} =1 {1 tab change} other {# tab changes}}",
+      "afterExpiry": "Submitted after the time limit",
+      "writingResponse": "Candidate text",
+      "mcqSummary": "Multiple choice: {correct} of {total} ({level})",
+      "reasons": "Sent to validation because: {reasons}"
     }
   }
 }

@@ -1,6 +1,8 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
+import { Analytics } from "@/components/shared/analytics";
+import { CookieNotice } from "@/components/shared/cookie-notice";
 import { ToastProvider } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { routing } from "@/i18n/routing";
@@ -48,9 +50,13 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>
           <TooltipProvider delayDuration={200}>
-            <ToastProvider closeLabel={t("close")}>{children}</ToastProvider>
+            <ToastProvider closeLabel={t("close")}>
+              {children}
+              <CookieNotice enabled={publicEnv().NEXT_PUBLIC_ANALYTICS_PROVIDER === "ga4"} />
+            </ToastProvider>
           </TooltipProvider>
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );

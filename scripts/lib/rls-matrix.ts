@@ -137,6 +137,12 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
   await check("candidate sees active assessments only", async () => (await count(laura, "select * from public.assessments")) === 0);
   await check("candidate gets no rows from assessment_questions table", async () =>
     (await count(laura, "select answer_key from public.assessment_questions")) === 0);
+  await check("candidate reads active questions through the public view without answer keys", async () =>
+    asUser(db, laura, async (tx) => {
+      const res = await tx.query<{ n: number }>("select count(*)::int as n from public.assessment_questions_public");
+      const cols = await tx.query<{ column_name: string }>("select column_name from information_schema.columns where table_schema = 'public' and table_name = 'assessment_questions_public'");
+      return Number(res.rows[0]?.n) > 100 && !cols.rows.some((c) => c.column_name === "answer_key");
+    }, { commit: false }));
 
   // Assessment attempts: single open attempt and cooldown
   await asUser(db, { id: null, role: "service_role" }, async (tx) => {

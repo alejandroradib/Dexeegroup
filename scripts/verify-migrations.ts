@@ -8,7 +8,7 @@ import { runAccessMatrix } from "./lib/rls-matrix";
 
 async function main() {
   const started = Date.now();
-  const db = await createTestDatabase({ seed: true });
+  const db = await createTestDatabase({ seed: true, banks: true });
   console.log(`Migrations and seed applied in ${Date.now() - started} ms`);
 
   const tables = await db.query<{ relname: string; relrowsecurity: boolean }>(

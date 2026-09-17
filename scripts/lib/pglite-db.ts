@@ -8,6 +8,8 @@ import path from "node:path";
 
 import { PGlite } from "@electric-sql/pglite";
 
+import { loadBanks } from "./banks";
+
 export const MIGRATIONS_DIR = path.resolve(process.cwd(), "supabase/migrations");
 export const SEED_FILE = path.resolve(process.cwd(), "supabase/seed.sql");
 
@@ -107,7 +109,7 @@ export function listMigrations(): { name: string; sql: string }[] {
     .map((name) => ({ name, sql: readFileSync(path.join(MIGRATIONS_DIR, name), "utf8") }));
 }
 
-export async function createTestDatabase(options: { seed?: boolean } = {}) {
+export async function createTestDatabase(options: { seed?: boolean; banks?: boolean } = {}) {
   const db = new PGlite();
   await db.exec(SUPABASE_STUBS);
   for (const migration of listMigrations()) {
@@ -120,7 +122,30 @@ export async function createTestDatabase(options: { seed?: boolean } = {}) {
   if (options.seed) {
     await db.exec(readFileSync(SEED_FILE, "utf8"));
   }
+  if (options.banks) {
+    await loadBanksInto(db);
+  }
   return db;
+}
+
+/** Inserts the JSON question banks the same way scripts/seed.ts does against a real project. */
+export async function loadBanksInto(db: PGlite): Promise<number> {
+  const banks = loadBanks(path.resolve(process.cwd(), "supabase/seed"));
+  const { rows } = await db.query<{ id: string; type: string }>("select id, type from public.assessments");
+  let count = 0;
+  for (const type of ["english_written", "english_oral", "psychometric"] as const) {
+    const assessment = rows.find((r) => r.type === type);
+    if (!assessment) continue;
+    for (const q of banks[type]) {
+      await db.query(
+        `insert into public.assessment_questions (assessment_id, section, band, sort_order, prompt, question_type, options, answer_key, factor, is_active)
+         values ($1, $2, $3, $4, $5, $6, $7::jsonb, $8::jsonb, $9, true)`,
+        [assessment.id, q.section, q.band, q.sort_order, q.prompt, q.question_type, JSON.stringify({ ...q.options, bank_id: q.bank_id }), q.answer_key ? JSON.stringify(q.answer_key) : null, q.factor],
+      );
+      count += 1;
+    }
+  }
+  return count;
 }
 
 /** Runs `fn` as the given Supabase role and user inside one transaction, then rolls back or commits. */
