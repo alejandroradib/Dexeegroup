@@ -11,7 +11,11 @@ import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
 import { getSessionUser } from "@/lib/auth/session";
 import { completenessChecklist } from "@/lib/profile/completeness";
-import { getCurrentCandidateProfile, listCandidateApplications, listRecommendedJobs } from "@/server/services/candidates";
+import {
+  getCurrentCandidateProfile,
+  listCandidateApplications,
+  listRecommendedJobs,
+} from "@/server/services/candidates";
 
 export default async function CandidateDashboardPage({ params }: PageProps<"/[locale]/candidate">) {
   await pageLocale(params);
@@ -44,45 +48,69 @@ export default async function CandidateDashboardPage({ params }: PageProps<"/[lo
     <>
       <PageHeader title={t("welcome", { name: profile.candidate.first_name })} />
       <div className="grid gap-4 lg:grid-cols-3">
-        <section className="rounded-[12px] border border-border bg-white p-5 lg:col-span-2">
+        <section className="border-border rounded-[12px] border bg-white p-5 lg:col-span-2">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-base">{t("completeness")}</h2>
-            <span className="font-heading text-2xl font-bold text-navy">{completeness}%</span>
+            <span className="font-heading text-navy text-2xl font-bold">{completeness}%</span>
           </div>
           <Progress value={completeness} className="mt-3" />
-          {missing.length > 0 ? <p className="mt-3 text-sm text-muted-foreground">{t("missing", { items: missing.join(", ") })}</p> : null}
-          {completeness < 100 ? <Button asChild variant="outline" size="sm" className="mt-4"><Link href="/candidate/onboarding">{t("completeProfile")}</Link></Button> : null}
+          {missing.length > 0 ? (
+            <p className="text-muted-foreground mt-3 text-sm">
+              {t("missing", { items: missing.join(", ") })}
+            </p>
+          ) : null}
+          {completeness < 100 ? (
+            <Button asChild variant="outline" size="sm" className="mt-4">
+              <Link href="/candidate/onboarding">{t("completeProfile")}</Link>
+            </Button>
+          ) : null}
         </section>
-        <section className="rounded-[12px] bg-navy p-5 text-white">
-          <ClipboardCheckIcon className="size-6 text-green" aria-hidden />
+        <section className="bg-navy rounded-[12px] p-5 text-white">
+          <ClipboardCheckIcon className="text-green size-6" aria-hidden />
           <h2 className="mt-3 text-base text-white">{t("assessments")}</h2>
           <p className="mt-1 text-sm text-white/80">{t("assessmentsPrompt")}</p>
-          <Button asChild variant="accent" size="sm" className="mt-4"><Link href="/candidate/assessments">{t("goToAssessments")}</Link></Button>
+          <Button asChild variant="accent" size="sm" className="mt-4">
+            <Link href="/candidate/assessments">{t("goToAssessments")}</Link>
+          </Button>
         </section>
       </div>
       <section className="mt-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg">{t("recommended")}</h2>
-          <Link href="/candidate/jobs" className="text-sm text-link hover:underline">{t("browseAll")}</Link>
+          <Link href="/candidate/jobs" className="text-link text-sm hover:underline">
+            {t("browseAll")}
+          </Link>
         </div>
-        {recommended.length === 0 ? <p className="rounded-[12px] border border-dashed border-border bg-white p-6 text-sm text-muted-foreground">{t("recommendedEmpty")}</p> : (
+        {recommended.length === 0 ? (
+          <p className="border-border text-muted-foreground rounded-[12px] border border-dashed bg-white p-6 text-sm">
+            {t("recommendedEmpty")}
+          </p>
+        ) : (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {recommended.map((job) => <JobCard key={job.id} job={job} hrefBase="/candidate/jobs" />)}
+            {recommended.map((job) => (
+              <JobCard key={job.id} job={job} hrefBase="/candidate/jobs" />
+            ))}
           </div>
         )}
       </section>
       <section className="mt-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg">{t("applications")}</h2>
-          <Link href="/candidate/applications" className="text-sm text-link hover:underline">{t("viewApplications")}</Link>
+          <Link href="/candidate/applications" className="text-link text-sm hover:underline">
+            {t("viewApplications")}
+          </Link>
         </div>
-        {applications.length === 0 ? <p className="rounded-[12px] border border-dashed border-border bg-white p-6 text-sm text-muted-foreground">{t("applicationsEmpty")}</p> : (
-          <ul className="divide-y divide-border rounded-[12px] border border-border bg-white">
+        {applications.length === 0 ? (
+          <p className="border-border text-muted-foreground rounded-[12px] border border-dashed bg-white p-6 text-sm">
+            {t("applicationsEmpty")}
+          </p>
+        ) : (
+          <ul className="divide-border border-border divide-y rounded-[12px] border bg-white">
             {applications.slice(0, 5).map((a) => (
               <li key={a.id} className="flex items-center justify-between gap-3 px-4 py-3 text-sm">
                 <div>
-                  <p className="font-medium text-navy">{a.job?.title ?? "—"}</p>
-                  <p className="text-xs text-muted-foreground">{a.job?.company_name}</p>
+                  <p className="text-navy font-medium">{a.job?.title ?? "—"}</p>
+                  <p className="text-muted-foreground text-xs">{a.job?.company_name}</p>
                 </div>
                 <StatusChip kind="application" status={a.status} />
               </li>

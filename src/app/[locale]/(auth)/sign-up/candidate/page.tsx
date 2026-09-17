@@ -7,13 +7,18 @@ import { pageLocale } from "@/i18n/server";
 
 import type { Metadata } from "next";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/sign-up/candidate">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/sign-up/candidate">): Promise<Metadata> {
   const locale = await pageLocale(params);
   const t = await getTranslations({ locale, namespace: "auth.meta" });
   return { title: t("signUpCandidate"), robots: { index: false } };
 }
 
-export default async function SignUpCandidatePage({ params, searchParams }: PageProps<"/[locale]/sign-up/candidate">) {
+export default async function SignUpCandidatePage({
+  params,
+  searchParams,
+}: PageProps<"/[locale]/sign-up/candidate">) {
   await pageLocale(params);
   const query = await searchParams;
   const t = await getTranslations("auth.signUpCandidate");
@@ -21,7 +26,14 @@ export default async function SignUpCandidatePage({ params, searchParams }: Page
     <AuthCard
       title={t("title")}
       subtitle={t("subtitle")}
-      footer={<p>{t("companyInstead")} <Link href="/sign-up/company" className="font-semibold text-link hover:underline">{t("companyLink")}</Link></p>}
+      footer={
+        <p>
+          {t("companyInstead")}{" "}
+          <Link href="/sign-up/company" className="text-link font-semibold hover:underline">
+            {t("companyLink")}
+          </Link>
+        </p>
+      }
     >
       <SignUpCandidateForm next={typeof query.next === "string" ? query.next : undefined} />
     </AuthCard>

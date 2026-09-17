@@ -7,7 +7,9 @@ import { getSessionUser } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentCompany } from "@/server/services/companies";
 
-export default async function CompanyOnboardingPage({ params }: PageProps<"/[locale]/company/onboarding">) {
+export default async function CompanyOnboardingPage({
+  params,
+}: PageProps<"/[locale]/company/onboarding">) {
   await pageLocale(params);
   const t = await getTranslations("company.onboarding");
   const [company, user] = await Promise.all([getCurrentCompany(), getSessionUser()]);

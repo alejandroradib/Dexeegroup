@@ -15,7 +15,12 @@ export type JobPostingJsonLd = {
   baseSalary?: {
     "@type": "MonetaryAmount";
     currency: "USD";
-    value: { "@type": "QuantitativeValue"; minValue?: number; maxValue?: number; unitText: "MONTH" };
+    value: {
+      "@type": "QuantitativeValue";
+      minValue?: number;
+      maxValue?: number;
+      unitText: "MONTH";
+    };
   };
   directApply: boolean;
   url: string;
@@ -31,20 +36,30 @@ function paragraphs(text: string | null | undefined): string {
     .split(/\n{2,}|\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean)
-    .map((line) => (line.startsWith("- ") ? `<li>${escapeHtml(line.slice(2))}</li>` : `<p>${escapeHtml(line)}</p>`))
+    .map((line) =>
+      line.startsWith("- ")
+        ? `<li>${escapeHtml(line.slice(2))}</li>`
+        : `<p>${escapeHtml(line)}</p>`,
+    )
     .join("")
     .replace(/(<li>.*?<\/li>)+/g, (m) => `<ul>${m}</ul>`);
 }
 
-export function employmentTypeFor(job: Pick<PublicJob, "employment_type" | "contract_type">): JobPostingJsonLd["employmentType"] {
+export function employmentTypeFor(
+  job: Pick<PublicJob, "employment_type" | "contract_type">,
+): JobPostingJsonLd["employmentType"] {
   const types: JobPostingJsonLd["employmentType"] = [];
   if (job.employment_type === "part_time") types.push("PART_TIME");
   else types.push("FULL_TIME");
-  if (job.contract_type === "independent_contractor" || job.contract_type === "project_based") types.push("CONTRACTOR");
+  if (job.contract_type === "independent_contractor" || job.contract_type === "project_based")
+    types.push("CONTRACTOR");
   return types;
 }
 
-export function buildJobPostingJsonLd(job: PublicJob, opts: { siteUrl: string; locale: string; publicLogoUrl?: string | null }): JobPostingJsonLd {
+export function buildJobPostingJsonLd(
+  job: PublicJob,
+  opts: { siteUrl: string; locale: string; publicLogoUrl?: string | null },
+): JobPostingJsonLd {
   const description = [
     paragraphs(job.description),
     job.responsibilities ? `<h3>Responsibilities</h3>${paragraphs(job.responsibilities)}` : "",
@@ -52,10 +67,15 @@ export function buildJobPostingJsonLd(job: PublicJob, opts: { siteUrl: string; l
   ].join("");
 
   const posted = job.published_at ?? new Date().toISOString();
-  const validThrough = job.closes_at ?? new Date(new Date(posted).getTime() + 60 * 24 * 3600 * 1000).toISOString();
+  const validThrough =
+    job.closes_at ?? new Date(new Date(posted).getTime() + 60 * 24 * 3600 * 1000).toISOString();
   const hiring: JobPostingJsonLd["hiringOrganization"] = job.confidential_company
     ? { "@type": "Organization", name: "Dexee" }
-    : { "@type": "Organization", name: job.company_name ?? "Dexee", ...(opts.publicLogoUrl ? { logo: opts.publicLogoUrl } : {}) };
+    : {
+        "@type": "Organization",
+        name: job.company_name ?? "Dexee",
+        ...(opts.publicLogoUrl ? { logo: opts.publicLogoUrl } : {}),
+      };
 
   const jsonLd: JobPostingJsonLd = {
     "@context": "https://schema.org",

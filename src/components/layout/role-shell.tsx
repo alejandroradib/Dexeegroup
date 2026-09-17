@@ -1,9 +1,19 @@
 import {
-  ActivityIcon, BookmarkIcon, BriefcaseIcon, BuildingIcon, ClipboardCheckIcon, FileTextIcon, HandshakeIcon,
-  LayoutDashboardIcon, SearchIcon, SettingsIcon, ShieldIcon, UserIcon, UsersIcon,
+  ActivityIcon,
+  BookmarkIcon,
+  BriefcaseIcon,
+  BuildingIcon,
+  ClipboardCheckIcon,
+  FileTextIcon,
+  HandshakeIcon,
+  LayoutDashboardIcon,
+  SearchIcon,
+  SettingsIcon,
+  ShieldIcon,
+  UserIcon,
+  UsersIcon,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-
 
 import { NotificationBell } from "@/components/domain/notifications/notification-bell";
 import { AppShell, type NavItem } from "@/components/layout/app-shell";
@@ -47,7 +57,15 @@ const NAV: Record<UserRole, NavSpec[]> = {
   ],
 };
 
-export async function RoleShell({ area, locale, children }: { area: UserRole; locale: Locale; children: ReactNode }) {
+export async function RoleShell({
+  area,
+  locale,
+  children,
+}: {
+  area: UserRole;
+  locale: Locale;
+  children: ReactNode;
+}) {
   const user = await requireRole(area, locale, `/${area}`);
   const t = await getTranslations("nav");
   const nav: NavItem[] = NAV[area].map((item) => ({

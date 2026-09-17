@@ -16,11 +16,11 @@ Out of scope for v1: billing and payments, contract generation and e-signature, 
 
 ## 2. Users and roles
 
-| Role | Who | Can |
-|---|---|---|
-| Company | US client user (owner or member of a company) | Manage company profile and team, create and manage vacancies, review applicants, move them through the pipeline, save candidates, request contact details |
-| Candidate | Colombian professional | Manage profile, browse and apply to vacancies, track applications, take assessments, control visibility of the work-style profile |
-| Admin | Dexee staff | Everything above plus verification, moderation, database views and exports, contact release, recommendations, assessment validation, placements, team management |
+| Role      | Who                                           | Can                                                                                                                                                              |
+| --------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Company   | US client user (owner or member of a company) | Manage company profile and team, create and manage vacancies, review applicants, move them through the pipeline, save candidates, request contact details        |
+| Candidate | Colombian professional                        | Manage profile, browse and apply to vacancies, track applications, take assessments, control visibility of the work-style profile                                |
+| Admin     | Dexee staff                                   | Everything above plus verification, moderation, database views and exports, contact release, recommendations, assessment validation, placements, team management |
 
 One user has exactly one role. A company can have several users (owner plus members). Admins cannot self-register.
 
@@ -169,29 +169,29 @@ Postgres, schema `public`. `id` columns are `uuid default gen_random_uuid()`. `c
 
 Every table has RLS enabled. Service role bypasses RLS and is used only server-side.
 
-| Table | Anonymous | Candidate | Company user | Admin |
-|---|---|---|---|---|
-| profiles | none | own row: select, update (full_name, locale) | own row: select, update | all |
-| companies | none | none | select and update companies in `user_company_ids()`; insert with self as owner | all |
-| company_members | none | none | select members of own companies; owner inserts and deletes | all |
-| jobs | none (use public_jobs) | none (use public_jobs) | select, insert, update, delete for own companies; cannot set status to `published` unless company verified (enforced by trigger) | all |
-| job_commercials | none | none | none | all |
-| candidates | none | own row: select, insert, update | select via `company_can_view_candidate` | all |
-| candidate_contacts | none | own row | select via `company_can_view_contact` | all |
-| candidate_experience, candidate_education | none | own rows | select via `company_can_view_candidate` | all |
-| applications | none | own rows: select, insert (only to published jobs, cooldown none), update only to `withdrawn` | select and update status on applications to own companies' jobs; cannot set `contact_released` | all |
-| application_events | none | own applications | own companies' applications | all |
-| notes | none | none | select and insert `company` visibility on own companies' applications | all |
-| saved_candidates | none | none | own companies | all |
-| placements | none | none | none | all |
-| assessments | none | select active | none | all |
-| assessment_questions | none | none (use view) | none | all |
-| assessment_attempts | none | own rows: select, insert (cooldown enforced by trigger), update only `visible_to_companies` | none | all |
-| assessment_answers | none | own attempts, only while `in_progress` for insert and update | none | all |
-| contact_requests | none (insert via server action) | none | none | all |
-| notifications | none | own rows: select, update read_at | same | all |
-| admin_activity | none | none | none | all |
-| data_requests | none | own rows: select, insert | none | all |
+| Table                                     | Anonymous                       | Candidate                                                                                    | Company user                                                                                                                     | Admin |
+| ----------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| profiles                                  | none                            | own row: select, update (full_name, locale)                                                  | own row: select, update                                                                                                          | all   |
+| companies                                 | none                            | none                                                                                         | select and update companies in `user_company_ids()`; insert with self as owner                                                   | all   |
+| company_members                           | none                            | none                                                                                         | select members of own companies; owner inserts and deletes                                                                       | all   |
+| jobs                                      | none (use public_jobs)          | none (use public_jobs)                                                                       | select, insert, update, delete for own companies; cannot set status to `published` unless company verified (enforced by trigger) | all   |
+| job_commercials                           | none                            | none                                                                                         | none                                                                                                                             | all   |
+| candidates                                | none                            | own row: select, insert, update                                                              | select via `company_can_view_candidate`                                                                                          | all   |
+| candidate_contacts                        | none                            | own row                                                                                      | select via `company_can_view_contact`                                                                                            | all   |
+| candidate_experience, candidate_education | none                            | own rows                                                                                     | select via `company_can_view_candidate`                                                                                          | all   |
+| applications                              | none                            | own rows: select, insert (only to published jobs, cooldown none), update only to `withdrawn` | select and update status on applications to own companies' jobs; cannot set `contact_released`                                   | all   |
+| application_events                        | none                            | own applications                                                                             | own companies' applications                                                                                                      | all   |
+| notes                                     | none                            | none                                                                                         | select and insert `company` visibility on own companies' applications                                                            | all   |
+| saved_candidates                          | none                            | none                                                                                         | own companies                                                                                                                    | all   |
+| placements                                | none                            | none                                                                                         | none                                                                                                                             | all   |
+| assessments                               | none                            | select active                                                                                | none                                                                                                                             | all   |
+| assessment_questions                      | none                            | none (use view)                                                                              | none                                                                                                                             | all   |
+| assessment_attempts                       | none                            | own rows: select, insert (cooldown enforced by trigger), update only `visible_to_companies`  | none                                                                                                                             | all   |
+| assessment_answers                        | none                            | own attempts, only while `in_progress` for insert and update                                 | none                                                                                                                             | all   |
+| contact_requests                          | none (insert via server action) | none                                                                                         | none                                                                                                                             | all   |
+| notifications                             | none                            | own rows: select, update read_at                                                             | same                                                                                                                             | all   |
+| admin_activity                            | none                            | none                                                                                         | none                                                                                                                             | all   |
+| data_requests                             | none                            | own rows: select, insert                                                                     | none                                                                                                                             | all   |
 
 Storage: bucket `logos` public read, write by company owners and admins under `companies/{company_id}/`; bucket `resumes` private, path `candidates/{candidate_id}/resume.pdf`, read by owner, admins, and companies via server-generated signed URLs (10 minutes) only when `company_can_view_contact`; bucket `assessment-audio` private, path `attempts/{attempt_id}/{question_id}.webm`, write by owner during `in_progress`, read by owner and admins via signed URLs.
 
@@ -285,20 +285,20 @@ All banks are original content authored during the build (Phase 6) and stored in
 
 Events, recipients and templates (`emails/<template>.tsx`, bilingual):
 
-| Event | Recipient | In-app | Email template |
-|---|---|---|---|
-| Sign-up | user | no | verify-email |
-| Company verified / suspended | company users | yes | company-status |
-| Job approved / changes requested / published | company users | yes | job-status |
-| New application | company users | yes | new-application (digest: at most one email per job per hour) |
-| Application status changed | candidate | yes | application-status |
-| Contact requested | admins | yes | none |
-| Contact released | company users | yes | contact-released |
-| Dexee recommendation | company users, candidate | yes | recommendation |
-| Assessment scored (written), pending validation (oral), validated | candidate | yes | assessment-result |
-| Team invite / admin invite | invitee | no | invite |
-| Hired → placement pending | admins | yes | none |
-| Data request created | admins | yes | none |
+| Event                                                             | Recipient                | In-app | Email template                                               |
+| ----------------------------------------------------------------- | ------------------------ | ------ | ------------------------------------------------------------ |
+| Sign-up                                                           | user                     | no     | verify-email                                                 |
+| Company verified / suspended                                      | company users            | yes    | company-status                                               |
+| Job approved / changes requested / published                      | company users            | yes    | job-status                                                   |
+| New application                                                   | company users            | yes    | new-application (digest: at most one email per job per hour) |
+| Application status changed                                        | candidate                | yes    | application-status                                           |
+| Contact requested                                                 | admins                   | yes    | none                                                         |
+| Contact released                                                  | company users            | yes    | contact-released                                             |
+| Dexee recommendation                                              | company users, candidate | yes    | recommendation                                               |
+| Assessment scored (written), pending validation (oral), validated | candidate                | yes    | assessment-result                                            |
+| Team invite / admin invite                                        | invitee                  | no     | invite                                                       |
+| Hired → placement pending                                         | admins                   | yes    | none                                                         |
+| Data request created                                              | admins                   | yes    | none                                                         |
 
 `notifications` rows are inserted by the same server action that performs the change. Emails are sent through a queue table `email_outbox` (id, to, template, payload, locale, status, attempts, sent_at) processed by `/api/cron/process-outbox` every 5 minutes, so a Resend outage never blocks a user action. Unsubscribe applies to digests only; transactional emails always send.
 

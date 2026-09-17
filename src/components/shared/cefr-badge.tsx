@@ -20,11 +20,19 @@ export function CefrBadge({ verified, written, self, className }: CefrBadgeProps
   const level = verified ?? written ?? self;
   if (!level) return null;
   const kind = verified ? "verified" : written ? "written" : "self";
-  const label = kind === "verified" ? t("common.labels.verifiedByDexee") : kind === "written" ? t("enums.assessment_type.english_written") : t("common.labels.selfReported");
+  const label =
+    kind === "verified"
+      ? t("common.labels.verifiedByDexee")
+      : kind === "written"
+        ? t("enums.assessment_type.english_written")
+        : t("common.labels.selfReported");
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Badge variant={kind === "verified" ? "success" : kind === "written" ? "info" : "outline"} className={className}>
+        <Badge
+          variant={kind === "verified" ? "success" : kind === "written" ? "info" : "outline"}
+          className={className}
+        >
           {kind === "verified" ? <ShieldCheckIcon className="size-3" aria-hidden /> : null}
           <span>{level}</span>
           <span className="sr-only">{label}</span>

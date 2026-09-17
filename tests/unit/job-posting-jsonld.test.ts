@@ -44,24 +44,45 @@ describe("buildJobPostingJsonLd", () => {
     expect(ld.jobLocationType).toBe("TELECOMMUTE");
     expect(ld.applicantLocationRequirements).toEqual({ "@type": "Country", name: "Colombia" });
     expect(ld.identifier.value).toBe(base.id);
-    expect(ld.baseSalary?.value).toEqual({ "@type": "QuantitativeValue", minValue: 2800, maxValue: 3600, unitText: "MONTH" });
+    expect(ld.baseSalary?.value).toEqual({
+      "@type": "QuantitativeValue",
+      minValue: 2800,
+      maxValue: 3600,
+      unitText: "MONTH",
+    });
     expect(ld.description).toContain("<ul><li>Close the books</li><li>Reconcile</li></ul>");
     expect(ld.url).toBe("https://dexeegroup.com/en/jobs/senior-accountant-e00000");
   });
 
   it("uses Dexee as hiring organization for confidential jobs and omits salary when hidden", () => {
-    const ld = buildJobPostingJsonLd({ ...base, confidential_company: true, company_name: "Confidential", show_salary: false, salary_min_usd: null, salary_max_usd: null }, { siteUrl: "https://dexeegroup.com", locale: "es" });
+    const ld = buildJobPostingJsonLd(
+      {
+        ...base,
+        confidential_company: true,
+        company_name: "Confidential",
+        show_salary: false,
+        salary_min_usd: null,
+        salary_max_usd: null,
+      },
+      { siteUrl: "https://dexeegroup.com", locale: "es" },
+    );
     expect(ld.hiringOrganization.name).toBe("Dexee");
     expect(ld.baseSalary).toBeUndefined();
   });
 
   it("marks contractors and part-time roles", () => {
-    const ld = buildJobPostingJsonLd({ ...base, employment_type: "part_time", contract_type: "independent_contractor" }, { siteUrl: "https://dexeegroup.com", locale: "en" });
+    const ld = buildJobPostingJsonLd(
+      { ...base, employment_type: "part_time", contract_type: "independent_contractor" },
+      { siteUrl: "https://dexeegroup.com", locale: "en" },
+    );
     expect(ld.employmentType).toEqual(["PART_TIME", "CONTRACTOR"]);
   });
 
   it("escapes HTML in descriptions", () => {
-    const ld = buildJobPostingJsonLd({ ...base, description: "<script>alert(1)</script>" }, { siteUrl: "https://dexeegroup.com", locale: "en" });
+    const ld = buildJobPostingJsonLd(
+      { ...base, description: "<script>alert(1)</script>" },
+      { siteUrl: "https://dexeegroup.com", locale: "en" },
+    );
     expect(ld.description).not.toContain("<script>");
     expect(ld.description).toContain("&lt;script&gt;");
   });

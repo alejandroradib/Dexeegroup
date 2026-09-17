@@ -7,17 +7,29 @@ import { pageLocale } from "@/i18n/server";
 
 import type { Metadata } from "next";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/forgot-password">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/forgot-password">): Promise<Metadata> {
   const locale = await pageLocale(params);
   const t = await getTranslations({ locale, namespace: "auth.meta" });
   return { title: t("forgotPassword"), robots: { index: false } };
 }
 
-export default async function ForgotPasswordPage({ params }: PageProps<"/[locale]/forgot-password">) {
+export default async function ForgotPasswordPage({
+  params,
+}: PageProps<"/[locale]/forgot-password">) {
   await pageLocale(params);
   const t = await getTranslations("auth.forgot");
   return (
-    <AuthCard title={t("title")} subtitle={t("subtitle")} footer={<Link href="/sign-in" className="font-semibold text-link hover:underline">{t("backToSignIn")}</Link>}>
+    <AuthCard
+      title={t("title")}
+      subtitle={t("subtitle")}
+      footer={
+        <Link href="/sign-in" className="text-link font-semibold hover:underline">
+          {t("backToSignIn")}
+        </Link>
+      }
+    >
       <ForgotPasswordForm />
     </AuthCard>
   );

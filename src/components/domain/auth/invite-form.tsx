@@ -13,18 +13,33 @@ import { Label } from "@/components/ui/label";
 import { acceptInviteSchema, type AcceptInviteInput } from "@/lib/validation/auth";
 import { acceptInvite, acceptInviteSignedIn } from "@/server/actions/auth";
 
-export function InviteForm({ token, email, signedInEmail }: { token: string; email: string; signedInEmail?: string }) {
+export function InviteForm({
+  token,
+  email,
+  signedInEmail,
+}: {
+  token: string;
+  email: string;
+  signedInEmail?: string;
+}) {
   const t = useTranslations("auth.invite");
   const te = useTranslations("auth.errors");
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const form = useForm<AcceptInviteInput>({ resolver: zodResolver(acceptInviteSchema), defaultValues: { token, full_name: "", password: "" } });
+  const form = useForm<AcceptInviteInput>({
+    resolver: zodResolver(acceptInviteSchema),
+    defaultValues: { token, full_name: "", password: "" },
+  });
 
   if (signedInEmail) {
     return (
       <div className="grid gap-4">
         <Alert>{t("alreadySignedIn", { email: signedInEmail })}</Alert>
-        {error ? <Alert variant="danger">{te.has(error as "generic") ? te(error as "generic") : te("generic")}</Alert> : null}
+        {error ? (
+          <Alert variant="danger">
+            {te.has(error as "generic") ? te(error as "generic") : te("generic")}
+          </Alert>
+        ) : null}
         <Button
           disabled={pending}
           onClick={() =>
@@ -59,16 +74,33 @@ export function InviteForm({ token, email, signedInEmail }: { token: string; ema
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="full_name">{t("fullName")}</Label>
-        <Input id="full_name" autoComplete="name" aria-invalid={Boolean(form.formState.errors.full_name)} {...form.register("full_name")} />
+        <Input
+          id="full_name"
+          autoComplete="name"
+          aria-invalid={Boolean(form.formState.errors.full_name)}
+          {...form.register("full_name")}
+        />
         <FieldError error={form.formState.errors.full_name?.message} />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="password">{t("password")}</Label>
-        <Input id="password" type="password" autoComplete="new-password" aria-invalid={Boolean(form.formState.errors.password)} {...form.register("password")} />
+        <Input
+          id="password"
+          type="password"
+          autoComplete="new-password"
+          aria-invalid={Boolean(form.formState.errors.password)}
+          {...form.register("password")}
+        />
         <FieldError error={form.formState.errors.password?.message} />
       </div>
-      {error ? <Alert variant="danger">{te.has(error as "generic") ? te(error as "generic") : te("generic")}</Alert> : null}
-      <Button type="submit" disabled={pending} className="w-full">{t("submit")}</Button>
+      {error ? (
+        <Alert variant="danger">
+          {te.has(error as "generic") ? te(error as "generic") : te("generic")}
+        </Alert>
+      ) : null}
+      <Button type="submit" disabled={pending} className="w-full">
+        {t("submit")}
+      </Button>
     </form>
   );
 }

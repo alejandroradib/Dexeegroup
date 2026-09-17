@@ -18,7 +18,13 @@ export function useToast() {
   return ctx;
 }
 
-export function ToastProvider({ children, closeLabel = "Close" }: { children: React.ReactNode; closeLabel?: string }) {
+export function ToastProvider({
+  children,
+  closeLabel = "Close",
+}: {
+  children: React.ReactNode;
+  closeLabel?: string;
+}) {
   const [items, setItems] = React.useState<ToastItem[]>([]);
   const counter = React.useRef(0);
   const toast = React.useCallback((input: ToastInput) => {
@@ -37,16 +43,21 @@ export function ToastProvider({ children, closeLabel = "Close" }: { children: Re
             onOpenChange={(open) => !open && dismiss(item.id)}
             className={cn(
               "grid w-full items-start gap-1 rounded-[12px] border p-4 pr-10 text-sm shadow-lg",
-              item.variant === "success" && "border-transparent bg-mint text-navy",
-              item.variant === "danger" && "border-transparent bg-danger-soft text-danger",
-              (!item.variant || item.variant === "default") && "border-border bg-white text-navy",
+              item.variant === "success" && "bg-mint text-navy border-transparent",
+              item.variant === "danger" && "bg-danger-soft text-danger border-transparent",
+              (!item.variant || item.variant === "default") && "border-border text-navy bg-white",
             )}
           >
             <ToastPrimitive.Title className="font-semibold">{item.title}</ToastPrimitive.Title>
             {item.description ? (
-              <ToastPrimitive.Description className="opacity-90">{item.description}</ToastPrimitive.Description>
+              <ToastPrimitive.Description className="opacity-90">
+                {item.description}
+              </ToastPrimitive.Description>
             ) : null}
-            <ToastPrimitive.Close className="absolute top-3 right-3 rounded-[6px] opacity-70 hover:opacity-100" aria-label={closeLabel}>
+            <ToastPrimitive.Close
+              className="absolute top-3 right-3 rounded-[6px] opacity-70 hover:opacity-100"
+              aria-label={closeLabel}
+            >
               <XIcon className="size-4" />
             </ToastPrimitive.Close>
           </ToastPrimitive.Root>

@@ -8,7 +8,7 @@ export function FieldError({ error, id }: { error?: string; id?: string }) {
   if (!error) return null;
   const known = t.has(error as "required") ? t(error as "required") : error;
   return (
-    <p id={id} role="alert" className="text-xs text-destructive">
+    <p id={id} role="alert" className="text-destructive text-xs">
       {known}
     </p>
   );

@@ -16,14 +16,22 @@ export default async function ShortlistPage({ params }: PageProps<"/[locale]/com
   if (!company) redirect({ href: "/company/onboarding", locale });
   const t = await getTranslations("company.shortlist");
   const supabase = await createClient();
-  const { data: saved } = await supabase.from("saved_candidates").select("candidate_id").eq("company_id", company!.id);
+  const { data: saved } = await supabase
+    .from("saved_candidates")
+    .select("candidate_id")
+    .eq("company_id", company!.id);
   const savedIds = new Set((saved ?? []).map((s) => s.candidate_id));
   const { rows } = await listCompanyApplicants(company!.id, {}, { from: 0, to: 199 });
   const shortlisted = rows.filter((r) => savedIds.has(r.application.candidate_id));
   return (
     <>
       <PageHeader title={t("title")} description={t("subtitle")} />
-      <ApplicantsTable rows={shortlisted} emptyState={<EmptyState icon={BookmarkIcon} title={t("empty")} description={t("emptyBody")} />} />
+      <ApplicantsTable
+        rows={shortlisted}
+        emptyState={
+          <EmptyState icon={BookmarkIcon} title={t("empty")} description={t("emptyBody")} />
+        }
+      />
     </>
   );
 }

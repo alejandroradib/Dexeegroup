@@ -15,16 +15,55 @@ export type BankQuestion = {
 };
 
 type WrittenBank = {
-  mcq: { id: string; section: string; band: "band1" | "band2" | "band3"; prompt: string; passage_id: string | null; options: { id: string; text: string }[]; correct: string }[];
+  mcq: {
+    id: string;
+    section: string;
+    band: "band1" | "band2" | "band3";
+    prompt: string;
+    passage_id: string | null;
+    options: { id: string; text: string }[];
+    correct: string;
+  }[];
   passages: { id: string; band: string; title: string; text: string }[];
-  writing_prompts: { id: string; band: string; prompt: string; min_words: number; max_words: number }[];
+  writing_prompts: {
+    id: string;
+    band: string;
+    prompt: string;
+    min_words: number;
+    max_words: number;
+  }[];
 };
-type OralBank = { prompts: { id: string; category: string; prompt: string; prep_seconds: number; min_seconds: number; max_seconds: number }[] };
-type IpipBank = { scale: unknown; items: { id: string; factor: string; reverse: boolean; text_en: string; text_es: string }[] };
-type SjtBank = { items: { id: string; theme: string; prompt_en: string; prompt_es: string; options: { id: string; text_en: string; text_es: string }[]; best: string }[] };
+type OralBank = {
+  prompts: {
+    id: string;
+    category: string;
+    prompt: string;
+    prep_seconds: number;
+    min_seconds: number;
+    max_seconds: number;
+  }[];
+};
+type IpipBank = {
+  scale: unknown;
+  items: { id: string; factor: string; reverse: boolean; text_en: string; text_es: string }[];
+};
+type SjtBank = {
+  items: {
+    id: string;
+    theme: string;
+    prompt_en: string;
+    prompt_es: string;
+    options: { id: string; text_en: string; text_es: string }[];
+    best: string;
+  }[];
+};
 
 /** Band quotas use the representative CEFR level of each band for the `band` column. */
-const BAND_LEVEL: Record<"band1" | "band2" | "band3", "B1" | "B2" | "C1"> = { band1: "B1", band2: "B2", band3: "C1" };
+const BAND_LEVEL: Record<"band1" | "band2" | "band3", "B1" | "B2" | "C1"> = {
+  band1: "B1",
+  band2: "B2",
+  band3: "C1",
+};
 
 export function loadBanks(dir: string) {
   const read = <T>(name: string): T => JSON.parse(readFileSync(path.join(dir, name), "utf8")) as T;
@@ -42,7 +81,11 @@ export function loadBanks(dir: string) {
       sort_order: i,
       prompt: q.prompt,
       question_type: "mcq" as const,
-      options: { choices: q.options, band: q.band, passage: q.passage_id ? passages.get(q.passage_id) ?? null : null },
+      options: {
+        choices: q.options,
+        band: q.band,
+        passage: q.passage_id ? (passages.get(q.passage_id) ?? null) : null,
+      },
       answer_key: { correct: q.correct },
       factor: null,
     })),
@@ -66,7 +109,11 @@ export function loadBanks(dir: string) {
     sort_order: i,
     prompt: p.prompt,
     question_type: "audio" as const,
-    options: { prep_seconds: p.prep_seconds, min_seconds: p.min_seconds, max_seconds: p.max_seconds },
+    options: {
+      prep_seconds: p.prep_seconds,
+      min_seconds: p.min_seconds,
+      max_seconds: p.max_seconds,
+    },
     answer_key: null,
     factor: null,
   }));
@@ -90,7 +137,11 @@ export function loadBanks(dir: string) {
       sort_order: 100 + i,
       prompt: item.prompt_en,
       question_type: "situational" as const,
-      options: { prompt_es: item.prompt_es, theme: item.theme, choices: item.options.map((o) => ({ id: o.id, text: o.text_en, text_es: o.text_es })) },
+      options: {
+        prompt_es: item.prompt_es,
+        theme: item.theme,
+        choices: item.options.map((o) => ({ id: o.id, text: o.text_en, text_es: o.text_es })),
+      },
       answer_key: { best: item.best },
       factor: null,
     })),

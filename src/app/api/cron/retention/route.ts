@@ -9,7 +9,8 @@ export const maxDuration = 120;
 
 /** Deletes assessment audio twelve months after validation (SPEC 15 retention rule). */
 export async function GET(request: NextRequest) {
-  if (!isAuthorizedCron(request)) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  if (!isAuthorizedCron(request))
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   try {
     const removed = await purgeOldAudio();
     logger.info({ removed }, "cron_retention");

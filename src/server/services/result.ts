@@ -3,7 +3,11 @@ export type Err = { ok: false; error: string; details?: Record<string, string[]>
 export type Result<T> = Ok<T> | Err;
 
 export const ok = <T>(data: T): Ok<T> => ({ ok: true, data });
-export const err = (error: string, details?: Record<string, string[]>): Err => ({ ok: false, error, details });
+export const err = (error: string, details?: Record<string, string[]>): Err => ({
+  ok: false,
+  error,
+  details,
+});
 
 /** Error codes returned to the client, translated with `common.errors` or the area namespace. */
 export const ERR = {

@@ -11,7 +11,11 @@ import type { Metadata } from "next";
 export async function generateMetadata({ params }: PageProps<"/[locale]/jobs">): Promise<Metadata> {
   const locale = await pageLocale(params);
   const t = await getTranslations({ locale, namespace: "marketing.meta" });
-  return { title: t("jobs"), description: t("jobsDescription"), alternates: { canonical: `/${locale}/jobs`, languages: { en: "/en/jobs", es: "/es/jobs" } } };
+  return {
+    title: t("jobs"),
+    description: t("jobsDescription"),
+    alternates: { canonical: `/${locale}/jobs`, languages: { en: "/en/jobs", es: "/es/jobs" } },
+  };
 }
 
 export default async function JobsPage({ params, searchParams }: PageProps<"/[locale]/jobs">) {
@@ -23,7 +27,7 @@ export default async function JobsPage({ params, searchParams }: PageProps<"/[lo
     <div className="container-marketing py-12">
       <div className="mb-8 max-w-2xl">
         <h1 className="text-3xl sm:text-4xl">{t("title")}</h1>
-        <p className="mt-3 text-muted-foreground">{t("subtitle")}</p>
+        <p className="text-muted-foreground mt-3">{t("subtitle")}</p>
       </div>
       <Suspense fallback={<JobsBoardSkeleton />}>
         <JobsBoard filter={filter} basePath="/jobs" />

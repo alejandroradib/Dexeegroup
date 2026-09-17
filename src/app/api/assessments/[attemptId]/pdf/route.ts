@@ -9,15 +9,25 @@ import { createAdminClient } from "@/lib/supabase/admin";
 export const dynamic = "force-dynamic";
 
 /** Server-rendered PDF of a validated result, for the owner or an admin. */
-export async function GET(_request: NextRequest, { params }: RouteContext<"/api/assessments/[attemptId]/pdf">) {
+export async function GET(
+  _request: NextRequest,
+  { params }: RouteContext<"/api/assessments/[attemptId]/pdf">,
+) {
   const { attemptId } = await params;
   const user = await getSessionUser();
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   const admin = createAdminClient();
-  const { data: attempt } = await admin.from("assessment_attempts").select("*, assessments (type, title), candidates (first_name, last_name)").eq("id", attemptId).maybeSingle();
-  if (!attempt || !attempt.assessments) return NextResponse.json({ error: "not_found" }, { status: 404 });
-  if (user.role !== "admin" && attempt.candidate_id !== user.id) return NextResponse.json({ error: "forbidden" }, { status: 403 });
-  if (attempt.status !== "validated") return NextResponse.json({ error: "not_ready" }, { status: 409 });
+  const { data: attempt } = await admin
+    .from("assessment_attempts")
+    .select("*, assessments (type, title), candidates (first_name, last_name)")
+    .eq("id", attemptId)
+    .maybeSingle();
+  if (!attempt || !attempt.assessments)
+    return NextResponse.json({ error: "not_found" }, { status: 404 });
+  if (user.role !== "admin" && attempt.candidate_id !== user.id)
+    return NextResponse.json({ error: "forbidden" }, { status: 403 });
+  if (attempt.status !== "validated")
+    return NextResponse.json({ error: "not_ready" }, { status: 409 });
 
   const locale = user.profile?.locale ?? "en";
   const t = await getTranslations({ locale, namespace: "assessments" });
@@ -39,7 +49,9 @@ export async function GET(_request: NextRequest, { params }: RouteContext<"/api/
   };
   const { assessments: _a, candidates, ...row } = attempt;
   const candidateName = candidates ? `${candidates.first_name} ${candidates.last_name}` : "";
-  const buffer = await renderToBuffer(AssessmentReportPdf({ attempt: row, type, candidateName, locale, labels }));
+  const buffer = await renderToBuffer(
+    AssessmentReportPdf({ attempt: row, type, candidateName, locale, labels }),
+  );
   return new NextResponse(new Uint8Array(buffer), {
     headers: {
       "Content-Type": "application/pdf",

@@ -1,6 +1,16 @@
 import { z } from "zod";
 
-import { CEFR_LEVELS, COMPANY_SIZES, CONTRACT_TYPES, EMPLOYMENT_TYPES, ROLE_FAMILIES, SECTORS, SENIORITIES, TIMEZONE_OVERLAPS, WORK_MODES } from "@/lib/validation/enums";
+import {
+  CEFR_LEVELS,
+  COMPANY_SIZES,
+  CONTRACT_TYPES,
+  EMPLOYMENT_TYPES,
+  ROLE_FAMILIES,
+  SECTORS,
+  SENIORITIES,
+  TIMEZONE_OVERLAPS,
+  WORK_MODES,
+} from "@/lib/validation/enums";
 
 const URL_PATTERN = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
 const optionalUrl = z
@@ -10,7 +20,8 @@ const optionalUrl = z
   .refine((v) => v === "" || URL_PATTERN.test(v), "invalidUrl")
   .optional();
 const optionalText = (max: number) => z.string().trim().max(max, "tooLong").optional();
-const requiredInt = (min: number, max: number) => z.number({ error: "required" }).int("integer").min(min, "positive").max(max, "tooLong");
+const requiredInt = (min: number, max: number) =>
+  z.number({ error: "required" }).int("integer").min(min, "positive").max(max, "tooLong");
 
 export const companyDetailsSchema = z.object({
   name: z.string().trim().min(2, "tooShort").max(120, "tooLong"),
@@ -30,7 +41,10 @@ export const hiringNeedsSchema = z.object({
   preferred_contract_types: z.array(z.enum(CONTRACT_TYPES)).max(4),
 });
 
-export const companyOnboardingSchema = z.object({ details: companyDetailsSchema, hiring_needs: hiringNeedsSchema });
+export const companyOnboardingSchema = z.object({
+  details: companyDetailsSchema,
+  hiring_needs: hiringNeedsSchema,
+});
 
 export const jobRoleStepSchema = z.object({
   title: z.string().trim().min(3, "tooShort").max(120, "tooLong"),
@@ -53,10 +67,16 @@ export const jobCompensationStepSchema = z
     hours_per_week: requiredInt(1, 60),
     timezone_overlap: z.enum(TIMEZONE_OVERLAPS, { error: "required" }),
     work_mode: z.enum(WORK_MODES),
-    start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "invalidDate").optional(),
+    start_date: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "invalidDate")
+      .optional(),
     confidential_company: z.boolean(),
   })
-  .refine((v) => v.salary_min_usd <= v.salary_max_usd, { path: ["salary_max_usd"], error: "salaryRange" });
+  .refine((v) => v.salary_min_usd <= v.salary_max_usd, {
+    path: ["salary_max_usd"],
+    error: "salaryRange",
+  });
 
 /** Partial schema used by autosave: every field optional, still type-checked. */
 export const jobDraftPatchSchema = jobRoleStepSchema.partial().extend({
@@ -83,9 +103,15 @@ export const jobDraftRequestSchema = z.object({
 
 export const teamInviteSchema = z.object({ email: z.email("invalidEmail").max(200) });
 
-export const companyNoteSchema = z.object({ application_id: z.uuid(), body: z.string().trim().min(2, "tooShort").max(1000, "tooLong") });
+export const companyNoteSchema = z.object({
+  application_id: z.uuid(),
+  body: z.string().trim().min(2, "tooShort").max(1000, "tooLong"),
+});
 
-export const notificationPrefsSchema = z.object({ digest: z.boolean(), application_updates: z.boolean() });
+export const notificationPrefsSchema = z.object({
+  digest: z.boolean(),
+  application_updates: z.boolean(),
+});
 
 export type CompanyDetailsInput = z.infer<typeof companyDetailsSchema>;
 export type HiringNeedsInput = z.infer<typeof hiringNeedsSchema>;

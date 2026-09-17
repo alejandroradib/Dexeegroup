@@ -18,7 +18,7 @@ function DropdownMenuContent({
       <DropdownMenuPrimitive.Content
         sideOffset={sideOffset}
         className={cn(
-          "z-50 min-w-[10rem] overflow-hidden rounded-[10px] border border-border bg-popover p-1 text-popover-foreground shadow-lg",
+          "border-border bg-popover text-popover-foreground z-50 min-w-[10rem] overflow-hidden rounded-[10px] border p-1 shadow-lg",
           className,
         )}
         {...props}
@@ -33,7 +33,7 @@ function DropdownMenuItem({
   return (
     <DropdownMenuPrimitive.Item
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-[6px] px-2 py-2 text-sm outline-none select-none focus:bg-mist data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:size-4",
+        "focus:bg-mist relative flex cursor-default items-center gap-2 rounded-[6px] px-2 py-2 text-sm outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:size-4",
         className,
       )}
       {...props}
@@ -45,14 +45,29 @@ function DropdownMenuLabel({
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Label>) {
   return (
-    <DropdownMenuPrimitive.Label className={cn("px-2 py-1.5 text-xs font-semibold text-muted-foreground", className)} {...props} />
+    <DropdownMenuPrimitive.Label
+      className={cn("text-muted-foreground px-2 py-1.5 text-xs font-semibold", className)}
+      {...props}
+    />
   );
 }
 function DropdownMenuSeparator({
   className,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Separator>) {
-  return <DropdownMenuPrimitive.Separator className={cn("-mx-1 my-1 h-px bg-border", className)} {...props} />;
+  return (
+    <DropdownMenuPrimitive.Separator
+      className={cn("bg-border -mx-1 my-1 h-px", className)}
+      {...props}
+    />
+  );
 }
 
-export { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator };
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+};

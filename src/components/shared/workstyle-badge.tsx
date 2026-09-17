@@ -3,7 +3,13 @@ import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
 
-export function WorkStyleBadge({ completedAt, className }: { completedAt?: string | null; className?: string }) {
+export function WorkStyleBadge({
+  completedAt,
+  className,
+}: {
+  completedAt?: string | null;
+  className?: string;
+}) {
   const t = useTranslations("enums.assessment_type");
   if (!completedAt) return null;
   return (

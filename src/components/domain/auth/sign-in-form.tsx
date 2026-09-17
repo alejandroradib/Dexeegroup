@@ -20,7 +20,10 @@ export function SignInForm({ next }: { next?: string }) {
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [resent, setResent] = useState(false);
-  const form = useForm<SignInInput>({ resolver: zodResolver(signInSchema), defaultValues: { email: "", password: "", next } });
+  const form = useForm<SignInInput>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: { email: "", password: "", next },
+  });
 
   const onSubmit = form.handleSubmit((values) => {
     setError(null);
@@ -38,30 +41,61 @@ export function SignInForm({ next }: { next?: string }) {
     <form onSubmit={onSubmit} className="grid gap-4" noValidate>
       <div className="grid gap-1.5">
         <Label htmlFor="email">{t("email")}</Label>
-        <Input id="email" type="email" autoComplete="email" aria-invalid={Boolean(form.formState.errors.email)} {...form.register("email")} />
+        <Input
+          id="email"
+          type="email"
+          autoComplete="email"
+          aria-invalid={Boolean(form.formState.errors.email)}
+          {...form.register("email")}
+        />
         <FieldError error={form.formState.errors.email?.message} />
       </div>
       <div className="grid gap-1.5">
         <div className="flex items-center justify-between">
           <Label htmlFor="password">{t("password")}</Label>
-          <Link href="/forgot-password" className="text-xs text-link hover:underline">{t("forgot")}</Link>
+          <Link href="/forgot-password" className="text-link text-xs hover:underline">
+            {t("forgot")}
+          </Link>
         </div>
-        <Input id="password" type="password" autoComplete="current-password" aria-invalid={Boolean(form.formState.errors.password)} {...form.register("password")} />
+        <Input
+          id="password"
+          type="password"
+          autoComplete="current-password"
+          aria-invalid={Boolean(form.formState.errors.password)}
+          {...form.register("password")}
+        />
         <FieldError error={form.formState.errors.password?.message} />
       </div>
-      {error === "invalidCredentials" ? <Alert variant="danger">{t("invalidCredentials")}</Alert> : null}
+      {error === "invalidCredentials" ? (
+        <Alert variant="danger">{t("invalidCredentials")}</Alert>
+      ) : null}
       {error === "emailNotConfirmed" ? (
         <Alert variant="warning">
           {t("emailNotConfirmed")}{" "}
           {resent ? null : (
-            <button type="button" className="font-semibold underline" onClick={() => start(async () => { await resendVerification(form.getValues("email")); setResent(true); })}>
+            <button
+              type="button"
+              className="font-semibold underline"
+              onClick={() =>
+                start(async () => {
+                  await resendVerification(form.getValues("email"));
+                  setResent(true);
+                })
+              }
+            >
               {t("resend")}
             </button>
           )}
         </Alert>
       ) : null}
-      {error && !["invalidCredentials", "emailNotConfirmed"].includes(error) ? <Alert variant="danger">{te.has(error as "generic") ? te(error as "generic") : te("generic")}</Alert> : null}
-      <Button type="submit" disabled={pending} className="w-full">{t("submit")}</Button>
+      {error && !["invalidCredentials", "emailNotConfirmed"].includes(error) ? (
+        <Alert variant="danger">
+          {te.has(error as "generic") ? te(error as "generic") : te("generic")}
+        </Alert>
+      ) : null}
+      <Button type="submit" disabled={pending} className="w-full">
+        {t("submit")}
+      </Button>
     </form>
   );
 }

@@ -31,21 +31,72 @@ export function AssessmentConfigForm({ assessment }: { assessment: Assessment })
   const id = assessment.id.slice(0, 8);
 
   return (
-    <form className="grid gap-4 rounded-[12px] border border-border bg-white p-5" onSubmit={(e) => { e.preventDefault(); setError(null); start(async () => {
-      const r = await updateAssessmentConfig({ assessment_id: assessment.id, config, is_active: active, cooldown_days: cooldown, time_limit_minutes: limit === "" ? null : limit });
-      if (r.ok) { toast({ title: t("saved", { version: assessment.version + 1 }), variant: "success" }); router.refresh(); }
-      else setError(r.details?.config ? t("invalidJson") : tc("errors.generic"));
-    }); }}>
+    <form
+      className="border-border grid gap-4 rounded-[12px] border bg-white p-5"
+      onSubmit={(e) => {
+        e.preventDefault();
+        setError(null);
+        start(async () => {
+          const r = await updateAssessmentConfig({
+            assessment_id: assessment.id,
+            config,
+            is_active: active,
+            cooldown_days: cooldown,
+            time_limit_minutes: limit === "" ? null : limit,
+          });
+          if (r.ok) {
+            toast({ title: t("saved", { version: assessment.version + 1 }), variant: "success" });
+            router.refresh();
+          } else setError(r.details?.config ? t("invalidJson") : tc("errors.generic"));
+        });
+      }}
+    >
       <div className="flex items-center justify-between gap-3">
-        <h3 className="text-base">{te(assessment.type)} <span className="text-xs font-normal text-muted-foreground">v{assessment.version}</span></h3>
-        <div className="flex items-center gap-2"><Label htmlFor={`active-${id}`} className="font-normal">{t("active")}</Label><Switch id={`active-${id}`} checked={active} onCheckedChange={setActive} /></div>
+        <h3 className="text-base">
+          {te(assessment.type)}{" "}
+          <span className="text-muted-foreground text-xs font-normal">v{assessment.version}</span>
+        </h3>
+        <div className="flex items-center gap-2">
+          <Label htmlFor={`active-${id}`} className="font-normal">
+            {t("active")}
+          </Label>
+          <Switch id={`active-${id}`} checked={active} onCheckedChange={setActive} />
+        </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <FormField id={`cooldown-${id}`} label={t("cooldown")}><Input id={`cooldown-${id}`} type="number" min={1} max={365} value={cooldown} onChange={(e) => setCooldown(Number(e.target.value))} /></FormField>
-        <FormField id={`limit-${id}`} label={t("timeLimit")}><Input id={`limit-${id}`} type="number" min={1} max={1440} value={limit} onChange={(e) => setLimit(e.target.value === "" ? "" : Number(e.target.value))} /></FormField>
+        <FormField id={`cooldown-${id}`} label={t("cooldown")}>
+          <Input
+            id={`cooldown-${id}`}
+            type="number"
+            min={1}
+            max={365}
+            value={cooldown}
+            onChange={(e) => setCooldown(Number(e.target.value))}
+          />
+        </FormField>
+        <FormField id={`limit-${id}`} label={t("timeLimit")}>
+          <Input
+            id={`limit-${id}`}
+            type="number"
+            min={1}
+            max={1440}
+            value={limit}
+            onChange={(e) => setLimit(e.target.value === "" ? "" : Number(e.target.value))}
+          />
+        </FormField>
       </div>
-      <FormField id={`config-${id}`} label={t("config")} error={error ?? undefined}><Textarea id={`config-${id}`} rows={12} value={config} onChange={(e) => setConfig(e.target.value)} className="font-mono text-xs" /></FormField>
-      <Button type="submit" disabled={pending} className="justify-self-start">{tc("actions.save")}</Button>
+      <FormField id={`config-${id}`} label={t("config")} error={error ?? undefined}>
+        <Textarea
+          id={`config-${id}`}
+          rows={12}
+          value={config}
+          onChange={(e) => setConfig(e.target.value)}
+          className="font-mono text-xs"
+        />
+      </FormField>
+      <Button type="submit" disabled={pending} className="justify-self-start">
+        {tc("actions.save")}
+      </Button>
     </form>
   );
 }

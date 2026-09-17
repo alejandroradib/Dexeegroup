@@ -7,11 +7,17 @@ import { err, ok, type Result } from "./result";
 
 export type PublicJob = Database["public"]["Views"]["public_jobs"]["Row"];
 
-export async function listPublicJobs(filter: JobsFilter): Promise<Result<{ jobs: PublicJob[]; total: number; page: number }>> {
+export async function listPublicJobs(
+  filter: JobsFilter,
+): Promise<Result<{ jobs: PublicJob[]; total: number; page: number }>> {
   const supabase = await createClient();
   const page = filter.page ?? 1;
   const { from, to } = pageRange(page, PAGE_SIZE);
-  let query = supabase.from("public_jobs").select("*", { count: "exact" }).order("published_at", { ascending: false }).range(from, to);
+  let query = supabase
+    .from("public_jobs")
+    .select("*", { count: "exact" })
+    .order("published_at", { ascending: false })
+    .range(from, to);
 
   if (filter.q) {
     const term = filter.q.replace(/[%_,()]/g, " ").trim();
@@ -31,21 +37,34 @@ export async function listPublicJobs(filter: JobsFilter): Promise<Result<{ jobs:
 
 export async function getPublicJobBySlug(slug: string): Promise<Result<PublicJob | null>> {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("public_jobs").select("*").eq("slug", slug).maybeSingle();
+  const { data, error } = await supabase
+    .from("public_jobs")
+    .select("*")
+    .eq("slug", slug)
+    .maybeSingle();
   if (error) return err(error.message);
   return ok(data);
 }
 
 export async function listSimilarPublicJobs(job: PublicJob, limit = 3): Promise<PublicJob[]> {
   const supabase = await createClient();
-  let query = supabase.from("public_jobs").select("*").neq("id", job.id ?? "").order("published_at", { ascending: false }).limit(limit);
+  let query = supabase
+    .from("public_jobs")
+    .select("*")
+    .neq("id", job.id ?? "")
+    .order("published_at", { ascending: false })
+    .limit(limit);
   if (job.role_family) query = query.eq("role_family", job.role_family);
   const { data } = await query;
   return data ?? [];
 }
 
-export async function listAllPublicJobSlugs(): Promise<{ slug: string; published_at: string | null }[]> {
+export async function listAllPublicJobSlugs(): Promise<
+  { slug: string; published_at: string | null }[]
+> {
   const supabase = await createClient();
   const { data } = await supabase.from("public_jobs").select("slug, published_at").limit(1000);
-  return (data ?? []).filter((r): r is { slug: string; published_at: string | null } => Boolean(r.slug));
+  return (data ?? []).filter((r): r is { slug: string; published_at: string | null } =>
+    Boolean(r.slug),
+  );
 }

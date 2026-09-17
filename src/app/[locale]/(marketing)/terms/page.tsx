@@ -5,10 +5,15 @@ import { pageLocale } from "@/i18n/server";
 
 import type { Metadata } from "next";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/terms">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/terms">): Promise<Metadata> {
   const locale = await pageLocale(params);
   const t = await getTranslations({ locale, namespace: "marketing.meta" });
-  return { title: t("terms"), alternates: { canonical: `/${locale}/terms`, languages: { en: "/en/terms", es: "/es/terms" } } };
+  return {
+    title: t("terms"),
+    alternates: { canonical: `/${locale}/terms`, languages: { en: "/en/terms", es: "/es/terms" } },
+  };
 }
 
 export default async function TermsPage({ params }: PageProps<"/[locale]/terms">) {

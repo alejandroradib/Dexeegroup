@@ -13,7 +13,9 @@ describe("question banks", () => {
     expect(mcq.length).toBeGreaterThanOrEqual(60);
     expect(writing.length).toBeGreaterThanOrEqual(6);
     for (const band of ["band1", "band2", "band3"]) {
-      expect(mcq.filter((q) => (q.options as { band: string }).band === band).length).toBeGreaterThanOrEqual(12);
+      expect(
+        mcq.filter((q) => (q.options as { band: string }).band === band).length,
+      ).toBeGreaterThanOrEqual(12);
     }
     for (const q of mcq) {
       const choices = (q.options as { choices: { id: string }[] }).choices;
@@ -30,7 +32,13 @@ describe("question banks", () => {
     const sjt = banks.psychometric.filter((q) => q.question_type === "situational");
     expect(likert).toHaveLength(50);
     expect(sjt).toHaveLength(10);
-    for (const factor of ["extraversion", "agreeableness", "conscientiousness", "emotional_stability", "intellect"]) {
+    for (const factor of [
+      "extraversion",
+      "agreeableness",
+      "conscientiousness",
+      "emotional_stability",
+      "intellect",
+    ]) {
       expect(likert.filter((q) => q.factor === factor)).toHaveLength(10);
     }
     expect(likert.some((q) => (q.answer_key as { reverse: boolean }).reverse)).toBe(true);
@@ -41,7 +49,9 @@ describe("question banks", () => {
     }
   });
   it("uses unique bank ids", () => {
-    const ids = [...banks.english_written, ...banks.english_oral, ...banks.psychometric].map((q) => q.bank_id);
+    const ids = [...banks.english_written, ...banks.english_oral, ...banks.psychometric].map(
+      (q) => q.bank_id,
+    );
     expect(new Set(ids).size).toBe(ids.length);
   });
 });

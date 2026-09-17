@@ -7,7 +7,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * Uses the service role because companies have no policy on assessment_attempts; the visibility
  * flag is the gate and numeric scores are never returned.
  */
-export async function getVisibleWorkstyleBands(candidateId: string): Promise<Record<string, string> | null> {
+export async function getVisibleWorkstyleBands(
+  candidateId: string,
+): Promise<Record<string, string> | null> {
   const admin = createAdminClient();
   const { data } = await admin
     .from("assessment_attempts")

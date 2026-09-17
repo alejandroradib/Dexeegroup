@@ -7,7 +7,16 @@ import { buildEmail } from "../../emails/index";
 
 describe("email templates", () => {
   it("has every SPEC 12 template in both locales", () => {
-    for (const template of ["company-status", "job-status", "new-application", "application-status", "contact-released", "recommendation", "assessment-result", "invite"]) {
+    for (const template of [
+      "company-status",
+      "job-status",
+      "new-application",
+      "application-status",
+      "contact-released",
+      "recommendation",
+      "assessment-result",
+      "invite",
+    ]) {
       expect(isTemplateName(template)).toBe(true);
       expect(EMAIL_COPY[template as keyof typeof EMAIL_COPY].en.subject).toBeTruthy();
       expect(EMAIL_COPY[template as keyof typeof EMAIL_COPY].es.subject).toBeTruthy();
@@ -17,7 +26,12 @@ describe("email templates", () => {
     expect(fillTemplate("Hello {name}, {missing} done", { name: "Ana" })).toBe("Hello Ana, done");
   });
   it("builds absolute, locale-prefixed CTA links", () => {
-    const email = buildEmail("new-application", "es", { job: "Contador", candidate: "Laura G.", link: "/company/jobs/1/pipeline" }, "https://dexeegroup.com");
+    const email = buildEmail(
+      "new-application",
+      "es",
+      { job: "Contador", candidate: "Laura G.", link: "/company/jobs/1/pipeline" },
+      "https://dexeegroup.com",
+    );
     expect(email.subject).toBe("Nuevos postulantes para Contador");
     expect(email.props.ctaUrl).toBe("https://dexeegroup.com/es/company/jobs/1/pipeline");
     expect(email.props.body).toContain("Laura G.");

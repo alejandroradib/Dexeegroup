@@ -7,7 +7,9 @@ import { pageLocale } from "@/i18n/server";
 
 import type { Metadata } from "next";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/sign-in">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/sign-in">): Promise<Metadata> {
   const locale = await pageLocale(params);
   const t = await getTranslations({ locale, namespace: "auth.meta" });
   return { title: t("signIn"), robots: { index: false } };
@@ -24,7 +26,10 @@ export default async function SignInPage({ params, searchParams }: PageProps<"/[
       subtitle={t("subtitle")}
       footer={
         <p>
-          {t("noAccount")} <Link href="/sign-up" className="font-semibold text-link hover:underline">{t("createAccount")}</Link>
+          {t("noAccount")}{" "}
+          <Link href="/sign-up" className="text-link font-semibold hover:underline">
+            {t("createAccount")}
+          </Link>
         </p>
       }
     >

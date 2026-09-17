@@ -14,7 +14,6 @@ import { loadBanks, type BankQuestion } from "./lib/banks";
 
 import type { Database, Json } from "../src/types/database";
 
-
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!url || !key) {
@@ -24,7 +23,10 @@ if (!url || !key) {
 const supabase = createClient<Database>(url, key, { auth: { persistSession: false } });
 
 async function upsertQuestions(assessmentId: string, questions: BankQuestion[]) {
-  const { data: existing } = await supabase.from("assessment_questions").select("id, options, prompt").eq("assessment_id", assessmentId);
+  const { data: existing } = await supabase
+    .from("assessment_questions")
+    .select("id, options, prompt")
+    .eq("assessment_id", assessmentId);
   const byBankId = new Map<string, string>();
   for (const row of existing ?? []) {
     const bankId = (row.options as { bank_id?: string } | null)?.bank_id;
@@ -62,7 +64,9 @@ async function upsertQuestions(assessmentId: string, questions: BankQuestion[]) 
 
 async function main() {
   if (process.argv.includes("--sql")) {
-    console.log("Apply supabase/seed.sql with `supabase db reset` or psql; the JS client cannot run raw SQL.");
+    console.log(
+      "Apply supabase/seed.sql with `supabase db reset` or psql; the JS client cannot run raw SQL.",
+    );
   }
   const banks = loadBanks(path.resolve(process.cwd(), "supabase/seed"));
   const { data: assessments, error } = await supabase.from("assessments").select("id, type");
@@ -76,7 +80,12 @@ async function main() {
     const result = await upsertQuestions(assessment.id, banks[type]);
     console.log(`${type}: ${result.inserted} inserted, ${result.updated} updated`);
   }
-  console.log(readFileSync(path.resolve(process.cwd(), "supabase/seed/english_written.json"), "utf8").length > 0 ? "Banks loaded." : "");
+  console.log(
+    readFileSync(path.resolve(process.cwd(), "supabase/seed/english_written.json"), "utf8").length >
+      0
+      ? "Banks loaded."
+      : "",
+  );
 }
 
 main().catch((error) => {

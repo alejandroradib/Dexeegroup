@@ -19,7 +19,13 @@ const NAV = [
   { href: "/contact", key: "contact" },
 ] as const;
 
-export function MarketingHeader({ signedIn, dashboardHref }: { signedIn: boolean; dashboardHref?: string }) {
+export function MarketingHeader({
+  signedIn,
+  dashboardHref,
+}: {
+  signedIn: boolean;
+  dashboardHref?: string;
+}) {
   const t = useTranslations("nav.marketing");
   const tc = useTranslations("common.actions");
   const pathname = usePathname();
@@ -30,7 +36,7 @@ export function MarketingHeader({ signedIn, dashboardHref }: { signedIn: boolean
       key={item.href}
       href={item.href}
       className={cn(
-        "rounded-[8px] px-3 py-2 text-sm font-medium text-navy hover:bg-mist",
+        "text-navy hover:bg-mist rounded-[8px] px-3 py-2 text-sm font-medium",
         pathname === item.href && "bg-mist",
       )}
       onClick={() => setOpen(false)}
@@ -40,7 +46,7 @@ export function MarketingHeader({ signedIn, dashboardHref }: { signedIn: boolean
   ));
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-white/95 backdrop-blur">
+    <header className="border-border sticky top-0 z-40 border-b bg-white/95 backdrop-blur">
       <div className="container-marketing flex h-16 items-center justify-between gap-4">
         <Logo height={26} />
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
@@ -70,14 +76,22 @@ export function MarketingHeader({ signedIn, dashboardHref }: { signedIn: boolean
               <SheetTitle className="sr-only">{tc("openMenu")}</SheetTitle>
               <nav className="mt-6 flex flex-col gap-1" aria-label="Mobile">
                 {links}
-                <Link href="/sign-in" className="rounded-[8px] px-3 py-2 text-sm font-medium text-navy hover:bg-mist" onClick={() => setOpen(false)}>
+                <Link
+                  href="/sign-in"
+                  className="text-navy hover:bg-mist rounded-[8px] px-3 py-2 text-sm font-medium"
+                  onClick={() => setOpen(false)}
+                >
                   {t("signIn")}
                 </Link>
                 <Button asChild variant="accent" className="mt-4">
-                  <Link href="/sign-up/company" onClick={() => setOpen(false)}>{t("postJob")}</Link>
+                  <Link href="/sign-up/company" onClick={() => setOpen(false)}>
+                    {t("postJob")}
+                  </Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="/sign-up/candidate" onClick={() => setOpen(false)}>{t("createProfile")}</Link>
+                  <Link href="/sign-up/candidate" onClick={() => setOpen(false)}>
+                    {t("createProfile")}
+                  </Link>
                 </Button>
               </nav>
             </SheetContent>

@@ -569,7 +569,7 @@
         "success": "Message received. We will reply within one business day.",
         "error": "We could not send your message. Try again or write to info@dexeegroup.com."
       },
-      "direct": "Or write to us at {email}"
+      "direct": "Or write to us at <email></email>"
     },
     "legal": {
       "updated": "Last updated {date}",

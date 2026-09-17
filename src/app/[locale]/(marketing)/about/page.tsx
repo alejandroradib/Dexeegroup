@@ -1,14 +1,25 @@
 import { getTranslations } from "next-intl/server";
 
-import { ChevronList, FeatureCard, Section, SectionTitle } from "@/components/domain/marketing/sections";
+import {
+  ChevronList,
+  FeatureCard,
+  Section,
+  SectionTitle,
+} from "@/components/domain/marketing/sections";
 import { pageLocale } from "@/i18n/server";
 
 import type { Metadata } from "next";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/about">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/about">): Promise<Metadata> {
   const locale = await pageLocale(params);
   const t = await getTranslations({ locale, namespace: "marketing.meta" });
-  return { title: t("about"), description: t("aboutDescription"), alternates: { canonical: `/${locale}/about`, languages: { en: "/en/about", es: "/es/about" } } };
+  return {
+    title: t("about"),
+    description: t("aboutDescription"),
+    alternates: { canonical: `/${locale}/about`, languages: { en: "/en/about", es: "/es/about" } },
+  };
 }
 
 export default async function AboutPage({ params }: PageProps<"/[locale]/about">) {
@@ -49,7 +60,9 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
             <dl className="grid gap-6 sm:grid-cols-2">
               {[1, 2, 3, 4].map((n) => (
                 <div key={n}>
-                  <dt className="font-heading text-lg font-bold text-navy">{t(`value${n}Title` as "value1Title")}</dt>
+                  <dt className="font-heading text-navy text-lg font-bold">
+                    {t(`value${n}Title` as "value1Title")}
+                  </dt>
                   <dd className="mt-1 text-sm">{t(`value${n}Body` as "value1Body")}</dd>
                 </div>
               ))}
@@ -59,7 +72,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/about">
             <SectionTitle title={t("whyTitle")} />
             <ChevronList items={[t("why1"), t("why2"), t("why3")]} />
             <h3 className="mt-10 text-lg">{t("legalTitle")}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{t("legalBody")}</p>
+            <p className="text-muted-foreground mt-2 text-sm">{t("legalBody")}</p>
           </div>
         </div>
       </Section>

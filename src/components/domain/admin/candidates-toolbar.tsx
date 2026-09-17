@@ -14,18 +14,28 @@ export function ExportCandidatesButton({ ids }: { ids: string[] }) {
   const { toast } = useToast();
   const [pending, start] = useTransition();
   return (
-    <Button variant="outline" size="sm" disabled={pending || ids.length === 0} onClick={() => start(async () => {
-      const result = await exportCandidatesCsv(ids);
-      if (!result.ok) { toast({ title: tc("errors.generic"), variant: "danger" }); return; }
-      const blob = new Blob([result.data.csv], { type: "text/csv;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = result.data.filename;
-      a.click();
-      URL.revokeObjectURL(url);
-      toast({ title: t("exported"), variant: "success" });
-    })}>
+    <Button
+      variant="outline"
+      size="sm"
+      disabled={pending || ids.length === 0}
+      onClick={() =>
+        start(async () => {
+          const result = await exportCandidatesCsv(ids);
+          if (!result.ok) {
+            toast({ title: tc("errors.generic"), variant: "danger" });
+            return;
+          }
+          const blob = new Blob([result.data.csv], { type: "text/csv;charset=utf-8" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = result.data.filename;
+          a.click();
+          URL.revokeObjectURL(url);
+          toast({ title: t("exported"), variant: "success" });
+        })
+      }
+    >
       <DownloadIcon /> {t("export")}
     </Button>
   );

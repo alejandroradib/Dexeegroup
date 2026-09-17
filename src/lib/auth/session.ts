@@ -23,7 +23,11 @@ export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return null;
-  const { data: profile } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .maybeSingle();
   return {
     id: user.id,
     email: user.email ?? profile?.email ?? "",
@@ -40,7 +44,11 @@ export const roleHome: Record<UserRole, string> = {
 };
 
 /** Ensures the current user has the given role; redirects otherwise. Never returns null. */
-export async function requireRole(role: UserRole, locale: Locale, next?: string): Promise<SessionUser> {
+export async function requireRole(
+  role: UserRole,
+  locale: Locale,
+  next?: string,
+): Promise<SessionUser> {
   const user = await getSessionUser();
   if (!user) {
     redirect({ href: { pathname: "/sign-in", query: next ? { next } : undefined }, locale });

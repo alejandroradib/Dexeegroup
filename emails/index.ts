@@ -9,10 +9,17 @@ const FOOTER: Record<EmailLocale, string> = {
 export type RenderedEmail = { subject: string; props: BaseEmailProps };
 
 /** Builds subject and component props for a template in the recipient's locale. */
-export function buildEmail(template: TemplateName, locale: EmailLocale, payload: Record<string, unknown>, siteUrl: string): RenderedEmail {
+export function buildEmail(
+  template: TemplateName,
+  locale: EmailLocale,
+  payload: Record<string, unknown>,
+  siteUrl: string,
+): RenderedEmail {
   const copy = EMAIL_COPY[template][locale];
   const link = typeof payload.link === "string" ? payload.link : "/";
-  const ctaUrl = link.startsWith("http") ? link : `${siteUrl}${link.startsWith(`/${locale}`) ? link : `/${locale}${link}`}`;
+  const ctaUrl = link.startsWith("http")
+    ? link
+    : `${siteUrl}${link.startsWith(`/${locale}`) ? link : `/${locale}${link}`}`;
   return {
     subject: fillTemplate(copy.subject, payload),
     props: {

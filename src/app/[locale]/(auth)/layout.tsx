@@ -5,7 +5,7 @@ import { pageLocale } from "@/i18n/server";
 export default async function AuthLayout({ children, params }: LayoutProps<"/[locale]">) {
   await pageLocale(params);
   return (
-    <div className="flex min-h-screen flex-col bg-mist">
+    <div className="bg-mist flex min-h-screen flex-col">
       <header className="flex h-16 items-center justify-between px-4 sm:px-8">
         <Logo height={26} />
         <LanguageSwitch />

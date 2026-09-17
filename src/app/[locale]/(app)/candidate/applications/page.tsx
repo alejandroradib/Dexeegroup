@@ -10,15 +10,29 @@ import { pageLocale } from "@/i18n/server";
 import { getSessionUser } from "@/lib/auth/session";
 import { listCandidateApplications } from "@/server/services/candidates";
 
-export default async function CandidateApplicationsPage({ params }: PageProps<"/[locale]/candidate/applications">) {
+export default async function CandidateApplicationsPage({
+  params,
+}: PageProps<"/[locale]/candidate/applications">) {
   await pageLocale(params);
   const user = await getSessionUser();
-  const [applications, t] = await Promise.all([listCandidateApplications(user!.id), getTranslations("candidate.applications")]);
+  const [applications, t] = await Promise.all([
+    listCandidateApplications(user!.id),
+    getTranslations("candidate.applications"),
+  ]);
   return (
     <>
       <PageHeader title={t("title")} description={t("subtitle")} />
       {applications.length === 0 ? (
-        <EmptyState icon={FileTextIcon} title={t("empty")} description={t("emptyBody")} action={<Button asChild><Link href="/candidate/jobs">{t("browse")}</Link></Button>} />
+        <EmptyState
+          icon={FileTextIcon}
+          title={t("empty")}
+          description={t("emptyBody")}
+          action={
+            <Button asChild>
+              <Link href="/candidate/jobs">{t("browse")}</Link>
+            </Button>
+          }
+        />
       ) : (
         <ApplicationsList applications={applications} />
       )}

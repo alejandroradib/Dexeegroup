@@ -29,7 +29,8 @@ export function SignUpCompanyForm({ next }: { next?: string }) {
     setError(null);
     start(async () => {
       const result = await signUpCompany(values);
-      if (result.ok) router.push({ pathname: "/verify-email", query: { email: result.data.email } });
+      if (result.ok)
+        router.push({ pathname: "/verify-email", query: { email: result.data.email } });
       else setError(result.error);
     });
   });
@@ -38,33 +39,72 @@ export function SignUpCompanyForm({ next }: { next?: string }) {
     <form onSubmit={onSubmit} className="grid gap-4" noValidate>
       <div className="grid gap-1.5">
         <Label htmlFor="full_name">{t("fullName")}</Label>
-        <Input id="full_name" autoComplete="name" aria-invalid={Boolean(form.formState.errors.full_name)} {...form.register("full_name")} />
+        <Input
+          id="full_name"
+          autoComplete="name"
+          aria-invalid={Boolean(form.formState.errors.full_name)}
+          {...form.register("full_name")}
+        />
         <FieldError error={form.formState.errors.full_name?.message} />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="company_name">{t("companyName")}</Label>
-        <Input id="company_name" autoComplete="organization" aria-invalid={Boolean(form.formState.errors.company_name)} {...form.register("company_name")} />
+        <Input
+          id="company_name"
+          autoComplete="organization"
+          aria-invalid={Boolean(form.formState.errors.company_name)}
+          {...form.register("company_name")}
+        />
         <FieldError error={form.formState.errors.company_name?.message} />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="email">{t("email")}</Label>
-        <Input id="email" type="email" autoComplete="email" aria-invalid={Boolean(form.formState.errors.email)} {...form.register("email")} />
+        <Input
+          id="email"
+          type="email"
+          autoComplete="email"
+          aria-invalid={Boolean(form.formState.errors.email)}
+          {...form.register("email")}
+        />
         <FieldError error={form.formState.errors.email?.message} />
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="password">{t("password")}</Label>
-        <Input id="password" type="password" autoComplete="new-password" aria-describedby="password-hint" aria-invalid={Boolean(form.formState.errors.password)} {...form.register("password")} />
-        <p id="password-hint" className="text-xs text-muted-foreground">{t("passwordHint")}</p>
+        <Input
+          id="password"
+          type="password"
+          autoComplete="new-password"
+          aria-describedby="password-hint"
+          aria-invalid={Boolean(form.formState.errors.password)}
+          {...form.register("password")}
+        />
+        <p id="password-hint" className="text-muted-foreground text-xs">
+          {t("passwordHint")}
+        </p>
         <FieldError error={form.formState.errors.password?.message} />
       </div>
-      <p className="text-xs text-muted-foreground">
+      <p className="text-muted-foreground text-xs">
         {t.rich("terms", {
-          terms: (chunks) => <Link href="/terms" className="text-link underline">{chunks}</Link>,
-          privacy: (chunks) => <Link href="/privacy" className="text-link underline">{chunks}</Link>,
+          terms: (chunks) => (
+            <Link href="/terms" className="text-link underline">
+              {chunks}
+            </Link>
+          ),
+          privacy: (chunks) => (
+            <Link href="/privacy" className="text-link underline">
+              {chunks}
+            </Link>
+          ),
         })}
       </p>
-      {error ? <Alert variant="danger">{te.has(error as "generic") ? te(error as "generic") : te("generic")}</Alert> : null}
-      <Button type="submit" disabled={pending} className="w-full">{t("submit")}</Button>
+      {error ? (
+        <Alert variant="danger">
+          {te.has(error as "generic") ? te(error as "generic") : te("generic")}
+        </Alert>
+      ) : null}
+      <Button type="submit" disabled={pending} className="w-full">
+        {t("submit")}
+      </Button>
     </form>
   );
 }

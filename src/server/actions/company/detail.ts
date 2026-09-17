@@ -7,7 +7,9 @@ import { ERR, err, ok, type Result } from "@/server/services/result";
 import { getVisibleWorkstyleBands } from "@/server/services/workstyle";
 
 /** Loads a single applicant for the drawer. RLS guarantees contact data only comes back when released. */
-export async function fetchApplicantDetail(applicationId: string): Promise<Result<ApplicantDetail>> {
+export async function fetchApplicantDetail(
+  applicationId: string,
+): Promise<Result<ApplicantDetail>> {
   const user = await getSessionUser();
   if (!user || user.role !== "company") return err(ERR.unauthorized);
   const company = await getCurrentCompany();

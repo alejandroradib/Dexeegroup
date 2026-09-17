@@ -13,7 +13,15 @@ export function formatCountdown(ms: number): string {
 }
 
 /** Shows the remaining time until `expiresAt` and calls `onExpire` once. */
-export function CountdownTimer({ expiresAt, label, onExpire }: { expiresAt: string; label: string; onExpire?: () => void }) {
+export function CountdownTimer({
+  expiresAt,
+  label,
+  onExpire,
+}: {
+  expiresAt: string;
+  label: string;
+  onExpire?: () => void;
+}) {
   const [remaining, setRemaining] = useState(() => new Date(expiresAt).getTime() - Date.now());
   useEffect(() => {
     const target = new Date(expiresAt).getTime();
@@ -30,7 +38,16 @@ export function CountdownTimer({ expiresAt, label, onExpire }: { expiresAt: stri
   }, [expiresAt, onExpire]);
   const warning = remaining < 5 * 60 * 1000;
   return (
-    <div className={cn("flex items-center gap-2 rounded-[10px] border px-3 py-1.5 text-sm font-medium", warning ? "border-warning bg-warning-soft text-warning" : "border-border bg-white text-navy")} role="timer" aria-live={warning ? "polite" : "off"}>
+    <div
+      className={cn(
+        "flex items-center gap-2 rounded-[10px] border px-3 py-1.5 text-sm font-medium",
+        warning
+          ? "border-warning bg-warning-soft text-warning"
+          : "border-border text-navy bg-white",
+      )}
+      role="timer"
+      aria-live={warning ? "polite" : "off"}
+    >
       <ClockIcon className="size-4" aria-hidden />
       <span className="sr-only">{label}</span>
       <span className="font-mono tabular-nums">{formatCountdown(remaining)}</span>

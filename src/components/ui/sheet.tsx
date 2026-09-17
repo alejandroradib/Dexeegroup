@@ -22,17 +22,17 @@ function SheetContent({
 }) {
   return (
     <SheetPrimitive.Portal>
-      <SheetPrimitive.Overlay className="fixed inset-0 z-50 bg-navy/50" />
+      <SheetPrimitive.Overlay className="bg-navy/50 fixed inset-0 z-50" />
       <SheetPrimitive.Content
         className={cn(
-          "fixed inset-y-0 z-50 flex h-full w-[min(100%,480px)] flex-col gap-4 overflow-y-auto border-border bg-background p-6 shadow-xl transition-transform",
+          "border-border bg-background fixed inset-y-0 z-50 flex h-full w-[min(100%,480px)] flex-col gap-4 overflow-y-auto p-6 shadow-xl transition-transform",
           side === "right" ? "right-0 border-l" : "left-0 border-r",
           className,
         )}
         {...props}
       >
         {children}
-        <SheetPrimitive.Close className="absolute top-4 right-4 rounded-[6px] opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring/40">
+        <SheetPrimitive.Close className="focus:ring-ring/40 absolute top-4 right-4 rounded-[6px] opacity-70 hover:opacity-100 focus:ring-2 focus:outline-none">
           <XIcon className="size-4" />
           <span className="sr-only">{closeLabel}</span>
         </SheetPrimitive.Close>
@@ -45,14 +45,19 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
   return <div className={cn("flex flex-col gap-1.5", className)} {...props} />;
 }
 function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Title>) {
-  return <SheetPrimitive.Title className={cn("text-lg font-semibold text-navy", className)} {...props} />;
+  return (
+    <SheetPrimitive.Title className={cn("text-navy text-lg font-semibold", className)} {...props} />
+  );
 }
 function SheetDescription({
   className,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Description>) {
   return (
-    <SheetPrimitive.Description className={cn("text-sm text-muted-foreground", className)} {...props} />
+    <SheetPrimitive.Description
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
   );
 }
 

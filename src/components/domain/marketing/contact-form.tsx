@@ -14,7 +14,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { contactSchema, type ContactInput } from "@/lib/validation/contact";
 import { submitContactRequest } from "@/server/actions/marketing/contact";
 
-
 export function ContactForm() {
   const t = useTranslations("marketing.contact.form");
   const te = useTranslations("enums.request_type");
@@ -23,7 +22,14 @@ export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "success" | "error" | "rateLimited">("idle");
   const form = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
-    defaultValues: { name: "", email: "", company: "", request_type: "hire", message: "", website: "" },
+    defaultValues: {
+      name: "",
+      email: "",
+      company: "",
+      request_type: "hire",
+      message: "",
+      website: "",
+    },
   });
 
   const onSubmit = form.handleSubmit((values) => {
@@ -44,12 +50,23 @@ export function ContactForm() {
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="grid gap-1.5">
           <Label htmlFor="name">{t("name")}</Label>
-          <Input id="name" autoComplete="name" aria-invalid={Boolean(form.formState.errors.name)} {...form.register("name")} />
+          <Input
+            id="name"
+            autoComplete="name"
+            aria-invalid={Boolean(form.formState.errors.name)}
+            {...form.register("name")}
+          />
           <FieldError error={form.formState.errors.name?.message} />
         </div>
         <div className="grid gap-1.5">
           <Label htmlFor="email">{t("email")}</Label>
-          <Input id="email" type="email" autoComplete="email" aria-invalid={Boolean(form.formState.errors.email)} {...form.register("email")} />
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            aria-invalid={Boolean(form.formState.errors.email)}
+            {...form.register("email")}
+          />
           <FieldError error={form.formState.errors.email?.message} />
         </div>
       </div>
@@ -60,14 +77,28 @@ export function ContactForm() {
         </div>
         <div className="grid gap-1.5">
           <Label htmlFor="request_type">{t("requestType")}</Label>
-          <select id="request_type" className="flex h-10 w-full rounded-[10px] border border-input bg-background px-3 text-sm" {...form.register("request_type")}>
-            {(["hire", "talent", "other"] as const).map((v) => <option key={v} value={v}>{te(v)}</option>)}
+          <select
+            id="request_type"
+            className="border-input bg-background flex h-10 w-full rounded-[10px] border px-3 text-sm"
+            {...form.register("request_type")}
+          >
+            {(["hire", "talent", "other"] as const).map((v) => (
+              <option key={v} value={v}>
+                {te(v)}
+              </option>
+            ))}
           </select>
         </div>
       </div>
       <div className="grid gap-1.5">
         <Label htmlFor="message">{t("message")}</Label>
-        <Textarea id="message" rows={5} placeholder={t("messagePlaceholder")} aria-invalid={Boolean(form.formState.errors.message)} {...form.register("message")} />
+        <Textarea
+          id="message"
+          rows={5}
+          placeholder={t("messagePlaceholder")}
+          aria-invalid={Boolean(form.formState.errors.message)}
+          {...form.register("message")}
+        />
         <FieldError error={form.formState.errors.message?.message} />
       </div>
       <div className="hidden" aria-hidden>
@@ -76,7 +107,9 @@ export function ContactForm() {
       </div>
       {status === "error" ? <Alert variant="danger">{t("error")}</Alert> : null}
       {status === "rateLimited" ? <Alert variant="warning">{tc("rateLimited")}</Alert> : null}
-      <Button type="submit" variant="accent" disabled={pending} className="justify-self-start">{t("submit")}</Button>
+      <Button type="submit" variant="accent" disabled={pending} className="justify-self-start">
+        {t("submit")}
+      </Button>
     </form>
   );
 }

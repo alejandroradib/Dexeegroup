@@ -7,7 +7,10 @@ import { PageHeader } from "@/components/layout/page-header";
 import { pageLocale } from "@/i18n/server";
 import { parseJobsFilter } from "@/lib/validation/jobs-filter";
 
-export default async function CandidateJobsPage({ params, searchParams }: PageProps<"/[locale]/candidate/jobs">) {
+export default async function CandidateJobsPage({
+  params,
+  searchParams,
+}: PageProps<"/[locale]/candidate/jobs">) {
   await pageLocale(params);
   const t = await getTranslations("candidate.jobs");
   const filter = parseJobsFilter(await searchParams);

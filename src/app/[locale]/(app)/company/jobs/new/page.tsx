@@ -10,5 +10,8 @@ export default async function NewJobPage({ params }: PageProps<"/[locale]/compan
   if (!company) redirect({ href: "/company/onboarding", locale });
   const result = await createDraftJob();
   if (!result.ok) redirect({ href: "/company/jobs", locale });
-  redirect({ href: `/company/jobs/${(result as { ok: true; data: { jobId: string } }).data.jobId}/edit`, locale });
+  redirect({
+    href: `/company/jobs/${(result as { ok: true; data: { jobId: string } }).data.jobId}/edit`,
+    locale,
+  });
 }

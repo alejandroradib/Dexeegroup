@@ -1,11 +1,19 @@
-
 import { locales } from "@/i18n/routing";
 import { publicEnv } from "@/lib/env";
 import { listAllPublicJobSlugs } from "@/server/services/public-jobs";
 
 import type { MetadataRoute } from "next";
 
-const STATIC_PATHS = ["", "/for-companies", "/for-talent", "/jobs", "/about", "/contact", "/privacy", "/terms"];
+const STATIC_PATHS = [
+  "",
+  "/for-companies",
+  "/for-talent",
+  "/jobs",
+  "/about",
+  "/contact",
+  "/privacy",
+  "/terms",
+];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = publicEnv().NEXT_PUBLIC_SITE_URL;
@@ -16,7 +24,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${base}/${locale}${path}`,
         changeFrequency: path === "/jobs" ? "daily" : "monthly",
         priority: path === "" ? 1 : 0.7,
-        alternates: { languages: Object.fromEntries(locales.map((l) => [l, `${base}/${l}${path}`])) },
+        alternates: {
+          languages: Object.fromEntries(locales.map((l) => [l, `${base}/${l}${path}`])),
+        },
       });
     }
   }
@@ -33,7 +43,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: job.published_at ?? undefined,
         changeFrequency: "weekly",
         priority: 0.8,
-        alternates: { languages: Object.fromEntries(locales.map((l) => [l, `${base}/${l}/jobs/${job.slug}`])) },
+        alternates: {
+          languages: Object.fromEntries(locales.map((l) => [l, `${base}/${l}/jobs/${job.slug}`])),
+        },
       });
     }
   }

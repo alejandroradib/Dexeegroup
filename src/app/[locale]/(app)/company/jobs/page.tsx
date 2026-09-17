@@ -14,12 +14,29 @@ export default async function CompanyJobsPage({ params }: PageProps<"/[locale]/c
   const locale = await pageLocale(params);
   const company = await getCurrentCompany();
   if (!company) redirect({ href: "/company/onboarding", locale });
-  const [t, jobs] = await Promise.all([getTranslations("company.jobs"), listCompanyJobs(company!.id)]);
-  const newButton = <Button asChild variant="accent"><Link href="/company/jobs/new">{t("new")}</Link></Button>;
+  const [t, jobs] = await Promise.all([
+    getTranslations("company.jobs"),
+    listCompanyJobs(company!.id),
+  ]);
+  const newButton = (
+    <Button asChild variant="accent">
+      <Link href="/company/jobs/new">{t("new")}</Link>
+    </Button>
+  );
   return (
     <>
       <PageHeader title={t("title")} description={t("subtitle")} actions={newButton} />
-      <JobsTable jobs={jobs} emptyState={<EmptyState icon={BriefcaseIcon} title={t("empty")} description={t("emptyBody")} action={newButton} />} />
+      <JobsTable
+        jobs={jobs}
+        emptyState={
+          <EmptyState
+            icon={BriefcaseIcon}
+            title={t("empty")}
+            description={t("emptyBody")}
+            action={newButton}
+          />
+        }
+      />
     </>
   );
 }

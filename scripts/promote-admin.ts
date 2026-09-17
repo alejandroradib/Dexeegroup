@@ -18,17 +18,25 @@ async function main() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!email) throw new Error("Pass --email or set ADMIN_EMAIL");
-  if (!url || !key) throw new Error("NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required");
+  if (!url || !key)
+    throw new Error("NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required");
 
   const supabase = createClient<Database>(url, key, { auth: { persistSession: false } });
-  const { data: profile, error } = await supabase.from("profiles").select("id, role").eq("email", email).maybeSingle();
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("id, role")
+    .eq("email", email)
+    .maybeSingle();
   if (error) throw error;
   if (!profile) throw new Error(`No profile found for ${email}. The user must sign up first.`);
   if (profile.role === "admin") {
     console.log(`${email} is already an admin`);
     return;
   }
-  const { error: updateError } = await supabase.from("profiles").update({ role: "admin" }).eq("id", profile.id);
+  const { error: updateError } = await supabase
+    .from("profiles")
+    .update({ role: "admin" })
+    .eq("id", profile.id);
   if (updateError) throw updateError;
   await supabase.from("admin_activity").insert({
     actor_user_id: profile.id,

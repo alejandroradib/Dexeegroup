@@ -25,7 +25,11 @@ export async function GET(request: NextRequest) {
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.redirect(new URL(`/${locale}/sign-in`, url.origin));
 
-  const { data: profile } = await supabase.from("profiles").select("role, locale").eq("id", user.id).maybeSingle();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role, locale")
+    .eq("id", user.id)
+    .maybeSingle();
   const finalLocale = profile?.locale ?? locale;
   const destination = next !== "/" ? next : profile?.role ? roleHome[profile.role] : "/";
   return NextResponse.redirect(new URL(`/${finalLocale}${destination}`, url.origin));

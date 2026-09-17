@@ -1,4 +1,10 @@
-export const FACTORS = ["extraversion", "agreeableness", "conscientiousness", "emotional_stability", "intellect"] as const;
+export const FACTORS = [
+  "extraversion",
+  "agreeableness",
+  "conscientiousness",
+  "emotional_stability",
+  "intellect",
+] as const;
 export type Factor = (typeof FACTORS)[number];
 export type Band = "low" | "mid" | "high";
 
@@ -8,7 +14,10 @@ export type SjtItem = { id: string; best: string };
 export type SjtAnswer = { question_id: string; selected_option: string | null };
 
 export type FactorScore = { raw: number; scaled: number; band: Band; answered: number };
-export type WorkstyleScores = { factors: Record<Factor, FactorScore>; sjt: { score: number; total: number; band: Band } };
+export type WorkstyleScores = {
+  factors: Record<Factor, FactorScore>;
+  sjt: { score: number; total: number; band: Band };
+};
 
 export type BandThresholds = { low_below: number; high_above: number };
 export const DEFAULT_BANDS: BandThresholds = { low_below: 40, high_above: 60 };
@@ -20,7 +29,11 @@ export function bandFor(scaled: number, t: BandThresholds = DEFAULT_BANDS): Band
 }
 
 /** raw = sum of item values with reversed items as 6 − value (range 10–50); scaled = (raw − 10) / 40 × 100. */
-export function scoreFactors(items: LikertItem[], answers: LikertAnswer[], bands: BandThresholds = DEFAULT_BANDS): Record<Factor, FactorScore> {
+export function scoreFactors(
+  items: LikertItem[],
+  answers: LikertAnswer[],
+  bands: BandThresholds = DEFAULT_BANDS,
+): Record<Factor, FactorScore> {
   const byId = new Map(answers.map((a) => [a.question_id, a.likert_value]));
   const result = {} as Record<Factor, FactorScore>;
   for (const factor of FACTORS) {
@@ -45,20 +58,41 @@ export function scoreFactors(items: LikertItem[], answers: LikertAnswer[], bands
   return result;
 }
 
-export function scoreSjt(items: SjtItem[], answers: SjtAnswer[]): { score: number; total: number; band: Band } {
+export function scoreSjt(
+  items: SjtItem[],
+  answers: SjtAnswer[],
+): { score: number; total: number; band: Band } {
   const byId = new Map(answers.map((a) => [a.question_id, a.selected_option]));
   const score = items.filter((i) => byId.get(i.id) === i.best).length;
   const ratio = items.length > 0 ? score / items.length : 0;
   return { score, total: items.length, band: ratio >= 0.7 ? "high" : ratio >= 0.4 ? "mid" : "low" };
 }
 
-export function scoreWorkstyle(likertItems: LikertItem[], likertAnswers: LikertAnswer[], sjtItems: SjtItem[], sjtAnswers: SjtAnswer[], bands?: BandThresholds): WorkstyleScores {
-  return { factors: scoreFactors(likertItems, likertAnswers, bands), sjt: scoreSjt(sjtItems, sjtAnswers) };
+export function scoreWorkstyle(
+  likertItems: LikertItem[],
+  likertAnswers: LikertAnswer[],
+  sjtItems: SjtItem[],
+  sjtAnswers: SjtAnswer[],
+  bands?: BandThresholds,
+): WorkstyleScores {
+  return {
+    factors: scoreFactors(likertItems, likertAnswers, bands),
+    sjt: scoreSjt(sjtItems, sjtAnswers),
+  };
 }
 
 export type WorkstyleReport = {
   version: 1;
-  factors: Record<Factor, { scaled: number; band: Band; label: { en: string; es: string }; preferences: { en: string; es: string }; environments: { en: string; es: string } }>;
+  factors: Record<
+    Factor,
+    {
+      scaled: number;
+      band: Band;
+      label: { en: string; es: string };
+      preferences: { en: string; es: string };
+      environments: { en: string; es: string };
+    }
+  >;
   sjt: { score: number; total: number; band: Band; summary: { en: string; es: string } };
   strengths: { en: string[]; es: string[] };
   disclaimer: { en: string; es: string };
@@ -77,12 +111,26 @@ type Copy = {
  * Deterministic report: same scores → same report. Strengths are the two highest factors plus the SJT
  * strength when the SJT score reaches the configured minimum (SPEC 11.3).
  */
-export function buildWorkstyleReport(scores: WorkstyleScores, copy: { en: Copy; es: Copy }, strengthSjtMin = 7): WorkstyleReport {
-  const ranked = [...FACTORS].sort((a, b) => scores.factors[b].scaled - scores.factors[a].scaled || FACTORS.indexOf(a) - FACTORS.indexOf(b));
+export function buildWorkstyleReport(
+  scores: WorkstyleScores,
+  copy: { en: Copy; es: Copy },
+  strengthSjtMin = 7,
+): WorkstyleReport {
+  const ranked = [...FACTORS].sort(
+    (a, b) =>
+      scores.factors[b].scaled - scores.factors[a].scaled ||
+      FACTORS.indexOf(a) - FACTORS.indexOf(b),
+  );
   const top = ranked.slice(0, 2);
   const strengths = {
-    en: [...top.map((f) => copy.en.strengths[f]), ...(scores.sjt.score >= strengthSjtMin ? [copy.en.sjtStrength] : [])],
-    es: [...top.map((f) => copy.es.strengths[f]), ...(scores.sjt.score >= strengthSjtMin ? [copy.es.sjtStrength] : [])],
+    en: [
+      ...top.map((f) => copy.en.strengths[f]),
+      ...(scores.sjt.score >= strengthSjtMin ? [copy.en.sjtStrength] : []),
+    ],
+    es: [
+      ...top.map((f) => copy.es.strengths[f]),
+      ...(scores.sjt.score >= strengthSjtMin ? [copy.es.sjtStrength] : []),
+    ],
   };
   const factors = {} as WorkstyleReport["factors"];
   for (const factor of FACTORS) {
@@ -91,14 +139,23 @@ export function buildWorkstyleReport(scores: WorkstyleScores, copy: { en: Copy; 
       scaled,
       band,
       label: { en: copy.en.labels[factor], es: copy.es.labels[factor] },
-      preferences: { en: copy.en.factors[factor][band].preferences, es: copy.es.factors[factor][band].preferences },
-      environments: { en: copy.en.factors[factor][band].environments, es: copy.es.factors[factor][band].environments },
+      preferences: {
+        en: copy.en.factors[factor][band].preferences,
+        es: copy.es.factors[factor][band].preferences,
+      },
+      environments: {
+        en: copy.en.factors[factor][band].environments,
+        es: copy.es.factors[factor][band].environments,
+      },
     };
   }
   return {
     version: 1,
     factors,
-    sjt: { ...scores.sjt, summary: { en: copy.en.sjt[scores.sjt.band], es: copy.es.sjt[scores.sjt.band] } },
+    sjt: {
+      ...scores.sjt,
+      summary: { en: copy.en.sjt[scores.sjt.band], es: copy.es.sjt[scores.sjt.band] },
+    },
     strengths,
     disclaimer: { en: copy.en.disclaimer, es: copy.es.disclaimer },
   };

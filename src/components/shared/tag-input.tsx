@@ -17,11 +17,26 @@ type TagInputProps = {
   "aria-invalid"?: boolean;
 };
 
-export function TagInput({ value, onChange, suggestions = [], placeholder, max = 20, id, removeLabel, ...rest }: TagInputProps) {
+export function TagInput({
+  value,
+  onChange,
+  suggestions = [],
+  placeholder,
+  max = 20,
+  id,
+  removeLabel,
+  ...rest
+}: TagInputProps) {
   const [draft, setDraft] = useState("");
   const listId = useId();
   const normalized = new Set(value.map((v) => v.toLowerCase()));
-  const filtered = suggestions.filter((s) => !normalized.has(s.toLowerCase()) && (!draft || s.toLowerCase().includes(draft.toLowerCase()))).slice(0, 8);
+  const filtered = suggestions
+    .filter(
+      (s) =>
+        !normalized.has(s.toLowerCase()) &&
+        (!draft || s.toLowerCase().includes(draft.toLowerCase())),
+    )
+    .slice(0, 8);
 
   function add(raw: string) {
     const tag = raw.trim().replace(/,+$/, "");
@@ -50,7 +65,9 @@ export function TagInput({ value, onChange, suggestions = [], placeholder, max =
         onBlur={() => draft && add(draft)}
       />
       <datalist id={listId}>
-        {filtered.map((s) => <option key={s} value={s} />)}
+        {filtered.map((s) => (
+          <option key={s} value={s} />
+        ))}
       </datalist>
       {value.length > 0 ? (
         <ul className="flex flex-wrap gap-1.5">
@@ -58,7 +75,12 @@ export function TagInput({ value, onChange, suggestions = [], placeholder, max =
             <li key={tag}>
               <Badge variant="secondary" className="gap-1 pr-1">
                 {tag}
-                <button type="button" onClick={() => onChange(value.filter((v) => v !== tag))} className="rounded-full p-0.5 hover:bg-navy/10" aria-label={`${removeLabel} ${tag}`}>
+                <button
+                  type="button"
+                  onClick={() => onChange(value.filter((v) => v !== tag))}
+                  className="hover:bg-navy/10 rounded-full p-0.5"
+                  aria-label={`${removeLabel} ${tag}`}
+                >
                   <XIcon className="size-3" />
                 </button>
               </Badge>

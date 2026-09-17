@@ -131,7 +131,9 @@ export async function createTestDatabase(options: { seed?: boolean; banks?: bool
 /** Inserts the JSON question banks the same way scripts/seed.ts does against a real project. */
 export async function loadBanksInto(db: PGlite): Promise<number> {
   const banks = loadBanks(path.resolve(process.cwd(), "supabase/seed"));
-  const { rows } = await db.query<{ id: string; type: string }>("select id, type from public.assessments");
+  const { rows } = await db.query<{ id: string; type: string }>(
+    "select id, type from public.assessments",
+  );
   let count = 0;
   for (const type of ["english_written", "english_oral", "psychometric"] as const) {
     const assessment = rows.find((r) => r.type === type);
@@ -140,7 +142,17 @@ export async function loadBanksInto(db: PGlite): Promise<number> {
       await db.query(
         `insert into public.assessment_questions (assessment_id, section, band, sort_order, prompt, question_type, options, answer_key, factor, is_active)
          values ($1, $2, $3, $4, $5, $6, $7::jsonb, $8::jsonb, $9, true)`,
-        [assessment.id, q.section, q.band, q.sort_order, q.prompt, q.question_type, JSON.stringify({ ...q.options, bank_id: q.bank_id }), q.answer_key ? JSON.stringify(q.answer_key) : null, q.factor],
+        [
+          assessment.id,
+          q.section,
+          q.band,
+          q.sort_order,
+          q.prompt,
+          q.question_type,
+          JSON.stringify({ ...q.options, bank_id: q.bank_id }),
+          q.answer_key ? JSON.stringify(q.answer_key) : null,
+          q.factor,
+        ],
       );
       count += 1;
     }

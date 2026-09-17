@@ -11,7 +11,10 @@ type Window = { limit: number; windowSeconds: number };
 
 const memory = new Map<string, { count: number; resetAt: number }>();
 
-function memoryLimit(key: string, { limit, windowSeconds }: Window): { success: boolean; remaining: number } {
+function memoryLimit(
+  key: string,
+  { limit, windowSeconds }: Window,
+): { success: boolean; remaining: number } {
   const now = Date.now();
   const entry = memory.get(key);
   if (!entry || entry.resetAt < now) {
@@ -35,7 +38,11 @@ function upstashLimiter(window: Window): Ratelimit | undefined {
 }
 
 /** Sliding-window rate limit: Upstash when configured, in-memory fallback otherwise. */
-export async function rateLimit(scope: string, identifier: string, window: Window): Promise<{ success: boolean; remaining: number }> {
+export async function rateLimit(
+  scope: string,
+  identifier: string,
+  window: Window,
+): Promise<{ success: boolean; remaining: number }> {
   const key = `${scope}:${identifier}`;
   const limiter = upstashLimiter(window);
   if (limiter) {

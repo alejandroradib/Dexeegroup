@@ -2,7 +2,6 @@ import "server-only";
 
 import Anthropic from "@anthropic-ai/sdk";
 
-
 import { serverEnv } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -33,7 +32,12 @@ export type CompleteJsonOptions = {
  * Sends a system and user prompt, expects strict JSON back and validates it with the given schema.
  * Retries once on parse failure. Logs tokens to ai_usage.
  */
-export async function completeJson<T>(schema: z.ZodType<T>, system: string, user: string, options: CompleteJsonOptions): Promise<T> {
+export async function completeJson<T>(
+  schema: z.ZodType<T>,
+  system: string,
+  user: string,
+  options: CompleteJsonOptions,
+): Promise<T> {
   const env = serverEnv();
   const retries = options.retries ?? 1;
   let lastError: unknown;
@@ -43,10 +47,27 @@ export async function completeJson<T>(schema: z.ZodType<T>, system: string, user
       max_tokens: options.maxTokens ?? 2048,
       temperature: options.temperature ?? 0,
       system: `${system}\n\nRespond with a single JSON object and nothing else. No markdown fences.`,
-      messages: [{ role: "user", content: attempt === 0 ? user : `${user}\n\nYour previous answer was not valid JSON for the schema. Return only the JSON object.` }],
+      messages: [
+        {
+          role: "user",
+          content:
+            attempt === 0
+              ? user
+              : `${user}\n\nYour previous answer was not valid JSON for the schema. Return only the JSON object.`,
+        },
+      ],
     });
-    await logUsage(options.feature, env.ANTHROPIC_MODEL, response.usage.input_tokens, response.usage.output_tokens, options.actorUserId);
-    const text = response.content.filter((c) => c.type === "text").map((c) => c.text).join("");
+    await logUsage(
+      options.feature,
+      env.ANTHROPIC_MODEL,
+      response.usage.input_tokens,
+      response.usage.output_tokens,
+      options.actorUserId,
+    );
+    const text = response.content
+      .filter((c) => c.type === "text")
+      .map((c) => c.text)
+      .join("");
     try {
       const json = JSON.parse(extractJson(text));
       return schema.parse(json);
@@ -59,15 +80,34 @@ export async function completeJson<T>(schema: z.ZodType<T>, system: string, user
 }
 
 function extractJson(text: string): string {
-  const trimmed = text.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  const trimmed = text
+    .trim()
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/, "")
+    .trim();
   const start = trimmed.indexOf("{");
   const end = trimmed.lastIndexOf("}");
   return start >= 0 && end > start ? trimmed.slice(start, end + 1) : trimmed;
 }
 
-async function logUsage(feature: string, model: string, input: number, output: number, actorUserId?: string | null) {
+async function logUsage(
+  feature: string,
+  model: string,
+  input: number,
+  output: number,
+  actorUserId?: string | null,
+) {
   const cost = (input * PRICE_PER_MTOK.input + output * PRICE_PER_MTOK.output) / 1_000_000;
-  const { error } = await createAdminClient().from("ai_usage").insert({ feature, model, input_tokens: input, output_tokens: output, cost_estimate: cost, actor_user_id: actorUserId ?? null });
+  const { error } = await createAdminClient()
+    .from("ai_usage")
+    .insert({
+      feature,
+      model,
+      input_tokens: input,
+      output_tokens: output,
+      cost_estimate: cost,
+      actor_user_id: actorUserId ?? null,
+    });
   if (error) logger.error({ err: error.message }, "ai_usage_insert_failed");
 }
 

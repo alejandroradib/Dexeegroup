@@ -32,12 +32,12 @@ export function MarketingFooter() {
   ] as const;
 
   return (
-    <footer className="mt-auto border-t border-border bg-navy text-white">
+    <footer className="border-border bg-navy mt-auto border-t text-white">
       <div className="container-marketing grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <Logo variant="white" height={28} />
           <p className="mt-4 max-w-xs text-sm text-white/75">{t("descriptor")}</p>
-          <p className="mt-6 font-heading text-lg font-bold text-green">{t("tagline")}</p>
+          <p className="font-heading text-green mt-6 text-lg font-bold">{t("tagline")}</p>
         </div>
         {columns.map((column) => (
           <div key={column.title}>
@@ -58,7 +58,9 @@ export function MarketingFooter() {
         <div className="container-marketing flex flex-col gap-2 py-5 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between">
           <p>{t("footer.rights")}</p>
           <p>
-            <a href={`mailto:${SITE.email}`} className="hover:text-white">{SITE.email}</a>
+            <a href={`mailto:${SITE.email}`} className="hover:text-white">
+              {SITE.email}
+            </a>
           </p>
         </div>
       </div>

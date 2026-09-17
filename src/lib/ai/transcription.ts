@@ -18,7 +18,12 @@ class WhisperProvider implements TranscriptionProvider {
   }
   async transcribe(file: Blob, filename: string): Promise<Transcription> {
     const upload = new File([file], filename, { type: file.type || "audio/webm" });
-    const result = await this.client.audio.transcriptions.create({ file: upload, model: "whisper-1", language: "en", response_format: "verbose_json" });
+    const result = await this.client.audio.transcriptions.create({
+      file: upload,
+      model: "whisper-1",
+      language: "en",
+      response_format: "verbose_json",
+    });
     const verbose = result as unknown as { text: string; duration?: number };
     return { text: verbose.text ?? "", durationSeconds: Number(verbose.duration ?? 0) };
   }
@@ -39,7 +44,10 @@ export function transcriptionConfigured(): boolean {
 }
 
 /** Downloads a private storage object and transcribes it. */
-export async function transcribe(fileUrl: string, filename = "answer.webm"): Promise<Transcription> {
+export async function transcribe(
+  fileUrl: string,
+  filename = "answer.webm",
+): Promise<Transcription> {
   const response = await fetch(fileUrl);
   if (!response.ok) throw new Error(`audio_download_failed_${response.status}`);
   const blob = await response.blob();

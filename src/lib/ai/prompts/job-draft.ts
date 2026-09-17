@@ -15,7 +15,12 @@ Tone: professional and direct, sentence case, no exclamation marks, no emojis, n
 Write in English. Each list is 4 to 6 lines, one item per line starting with "- ". Description is 2 short paragraphs (no bullets).
 Do not invent company names, salaries or benefits. Mention that the role is remote from Colombia on US hours where natural.`;
 
-export function jobDraftUser(input: { title: string; seniority?: string | null; roleFamily?: string | null; keywords: string[] }): string {
+export function jobDraftUser(input: {
+  title: string;
+  seniority?: string | null;
+  roleFamily?: string | null;
+  keywords: string[];
+}): string {
   return [
     `Title: ${input.title}`,
     input.seniority ? `Seniority: ${input.seniority}` : null,

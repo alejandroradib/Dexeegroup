@@ -4,18 +4,27 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { recordTabLeave, saveAssessmentAnswers } from "@/server/actions/assessments";
 
-export type AnswerValue = { selected_option?: string | null; answer_text?: string | null; likert_value?: number | null };
+export type AnswerValue = {
+  selected_option?: string | null;
+  answer_text?: string | null;
+  likert_value?: number | null;
+};
 
 /** Local answer state with debounced autosave and tab-visibility logging. */
 export function useAttemptAnswers(attemptId: string, initial: Record<string, AnswerValue>) {
   const [answers, setAnswers] = useState<Record<string, AnswerValue>>(initial);
-  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "closed" | "error">("idle");
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "closed" | "error">(
+    "idle",
+  );
   const dirty = useRef(new Map<string, AnswerValue>());
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const flush = useCallback(async () => {
     if (dirty.current.size === 0) return;
-    const batch = [...dirty.current.entries()].map(([question_id, value]) => ({ question_id, ...value }));
+    const batch = [...dirty.current.entries()].map(([question_id, value]) => ({
+      question_id,
+      ...value,
+    }));
     dirty.current.clear();
     setSaveState("saving");
     const result = await saveAssessmentAnswers(attemptId, batch);

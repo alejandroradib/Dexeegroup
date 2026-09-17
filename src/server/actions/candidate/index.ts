@@ -43,8 +43,19 @@ export async function saveIdentityStep(input: unknown): Promise<Result<null>> {
   const d = parsed.data;
   const supabase = await createClient();
   const [{ error: e1 }, { error: e2 }] = await Promise.all([
-    supabase.from("candidates").update({ first_name: d.first_name, last_name: d.last_name, city: d.city }).eq("id", user.id),
-    supabase.from("candidate_contacts").upsert({ candidate_id: user.id, email: user.email, phone: d.phone || null, linkedin_url: d.linkedin_url || null, portfolio_url: d.portfolio_url || null }),
+    supabase
+      .from("candidates")
+      .update({ first_name: d.first_name, last_name: d.last_name, city: d.city })
+      .eq("id", user.id),
+    supabase
+      .from("candidate_contacts")
+      .upsert({
+        candidate_id: user.id,
+        email: user.email,
+        phone: d.phone || null,
+        linkedin_url: d.linkedin_url || null,
+        portfolio_url: d.portfolio_url || null,
+      }),
   ]);
   if (e1 || e2) {
     logger.warn({ err: e1?.message ?? e2?.message }, "identity_step_failed");
@@ -74,9 +85,23 @@ export async function upsertExperience(input: unknown): Promise<Result<{ id: str
   const d = parsed.data;
   const normalize = (v: string) => (v.length === 7 ? `${v}-01` : v);
   const supabase = await createClient();
-  const row = { candidate_id: user.id, company: d.company, title: d.title, start_date: normalize(d.start_date), end_date: d.is_current || !d.end_date ? null : normalize(d.end_date), is_current: d.is_current, description: d.description || null };
+  const row = {
+    candidate_id: user.id,
+    company: d.company,
+    title: d.title,
+    start_date: normalize(d.start_date),
+    end_date: d.is_current || !d.end_date ? null : normalize(d.end_date),
+    is_current: d.is_current,
+    description: d.description || null,
+  };
   const { data, error } = d.id
-    ? await supabase.from("candidate_experience").update(row).eq("id", d.id).eq("candidate_id", user.id).select("id").single()
+    ? await supabase
+        .from("candidate_experience")
+        .update(row)
+        .eq("id", d.id)
+        .eq("candidate_id", user.id)
+        .select("id")
+        .single()
     : await supabase.from("candidate_experience").insert(row).select("id").single();
   if (error) return err(ERR.generic);
   revalidateCandidate();
@@ -87,7 +112,11 @@ export async function deleteExperience(id: string): Promise<Result<null>> {
   const user = await requireCandidate();
   if (!user) return err(ERR.unauthorized);
   const supabase = await createClient();
-  const { error } = await supabase.from("candidate_experience").delete().eq("id", id).eq("candidate_id", user.id);
+  const { error } = await supabase
+    .from("candidate_experience")
+    .delete()
+    .eq("id", id)
+    .eq("candidate_id", user.id);
   if (error) return err(ERR.generic);
   revalidateCandidate();
   return ok(null);
@@ -100,9 +129,22 @@ export async function upsertEducation(input: unknown): Promise<Result<{ id: stri
   if (!parsed.success) return err(ERR.validation, fieldErrors(parsed.error));
   const d = parsed.data;
   const supabase = await createClient();
-  const row = { candidate_id: user.id, institution: d.institution, degree: d.degree || null, field: d.field || null, start_year: d.start_year ?? null, end_year: d.end_year ?? null };
+  const row = {
+    candidate_id: user.id,
+    institution: d.institution,
+    degree: d.degree || null,
+    field: d.field || null,
+    start_year: d.start_year ?? null,
+    end_year: d.end_year ?? null,
+  };
   const { data, error } = d.id
-    ? await supabase.from("candidate_education").update(row).eq("id", d.id).eq("candidate_id", user.id).select("id").single()
+    ? await supabase
+        .from("candidate_education")
+        .update(row)
+        .eq("id", d.id)
+        .eq("candidate_id", user.id)
+        .select("id")
+        .single()
     : await supabase.from("candidate_education").insert(row).select("id").single();
   if (error) return err(ERR.generic);
   revalidateCandidate();
@@ -113,7 +155,11 @@ export async function deleteEducation(id: string): Promise<Result<null>> {
   const user = await requireCandidate();
   if (!user) return err(ERR.unauthorized);
   const supabase = await createClient();
-  const { error } = await supabase.from("candidate_education").delete().eq("id", id).eq("candidate_id", user.id);
+  const { error } = await supabase
+    .from("candidate_education")
+    .delete()
+    .eq("id", id)
+    .eq("candidate_id", user.id);
   if (error) return err(ERR.generic);
   revalidateCandidate();
   return ok(null);
@@ -162,7 +208,9 @@ export async function confirmResumeUpload(): Promise<Result<null>> {
     return err("fileSize");
   }
   const supabase = await createClient();
-  const { error } = await supabase.from("candidate_contacts").upsert({ candidate_id: user.id, resume_path: path });
+  const { error } = await supabase
+    .from("candidate_contacts")
+    .upsert({ candidate_id: user.id, resume_path: path });
   if (error) return err(ERR.generic);
   revalidateCandidate();
   return ok(null);
@@ -174,7 +222,10 @@ export async function removeResume(): Promise<Result<null>> {
   const admin = createAdminClient();
   await admin.storage.from("resumes").remove([`candidates/${user.id}/resume.pdf`]);
   const supabase = await createClient();
-  await supabase.from("candidate_contacts").update({ resume_path: null }).eq("candidate_id", user.id);
+  await supabase
+    .from("candidate_contacts")
+    .update({ resume_path: null })
+    .eq("candidate_id", user.id);
   revalidateCandidate();
   return ok(null);
 }
@@ -183,7 +234,9 @@ export async function getOwnResumeUrl(): Promise<Result<{ url: string }>> {
   const user = await requireCandidate();
   if (!user) return err(ERR.unauthorized);
   const supabase = await createClient();
-  const { data, error } = await supabase.storage.from("resumes").createSignedUrl(`candidates/${user.id}/resume.pdf`, 600);
+  const { data, error } = await supabase.storage
+    .from("resumes")
+    .createSignedUrl(`candidates/${user.id}/resume.pdf`, 600);
   if (error || !data) return err(ERR.notFound);
   return ok({ url: data.signedUrl });
 }
@@ -196,7 +249,11 @@ export async function applyToJob(input: unknown): Promise<Result<{ applicationId
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("applications")
-    .insert({ job_id: parsed.data.job_id, candidate_id: user.id, cover_note: parsed.data.cover_note || null })
+    .insert({
+      job_id: parsed.data.job_id,
+      candidate_id: user.id,
+      cover_note: parsed.data.cover_note || null,
+    })
     .select("id")
     .single();
   if (error) {
@@ -214,25 +271,41 @@ export async function withdrawApplication(applicationId: string): Promise<Result
   const user = await requireCandidate();
   if (!user) return err(ERR.unauthorized);
   const supabase = await createClient();
-  const { data, error } = await supabase.from("applications").update({ status: "withdrawn" }).eq("id", applicationId).eq("candidate_id", user.id).select("id").maybeSingle();
-  if (error) return err(error.message.includes("withdraw_not_allowed") ? "withdrawNotAllowed" : ERR.generic);
+  const { data, error } = await supabase
+    .from("applications")
+    .update({ status: "withdrawn" })
+    .eq("id", applicationId)
+    .eq("candidate_id", user.id)
+    .select("id")
+    .maybeSingle();
+  if (error)
+    return err(error.message.includes("withdraw_not_allowed") ? "withdrawNotAllowed" : ERR.generic);
   if (!data) return err(ERR.notFound);
   await dispatchEvent({ type: "application_status", applicationId, status: "withdrawn" });
   revalidateCandidate();
   return ok(null);
 }
 
-export async function setWorkstyleVisibility(attemptId: string, visible: boolean): Promise<Result<null>> {
+export async function setWorkstyleVisibility(
+  attemptId: string,
+  visible: boolean,
+): Promise<Result<null>> {
   const user = await requireCandidate();
   if (!user) return err(ERR.unauthorized);
   const supabase = await createClient();
-  const { error } = await supabase.from("assessment_attempts").update({ visible_to_companies: visible }).eq("id", attemptId).eq("candidate_id", user.id);
+  const { error } = await supabase
+    .from("assessment_attempts")
+    .update({ visible_to_companies: visible })
+    .eq("id", attemptId)
+    .eq("candidate_id", user.id);
   if (error) return err(ERR.generic);
   revalidateCandidate();
   return ok(null);
 }
 
-export async function setCandidateVisibility(visibility: "visible_to_companies" | "dexee_only"): Promise<Result<null>> {
+export async function setCandidateVisibility(
+  visibility: "visible_to_companies" | "dexee_only",
+): Promise<Result<null>> {
   const user = await requireCandidate();
   if (!user) return err(ERR.unauthorized);
   const supabase = await createClient();
@@ -248,7 +321,11 @@ export async function createDataRequest(input: unknown): Promise<Result<null>> {
   const parsed = dataRequestSchema.safeParse(input);
   if (!parsed.success) return err(ERR.validation, fieldErrors(parsed.error));
   const supabase = await createClient();
-  const { data, error } = await supabase.from("data_requests").insert({ candidate_id: user.id, kind: parsed.data.kind, message: parsed.data.message || null }).select("id").single();
+  const { data, error } = await supabase
+    .from("data_requests")
+    .insert({ candidate_id: user.id, kind: parsed.data.kind, message: parsed.data.message || null })
+    .select("id")
+    .single();
   if (error) return err(ERR.generic);
   await dispatchEvent({ type: "data_request", dataRequestId: data.id });
   revalidateCandidate();

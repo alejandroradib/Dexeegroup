@@ -19,9 +19,18 @@ export function cefrGap(a: Cefr, b: Cefr): number {
 /** Maps a 0-20 rubric total to a level using inclusive ranges, e.g. { A2: [0,5], B1: [6,9] }. */
 export type LevelRanges = Partial<Record<Cefr, [number, number]>>;
 
-export const DEFAULT_RUBRIC_LEVELS: LevelRanges = { A2: [0, 5], B1: [6, 9], B2: [10, 13], C1: [14, 17], C2: [18, 20] };
+export const DEFAULT_RUBRIC_LEVELS: LevelRanges = {
+  A2: [0, 5],
+  B1: [6, 9],
+  B2: [10, 13],
+  C1: [14, 17],
+  C2: [18, 20],
+};
 
-export function levelFromRubricTotal(total: number, ranges: LevelRanges = DEFAULT_RUBRIC_LEVELS): Cefr {
+export function levelFromRubricTotal(
+  total: number,
+  ranges: LevelRanges = DEFAULT_RUBRIC_LEVELS,
+): Cefr {
   const rounded = Math.round(total);
   for (const level of CEFR_ORDER) {
     const range = ranges[level];

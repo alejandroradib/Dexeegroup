@@ -3,7 +3,12 @@ import { z } from "zod";
 import { AVAILABILITIES, CEFR_LEVELS, CONTRACT_TYPES, ROLE_FAMILIES } from "@/lib/validation/enums";
 
 const URL_PATTERN = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
-const optionalUrl = z.string().trim().max(300, "tooLong").refine((v) => v === "" || URL_PATTERN.test(v), "invalidUrl").optional();
+const optionalUrl = z
+  .string()
+  .trim()
+  .max(300, "tooLong")
+  .refine((v) => v === "" || URL_PATTERN.test(v), "invalidUrl")
+  .optional();
 
 export const identityStepSchema = z.object({
   first_name: z.string().trim().min(2, "tooShort").max(80, "tooLong"),
@@ -28,11 +33,18 @@ export const experienceSchema = z
     company: z.string().trim().min(2, "tooShort").max(120, "tooLong"),
     title: z.string().trim().min(2, "tooShort").max(120, "tooLong"),
     start_date: z.string().regex(/^\d{4}-\d{2}(-\d{2})?$/, "invalidDate"),
-    end_date: z.string().regex(/^\d{4}-\d{2}(-\d{2})?$/, "invalidDate").optional().or(z.literal("")),
+    end_date: z
+      .string()
+      .regex(/^\d{4}-\d{2}(-\d{2})?$/, "invalidDate")
+      .optional()
+      .or(z.literal("")),
     is_current: z.boolean(),
     description: z.string().trim().max(800, "tooLong").optional(),
   })
-  .refine((v) => v.is_current || (v.end_date && v.end_date >= v.start_date), { path: ["end_date"], error: "endBeforeStart" });
+  .refine((v) => v.is_current || (v.end_date && v.end_date >= v.start_date), {
+    path: ["end_date"],
+    error: "endBeforeStart",
+  });
 
 export const educationSchema = z.object({
   id: z.string().uuid().optional(),
@@ -49,7 +61,11 @@ export const englishStepSchema = z.object({
 });
 
 export const compensationStepSchema = z.object({
-  desired_salary_min_usd: z.number({ error: "required" }).int("integer").min(0, "positive").max(100000),
+  desired_salary_min_usd: z
+    .number({ error: "required" })
+    .int("integer")
+    .min(0, "positive")
+    .max(100000),
   availability: z.enum(AVAILABILITIES, { error: "required" }),
   preferred_contract_types: z.array(z.enum(CONTRACT_TYPES)).min(1, "required").max(4),
 });

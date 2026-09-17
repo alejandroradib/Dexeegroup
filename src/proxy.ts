@@ -42,7 +42,11 @@ export async function proxy(request: NextRequest) {
 
   if (!user) return response;
 
-  const { data: profile } = await supabase.from("profiles").select("role, locale").eq("id", user.id).maybeSingle();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role, locale")
+    .eq("id", user.id)
+    .maybeSingle();
   const role = profile?.role;
   if (!role) return response;
 

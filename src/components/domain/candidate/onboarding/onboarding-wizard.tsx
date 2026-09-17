@@ -17,7 +17,15 @@ import { IdentityStep } from "./identity-step";
 import { ProfessionalStep } from "./professional-step";
 import { ResumeStep } from "./resume-step";
 
-const STEP_IDS = ["identity", "professional", "experience", "education", "english", "compensation", "resume"] as const;
+const STEP_IDS = [
+  "identity",
+  "professional",
+  "experience",
+  "education",
+  "english",
+  "compensation",
+  "resume",
+] as const;
 
 /** Picks the first incomplete step so a returning candidate resumes where they left off. */
 export function firstIncompleteStep(profile: CandidateProfile): number {
@@ -31,7 +39,15 @@ export function firstIncompleteStep(profile: CandidateProfile): number {
   return 6;
 }
 
-export function OnboardingWizard({ profile, suggestions, initialStep }: { profile: CandidateProfile; suggestions: string[]; initialStep: number }) {
+export function OnboardingWizard({
+  profile,
+  suggestions,
+  initialStep,
+}: {
+  profile: CandidateProfile;
+  suggestions: string[];
+  initialStep: number;
+}) {
   const t = useTranslations("candidate.onboarding");
   const router = useRouter();
   const { toast } = useToast();
@@ -48,17 +64,38 @@ export function OnboardingWizard({ profile, suggestions, initialStep }: { profil
 
   return (
     <div className="mx-auto max-w-2xl">
-      <Progress value={profile.candidate.profile_completeness} className="mb-4" aria-label={`${profile.candidate.profile_completeness}%`} />
+      <Progress
+        value={profile.candidate.profile_completeness}
+        className="mb-4"
+        aria-label={`${profile.candidate.profile_completeness}%`}
+      />
       <Stepper steps={steps} current={step} onSelect={setStep} className="mb-6" />
-      <div className="rounded-[12px] border border-border bg-white p-6">
+      <div className="border-border rounded-[12px] border bg-white p-6">
         <h2 className="mb-5 text-lg">{steps[step]?.label}</h2>
         {step === 0 ? <IdentityStep profile={profile} onNext={next} /> : null}
-        {step === 1 ? <ProfessionalStep profile={profile} suggestions={suggestions} onNext={next} onBack={back} /> : null}
-        {step === 2 ? <ExperienceStep rows={profile.experience} onNext={next} onBack={back} /> : null}
+        {step === 1 ? (
+          <ProfessionalStep
+            profile={profile}
+            suggestions={suggestions}
+            onNext={next}
+            onBack={back}
+          />
+        ) : null}
+        {step === 2 ? (
+          <ExperienceStep rows={profile.experience} onNext={next} onBack={back} />
+        ) : null}
         {step === 3 ? <EducationStep rows={profile.education} onNext={next} onBack={back} /> : null}
         {step === 4 ? <EnglishStep profile={profile} onNext={next} onBack={back} /> : null}
         {step === 5 ? <CompensationStep profile={profile} onNext={next} onBack={back} /> : null}
-        {step === 6 ? <ResumeStep candidateId={profile.candidate.id} hasResume={Boolean(profile.contact?.resume_path)} onFinish={finish} onBack={back} finishLabel={t("finish")} /> : null}
+        {step === 6 ? (
+          <ResumeStep
+            candidateId={profile.candidate.id}
+            hasResume={Boolean(profile.contact?.resume_path)}
+            onFinish={finish}
+            onBack={back}
+            finishLabel={t("finish")}
+          />
+        ) : null}
       </div>
     </div>
   );

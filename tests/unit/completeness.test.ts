@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { completenessChecklist, computeCompleteness, type CompletenessInput } from "@/lib/profile/completeness";
+import {
+  completenessChecklist,
+  computeCompleteness,
+  type CompletenessInput,
+} from "@/lib/profile/completeness";
 
 const full: CompletenessInput = {
   first_name: "Laura",
@@ -24,15 +28,31 @@ describe("computeCompleteness", () => {
   it("returns 0 for an empty profile", () => {
     expect(
       computeCompleteness({
-        first_name: null, last_name: null, headline: null, summary: null, skills: [], english_self_level: null,
-        desired_salary_min_usd: null, availability: null, experience_count: 0, education_count: 0, has_resume: false,
+        first_name: null,
+        last_name: null,
+        headline: null,
+        summary: null,
+        skills: [],
+        english_self_level: null,
+        desired_salary_min_usd: null,
+        availability: null,
+        experience_count: 0,
+        education_count: 0,
+        has_resume: false,
       }),
     ).toBe(0);
   });
 
   it("matches the SQL weights for the seeded sparse candidate (Mariana)", () => {
     // identity 15 + summary 10 + education 10 + english 10 + compensation 10 = 55 (no experience, 2 skills, no resume)
-    expect(computeCompleteness({ ...full, skills: ["Accounts payable", "Excel"], experience_count: 0, has_resume: false })).toBe(55);
+    expect(
+      computeCompleteness({
+        ...full,
+        skills: ["Accounts payable", "Excel"],
+        experience_count: 0,
+        has_resume: false,
+      }),
+    ).toBe(55);
   });
 
   it("requires headline for the identity block", () => {

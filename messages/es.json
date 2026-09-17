@@ -569,7 +569,7 @@
         "success": "Mensaje recibido. Respondemos en un día hábil.",
         "error": "No pudimos enviar su mensaje. Inténtelo de nuevo o escriba a info@dexeegroup.com."
       },
-      "direct": "O escríbanos a {email}"
+      "direct": "O escríbanos a <email></email>"
     },
     "legal": {
       "updated": "Última actualización: {date}",

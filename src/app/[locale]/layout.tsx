@@ -28,7 +28,10 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Pr
     description: t("defaultDescription"),
     applicationName: "Dexee",
     icons: {
-      icon: [{ url: "/favicon.ico" }, { url: "/brand/icon-192.png", sizes: "192x192", type: "image/png" }],
+      icon: [
+        { url: "/favicon.ico" },
+        { url: "/brand/icon-192.png", sizes: "192x192", type: "image/png" },
+      ],
       apple: "/brand/apple-icon.png",
     },
     openGraph: {

@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-export const emailSchema = z.email("invalidEmail").max(200).transform((v) => v.trim().toLowerCase());
+export const emailSchema = z
+  .email("invalidEmail")
+  .max(200)
+  .transform((v) => v.trim().toLowerCase());
 export const passwordSchema = z.string().min(8, "passwordMin").max(128, "tooLong");
 
 export const signInSchema = z.object({

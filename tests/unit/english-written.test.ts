@@ -1,11 +1,21 @@
 import { describe, expect, it } from "vitest";
 
-import { combineWrittenLevels, DEFAULT_THRESHOLDS, drawItems, mcqLevel, scoreMcq, writingLevel, type Band, type McqItem } from "@/lib/assessments/english-written";
+import {
+  combineWrittenLevels,
+  DEFAULT_THRESHOLDS,
+  drawItems,
+  mcqLevel,
+  scoreMcq,
+  writingLevel,
+  type Band,
+  type McqItem,
+} from "@/lib/assessments/english-written";
 
 function bank(counts: Record<Band, number>): McqItem[] {
   const items: McqItem[] = [];
   for (const band of ["band1", "band2", "band3"] as Band[]) {
-    for (let i = 0; i < counts[band]; i += 1) items.push({ id: `${band}-${i}`, band, correct: "a" });
+    for (let i = 0; i < counts[band]; i += 1)
+      items.push({ id: `${band}-${i}`, band, correct: "a" });
   }
   return items;
 }
@@ -37,14 +47,22 @@ describe("mcqLevel thresholds", () => {
     expect(mcqLevel({ overall: 0.9, band1: 1, band2: 1, band3: 0.8 })).toBe("C2");
   });
   it("honors custom thresholds from config", () => {
-    expect(mcqLevel({ overall: 0.9, band1: 1, band2: 1, band3: 0.8 }, { ...DEFAULT_THRESHOLDS, c2_overall_min: 0.95 })).toBe("C1");
+    expect(
+      mcqLevel(
+        { overall: 0.9, band1: 1, band2: 1, band3: 0.8 },
+        { ...DEFAULT_THRESHOLDS, c2_overall_min: 0.95 },
+      ),
+    ).toBe("C1");
   });
 });
 
 describe("scoreMcq", () => {
   it("computes per-band accuracy and overall", () => {
     const items = bank({ band1: 14, band2: 14, band3: 12 });
-    const answers = items.map((i, idx) => ({ question_id: i.id, selected_option: idx % 2 === 0 ? "a" : "b" }));
+    const answers = items.map((i, idx) => ({
+      question_id: i.id,
+      selected_option: idx % 2 === 0 ? "a" : "b",
+    }));
     const score = scoreMcq(items, answers);
     expect(score.total).toBe(40);
     expect(score.correct).toBe(20);
@@ -73,7 +91,19 @@ describe("writingLevel", () => {
 });
 
 describe("combineWrittenLevels", () => {
-  const grade = (level: "A2" | "B1" | "B2" | "C1" | "C2", flags = { off_topic: false, too_short: false }) => ({ task_achievement: 3, coherence: 3, lexical_range: 3, grammatical_accuracy: 3, total: 12, level, feedback: [], flags });
+  const grade = (
+    level: "A2" | "B1" | "B2" | "C1" | "C2",
+    flags = { off_topic: false, too_short: false },
+  ) => ({
+    task_achievement: 3,
+    coherence: 3,
+    lexical_range: 3,
+    grammatical_accuracy: 3,
+    total: 12,
+    level,
+    feedback: [],
+    flags,
+  });
   it("takes the lower level and validates automatically when levels are close", () => {
     const result = combineWrittenLevels("C1", grade("B2"));
     expect(result.finalLevel).toBe("B2");
@@ -86,12 +116,20 @@ describe("combineWrittenLevels", () => {
     expect(result.reasons).toContain("level_gap");
   });
   it("sends flagged writing to validation", () => {
-    expect(combineWrittenLevels("B2", grade("B2", { off_topic: true, too_short: false })).status).toBe("pending_validation");
-    expect(combineWrittenLevels("B2", grade("B2", { off_topic: false, too_short: true })).status).toBe("pending_validation");
+    expect(
+      combineWrittenLevels("B2", grade("B2", { off_topic: true, too_short: false })).status,
+    ).toBe("pending_validation");
+    expect(
+      combineWrittenLevels("B2", grade("B2", { off_topic: false, too_short: true })).status,
+    ).toBe("pending_validation");
   });
   it("uses the MCQ level alone when writing is excluded", () => {
     const result = combineWrittenLevels("B2", null);
-    expect(result).toEqual({ finalLevel: "B2", status: "validated", reasons: ["writing_excluded"] });
+    expect(result).toEqual({
+      finalLevel: "B2",
+      status: "validated",
+      reasons: ["writing_excluded"],
+    });
   });
 });
 

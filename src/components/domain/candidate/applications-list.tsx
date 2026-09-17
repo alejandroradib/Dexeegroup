@@ -24,34 +24,57 @@ export function ApplicationsList({ applications }: { applications: CandidateAppl
       {applications.map((a) => {
         const canWithdraw = ["applied", "screening", "shortlisted", "interview"].includes(a.status);
         return (
-          <li key={a.id} className="rounded-[12px] border border-border bg-white p-5">
+          <li key={a.id} className="border-border rounded-[12px] border bg-white p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h3 className="text-base">
-                  {a.job?.slug ? <Link href={`/candidate/jobs/${a.job.slug}`} className="hover:underline">{a.job.title}</Link> : a.job?.title ?? "—"}
+                  {a.job?.slug ? (
+                    <Link href={`/candidate/jobs/${a.job.slug}`} className="hover:underline">
+                      {a.job.title}
+                    </Link>
+                  ) : (
+                    (a.job?.title ?? "—")
+                  )}
                 </h3>
-                <p className="text-sm text-muted-foreground">{a.job?.confidential_company ? tc("labels.confidential") : a.job?.company_name}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{t("appliedOn", { date: format.dateTime(new Date(a.created_at), "short") })}</p>
+                <p className="text-muted-foreground text-sm">
+                  {a.job?.confidential_company ? tc("labels.confidential") : a.job?.company_name}
+                </p>
+                <p className="text-muted-foreground mt-1 text-xs">
+                  {t("appliedOn", { date: format.dateTime(new Date(a.created_at), "short") })}
+                </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                {a.source === "dexee_recommended" ? <Badge variant="accent">{t("recommendedBy")}</Badge> : null}
+                {a.source === "dexee_recommended" ? (
+                  <Badge variant="accent">{t("recommendedBy")}</Badge>
+                ) : null}
                 <StatusChip kind="application" status={a.status} />
               </div>
             </div>
             <ol className="mt-4 flex flex-wrap gap-2" aria-label={t("timeline")}>
               {a.events.map((e) => (
-                <li key={e.id} className="rounded-full bg-mist px-3 py-1 text-xs text-navy">
-                  {te(`application_status.${e.to_status}`)} · {format.dateTime(new Date(e.created_at), "short")}
+                <li key={e.id} className="bg-mist text-navy rounded-full px-3 py-1 text-xs">
+                  {te(`application_status.${e.to_status}`)} ·{" "}
+                  {format.dateTime(new Date(e.created_at), "short")}
                 </li>
               ))}
             </ol>
             {canWithdraw ? (
               <div className="mt-4">
-                <ConfirmButton variant="ghost" size="sm" className="text-danger" title={tj("withdraw")} description={tj("withdrawConfirm")} onConfirm={async () => {
-                  const result = await withdrawApplication(a.id);
-                  toast({ title: result.ok ? tj("withdrawn") : tc("errors.generic"), variant: result.ok ? "success" : "danger" });
-                  router.refresh();
-                }}>
+                <ConfirmButton
+                  variant="ghost"
+                  size="sm"
+                  className="text-danger"
+                  title={tj("withdraw")}
+                  description={tj("withdrawConfirm")}
+                  onConfirm={async () => {
+                    const result = await withdrawApplication(a.id);
+                    toast({
+                      title: result.ok ? tj("withdrawn") : tc("errors.generic"),
+                      variant: result.ok ? "success" : "danger",
+                    });
+                    router.refresh();
+                  }}
+                >
                   {t("withdraw")}
                 </ConfirmButton>
               </div>

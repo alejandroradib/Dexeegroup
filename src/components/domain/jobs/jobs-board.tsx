@@ -33,7 +33,9 @@ export async function JobsBoard({ filter, basePath }: { filter: JobsFilter; base
         <Alert variant="danger">{tc("generic")}</Alert>
       ) : (
         <>
-          <p className="text-sm text-muted-foreground" aria-live="polite">{t("count", { count: result.data.total })}</p>
+          <p className="text-muted-foreground text-sm" aria-live="polite">
+            {t("count", { count: result.data.total })}
+          </p>
           {result.data.jobs.length === 0 ? (
             <EmptyState icon={SearchXIcon} title={t("emptyTitle")} description={t("emptyBody")} />
           ) : (
@@ -43,7 +45,11 @@ export async function JobsBoard({ filter, basePath }: { filter: JobsFilter; base
               ))}
             </div>
           )}
-          <Pagination page={result.data.page} total={totalPages(result.data.total, PAGE_SIZE)} hrefFor={(p) => withPage(filter, p, basePath)} />
+          <Pagination
+            page={result.data.page}
+            total={totalPages(result.data.total, PAGE_SIZE)}
+            hrefFor={(p) => withPage(filter, p, basePath)}
+          />
         </>
       )}
     </div>

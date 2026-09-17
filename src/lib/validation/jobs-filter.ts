@@ -1,6 +1,12 @@
 import { z } from "zod";
 
-import { CEFR_LEVELS, CONTRACT_TYPES, ROLE_FAMILIES, SENIORITIES, WORK_MODES } from "@/lib/validation/enums";
+import {
+  CEFR_LEVELS,
+  CONTRACT_TYPES,
+  ROLE_FAMILIES,
+  SENIORITIES,
+  WORK_MODES,
+} from "@/lib/validation/enums";
 
 export const jobsFilterSchema = z.object({
   q: z.string().trim().max(80).optional(),

@@ -6,10 +6,15 @@ import { pageLocale } from "@/i18n/server";
 import { getSessionUser } from "@/lib/auth/session";
 import { getAssessmentHub } from "@/server/services/candidates";
 
-export default async function AssessmentsPage({ params }: PageProps<"/[locale]/candidate/assessments">) {
+export default async function AssessmentsPage({
+  params,
+}: PageProps<"/[locale]/candidate/assessments">) {
   await pageLocale(params);
   const user = await getSessionUser();
-  const [items, t] = await Promise.all([getAssessmentHub(user!.id), getTranslations("candidate.assessments")]);
+  const [items, t] = await Promise.all([
+    getAssessmentHub(user!.id),
+    getTranslations("candidate.assessments"),
+  ]);
   return (
     <>
       <PageHeader title={t("title")} description={t("subtitle")} />

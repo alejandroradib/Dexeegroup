@@ -10,7 +10,6 @@ import { createTestDatabase } from "./lib/pglite-db";
 
 import type { PGlite } from "@electric-sql/pglite";
 
-
 type Column = {
   table_name: string;
   column_name: string;
@@ -159,15 +158,20 @@ async function loadFunctions(db: PGlite, enums: Map<string, string[]>) {
   return res.rows.map((fn) => {
     const names = fn.arg_names ?? [];
     const types = fn.arg_types ?? [];
-    const args = types.length === 0
-      ? "Record<PropertyKey, never>"
-      : `{ ${types.map((t, i) => `${names[i] ?? `arg${i}`}: ${map(t)}`).join("; ")} }`;
+    const args =
+      types.length === 0
+        ? "Record<PropertyKey, never>"
+        : `{ ${types.map((t, i) => `${names[i] ?? `arg${i}`}: ${map(t)}`).join("; ")} }`;
     const ret = fn.returns_set ? `${map(fn.return_type)}[]` : map(fn.return_type);
     return `      ${fn.name}: {\n        Args: ${args}\n        Returns: ${ret}\n      }`;
   });
 }
 
-function renderRow(cols: Column[], enums: Map<string, string[]>, mode: "Row" | "Insert" | "Update") {
+function renderRow(
+  cols: Column[],
+  enums: Map<string, string[]>,
+  mode: "Row" | "Insert" | "Update",
+) {
   return cols
     .map((c) => {
       const base = tsType(c.udt_name, c.udt_schema, enums);
@@ -250,7 +254,9 @@ export type Enums<T extends keyof PublicSchema["Enums"]> = PublicSchema["Enums"]
 `;
   const target = path.resolve(process.cwd(), "src/types/database.ts");
   writeFileSync(target, out);
-  console.log(`Wrote ${target}: ${tables.size} tables, ${views.size} views, ${enums.size} enums, ${functions.length} functions`);
+  console.log(
+    `Wrote ${target}: ${tables.size} tables, ${views.size} views, ${enums.size} enums, ${functions.length} functions`,
+  );
   await db.close();
 }
 

@@ -36,7 +36,11 @@ export type McqScore = {
   level: Cefr;
 };
 
-export function scoreMcq(items: McqItem[], answers: McqAnswer[], thresholds: Thresholds = DEFAULT_THRESHOLDS): McqScore {
+export function scoreMcq(
+  items: McqItem[],
+  answers: McqAnswer[],
+  thresholds: Thresholds = DEFAULT_THRESHOLDS,
+): McqScore {
   const answerById = new Map(answers.map((a) => [a.question_id, a.selected_option]));
   const bands: McqScore["bands"] = {
     band1: { correct: 0, total: 0, accuracy: 0 },
@@ -54,9 +58,24 @@ export function scoreMcq(items: McqItem[], answers: McqAnswer[], thresholds: Thr
       correct += weight;
     }
   }
-  for (const band of Object.values(bands)) band.accuracy = band.total > 0 ? band.correct / band.total : 0;
+  for (const band of Object.values(bands))
+    band.accuracy = band.total > 0 ? band.correct / band.total : 0;
   const overall = total > 0 ? correct / total : 0;
-  return { correct, total, overall, bands, level: mcqLevel({ overall, band1: bands.band1.accuracy, band2: bands.band2.accuracy, band3: bands.band3.accuracy }, thresholds) };
+  return {
+    correct,
+    total,
+    overall,
+    bands,
+    level: mcqLevel(
+      {
+        overall,
+        band1: bands.band1.accuracy,
+        band2: bands.band2.accuracy,
+        band3: bands.band3.accuracy,
+      },
+      thresholds,
+    ),
+  };
 }
 
 /**
@@ -64,7 +83,10 @@ export function scoreMcq(items: McqItem[], answers: McqAnswer[], thresholds: Thr
  * band2 ≥ 55% and band3 < 50% → B2; band3 ≥ 50% and overall ≥ 75% → C1; band3 ≥ 80% and overall ≥ 90% → C2.
  * When band3 ≥ 50% but overall < 75%, the candidate stays at B2.
  */
-export function mcqLevel(acc: { overall: number; band1: number; band2: number; band3: number }, t: Thresholds = DEFAULT_THRESHOLDS): Cefr {
+export function mcqLevel(
+  acc: { overall: number; band1: number; band2: number; band3: number },
+  t: Thresholds = DEFAULT_THRESHOLDS,
+): Cefr {
   if (acc.overall < t.a1_overall_below) return "A1";
   if (acc.band1 < t.a2_band1_below) return "A2";
   if (acc.band2 < t.b1_band2_below) return "B1";
@@ -100,7 +122,11 @@ export type CombinedResult = {
  * or more levels or any flag is set. Without a writing grade (expired after grace), the MCQ level stands and
  * the attempt is validated automatically.
  */
-export function combineWrittenLevels(mcq: Cefr, writing: WritingGrade | null, gapForValidation = 2): CombinedResult {
+export function combineWrittenLevels(
+  mcq: Cefr,
+  writing: WritingGrade | null,
+  gapForValidation = 2,
+): CombinedResult {
   if (!writing) return { finalLevel: mcq, status: "validated", reasons: ["writing_excluded"] };
   const reasons: string[] = [];
   const finalLevel = lowerCefr(mcq, writing.level);
@@ -111,7 +137,11 @@ export function combineWrittenLevels(mcq: Cefr, writing: WritingGrade | null, ga
 }
 
 /** Draws items respecting band quotas, deterministic for a given seed (attempt id). */
-export function drawItems<T extends { id: string; band: Band }>(bank: T[], quotas: Record<Band, number>, seed: string): T[] {
+export function drawItems<T extends { id: string; band: Band }>(
+  bank: T[],
+  quotas: Record<Band, number>,
+  seed: string,
+): T[] {
   const rng = seededRandom(seed);
   const out: T[] = [];
   for (const band of ["band1", "band2", "band3"] as Band[]) {

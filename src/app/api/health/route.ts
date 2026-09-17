@@ -8,10 +8,15 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   const started = Date.now();
   try {
-    const { error } = await createAdminClient().from("assessments").select("id", { head: true, count: "exact" });
+    const { error } = await createAdminClient()
+      .from("assessments")
+      .select("id", { head: true, count: "exact" });
     if (error) throw error;
     return NextResponse.json({ status: "ok", database: "ok", latencyMs: Date.now() - started });
   } catch (error) {
-    return NextResponse.json({ status: "degraded", database: "error", error: (error as Error).message }, { status: 503 });
+    return NextResponse.json(
+      { status: "degraded", database: "error", error: (error as Error).message },
+      { status: 503 },
+    );
   }
 }

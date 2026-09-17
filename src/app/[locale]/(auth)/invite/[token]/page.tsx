@@ -9,7 +9,9 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 import type { Metadata } from "next";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/invite/[token]">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/invite/[token]">): Promise<Metadata> {
   const locale = await pageLocale(params);
   const t = await getTranslations({ locale, namespace: "auth.meta" });
   return { title: t("invite"), robots: { index: false } };
@@ -37,7 +39,10 @@ export default async function InvitePage({ params }: PageProps<"/[locale]/invite
   const user = await getSessionUser();
   const companyName = invite.companies?.name ?? "Dexee";
   return (
-    <AuthCard title={t("title", { company: companyName })} subtitle={t("body", { role: te(invite.role) })}>
+    <AuthCard
+      title={t("title", { company: companyName })}
+      subtitle={t("body", { role: te(invite.role) })}
+    >
       <InviteForm token={token} email={invite.invited_email} signedInEmail={user?.email} />
     </AuthCard>
   );
