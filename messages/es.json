@@ -584,5 +584,118 @@
     "fileSize": "El archivo debe pesar 5 MB o menos.",
     "invalidDate": "Ingresa una fecha válida.",
     "endBeforeStart": "La fecha de fin debe ser posterior a la de inicio."
+  },
+  "auth": {
+    "meta": {
+      "signIn": "Iniciar sesión",
+      "signUp": "Crea tu cuenta",
+      "signUpCompany": "Crear cuenta de empresa",
+      "signUpCandidate": "Crea tu perfil de candidato",
+      "verifyEmail": "Verifica tu correo",
+      "forgotPassword": "Restablecer contraseña",
+      "resetPassword": "Elige una nueva contraseña",
+      "invite": "Acepta tu invitación"
+    },
+    "signIn": {
+      "title": "Iniciar sesión",
+      "subtitle": "Bienvenido de nuevo. Ingresa tu correo y contraseña.",
+      "email": "Correo",
+      "password": "Contraseña",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "submit": "Iniciar sesión",
+      "noAccount": "¿Nuevo en Dexee?",
+      "createAccount": "Crear una cuenta",
+      "invalidCredentials": "El correo o la contraseña son incorrectos.",
+      "emailNotConfirmed": "Confirma tu correo antes de iniciar sesión. Podemos enviarte el enlace de nuevo.",
+      "resend": "Reenviar correo de verificación"
+    },
+    "choose": {
+      "title": "Crea tu cuenta",
+      "subtitle": "Elige cómo usarás Dexee.",
+      "companyTitle": "Quiero contratar",
+      "companyBody": "Publica vacantes, revisa postulantes verificados y contrata a través de Dexee.",
+      "companyCta": "Cuenta de empresa",
+      "candidateTitle": "Busco un empleo remoto",
+      "candidateBody": "Crea tu perfil, presenta evaluaciones gratuitas y postúlate a roles con empresas de EE. UU.",
+      "candidateCta": "Perfil de candidato",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "signIn": "Iniciar sesión"
+    },
+    "signUpCompany": {
+      "title": "Crear cuenta de empresa",
+      "subtitle": "Dexee verifica las empresas en un día hábil. Puede empezar a redactar vacantes de inmediato.",
+      "fullName": "Su nombre completo",
+      "companyName": "Nombre de la empresa",
+      "email": "Correo de trabajo",
+      "password": "Contraseña",
+      "passwordHint": "Al menos 8 caracteres.",
+      "terms": "Al crear una cuenta acepta los <terms>Términos del servicio</terms> y la <privacy>Política de privacidad</privacy>.",
+      "submit": "Crear cuenta de empresa",
+      "candidateInstead": "¿Busca empleo?",
+      "candidateLink": "Crear perfil de candidato"
+    },
+    "signUpCandidate": {
+      "title": "Crea tu perfil de candidato",
+      "subtitle": "Gratis para candidatos. Tus datos de contacto siguen siendo privados hasta que Dexee los libera a una empresa.",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo",
+      "password": "Contraseña",
+      "passwordHint": "Al menos 8 caracteres.",
+      "consentLabel": "Autorizo a Dexee S.A.S. a tratar mis datos personales conforme a la Ley 1581 de 2012 con fines de reclutamiento y evaluación, según se describe en la Política de privacidad.",
+      "consentDetail": "Puedes solicitar acceso, corrección o eliminación de tus datos en cualquier momento desde Configuración. Versión del consentimiento {version}.",
+      "consentLink": "Leer la política de privacidad",
+      "submit": "Crear mi perfil",
+      "companyInstead": "¿Quieres contratar?",
+      "companyLink": "Crear cuenta de empresa"
+    },
+    "verify": {
+      "title": "Revisa tu correo",
+      "body": "Enviamos un enlace de verificación a {email}. Ábrelo para activar tu cuenta.",
+      "bodyNoEmail": "Enviamos un enlace de verificación a tu correo. Ábrelo para activar tu cuenta.",
+      "resend": "Reenviar el correo",
+      "resent": "Correo enviado de nuevo.",
+      "backToSignIn": "Volver a iniciar sesión",
+      "spam": "Si no lo ves, revisa la carpeta de spam."
+    },
+    "forgot": {
+      "title": "Restablecer contraseña",
+      "subtitle": "Ingresa tu correo y te enviaremos un enlace para elegir una nueva contraseña.",
+      "email": "Correo",
+      "submit": "Enviar enlace",
+      "sent": "Si existe una cuenta para {email}, el enlace va en camino.",
+      "backToSignIn": "Volver a iniciar sesión"
+    },
+    "reset": {
+      "title": "Elige una nueva contraseña",
+      "password": "Nueva contraseña",
+      "confirm": "Confirmar nueva contraseña",
+      "submit": "Actualizar contraseña",
+      "success": "Tu contraseña fue actualizada.",
+      "invalidLink": "Este enlace no es válido o expiró. Solicita uno nuevo.",
+      "requestNew": "Solicitar un nuevo enlace"
+    },
+    "invite": {
+      "title": "Te invitaron a {company}",
+      "body": "Crea tu contraseña para unirte al equipo como {role}.",
+      "invalid": "Esta invitación no es válida o ya fue usada.",
+      "email": "Correo",
+      "fullName": "Tu nombre completo",
+      "password": "Contraseña",
+      "submit": "Unirme al equipo",
+      "alreadySignedIn": "Iniciaste sesión como {email}. Acepta la invitación con esta cuenta o cierra sesión primero.",
+      "accept": "Aceptar invitación",
+      "accepted": "Invitación aceptada."
+    },
+    "errors": {
+      "emailTaken": "Ya existe una cuenta con este correo. Inicia sesión.",
+      "weakPassword": "Elige una contraseña más segura.",
+      "generic": "No pudimos completar la solicitud. Inténtalo de nuevo.",
+      "consentRequired": "Debes aceptar la autorización de tratamiento de datos para continuar.",
+      "inviteInvalid": "Esta invitación no es válida o expiró.",
+      "inviteEmailMismatch": "Esta invitación fue enviada a otro correo.",
+      "rateLimited": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo."
+    },
+    "signedOut": "Cerraste sesión."
   }
 }

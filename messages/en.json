@@ -584,5 +584,118 @@
     "fileSize": "The file must be 5 MB or smaller.",
     "invalidDate": "Enter a valid date.",
     "endBeforeStart": "The end date must be after the start date."
+  },
+  "auth": {
+    "meta": {
+      "signIn": "Sign in",
+      "signUp": "Create your account",
+      "signUpCompany": "Create a company account",
+      "signUpCandidate": "Create your candidate profile",
+      "verifyEmail": "Verify your email",
+      "forgotPassword": "Reset your password",
+      "resetPassword": "Choose a new password",
+      "invite": "Accept your invitation"
+    },
+    "signIn": {
+      "title": "Sign in",
+      "subtitle": "Welcome back. Enter your email and password.",
+      "email": "Email",
+      "password": "Password",
+      "forgot": "Forgot your password?",
+      "submit": "Sign in",
+      "noAccount": "New to Dexee?",
+      "createAccount": "Create an account",
+      "invalidCredentials": "The email or password is incorrect.",
+      "emailNotConfirmed": "Confirm your email before signing in. We can send the link again.",
+      "resend": "Resend verification email"
+    },
+    "choose": {
+      "title": "Create your account",
+      "subtitle": "Choose how you will use Dexee.",
+      "companyTitle": "I want to hire",
+      "companyBody": "Post vacancies, review vetted applicants and hire through Dexee.",
+      "companyCta": "Company account",
+      "candidateTitle": "I am looking for a remote job",
+      "candidateBody": "Build your profile, take free assessments and apply to roles with US companies.",
+      "candidateCta": "Candidate profile",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "signUpCompany": {
+      "title": "Create a company account",
+      "subtitle": "Dexee verifies companies within one business day. You can start drafting vacancies right away.",
+      "fullName": "Your full name",
+      "companyName": "Company name",
+      "email": "Work email",
+      "password": "Password",
+      "passwordHint": "At least 8 characters.",
+      "terms": "By creating an account you accept the <terms>Terms of service</terms> and the <privacy>Privacy policy</privacy>.",
+      "submit": "Create company account",
+      "candidateInstead": "Looking for a job instead?",
+      "candidateLink": "Create a candidate profile"
+    },
+    "signUpCandidate": {
+      "title": "Create your candidate profile",
+      "subtitle": "Free for candidates. Your contact details stay private until Dexee releases them to a company.",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "At least 8 characters.",
+      "consentLabel": "I authorize Dexee S.A.S. to process my personal data under Colombian Law 1581 of 2012 for recruitment and assessment purposes, as described in the Privacy policy.",
+      "consentDetail": "You can request access, correction or deletion of your data at any time from Settings. Consent version {version}.",
+      "consentLink": "Read the privacy policy",
+      "submit": "Create my profile",
+      "companyInstead": "Hiring instead?",
+      "companyLink": "Create a company account"
+    },
+    "verify": {
+      "title": "Check your inbox",
+      "body": "We sent a verification link to {email}. Open it to activate your account.",
+      "bodyNoEmail": "We sent a verification link to your email. Open it to activate your account.",
+      "resend": "Resend the email",
+      "resent": "Email sent again.",
+      "backToSignIn": "Back to sign in",
+      "spam": "If you do not see it, check your spam folder."
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "subtitle": "Enter your email and we will send you a link to choose a new password.",
+      "email": "Email",
+      "submit": "Send reset link",
+      "sent": "If an account exists for {email}, a reset link is on its way.",
+      "backToSignIn": "Back to sign in"
+    },
+    "reset": {
+      "title": "Choose a new password",
+      "password": "New password",
+      "confirm": "Confirm new password",
+      "submit": "Update password",
+      "success": "Your password was updated.",
+      "invalidLink": "This link is invalid or has expired. Request a new one.",
+      "requestNew": "Request a new link"
+    },
+    "invite": {
+      "title": "You were invited to {company}",
+      "body": "Create your password to join the team as {role}.",
+      "invalid": "This invitation is invalid or was already used.",
+      "email": "Email",
+      "fullName": "Your full name",
+      "password": "Password",
+      "submit": "Join the team",
+      "alreadySignedIn": "You are signed in as {email}. Accept the invitation with this account or sign out first.",
+      "accept": "Accept invitation",
+      "accepted": "Invitation accepted."
+    },
+    "errors": {
+      "emailTaken": "An account with this email already exists. Sign in instead.",
+      "weakPassword": "Choose a stronger password.",
+      "generic": "We could not complete the request. Try again.",
+      "consentRequired": "You must accept the data processing consent to continue.",
+      "inviteInvalid": "This invitation is invalid or expired.",
+      "inviteEmailMismatch": "This invitation was sent to a different email address.",
+      "rateLimited": "Too many attempts. Wait a few minutes and try again."
+    },
+    "signedOut": "You have been signed out."
   }
 }

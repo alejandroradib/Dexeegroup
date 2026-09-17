@@ -1,7 +1,6 @@
 "use client";
 
 import { GlobeIcon } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
 
@@ -20,7 +19,6 @@ export function LanguageSwitch({ onChange, compact = false }: { onChange?: (loca
   const t = useTranslations("common.labels");
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
 
   const labels: Record<Locale, string> = { en: t("english"), es: t("spanish") };
@@ -29,7 +27,7 @@ export function LanguageSwitch({ onChange, compact = false }: { onChange?: (loca
     if (next === locale) return;
     startTransition(async () => {
       await onChange?.(next);
-      const query = searchParams.toString();
+      const query = typeof window === "undefined" ? "" : window.location.search.replace(/^\?/, "");
       router.replace(`${pathname}${query ? `?${query}` : ""}`, { locale: next });
     });
   }
