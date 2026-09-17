@@ -332,6 +332,10 @@
       "access": "Access my data",
       "correction": "Correct my data",
       "deletion": "Delete my data"
+    },
+    "note_visibility": {
+      "company": "Company",
+      "dexee_only": "Dexee only"
     }
   },
   "marketing": {
@@ -1146,6 +1150,259 @@
         "assessmentResults": "Assessment results",
         "saved": "Preferences saved."
       }
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Operations",
+      "companiesPending": "Companies pending verification",
+      "jobsPending": "Vacancies pending review",
+      "applications7d": "Applications (7 days)",
+      "contactRequests": "Contact requests pending",
+      "attemptsPending": "Assessments pending validation",
+      "activePlacements": "Active placements",
+      "byLevel": "Candidates by verified English level",
+      "notVerified": "Not verified",
+      "funnel": "Applications by status",
+      "review": "Review"
+    },
+    "companies": {
+      "title": "Companies",
+      "search": "Search by name",
+      "status": "Status",
+      "columns": {
+        "name": "Company",
+        "owner": "Owner",
+        "status": "Status",
+        "jobs": "Vacancies",
+        "created": "Created"
+      },
+      "empty": "No companies match",
+      "detail": {
+        "profile": "Profile",
+        "members": "Team",
+        "jobs": "Vacancies",
+        "activity": "Dexee activity",
+        "verify": "Verify company",
+        "verifyTitle": "Verify {company}",
+        "verifyBody": "The company will be able to publish vacancies directly. Select the vacancies waiting for review that you want to publish now.",
+        "verified": "Company verified.",
+        "suspend": "Suspend",
+        "suspendConfirm": "Suspend this company? Its vacancies stop being visible and its users lose access to applicants.",
+        "reinstate": "Reinstate",
+        "reinstated": "Company reinstated.",
+        "suspended": "Company suspended.",
+        "website": "Website",
+        "sector": "Sector",
+        "size": "Size",
+        "location": "Location",
+        "legalName": "Legal name",
+        "hiringNeeds": "Hiring needs",
+        "expectedHires": "Expected hires: {count}",
+        "noJobs": "No vacancies yet."
+      }
+    },
+    "jobs": {
+      "title": "Vacancies",
+      "tabs": {
+        "queue": "Review queue",
+        "all": "All vacancies"
+      },
+      "search": "Search by title",
+      "columns": {
+        "title": "Title",
+        "company": "Company",
+        "status": "Status",
+        "applicants": "Applicants",
+        "updated": "Updated"
+      },
+      "empty": "Nothing to review",
+      "emptyBody": "Vacancies from pending companies appear here when they are submitted.",
+      "detail": {
+        "preview": "Preview",
+        "approve": "Approve and publish",
+        "approved": "Vacancy published.",
+        "requestChanges": "Request changes",
+        "requestChangesBody": "The company sees this message at the top of the wizard and receives an email.",
+        "message": "Message to the company",
+        "changesRequested": "Changes requested.",
+        "pause": "Pause",
+        "close": "Close",
+        "reopen": "Publish again",
+        "commercials": "Commercial terms (Dexee only)",
+        "billRate": "Client bill rate (USD / month)",
+        "placementFee": "Placement fee (USD)",
+        "internalNotes": "Internal notes",
+        "commercialsSaved": "Commercial terms saved.",
+        "applicants": "Applicants",
+        "companyPending": "This company is pending verification. Approving publishes the vacancy anyway.",
+        "edit": "Edit as company"
+      }
+    },
+    "candidates": {
+      "title": "Candidates",
+      "search": "Name, headline, city or skill",
+      "roleFamily": "Role family",
+      "level": "Verified English",
+      "availability": "Availability",
+      "visibility": "Visibility",
+      "minCompleteness": "Min. completeness",
+      "tag": "Tag",
+      "export": "Export CSV",
+      "exported": "CSV exported.",
+      "columns": {
+        "name": "Candidate",
+        "roleFamily": "Role family",
+        "english": "English",
+        "completeness": "Complete",
+        "availability": "Availability",
+        "tags": "Tags",
+        "updated": "Updated"
+      },
+      "empty": "No candidates match",
+      "detail": {
+        "contact": "Contact details",
+        "resume": "Download resume",
+        "noResume": "No resume on file.",
+        "tags": "Tags",
+        "tagsHint": "Internal labels for sourcing. Press Enter to add.",
+        "tagsSaved": "Tags saved.",
+        "notes": "Dexee notes",
+        "addNote": "Add note",
+        "noteSaved": "Note saved.",
+        "applications": "Applications",
+        "assessments": "Assessment history",
+        "recommend": "Recommend to a vacancy",
+        "recommendBody": "Creates a shortlisted application with source Dexee recommended. The company and the candidate are notified.",
+        "chooseJob": "Vacancy",
+        "recommended": "Candidate recommended.",
+        "duplicate": "This candidate already has an application to that vacancy.",
+        "dataRequests": "Data requests",
+        "resolve": "Mark resolved",
+        "resolved": "Request resolved.",
+        "consent": "Consent version {version} on {date}",
+        "account": "Account",
+        "joined": "Joined {date}",
+        "locale": "Language",
+        "roleAndCity": "Role and city",
+        "expectedSalary": "Expected salary",
+        "availability": "Availability",
+        "experience": "Experience",
+        "education": "Education"
+      }
+    },
+    "applications": {
+      "title": "Applications",
+      "status": "Status",
+      "contact": "Contact",
+      "contactAny": "Any",
+      "contactRequested": "Requested, not released",
+      "contactReleased": "Released",
+      "search": "Candidate, vacancy or company",
+      "columns": {
+        "candidate": "Candidate",
+        "job": "Vacancy",
+        "company": "Company",
+        "status": "Status",
+        "contact": "Contact",
+        "applied": "Applied"
+      },
+      "empty": "No applications match",
+      "release": "Release contact details",
+      "releaseConfirm": "Release this candidate's email, phone, LinkedIn and resume to {company} for this application?",
+      "released": "Contact details released.",
+      "releasedOn": "Released {date}",
+      "requestedOn": "Requested {date}",
+      "notRequested": "Not requested",
+      "changeStatus": "Change status",
+      "statusChanged": "Status updated."
+    },
+    "placements": {
+      "title": "Placements",
+      "subtitle": "Hired candidates and the monthly margin of each engagement.",
+      "pending": "Hired, placement pending",
+      "pendingEmpty": "No hired applications without a placement.",
+      "record": "Record placement",
+      "recordTitle": "Record placement for {candidate}",
+      "contractType": "Contract type",
+      "startDate": "Start date",
+      "monthlySalary": "Monthly salary (USD)",
+      "monthlyBillRate": "Monthly bill rate (USD)",
+      "created": "Placement recorded.",
+      "columns": {
+        "candidate": "Candidate",
+        "company": "Company",
+        "job": "Vacancy",
+        "contract": "Contract",
+        "start": "Start",
+        "salary": "Salary",
+        "billRate": "Bill rate",
+        "margin": "Monthly margin",
+        "status": "Status"
+      },
+      "totalMargin": "Total monthly margin (active)",
+      "activeCount": "{count, plural, =1 {1 active placement} other {# active placements}}",
+      "end": "End placement",
+      "endDate": "End date",
+      "ended": "Placement ended.",
+      "empty": "No placements yet"
+    },
+    "assessments": {
+      "title": "Assessment validation",
+      "subtitle": "Oral attempts waiting for a reviewer and attempts whose processing failed. Oldest first.",
+      "columns": {
+        "candidate": "Candidate",
+        "assessment": "Assessment",
+        "status": "Status",
+        "submitted": "Submitted",
+        "aiLevel": "AI level"
+      },
+      "empty": "Nothing to validate",
+      "emptyBody": "Attempts pending validation appear here as soon as candidates submit them.",
+      "open": "Open",
+      "retry": "Retry processing",
+      "retried": "Processing queued."
+    },
+    "team": {
+      "title": "Dexee team",
+      "invite": "Invite admin",
+      "email": "Email",
+      "fullName": "Full name",
+      "invited": "Invitation sent.",
+      "deactivate": "Deactivate",
+      "deactivateConfirm": "Deactivate this admin? They will no longer be able to sign in.",
+      "deactivated": "Admin deactivated.",
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "since": "Since"
+      }
+    },
+    "activity": {
+      "title": "Activity log",
+      "action": "Action",
+      "entity": "Entity",
+      "columns": {
+        "when": "When",
+        "actor": "Admin",
+        "action": "Action",
+        "entity": "Entity",
+        "details": "Details"
+      },
+      "empty": "No activity recorded"
+    },
+    "settings": {
+      "title": "Settings",
+      "assessments": "Assessment thresholds and prompts",
+      "assessmentsBody": "Edit the JSON configuration of each assessment. Saving bumps the version.",
+      "config": "Configuration (JSON)",
+      "active": "Active",
+      "cooldown": "Cooldown (days)",
+      "timeLimit": "Time limit (minutes)",
+      "saved": "Assessment updated (version {version}).",
+      "invalidJson": "The configuration is not valid JSON.",
+      "consent": "Consent text version",
+      "consentBody": "Current version {version}. Change the constant CONSENT_VERSION in src/lib/legal.ts together with the privacy policy text."
     }
   }
 }

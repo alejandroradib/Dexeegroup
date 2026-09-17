@@ -332,6 +332,10 @@
       "access": "Acceder a mis datos",
       "correction": "Corregir mis datos",
       "deletion": "Eliminar mis datos"
+    },
+    "note_visibility": {
+      "company": "Empresa",
+      "dexee_only": "Solo Dexee"
     }
   },
   "marketing": {
@@ -1146,6 +1150,259 @@
         "assessmentResults": "Resultados de evaluaciones",
         "saved": "Preferencias guardadas."
       }
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Operaciones",
+      "companiesPending": "Empresas pendientes de verificación",
+      "jobsPending": "Vacantes pendientes de revisión",
+      "applications7d": "Postulaciones (7 días)",
+      "contactRequests": "Solicitudes de contacto pendientes",
+      "attemptsPending": "Evaluaciones pendientes de validación",
+      "activePlacements": "Colocaciones activas",
+      "byLevel": "Candidatos por nivel de inglés verificado",
+      "notVerified": "Sin verificar",
+      "funnel": "Postulaciones por estado",
+      "review": "Revisar"
+    },
+    "companies": {
+      "title": "Empresas",
+      "search": "Buscar por nombre",
+      "status": "Estado",
+      "columns": {
+        "name": "Empresa",
+        "owner": "Propietario",
+        "status": "Estado",
+        "jobs": "Vacantes",
+        "created": "Creada"
+      },
+      "empty": "Ninguna empresa coincide",
+      "detail": {
+        "profile": "Perfil",
+        "members": "Equipo",
+        "jobs": "Vacantes",
+        "activity": "Actividad de Dexee",
+        "verify": "Verificar empresa",
+        "verifyTitle": "Verificar {company}",
+        "verifyBody": "La empresa podrá publicar vacantes directamente. Seleccione las vacantes en revisión que quiere publicar ahora.",
+        "verified": "Empresa verificada.",
+        "suspend": "Suspender",
+        "suspendConfirm": "¿Suspender esta empresa? Sus vacantes dejan de ser visibles y sus usuarios pierden acceso a los postulantes.",
+        "reinstate": "Reactivar",
+        "reinstated": "Empresa reactivada.",
+        "suspended": "Empresa suspendida.",
+        "website": "Sitio web",
+        "sector": "Sector",
+        "size": "Tamaño",
+        "location": "Ubicación",
+        "legalName": "Razón social",
+        "hiringNeeds": "Necesidades de contratación",
+        "expectedHires": "Contrataciones previstas: {count}",
+        "noJobs": "Aún no hay vacantes."
+      }
+    },
+    "jobs": {
+      "title": "Vacantes",
+      "tabs": {
+        "queue": "Cola de revisión",
+        "all": "Todas las vacantes"
+      },
+      "search": "Buscar por título",
+      "columns": {
+        "title": "Título",
+        "company": "Empresa",
+        "status": "Estado",
+        "applicants": "Postulantes",
+        "updated": "Actualizada"
+      },
+      "empty": "Nada por revisar",
+      "emptyBody": "Las vacantes de empresas pendientes aparecen aquí cuando se envían.",
+      "detail": {
+        "preview": "Vista previa",
+        "approve": "Aprobar y publicar",
+        "approved": "Vacante publicada.",
+        "requestChanges": "Solicitar cambios",
+        "requestChangesBody": "La empresa ve este mensaje al inicio del asistente y recibe un correo.",
+        "message": "Mensaje para la empresa",
+        "changesRequested": "Cambios solicitados.",
+        "pause": "Pausar",
+        "close": "Cerrar",
+        "reopen": "Publicar de nuevo",
+        "commercials": "Condiciones comerciales (solo Dexee)",
+        "billRate": "Tarifa al cliente (USD / mes)",
+        "placementFee": "Tarifa de colocación (USD)",
+        "internalNotes": "Notas internas",
+        "commercialsSaved": "Condiciones comerciales guardadas.",
+        "applicants": "Postulantes",
+        "companyPending": "Esta empresa está pendiente de verificación. Aprobar publica la vacante de todos modos.",
+        "edit": "Editar como empresa"
+      }
+    },
+    "candidates": {
+      "title": "Candidatos",
+      "search": "Nombre, titular, ciudad o habilidad",
+      "roleFamily": "Área",
+      "level": "Inglés verificado",
+      "availability": "Disponibilidad",
+      "visibility": "Visibilidad",
+      "minCompleteness": "Completitud mínima",
+      "tag": "Etiqueta",
+      "export": "Exportar CSV",
+      "exported": "CSV exportado.",
+      "columns": {
+        "name": "Candidato",
+        "roleFamily": "Área",
+        "english": "Inglés",
+        "completeness": "Completo",
+        "availability": "Disponibilidad",
+        "tags": "Etiquetas",
+        "updated": "Actualizado"
+      },
+      "empty": "Ningún candidato coincide",
+      "detail": {
+        "contact": "Datos de contacto",
+        "resume": "Descargar hoja de vida",
+        "noResume": "No hay hoja de vida registrada.",
+        "tags": "Etiquetas",
+        "tagsHint": "Etiquetas internas para sourcing. Presione Enter para agregar.",
+        "tagsSaved": "Etiquetas guardadas.",
+        "notes": "Notas de Dexee",
+        "addNote": "Agregar nota",
+        "noteSaved": "Nota guardada.",
+        "applications": "Postulaciones",
+        "assessments": "Historial de evaluaciones",
+        "recommend": "Recomendar a una vacante",
+        "recommendBody": "Crea una postulación en lista corta con origen Recomendado por Dexee. Se notifica a la empresa y al candidato.",
+        "chooseJob": "Vacante",
+        "recommended": "Candidato recomendado.",
+        "duplicate": "Este candidato ya tiene una postulación a esa vacante.",
+        "dataRequests": "Solicitudes de datos",
+        "resolve": "Marcar resuelta",
+        "resolved": "Solicitud resuelta.",
+        "consent": "Consentimiento versión {version} el {date}",
+        "account": "Cuenta",
+        "joined": "Registrado el {date}",
+        "locale": "Idioma",
+        "roleAndCity": "Área y ciudad",
+        "expectedSalary": "Salario esperado",
+        "availability": "Disponibilidad",
+        "experience": "Experiencia",
+        "education": "Educación"
+      }
+    },
+    "applications": {
+      "title": "Postulaciones",
+      "status": "Estado",
+      "contact": "Contacto",
+      "contactAny": "Cualquiera",
+      "contactRequested": "Solicitado, no liberado",
+      "contactReleased": "Liberado",
+      "search": "Candidato, vacante o empresa",
+      "columns": {
+        "candidate": "Candidato",
+        "job": "Vacante",
+        "company": "Empresa",
+        "status": "Estado",
+        "contact": "Contacto",
+        "applied": "Postulado"
+      },
+      "empty": "Ninguna postulación coincide",
+      "release": "Liberar datos de contacto",
+      "releaseConfirm": "¿Liberar correo, teléfono, LinkedIn y hoja de vida de este candidato a {company} para esta postulación?",
+      "released": "Datos de contacto liberados.",
+      "releasedOn": "Liberados el {date}",
+      "requestedOn": "Solicitados el {date}",
+      "notRequested": "No solicitados",
+      "changeStatus": "Cambiar estado",
+      "statusChanged": "Estado actualizado."
+    },
+    "placements": {
+      "title": "Colocaciones",
+      "subtitle": "Candidatos contratados y el margen mensual de cada compromiso.",
+      "pending": "Contratados con colocación pendiente",
+      "pendingEmpty": "No hay postulaciones contratadas sin colocación.",
+      "record": "Registrar colocación",
+      "recordTitle": "Registrar colocación de {candidate}",
+      "contractType": "Tipo de contrato",
+      "startDate": "Fecha de inicio",
+      "monthlySalary": "Salario mensual (USD)",
+      "monthlyBillRate": "Tarifa mensual al cliente (USD)",
+      "created": "Colocación registrada.",
+      "columns": {
+        "candidate": "Candidato",
+        "company": "Empresa",
+        "job": "Vacante",
+        "contract": "Contrato",
+        "start": "Inicio",
+        "salary": "Salario",
+        "billRate": "Tarifa",
+        "margin": "Margen mensual",
+        "status": "Estado"
+      },
+      "totalMargin": "Margen mensual total (activas)",
+      "activeCount": "{count, plural, =1 {1 colocación activa} other {# colocaciones activas}}",
+      "end": "Finalizar colocación",
+      "endDate": "Fecha de fin",
+      "ended": "Colocación finalizada.",
+      "empty": "Aún no hay colocaciones"
+    },
+    "assessments": {
+      "title": "Validación de evaluaciones",
+      "subtitle": "Intentos orales a la espera de un revisor e intentos cuyo procesamiento falló. Los más antiguos primero.",
+      "columns": {
+        "candidate": "Candidato",
+        "assessment": "Evaluación",
+        "status": "Estado",
+        "submitted": "Enviado",
+        "aiLevel": "Nivel IA"
+      },
+      "empty": "Nada por validar",
+      "emptyBody": "Los intentos pendientes de validación aparecen aquí en cuanto los candidatos los envían.",
+      "open": "Abrir",
+      "retry": "Reintentar procesamiento",
+      "retried": "Procesamiento encolado."
+    },
+    "team": {
+      "title": "Equipo Dexee",
+      "invite": "Invitar administrador",
+      "email": "Correo",
+      "fullName": "Nombre completo",
+      "invited": "Invitación enviada.",
+      "deactivate": "Desactivar",
+      "deactivateConfirm": "¿Desactivar a este administrador? No podrá volver a iniciar sesión.",
+      "deactivated": "Administrador desactivado.",
+      "columns": {
+        "name": "Nombre",
+        "email": "Correo",
+        "since": "Desde"
+      }
+    },
+    "activity": {
+      "title": "Registro de actividad",
+      "action": "Acción",
+      "entity": "Entidad",
+      "columns": {
+        "when": "Cuándo",
+        "actor": "Administrador",
+        "action": "Acción",
+        "entity": "Entidad",
+        "details": "Detalles"
+      },
+      "empty": "Sin actividad registrada"
+    },
+    "settings": {
+      "title": "Configuración",
+      "assessments": "Umbrales y prompts de las evaluaciones",
+      "assessmentsBody": "Edite la configuración JSON de cada evaluación. Al guardar se incrementa la versión.",
+      "config": "Configuración (JSON)",
+      "active": "Activa",
+      "cooldown": "Periodo de espera (días)",
+      "timeLimit": "Límite de tiempo (minutos)",
+      "saved": "Evaluación actualizada (versión {version}).",
+      "invalidJson": "La configuración no es un JSON válido.",
+      "consent": "Versión del texto de consentimiento",
+      "consentBody": "Versión actual {version}. Cambie la constante CONSENT_VERSION en src/lib/legal.ts junto con el texto de la política de privacidad."
     }
   }
 }
