@@ -697,5 +697,227 @@
       "rateLimited": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo."
     },
     "signedOut": "Cerraste sesión."
+  },
+  "company": {
+    "dashboard": {
+      "title": "Panel",
+      "welcome": "Bienvenido, {name}",
+      "pendingBanner": "Dexee verifica las empresas en un día hábil. Puede redactar vacantes ahora; se publicarán después de la verificación.",
+      "suspendedBanner": "Su empresa está suspendida. Contacte a Dexee para restablecer el acceso.",
+      "openJobs": "Vacantes abiertas",
+      "newApplicants": "Postulantes nuevos (7 días)",
+      "byStage": "Postulantes por etapa",
+      "pendingActions": "Acciones pendientes",
+      "drafts": "{count, plural, =1 {1 vacante en borrador} other {# vacantes en borrador}}",
+      "changesRequested": "{count, plural, =1 {1 vacante con cambios solicitados} other {# vacantes con cambios solicitados}}",
+      "pendingReview": "{count, plural, =1 {1 vacante pendiente de revisión por Dexee} other {# vacantes pendientes de revisión por Dexee}}",
+      "contactRequests": "{count, plural, =1 {1 solicitud de contacto pendiente} other {# solicitudes de contacto pendientes}}",
+      "nothingPending": "Nada pendiente.",
+      "postJob": "Publicar vacante",
+      "viewJobs": "Ver vacantes"
+    },
+    "onboarding": {
+      "title": "Configure su empresa",
+      "subtitle": "Dos pasos cortos. Dexee verifica las empresas en un día hábil.",
+      "stepDetails": "Datos de la empresa",
+      "stepNeeds": "Necesidades de contratación",
+      "name": "Nombre de la empresa",
+      "legalName": "Razón social",
+      "website": "Sitio web",
+      "sector": "Sector",
+      "country": "País",
+      "state": "Estado",
+      "city": "Ciudad",
+      "size": "Tamaño de la empresa",
+      "description": "Sobre la empresa",
+      "descriptionHint": "Dos o tres frases que los candidatos leerán en sus vacantes.",
+      "logo": "Logo",
+      "logoHint": "PNG, JPG, SVG o WebP de hasta 2 MB.",
+      "roleFamilies": "Roles que planea contratar",
+      "expectedHires": "Contrataciones previstas este año",
+      "contractTypes": "Tipos de contrato preferidos",
+      "finish": "Finalizar configuración",
+      "saved": "Empresa guardada.",
+      "select": "Seleccionar"
+    },
+    "jobs": {
+      "title": "Vacantes",
+      "subtitle": "Cree, publique y gestione sus roles abiertos.",
+      "new": "Nueva vacante",
+      "empty": "Aún no hay vacantes",
+      "emptyBody": "Cree su primera vacante. Puede redactarla con IA y publicarla cuando esté lista.",
+      "columns": {
+        "title": "Título",
+        "status": "Estado",
+        "applicants": "Postulantes",
+        "updated": "Actualizada",
+        "published": "Publicada"
+      },
+      "applicantsByStage": "{applied} postulados, {screening} en preselección, {shortlisted} en lista corta, {interview} en entrevista",
+      "actions": {
+        "edit": "Editar",
+        "pipeline": "Pipeline",
+        "pause": "Pausar",
+        "resume": "Reanudar",
+        "close": "Cerrar",
+        "duplicate": "Duplicar",
+        "delete": "Eliminar borrador",
+        "view": "Ver página pública"
+      },
+      "closeConfirm": "¿Cerrar esta vacante? Los candidatos ya no podrán postularse.",
+      "deleteConfirm": "¿Eliminar este borrador? Esta acción no se puede deshacer.",
+      "statusChanged": "Vacante actualizada.",
+      "duplicated": "Vacante duplicada como borrador."
+    },
+    "wizard": {
+      "title": "Vacante",
+      "newTitle": "Nueva vacante",
+      "steps": {
+        "role": "Rol",
+        "compensation": "Compensación y contrato",
+        "review": "Revisión"
+      },
+      "autosaved": "Borrador guardado {time}",
+      "saving": "Guardando",
+      "changesRequested": "Dexee solicitó cambios",
+      "role": {
+        "title": "Título del cargo",
+        "titlePlaceholder": "Contador senior (US GAAP)",
+        "roleFamily": "Área",
+        "seniority": "Seniority",
+        "description": "Descripción",
+        "responsibilities": "Responsabilidades",
+        "requirements": "Requisitos",
+        "listHint": "Un elemento por línea.",
+        "skills": "Habilidades",
+        "skillsHint": "Presione Enter para agregar una habilidad.",
+        "englishLevel": "Nivel de inglés requerido",
+        "draftWithAi": "Redactar con IA",
+        "drafting": "Redactando",
+        "aiKeywords": "Palabras clave para la IA (hasta cinco)",
+        "aiHint": "Genera descripción, responsabilidades y requisitos a partir del título, la seniority, el área y las palabras clave. Edite el resultado antes de publicar.",
+        "aiUnavailable": "La redacción con IA no está configurada en este entorno.",
+        "aiFailed": "No pudimos generar el borrador. Inténtelo de nuevo.",
+        "aiDone": "Borrador generado. Revíselo y edítelo."
+      },
+      "compensation": {
+        "salaryMin": "Salario mínimo (USD / mes)",
+        "salaryMax": "Salario máximo (USD / mes)",
+        "showSalary": "Mostrar el rango salarial a los candidatos",
+        "contractType": "Tipo de contrato",
+        "employmentType": "Dedicación",
+        "hoursPerWeek": "Horas por semana",
+        "overlap": "Solapamiento requerido con horarios de EE. UU.",
+        "workMode": "Modalidad",
+        "startDate": "Fecha de inicio",
+        "confidential": "Mantener la empresa confidencial",
+        "confidentialHint": "La publicación muestra \"Confidencial\" en lugar del nombre y el logo de su empresa."
+      },
+      "review": {
+        "title": "Vista previa",
+        "subtitle": "Así verán la vacante los candidatos.",
+        "incomplete": "Complete los campos marcados antes de enviar.",
+        "submitVerified": "Publicar vacante",
+        "submitPending": "Enviar a revisión",
+        "submitPendingHint": "Su empresa está pendiente de verificación. Dexee revisa la vacante y la publica después de verificar su empresa.",
+        "published": "Vacante publicada.",
+        "queued": "Vacante enviada. Dexee la revisará pronto.",
+        "companyNotVerified": "Su empresa debe estar verificada antes de publicar."
+      }
+    },
+    "pipeline": {
+      "title": "Pipeline",
+      "back": "Todas las vacantes",
+      "withdrawn": "{count, plural, =0 {Sin postulaciones retiradas} =1 {1 postulación retirada} other {# postulaciones retiradas}}",
+      "empty": "Aún no hay postulantes",
+      "emptyBody": "Los postulantes aparecen aquí en cuanto los candidatos se postulan o Dexee recomienda a alguien.",
+      "moved": "Movido a {status}.",
+      "moveFailed": "No se pudo mover la postulación. El tablero fue restaurado.",
+      "dragHint": "Arrastre las tarjetas entre columnas o use el menú de estado de cada tarjeta.",
+      "moveTo": "Mover a",
+      "yearsExperience": "{years} años",
+      "openCard": "Abrir detalles"
+    },
+    "drawer": {
+      "profile": "Perfil",
+      "experience": "Experiencia",
+      "education": "Educación",
+      "skills": "Habilidades",
+      "assessments": "Tamizaje Dexee",
+      "contact": "Datos de contacto",
+      "contactGated": "Datos de contacto disponibles a través de Dexee",
+      "contactGatedBody": "Dexee libera correo, teléfono, LinkedIn y hoja de vida cuando su equipo está listo para avanzar con este candidato.",
+      "requestContact": "Solicitar datos de contacto",
+      "contactRequested": "Datos de contacto solicitados el {date}",
+      "contactRequestedShort": "Solicitados",
+      "resume": "Descargar hoja de vida",
+      "resumeUnavailable": "No hay hoja de vida registrada.",
+      "notes": "Notas del equipo",
+      "notesEmpty": "Aún no hay notas.",
+      "addNote": "Agregar nota",
+      "notePlaceholder": "Visible para su equipo y para Dexee.",
+      "save": "Guardar en lista corta",
+      "saved": "En lista corta",
+      "unsave": "Quitar de lista corta",
+      "timeline": "Historial",
+      "coverNote": "Nota del candidato",
+      "workstyle": "Perfil de estilo de trabajo",
+      "workstyleHidden": "El candidato no ha compartido el resumen de estilo de trabajo.",
+      "present": "Actual",
+      "desiredSalary": "Expectativa salarial",
+      "availability": "Disponibilidad",
+      "englishSelf": "Inglés autodeclarado",
+      "source": "Origen"
+    },
+    "candidates": {
+      "title": "Candidatos",
+      "subtitle": "Todas las personas que se postularon a sus vacantes.",
+      "empty": "Aún no hay postulantes",
+      "emptyBody": "Aquí aparecen los postulantes de todas sus vacantes.",
+      "filters": {
+        "job": "Vacante",
+        "status": "Estado",
+        "search": "Buscar por nombre, titular o habilidad"
+      },
+      "columns": {
+        "candidate": "Candidato",
+        "job": "Vacante",
+        "status": "Estado",
+        "english": "Inglés",
+        "applied": "Postulado"
+      }
+    },
+    "shortlist": {
+      "title": "Lista corta",
+      "subtitle": "Candidatos que su equipo guardó.",
+      "empty": "Su lista corta está vacía",
+      "emptyBody": "Guarde candidatos desde el pipeline para tenerlos a la mano."
+    },
+    "settings": {
+      "title": "Configuración",
+      "tabs": {
+        "company": "Empresa",
+        "team": "Equipo",
+        "notifications": "Notificaciones"
+      },
+      "companySaved": "Perfil de empresa guardado.",
+      "team": {
+        "title": "Miembros del equipo",
+        "invite": "Invitar a un miembro",
+        "inviteEmail": "Correo de trabajo",
+        "invited": "Invitación enviada.",
+        "pending": "Invitación pendiente",
+        "remove": "Quitar",
+        "removeConfirm": "¿Quitar a este miembro? Perderá acceso a sus vacantes.",
+        "ownerOnly": "Solo el propietario puede gestionar el equipo.",
+        "you": "Usted"
+      },
+      "notifications": {
+        "title": "Notificaciones por correo",
+        "digest": "Resumen de nuevas postulaciones (máximo un correo por vacante por hora)",
+        "applicationUpdates": "Novedades de postulaciones y vacantes",
+        "saved": "Preferencias guardadas."
+      }
+    }
   }
 }

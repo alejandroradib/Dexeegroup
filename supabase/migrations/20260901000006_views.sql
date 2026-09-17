@@ -66,6 +66,7 @@ select
   c.role_family,
   c.skills,
   c.desired_roles,
+  c.desired_salary_min_usd,
   c.availability,
   c.preferred_contract_types,
   c.english_self_level,

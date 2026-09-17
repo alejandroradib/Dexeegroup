@@ -697,5 +697,227 @@
       "rateLimited": "Too many attempts. Wait a few minutes and try again."
     },
     "signedOut": "You have been signed out."
+  },
+  "company": {
+    "dashboard": {
+      "title": "Dashboard",
+      "welcome": "Welcome, {name}",
+      "pendingBanner": "Dexee verifies companies within one business day. You can draft vacancies now; they will be published after verification.",
+      "suspendedBanner": "Your company is suspended. Contact Dexee to restore access.",
+      "openJobs": "Open vacancies",
+      "newApplicants": "New applicants (7 days)",
+      "byStage": "Applicants by stage",
+      "pendingActions": "Pending actions",
+      "drafts": "{count, plural, =1 {1 draft vacancy} other {# draft vacancies}}",
+      "changesRequested": "{count, plural, =1 {1 vacancy with changes requested} other {# vacancies with changes requested}}",
+      "pendingReview": "{count, plural, =1 {1 vacancy pending Dexee review} other {# vacancies pending Dexee review}}",
+      "contactRequests": "{count, plural, =1 {1 contact request pending} other {# contact requests pending}}",
+      "nothingPending": "Nothing pending.",
+      "postJob": "Post a vacancy",
+      "viewJobs": "View vacancies"
+    },
+    "onboarding": {
+      "title": "Set up your company",
+      "subtitle": "Two short steps. Dexee verifies companies within one business day.",
+      "stepDetails": "Company details",
+      "stepNeeds": "Hiring needs",
+      "name": "Company name",
+      "legalName": "Legal name",
+      "website": "Website",
+      "sector": "Sector",
+      "country": "Country",
+      "state": "State",
+      "city": "City",
+      "size": "Company size",
+      "description": "About the company",
+      "descriptionHint": "Two or three sentences candidates will read on your vacancies.",
+      "logo": "Logo",
+      "logoHint": "PNG, JPG, SVG or WebP up to 2 MB.",
+      "roleFamilies": "Roles you plan to hire",
+      "expectedHires": "Expected hires this year",
+      "contractTypes": "Preferred contract types",
+      "finish": "Finish setup",
+      "saved": "Company saved.",
+      "select": "Select"
+    },
+    "jobs": {
+      "title": "Vacancies",
+      "subtitle": "Create, publish and manage your open roles.",
+      "new": "New vacancy",
+      "empty": "No vacancies yet",
+      "emptyBody": "Create your first vacancy. You can draft it with AI and publish when ready.",
+      "columns": {
+        "title": "Title",
+        "status": "Status",
+        "applicants": "Applicants",
+        "updated": "Updated",
+        "published": "Published"
+      },
+      "applicantsByStage": "{applied} applied, {screening} screening, {shortlisted} shortlisted, {interview} interview",
+      "actions": {
+        "edit": "Edit",
+        "pipeline": "Pipeline",
+        "pause": "Pause",
+        "resume": "Resume",
+        "close": "Close",
+        "duplicate": "Duplicate",
+        "delete": "Delete draft",
+        "view": "View public page"
+      },
+      "closeConfirm": "Close this vacancy? Candidates will no longer be able to apply.",
+      "deleteConfirm": "Delete this draft? This cannot be undone.",
+      "statusChanged": "Vacancy updated.",
+      "duplicated": "Vacancy duplicated as a draft."
+    },
+    "wizard": {
+      "title": "Vacancy",
+      "newTitle": "New vacancy",
+      "steps": {
+        "role": "Role",
+        "compensation": "Compensation and contract",
+        "review": "Review"
+      },
+      "autosaved": "Draft saved {time}",
+      "saving": "Saving",
+      "changesRequested": "Dexee requested changes",
+      "role": {
+        "title": "Job title",
+        "titlePlaceholder": "Senior Accountant (US GAAP)",
+        "roleFamily": "Role family",
+        "seniority": "Seniority",
+        "description": "Description",
+        "responsibilities": "Responsibilities",
+        "requirements": "Requirements",
+        "listHint": "One item per line.",
+        "skills": "Skills",
+        "skillsHint": "Press Enter to add a skill.",
+        "englishLevel": "English level required",
+        "draftWithAi": "Draft with AI",
+        "drafting": "Drafting",
+        "aiKeywords": "Keywords for the AI (up to five)",
+        "aiHint": "Generates description, responsibilities and requirements from the title, seniority, role family and keywords. Edit the result before publishing.",
+        "aiUnavailable": "AI drafting is not configured in this environment.",
+        "aiFailed": "We could not generate a draft. Try again.",
+        "aiDone": "Draft generated. Review and edit it."
+      },
+      "compensation": {
+        "salaryMin": "Minimum salary (USD / month)",
+        "salaryMax": "Maximum salary (USD / month)",
+        "showSalary": "Show the salary range to candidates",
+        "contractType": "Contract type",
+        "employmentType": "Employment type",
+        "hoursPerWeek": "Hours per week",
+        "overlap": "Required overlap with US time zones",
+        "workMode": "Work mode",
+        "startDate": "Start date",
+        "confidential": "Keep the company confidential",
+        "confidentialHint": "The public listing shows \"Confidential\" instead of your company name and logo."
+      },
+      "review": {
+        "title": "Preview",
+        "subtitle": "This is how candidates will see the vacancy.",
+        "incomplete": "Complete the highlighted fields before submitting.",
+        "submitVerified": "Publish vacancy",
+        "submitPending": "Submit for review",
+        "submitPendingHint": "Your company is pending verification. Dexee reviews the vacancy and publishes it after verifying your company.",
+        "published": "Vacancy published.",
+        "queued": "Vacancy submitted. Dexee will review it shortly.",
+        "companyNotVerified": "Your company must be verified before publishing."
+      }
+    },
+    "pipeline": {
+      "title": "Pipeline",
+      "back": "All vacancies",
+      "withdrawn": "{count, plural, =0 {No withdrawn applications} =1 {1 withdrawn application} other {# withdrawn applications}}",
+      "empty": "No applicants yet",
+      "emptyBody": "Applicants appear here as soon as candidates apply or Dexee recommends someone.",
+      "moved": "Moved to {status}.",
+      "moveFailed": "Could not move the application. The board was restored.",
+      "dragHint": "Drag cards between columns or use the status menu on each card.",
+      "moveTo": "Move to",
+      "yearsExperience": "{years} years",
+      "openCard": "Open details"
+    },
+    "drawer": {
+      "profile": "Profile",
+      "experience": "Experience",
+      "education": "Education",
+      "skills": "Skills",
+      "assessments": "Dexee screening",
+      "contact": "Contact details",
+      "contactGated": "Contact details available through Dexee",
+      "contactGatedBody": "Dexee releases email, phone, LinkedIn and resume once your team is ready to move forward with this candidate.",
+      "requestContact": "Request contact details",
+      "contactRequested": "Contact details requested {date}",
+      "contactRequestedShort": "Requested",
+      "resume": "Download resume",
+      "resumeUnavailable": "No resume on file.",
+      "notes": "Team notes",
+      "notesEmpty": "No notes yet.",
+      "addNote": "Add a note",
+      "notePlaceholder": "Visible to your team and to Dexee.",
+      "save": "Save to shortlist",
+      "saved": "Saved to shortlist",
+      "unsave": "Remove from shortlist",
+      "timeline": "Timeline",
+      "coverNote": "Candidate note",
+      "workstyle": "Work-style profile",
+      "workstyleHidden": "The candidate has not shared the work-style summary.",
+      "present": "Present",
+      "desiredSalary": "Expected salary",
+      "availability": "Availability",
+      "englishSelf": "Self-reported English",
+      "source": "Source"
+    },
+    "candidates": {
+      "title": "Candidates",
+      "subtitle": "Everyone who applied to your vacancies.",
+      "empty": "No applicants yet",
+      "emptyBody": "Applicants across all your vacancies appear here.",
+      "filters": {
+        "job": "Vacancy",
+        "status": "Status",
+        "search": "Search by name, headline or skill"
+      },
+      "columns": {
+        "candidate": "Candidate",
+        "job": "Vacancy",
+        "status": "Status",
+        "english": "English",
+        "applied": "Applied"
+      }
+    },
+    "shortlist": {
+      "title": "Shortlist",
+      "subtitle": "Candidates your team saved.",
+      "empty": "Your shortlist is empty",
+      "emptyBody": "Save candidates from the pipeline to keep them at hand."
+    },
+    "settings": {
+      "title": "Settings",
+      "tabs": {
+        "company": "Company",
+        "team": "Team",
+        "notifications": "Notifications"
+      },
+      "companySaved": "Company profile saved.",
+      "team": {
+        "title": "Team members",
+        "invite": "Invite a member",
+        "inviteEmail": "Work email",
+        "invited": "Invitation sent.",
+        "pending": "Invitation pending",
+        "remove": "Remove",
+        "removeConfirm": "Remove this member? They will lose access to your vacancies.",
+        "ownerOnly": "Only the owner can manage the team.",
+        "you": "You"
+      },
+      "notifications": {
+        "title": "Email notifications",
+        "digest": "New application digest (at most one email per vacancy per hour)",
+        "applicationUpdates": "Application and vacancy updates",
+        "saved": "Preferences saved."
+      }
+    }
   }
 }

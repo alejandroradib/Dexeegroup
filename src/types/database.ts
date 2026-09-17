@@ -1359,6 +1359,7 @@ export type Database = {
           role_family: Database["public"]["Enums"]["role_family"] | null
           skills: string[] | null
           desired_roles: string[] | null
+          desired_salary_min_usd: number | null
           availability: Database["public"]["Enums"]["availability"] | null
           preferred_contract_types: Database["public"]["Enums"]["contract_type"][] | null
           english_self_level: Database["public"]["Enums"]["cefr_level"] | null
