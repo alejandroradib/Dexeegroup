@@ -919,5 +919,233 @@
         "saved": "Preferences saved."
       }
     }
+  },
+  "candidate": {
+    "dashboard": {
+      "welcome": "Hello, {name}",
+      "completeness": "Profile completeness",
+      "completeProfile": "Complete your profile",
+      "missing": "Missing: {items}",
+      "recommended": "Recommended for you",
+      "recommendedEmpty": "Complete your profile to receive recommendations that match your role, English level and salary expectation.",
+      "browseAll": "Browse all roles",
+      "applications": "Your applications",
+      "applicationsEmpty": "You have not applied to any role yet.",
+      "viewApplications": "View applications",
+      "assessments": "Assessments",
+      "assessmentsPrompt": "Take the three free assessments to add Dexee screening badges to your profile.",
+      "goToAssessments": "Go to assessments"
+    },
+    "checklist": {
+      "identity": "Name and headline",
+      "summary": "Professional summary",
+      "experience": "At least one experience",
+      "education": "Education",
+      "skills": "At least three skills",
+      "english": "English self-assessment",
+      "compensation": "Salary expectation and availability",
+      "resume": "Resume (PDF)"
+    },
+    "onboarding": {
+      "title": "Build your profile",
+      "subtitle": "Seven short steps. Each one saves automatically, so you can stop and come back.",
+      "steps": {
+        "identity": "Identity and contact",
+        "professional": "Headline and skills",
+        "experience": "Experience",
+        "education": "Education",
+        "english": "English and roles",
+        "compensation": "Salary and availability",
+        "resume": "Resume"
+      },
+      "identity": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "city": "City",
+        "phone": "Phone (with country code)",
+        "linkedin": "LinkedIn URL",
+        "portfolio": "Portfolio or website",
+        "privacy": "Phone, LinkedIn and portfolio are shared with a company only when Dexee releases your contact details."
+      },
+      "professional": {
+        "headline": "Professional headline",
+        "headlinePlaceholder": "Senior accountant, US GAAP and NetSuite",
+        "summary": "Summary",
+        "summaryHint": "Three to five sentences about your experience and what you are looking for.",
+        "roleFamily": "Main role family",
+        "skills": "Skills",
+        "skillsHint": "Add at least three. Press Enter after each one.",
+        "years": "Years of experience"
+      },
+      "experience": {
+        "title": "Work experience",
+        "add": "Add experience",
+        "edit": "Edit",
+        "company": "Company",
+        "role": "Job title",
+        "start": "Start (month)",
+        "end": "End (month)",
+        "current": "I currently work here",
+        "description": "What you did",
+        "empty": "No experience added yet. Add at least one position.",
+        "removeConfirm": "Remove this experience?"
+      },
+      "education": {
+        "title": "Education",
+        "add": "Add education",
+        "institution": "Institution",
+        "degree": "Degree",
+        "field": "Field of study",
+        "startYear": "Start year",
+        "endYear": "End year",
+        "empty": "No education added yet.",
+        "removeConfirm": "Remove this education?"
+      },
+      "english": {
+        "level": "Your English level",
+        "levelHint": "Choose the description that fits you best. You can verify it later with the free assessments.",
+        "desiredRoles": "Roles you are looking for",
+        "desiredRolesHint": "Job titles, one at a time."
+      },
+      "compensation": {
+        "salary": "Expected salary (USD per month)",
+        "salaryHint": "Companies see this expectation. Roles below it are not recommended to you.",
+        "availability": "Availability to start",
+        "contractTypes": "Contract types you accept"
+      },
+      "resume": {
+        "title": "Resume",
+        "hint": "PDF only, up to 5 MB. Companies download it only after Dexee releases your contact details.",
+        "upload": "Upload PDF",
+        "replace": "Replace PDF",
+        "uploaded": "Resume uploaded.",
+        "current": "Resume on file",
+        "view": "View",
+        "remove": "Remove",
+        "none": "No resume uploaded yet."
+      },
+      "finish": "Finish",
+      "finished": "Profile saved. Companies can now find you through your applications.",
+      "saved": "Saved."
+    },
+    "profile": {
+      "title": "Your profile",
+      "subtitle": "What you share with Dexee and, after release, with companies.",
+      "edit": "Edit profile",
+      "preview": "Preview as a company sees it",
+      "previewOn": "Company view",
+      "previewNote": "Companies see this until Dexee releases your contact details for a specific application.",
+      "contact": "Contact details",
+      "contactPrivate": "Private until released by Dexee",
+      "badges": "Dexee screening badges",
+      "noBadges": "No badges yet. Take the free assessments.",
+      "summary": "Summary",
+      "skills": "Skills",
+      "experience": "Experience",
+      "education": "Education",
+      "preferences": "Preferences",
+      "desiredRoles": "Desired roles",
+      "expectedSalary": "Expected salary",
+      "availability": "Availability",
+      "contractTypes": "Contract types",
+      "englishSelf": "Self-reported English",
+      "present": "Present"
+    },
+    "jobs": {
+      "title": "Find a role",
+      "subtitle": "Remote positions with US companies. Apply with one click.",
+      "apply": "Apply",
+      "applied": "You applied {date}",
+      "applyTitle": "Apply to {job}",
+      "applyBody": "Your profile and Dexee badges are shared with the company. Contact details stay private until Dexee releases them.",
+      "coverNote": "Note for the company",
+      "coverNoteHint": "Optional, up to 600 characters.",
+      "confirmApply": "Send application",
+      "success": "Application sent.",
+      "duplicate": "You already applied to this role. Track it in Applications.",
+      "forbidden": "This role is no longer accepting applications.",
+      "completeProfileFirst": "Complete your profile before applying so companies see your experience and skills.",
+      "withdraw": "Withdraw application",
+      "withdrawConfirm": "Withdraw your application? You cannot apply again to this role.",
+      "withdrawn": "Application withdrawn.",
+      "withdrawNotAllowed": "This application can no longer be withdrawn."
+    },
+    "applications": {
+      "title": "Applications",
+      "subtitle": "Track every role you applied to.",
+      "empty": "No applications yet",
+      "emptyBody": "Browse open roles and apply with one click.",
+      "browse": "Browse roles",
+      "timeline": "Timeline",
+      "appliedOn": "Applied {date}",
+      "recommendedBy": "Recommended by Dexee",
+      "withdraw": "Withdraw"
+    },
+    "assessments": {
+      "title": "Assessments",
+      "subtitle": "Three free screenings. Results attach to your profile as Dexee badges.",
+      "notice": "Assessment results are Dexee screening results, not certifications or clinical assessments. Each assessment can be taken once every {days} days.",
+      "start": "Start",
+      "continue": "Continue",
+      "viewResult": "View result",
+      "states": {
+        "not_started": "Not started",
+        "in_progress": "In progress, {time} remaining",
+        "in_progress_no_timer": "In progress",
+        "processing": "Processing your answers",
+        "pending_validation": "Pending Dexee validation",
+        "completed": "Completed",
+        "failed": "Processing failed. Dexee has been notified.",
+        "available_again": "Available again on {date}",
+        "expired": "Your previous attempt expired"
+      },
+      "level": "Level {level}",
+      "timeLimit": "{minutes} minutes",
+      "noTimeLimit": "No time limit",
+      "empty": "Assessments are not available yet",
+      "emptyBody": "Dexee is preparing the assessments. You will be notified when they open."
+    },
+    "settings": {
+      "title": "Settings",
+      "tabs": {
+        "account": "Account",
+        "privacy": "Privacy",
+        "notifications": "Notifications"
+      },
+      "account": {
+        "fullName": "Full name",
+        "email": "Email",
+        "emailHint": "Contact Dexee to change the email of your account.",
+        "locale": "Language",
+        "saved": "Account updated.",
+        "password": "Change password",
+        "newPassword": "New password",
+        "confirm": "Confirm new password",
+        "passwordSaved": "Password updated."
+      },
+      "privacy": {
+        "workstyleTitle": "Work-style profile visibility",
+        "workstyleBody": "When enabled, companies see the band descriptors of your work-style profile. They never see numeric scores.",
+        "workstyleToggle": "Share my work-style summary with companies",
+        "workstyleNone": "You have not completed the work-style profile yet.",
+        "visibilityTitle": "Profile visibility",
+        "visibilityBody": "Dexee only: your profile is visible to Dexee but not to companies, even when you apply.",
+        "visibilityToggle": "Visible to companies I apply to",
+        "dataTitle": "Your data",
+        "dataBody": "Under Law 1581 of 2012 you can request access to, correction of, or deletion of your personal data. Deletion closes your account once Dexee processes the request.",
+        "kind": "Request",
+        "message": "Details",
+        "submit": "Send request",
+        "sent": "Request received. Dexee will respond within the legal term.",
+        "history": "Previous requests",
+        "consent": "Consent version {version}, given {date}."
+      },
+      "notifications": {
+        "title": "Email notifications",
+        "applicationUpdates": "Application status changes and Dexee recommendations",
+        "assessmentResults": "Assessment results",
+        "saved": "Preferences saved."
+      }
+    }
   }
 }

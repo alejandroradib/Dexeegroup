@@ -919,5 +919,233 @@
         "saved": "Preferencias guardadas."
       }
     }
+  },
+  "candidate": {
+    "dashboard": {
+      "welcome": "Hola, {name}",
+      "completeness": "Perfil completado",
+      "completeProfile": "Completa tu perfil",
+      "missing": "Falta: {items}",
+      "recommended": "Recomendadas para ti",
+      "recommendedEmpty": "Completa tu perfil para recibir recomendaciones según tu área, nivel de inglés y expectativa salarial.",
+      "browseAll": "Ver todas las vacantes",
+      "applications": "Tus postulaciones",
+      "applicationsEmpty": "Aún no te has postulado a ninguna vacante.",
+      "viewApplications": "Ver postulaciones",
+      "assessments": "Evaluaciones",
+      "assessmentsPrompt": "Presenta las tres evaluaciones gratuitas para agregar insignias de tamizaje Dexee a tu perfil.",
+      "goToAssessments": "Ir a evaluaciones"
+    },
+    "checklist": {
+      "identity": "Nombre y titular",
+      "summary": "Resumen profesional",
+      "experience": "Al menos una experiencia",
+      "education": "Educación",
+      "skills": "Al menos tres habilidades",
+      "english": "Autoevaluación de inglés",
+      "compensation": "Expectativa salarial y disponibilidad",
+      "resume": "Hoja de vida (PDF)"
+    },
+    "onboarding": {
+      "title": "Crea tu perfil",
+      "subtitle": "Siete pasos cortos. Cada uno se guarda automáticamente; puedes parar y volver después.",
+      "steps": {
+        "identity": "Identidad y contacto",
+        "professional": "Titular y habilidades",
+        "experience": "Experiencia",
+        "education": "Educación",
+        "english": "Inglés y roles",
+        "compensation": "Salario y disponibilidad",
+        "resume": "Hoja de vida"
+      },
+      "identity": {
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "city": "Ciudad",
+        "phone": "Teléfono (con indicativo)",
+        "linkedin": "URL de LinkedIn",
+        "portfolio": "Portafolio o sitio web",
+        "privacy": "Teléfono, LinkedIn y portafolio se comparten con una empresa solo cuando Dexee libera tus datos de contacto."
+      },
+      "professional": {
+        "headline": "Titular profesional",
+        "headlinePlaceholder": "Contadora senior, US GAAP y NetSuite",
+        "summary": "Resumen",
+        "summaryHint": "De tres a cinco frases sobre tu experiencia y lo que buscas.",
+        "roleFamily": "Área principal",
+        "skills": "Habilidades",
+        "skillsHint": "Agrega al menos tres. Presiona Enter después de cada una.",
+        "years": "Años de experiencia"
+      },
+      "experience": {
+        "title": "Experiencia laboral",
+        "add": "Agregar experiencia",
+        "edit": "Editar",
+        "company": "Empresa",
+        "role": "Cargo",
+        "start": "Inicio (mes)",
+        "end": "Fin (mes)",
+        "current": "Trabajo aquí actualmente",
+        "description": "Qué hiciste",
+        "empty": "Aún no has agregado experiencia. Agrega al menos un cargo.",
+        "removeConfirm": "¿Quitar esta experiencia?"
+      },
+      "education": {
+        "title": "Educación",
+        "add": "Agregar educación",
+        "institution": "Institución",
+        "degree": "Título",
+        "field": "Campo de estudio",
+        "startYear": "Año de inicio",
+        "endYear": "Año de fin",
+        "empty": "Aún no has agregado educación.",
+        "removeConfirm": "¿Quitar esta educación?"
+      },
+      "english": {
+        "level": "Tu nivel de inglés",
+        "levelHint": "Elige la descripción que mejor te describe. Podrás verificarlo después con las evaluaciones gratuitas.",
+        "desiredRoles": "Roles que buscas",
+        "desiredRolesHint": "Nombres de cargo, uno a la vez."
+      },
+      "compensation": {
+        "salary": "Salario esperado (USD por mes)",
+        "salaryHint": "Las empresas ven esta expectativa. No te recomendamos roles por debajo de ella.",
+        "availability": "Disponibilidad para empezar",
+        "contractTypes": "Tipos de contrato que aceptas"
+      },
+      "resume": {
+        "title": "Hoja de vida",
+        "hint": "Solo PDF, hasta 5 MB. Las empresas la descargan solo después de que Dexee libera tus datos de contacto.",
+        "upload": "Subir PDF",
+        "replace": "Reemplazar PDF",
+        "uploaded": "Hoja de vida cargada.",
+        "current": "Hoja de vida registrada",
+        "view": "Ver",
+        "remove": "Quitar",
+        "none": "Aún no has subido tu hoja de vida."
+      },
+      "finish": "Finalizar",
+      "finished": "Perfil guardado. Las empresas podrán encontrarte a través de tus postulaciones.",
+      "saved": "Guardado."
+    },
+    "profile": {
+      "title": "Tu perfil",
+      "subtitle": "Lo que compartes con Dexee y, después de la liberación, con las empresas.",
+      "edit": "Editar perfil",
+      "preview": "Ver como lo ve una empresa",
+      "previewOn": "Vista de empresa",
+      "previewNote": "Las empresas ven esto hasta que Dexee libera tus datos de contacto para una postulación específica.",
+      "contact": "Datos de contacto",
+      "contactPrivate": "Privados hasta que Dexee los libere",
+      "badges": "Insignias de tamizaje Dexee",
+      "noBadges": "Aún no tienes insignias. Presenta las evaluaciones gratuitas.",
+      "summary": "Resumen",
+      "skills": "Habilidades",
+      "experience": "Experiencia",
+      "education": "Educación",
+      "preferences": "Preferencias",
+      "desiredRoles": "Roles deseados",
+      "expectedSalary": "Salario esperado",
+      "availability": "Disponibilidad",
+      "contractTypes": "Tipos de contrato",
+      "englishSelf": "Inglés autodeclarado",
+      "present": "Actual"
+    },
+    "jobs": {
+      "title": "Encuentra un rol",
+      "subtitle": "Posiciones remotas con empresas de EE. UU. Postúlate con un clic.",
+      "apply": "Postularme",
+      "applied": "Te postulaste el {date}",
+      "applyTitle": "Postularte a {job}",
+      "applyBody": "Tu perfil y tus insignias Dexee se comparten con la empresa. Los datos de contacto siguen siendo privados hasta que Dexee los libere.",
+      "coverNote": "Nota para la empresa",
+      "coverNoteHint": "Opcional, hasta 600 caracteres.",
+      "confirmApply": "Enviar postulación",
+      "success": "Postulación enviada.",
+      "duplicate": "Ya te postulaste a este rol. Síguelo en Postulaciones.",
+      "forbidden": "Este rol ya no recibe postulaciones.",
+      "completeProfileFirst": "Completa tu perfil antes de postularte para que las empresas vean tu experiencia y habilidades.",
+      "withdraw": "Retirar postulación",
+      "withdrawConfirm": "¿Retirar tu postulación? No podrás postularte de nuevo a este rol.",
+      "withdrawn": "Postulación retirada.",
+      "withdrawNotAllowed": "Esta postulación ya no se puede retirar."
+    },
+    "applications": {
+      "title": "Postulaciones",
+      "subtitle": "Sigue cada rol al que te postulaste.",
+      "empty": "Aún no hay postulaciones",
+      "emptyBody": "Explora las vacantes abiertas y postúlate con un clic.",
+      "browse": "Ver vacantes",
+      "timeline": "Historial",
+      "appliedOn": "Postulado el {date}",
+      "recommendedBy": "Recomendado por Dexee",
+      "withdraw": "Retirar"
+    },
+    "assessments": {
+      "title": "Evaluaciones",
+      "subtitle": "Tres tamizajes gratuitos. Los resultados se agregan a tu perfil como insignias Dexee.",
+      "notice": "Los resultados son resultados de tamizaje de Dexee, no certificaciones ni evaluaciones clínicas. Cada evaluación puede presentarse una vez cada {days} días.",
+      "start": "Comenzar",
+      "continue": "Continuar",
+      "viewResult": "Ver resultado",
+      "states": {
+        "not_started": "No iniciada",
+        "in_progress": "En curso, quedan {time}",
+        "in_progress_no_timer": "En curso",
+        "processing": "Procesando tus respuestas",
+        "pending_validation": "Pendiente de validación por Dexee",
+        "completed": "Completada",
+        "failed": "El procesamiento falló. Dexee fue notificado.",
+        "available_again": "Disponible de nuevo el {date}",
+        "expired": "Tu intento anterior expiró"
+      },
+      "level": "Nivel {level}",
+      "timeLimit": "{minutes} minutos",
+      "noTimeLimit": "Sin límite de tiempo",
+      "empty": "Las evaluaciones aún no están disponibles",
+      "emptyBody": "Dexee está preparando las evaluaciones. Te avisaremos cuando abran."
+    },
+    "settings": {
+      "title": "Configuración",
+      "tabs": {
+        "account": "Cuenta",
+        "privacy": "Privacidad",
+        "notifications": "Notificaciones"
+      },
+      "account": {
+        "fullName": "Nombre completo",
+        "email": "Correo",
+        "emailHint": "Contacta a Dexee para cambiar el correo de tu cuenta.",
+        "locale": "Idioma",
+        "saved": "Cuenta actualizada.",
+        "password": "Cambiar contraseña",
+        "newPassword": "Nueva contraseña",
+        "confirm": "Confirmar nueva contraseña",
+        "passwordSaved": "Contraseña actualizada."
+      },
+      "privacy": {
+        "workstyleTitle": "Visibilidad del perfil de estilo de trabajo",
+        "workstyleBody": "Cuando está activo, las empresas ven los descriptores por rango de tu perfil de estilo de trabajo. Nunca ven puntajes numéricos.",
+        "workstyleToggle": "Compartir mi resumen de estilo de trabajo con las empresas",
+        "workstyleNone": "Aún no has completado el perfil de estilo de trabajo.",
+        "visibilityTitle": "Visibilidad del perfil",
+        "visibilityBody": "Solo Dexee: tu perfil es visible para Dexee pero no para las empresas, incluso cuando te postulas.",
+        "visibilityToggle": "Visible para las empresas a las que me postulo",
+        "dataTitle": "Tus datos",
+        "dataBody": "Según la Ley 1581 de 2012 puedes solicitar acceso, corrección o eliminación de tus datos personales. La eliminación cierra tu cuenta cuando Dexee procesa la solicitud.",
+        "kind": "Solicitud",
+        "message": "Detalles",
+        "submit": "Enviar solicitud",
+        "sent": "Solicitud recibida. Dexee responderá dentro del término legal.",
+        "history": "Solicitudes anteriores",
+        "consent": "Consentimiento versión {version}, otorgado el {date}."
+      },
+      "notifications": {
+        "title": "Notificaciones por correo",
+        "applicationUpdates": "Cambios de estado de postulaciones y recomendaciones de Dexee",
+        "assessmentResults": "Resultados de evaluaciones",
+        "saved": "Preferencias guardadas."
+      }
+    }
   }
 }
