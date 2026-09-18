@@ -26,7 +26,7 @@ Operational procedures for the Dexee Talent Platform. Assumes a Vercel project a
 
 - Pull requests run lint, typecheck, unit tests, `db:verify` (migrations and RLS matrix on PGlite) and `next build`.
 - Production deploy is a Vercel promotion of `main`. Apply migrations first: `supabase db push --linked` with the production ref from CI (`SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD` secrets), then deploy.
-- Cron jobs are declared in `vercel.json` and authenticate with `CRON_SECRET`.
+- Cron jobs are declared in `vercel.json` and authenticate with `CRON_SECRET`. On the Vercel Hobby plan they run once a day (see DECISIONS 22); on Pro, set `process-attempts` and `process-outbox` back to `*/5 * * * *`.
 
 ## Rollback
 
