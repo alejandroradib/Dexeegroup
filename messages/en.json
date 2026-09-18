@@ -1690,6 +1690,12 @@
       "none": "No practice interviews.",
       "score": "{score}/20",
       "role": "Role"
+    },
+    "status": {
+      "in_progress": "In progress",
+      "completed": "Completed",
+      "failed": "Feedback pending",
+      "expired": "Expired"
     }
   }
 }

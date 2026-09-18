@@ -5,7 +5,17 @@ import { StatCard } from "@/components/shared/stat-card";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
 import { APPLICATION_STATUSES, CEFR_LEVELS } from "@/lib/validation/enums";
-import { getAdminDashboard } from "@/server/services/admin";
+import { getAdminDashboard, type AdoptionMetrics } from "@/server/services/admin";
+
+const ADOPTION_KEYS = [
+  "registered",
+  "withResume",
+  "withAssessment",
+  "allAssessments",
+  "withInterview",
+  "applied",
+  "hired",
+] as const satisfies readonly (keyof AdoptionMetrics)[];
 
 export default async function AdminDashboardPage({ params }: PageProps<"/[locale]/admin">) {
   await pageLocale(params);
@@ -100,6 +110,31 @@ export default async function AdminDashboardPage({ params }: PageProps<"/[locale
           </ul>
         </section>
       </div>
+      <section className="border-border mt-6 rounded-[12px] border bg-white p-5">
+        <h2 className="text-base">{t("adoptionTitle")}</h2>
+        <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+          {ADOPTION_KEYS.map((key) => (
+            <li
+              key={key}
+              className="grid grid-cols-[1fr_40px] items-center gap-3 text-sm sm:grid-cols-[200px_1fr_40px]"
+            >
+              <span className="text-muted-foreground">{t(key)}</span>
+              <span
+                className="bg-mist hidden h-2 overflow-hidden rounded-full sm:block"
+                aria-hidden
+              >
+                <span
+                  className="bg-green block h-2 rounded-full"
+                  style={{
+                    width: `${Math.round((stats.adoption[key] / Math.max(1, stats.adoption.registered)) * 100)}%`,
+                  }}
+                />
+              </span>
+              <span className="text-navy text-right font-medium">{stats.adoption[key]}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
     </>
   );
 }

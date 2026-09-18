@@ -1,6 +1,24 @@
 "use client";
 
-import { ChevronDownIcon, LogOutIcon, MenuIcon, SettingsIcon } from "lucide-react";
+import {
+  ActivityIcon,
+  BookmarkIcon,
+  BriefcaseIcon,
+  BuildingIcon,
+  ChevronDownIcon,
+  ClipboardCheckIcon,
+  FileTextIcon,
+  HandshakeIcon,
+  LayoutDashboardIcon,
+  LogOutIcon,
+  MenuIcon,
+  MessageSquareTextIcon,
+  SearchIcon,
+  SettingsIcon,
+  ShieldIcon,
+  UserIcon,
+  UsersIcon,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
 
@@ -22,7 +40,29 @@ import { cn } from "@/lib/utils";
 
 import type { LucideIcon } from "lucide-react";
 
-export type NavItem = { href: string; label: string; icon: LucideIcon; exact?: boolean };
+/**
+ * Icons are referenced by name because nav items are built in a Server Component and
+ * component functions cannot cross the server/client boundary.
+ */
+const NAV_ICONS = {
+  dashboard: LayoutDashboardIcon,
+  jobs: BriefcaseIcon,
+  users: UsersIcon,
+  bookmark: BookmarkIcon,
+  settings: SettingsIcon,
+  user: UserIcon,
+  search: SearchIcon,
+  file: FileTextIcon,
+  clipboard: ClipboardCheckIcon,
+  interview: MessageSquareTextIcon,
+  building: BuildingIcon,
+  handshake: HandshakeIcon,
+  shield: ShieldIcon,
+  activity: ActivityIcon,
+} satisfies Record<string, LucideIcon>;
+
+export type NavIcon = keyof typeof NAV_ICONS;
+export type NavItem = { href: string; label: string; icon: NavIcon; exact?: boolean };
 
 type AppShellProps = {
   areaLabel: string;
@@ -43,6 +83,7 @@ function SidebarNav({ nav, onNavigate }: { nav: NavItem[]; onNavigate?: () => vo
         const active = item.exact
           ? pathname === item.href
           : pathname === item.href || pathname.startsWith(`${item.href}/`);
+        const Icon = NAV_ICONS[item.icon];
         return (
           <Link
             key={item.href}
@@ -54,10 +95,7 @@ function SidebarNav({ nav, onNavigate }: { nav: NavItem[]; onNavigate?: () => vo
               active && "bg-white/10 text-white",
             )}
           >
-            <item.icon
-              className={cn("size-4", active ? "text-green" : "text-white/60")}
-              aria-hidden
-            />
+            <Icon className={cn("size-4", active ? "text-green" : "text-white/60")} aria-hidden />
             {item.label}
           </Link>
         );
@@ -107,7 +145,7 @@ export function AppShell({
           {sidebar(() => setOpen(false))}
         </SheetContent>
       </Sheet>
-      <div className="flex min-h-screen flex-1 flex-col lg:pl-[var(--sidebar-width)]">
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col lg:pl-[var(--sidebar-width)]">
         <header className="border-border sticky top-0 z-30 flex h-[var(--topbar-height)] items-center justify-between gap-3 border-b bg-white px-4 sm:px-6">
           <div className="flex items-center gap-2">
             <Button
@@ -161,7 +199,7 @@ export function AppShell({
             </DropdownMenu>
           </div>
         </header>
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );

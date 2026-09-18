@@ -1690,6 +1690,12 @@
       "none": "Sin entrevistas de práctica.",
       "score": "{score}/20",
       "role": "Rol"
+    },
+    "status": {
+      "in_progress": "En curso",
+      "completed": "Completada",
+      "failed": "Retroalimentación pendiente",
+      "expired": "Expirada"
     }
   }
 }

@@ -215,7 +215,7 @@ export default async function AdminCandidateDetailPage({
                             {ti(`report.band.${interviewBand(i.overall_score)}`)}
                           </Badge>
                         ) : (
-                          <Badge variant="secondary">{i.status}</Badge>
+                          <Badge variant="secondary">{ti(`status.${i.status}`)}</Badge>
                         )}
                       </div>
                       {report?.scores ? (

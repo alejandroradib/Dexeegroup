@@ -42,6 +42,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Keep next dev from appending its agent-rules block to CLAUDE.md (the project file is curated by hand).
+  agentRules: false,
   reactStrictMode: true,
   poweredByHeader: false,
   images: {

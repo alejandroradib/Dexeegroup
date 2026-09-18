@@ -61,7 +61,7 @@ export default async function InterviewPage({
                           {tr(`band.${interviewBand(i.overall_score)}`)}
                         </Badge>
                       ) : (
-                        <Badge variant="secondary">{i.status}</Badge>
+                        <Badge variant="secondary">{t(`status.${i.status}`)}</Badge>
                       )}
                       {i.status !== "expired" ? (
                         <Button asChild size="sm" variant="outline">

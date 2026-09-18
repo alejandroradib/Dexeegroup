@@ -42,19 +42,19 @@ export function InterviewRunner({ interview }: { interview: MockInterview }) {
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const dirty = useRef<string | null>(null);
+  const dirty = useRef<{ id: string; text: string } | null>(null);
 
   const flush = useCallback(async () => {
-    const id = dirty.current;
-    if (!id) return;
+    const pendingSave = dirty.current;
+    if (!pendingSave) return;
     dirty.current = null;
     setSaveState("saving");
     const result = await saveInterviewAnswer(interview.id, {
-      question_id: id,
-      text: answers[id] ?? "",
+      question_id: pendingSave.id,
+      text: pendingSave.text,
     });
     setSaveState(result.ok ? "saved" : "error");
-  }, [answers, interview.id]);
+  }, [interview.id]);
 
   useEffect(
     () => () => {
@@ -71,31 +71,21 @@ export function InterviewRunner({ interview }: { interview: MockInterview }) {
   function onChange(value: string) {
     if (!question) return;
     setAnswers((prev) => ({ ...prev, [question.id]: value }));
-    dirty.current = question.id;
+    dirty.current = { id: question.id, text: value };
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => void flush(), 800);
   }
 
   async function move(next: number) {
-    if (question && dirty.current) {
-      dirty.current = null;
-      setSaveState("saving");
-      const result = await saveInterviewAnswer(interview.id, {
-        question_id: question.id,
-        text: answers[question.id] ?? "",
-      });
-      setSaveState(result.ok ? "saved" : "error");
-    }
+    if (timer.current) clearTimeout(timer.current);
+    await flush();
     setIndex(next);
   }
 
   function submit() {
     start(async () => {
-      if (question)
-        await saveInterviewAnswer(interview.id, {
-          question_id: question.id,
-          text: answers[question.id] ?? "",
-        });
+      if (timer.current) clearTimeout(timer.current);
+      await flush();
       const result = await submitInterview(interview.id);
       if (result.ok) {
         router.push(`/candidate/interview/${interview.id}/result`);

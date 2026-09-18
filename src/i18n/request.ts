@@ -11,6 +11,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     locale,
     messages,
     timeZone: "America/Bogota",
+    now: new Date(),
     formats: {
       dateTime: {
         short: { day: "numeric", month: "short", year: "numeric" },
