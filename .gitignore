@@ -51,3 +51,6 @@ coverage
 
 # local
 .pglite
+
+# local demo stack (postgres data, postgrest binary, storage files)
+.demo/
