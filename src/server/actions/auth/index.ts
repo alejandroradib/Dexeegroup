@@ -122,8 +122,16 @@ export async function signUpCandidate(input: unknown): Promise<Result<{ email: s
     id: data.user.id,
     first_name: parsed.data.first_name,
     last_name: parsed.data.last_name,
+    country: parsed.data.country === "OT" ? "XX" : parsed.data.country,
     data_consent_at: new Date().toISOString(),
     data_consent_version: CONSENT_VERSION,
+    consent_flags: {
+      terms: true,
+      data_policy: true,
+      job_contact: parsed.data.consent_job_contact,
+      analytics: parsed.data.consent_analytics,
+      version: CONSENT_VERSION,
+    },
   });
   if (candidateError) {
     logger.error(

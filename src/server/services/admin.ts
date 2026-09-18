@@ -4,7 +4,18 @@ import type { Database } from "@/types/database";
 type Tables = Database["public"]["Tables"];
 type Enums = Database["public"]["Enums"];
 
+export type AdoptionMetrics = {
+  registered: number;
+  withResume: number;
+  withAssessment: number;
+  allAssessments: number;
+  withInterview: number;
+  applied: number;
+  hired: number;
+};
+
 export type AdminDashboard = {
+  adoption: AdoptionMetrics;
   companiesPending: number;
   jobsPendingReview: number;
   applications7d: number;
@@ -18,22 +29,51 @@ export type AdminDashboard = {
 export async function getAdminDashboard(): Promise<AdminDashboard> {
   const supabase = await createClient();
   const since = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
-  const [companies, jobs, apps, attempts, placements, candidates] = await Promise.all([
-    supabase.from("companies").select("id", { count: "exact", head: true }).eq("status", "pending"),
-    supabase
-      .from("jobs")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "pending_review"),
-    supabase
-      .from("applications")
-      .select("id, status, created_at, contact_requested_at, contact_released"),
-    supabase
-      .from("assessment_attempts")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "pending_validation"),
-    supabase.from("placements").select("id", { count: "exact", head: true }).eq("status", "active"),
-    supabase.from("candidates").select("english_verified_level"),
-  ]);
+  const [companies, jobs, apps, attempts, placements, candidates, contacts, validated, interviews] =
+    await Promise.all([
+      supabase
+        .from("companies")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending"),
+      supabase
+        .from("jobs")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending_review"),
+      supabase
+        .from("applications")
+        .select("id, status, created_at, contact_requested_at, contact_released, candidate_id"),
+      supabase
+        .from("assessment_attempts")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending_validation"),
+      supabase
+        .from("placements")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "active"),
+      supabase.from("candidates").select("id, english_verified_level"),
+      supabase.from("candidate_contacts").select("candidate_id").not("resume_path", "is", null),
+      supabase
+        .from("assessment_attempts")
+        .select("candidate_id, assessment_id")
+        .eq("status", "validated"),
+      supabase.from("mock_interviews").select("candidate_id").eq("status", "completed"),
+    ]);
+  const perCandidate = new Map<string, Set<string>>();
+  for (const a of validated.data ?? []) {
+    const set = perCandidate.get(a.candidate_id) ?? new Set<string>();
+    set.add(a.assessment_id);
+    perCandidate.set(a.candidate_id, set);
+  }
+  const adoption: AdoptionMetrics = {
+    registered: candidates.data?.length ?? 0,
+    withResume: new Set((contacts.data ?? []).map((c) => c.candidate_id)).size,
+    withAssessment: perCandidate.size,
+    allAssessments: [...perCandidate.values()].filter((s) => s.size >= 3).length,
+    withInterview: new Set((interviews.data ?? []).map((i) => i.candidate_id)).size,
+    applied: new Set((apps.data ?? []).map((a) => a.candidate_id)).size,
+    hired: new Set((apps.data ?? []).filter((a) => a.status === "hired").map((a) => a.candidate_id))
+      .size,
+  };
   const funnel = {
     applied: 0,
     screening: 0,
@@ -62,6 +102,7 @@ export async function getAdminDashboard(): Promise<AdminDashboard> {
   } as AdminDashboard["candidatesByLevel"];
   for (const c of candidates.data ?? []) candidatesByLevel[c.english_verified_level ?? "none"] += 1;
   return {
+    adoption,
     companiesPending: companies.count ?? 0,
     jobsPendingReview: jobs.count ?? 0,
     applications7d,
@@ -178,6 +219,7 @@ export async function getAdminJobDetail(id: string) {
 }
 
 export type CandidateFilter = {
+  country?: string;
   q?: string;
   role_family?: Enums["role_family"];
   level?: Enums["cefr_level"];
@@ -198,6 +240,7 @@ export async function listAdminCandidates(
     .order("updated_at", { ascending: false })
     .range(range.from, range.to);
   if (filter.role_family) query = query.eq("role_family", filter.role_family);
+  if (filter.country) query = query.eq("country", filter.country);
   if (filter.level) query = query.eq("english_verified_level", filter.level);
   if (filter.availability) query = query.eq("availability", filter.availability);
   if (filter.visibility) query = query.eq("visibility", filter.visibility);
@@ -226,6 +269,7 @@ export async function getAdminCandidateDetail(id: string) {
     notes,
     attempts,
     dataRequests,
+    interviews,
   ] = await Promise.all([
     supabase.from("candidates").select("*").eq("id", id).maybeSingle(),
     supabase.from("profiles").select("email, locale, created_at").eq("id", id).maybeSingle(),
@@ -256,6 +300,12 @@ export async function getAdminCandidateDetail(id: string) {
       .select("*")
       .eq("candidate_id", id)
       .order("created_at", { ascending: false }),
+    supabase
+      .from("mock_interviews")
+      .select("id, role_family, language, status, overall_score, report, created_at")
+      .eq("candidate_id", id)
+      .order("created_at", { ascending: false })
+      .limit(5),
   ]);
   if (!candidate.data) return null;
   return {
@@ -268,6 +318,7 @@ export async function getAdminCandidateDetail(id: string) {
     notes: notes.data ?? [],
     attempts: attempts.data ?? [],
     dataRequests: dataRequests.data ?? [],
+    interviews: interviews.data ?? [],
   };
 }
 

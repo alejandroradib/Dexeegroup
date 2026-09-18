@@ -6,6 +6,7 @@ import { getSessionUser } from "@/lib/auth/session";
 import { logger } from "@/lib/logger";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
+import { consentFlagsSchema } from "@/lib/validation/auth";
 import {
   accountSchema,
   applySchema,
@@ -20,6 +21,7 @@ import {
 } from "@/lib/validation/candidate";
 import { dispatchEvent } from "@/server/services/events";
 import { ERR, err, ok, type Result } from "@/server/services/result";
+import type { Json } from "@/types/database";
 
 async function requireCandidate() {
   const user = await getSessionUser();
@@ -47,15 +49,13 @@ export async function saveIdentityStep(input: unknown): Promise<Result<null>> {
       .from("candidates")
       .update({ first_name: d.first_name, last_name: d.last_name, city: d.city })
       .eq("id", user.id),
-    supabase
-      .from("candidate_contacts")
-      .upsert({
-        candidate_id: user.id,
-        email: user.email,
-        phone: d.phone || null,
-        linkedin_url: d.linkedin_url || null,
-        portfolio_url: d.portfolio_url || null,
-      }),
+    supabase.from("candidate_contacts").upsert({
+      candidate_id: user.id,
+      email: user.email,
+      phone: d.phone || null,
+      linkedin_url: d.linkedin_url || null,
+      portfolio_url: d.portfolio_url || null,
+    }),
   ]);
   if (e1 || e2) {
     logger.warn({ err: e1?.message ?? e2?.message }, "identity_step_failed");
@@ -352,4 +352,27 @@ export async function changePassword(input: unknown): Promise<Result<null>> {
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
   return error ? err(ERR.generic) : ok(null);
+}
+
+export async function updateConsentFlags(input: unknown): Promise<Result<null>> {
+  const user = await requireCandidate();
+  if (!user) return err(ERR.unauthorized);
+  const parsed = consentFlagsSchema.safeParse(input);
+  if (!parsed.success) return err(ERR.validation);
+  const supabase = await createClient();
+  const { data: row } = await supabase
+    .from("candidates")
+    .select("consent_flags")
+    .eq("id", user.id)
+    .maybeSingle();
+  const current = (row?.consent_flags as Record<string, unknown> | null) ?? {};
+  const { error } = await supabase
+    .from("candidates")
+    .update({
+      consent_flags: { ...current, ...parsed.data, updated_at: new Date().toISOString() } as Json,
+    })
+    .eq("id", user.id);
+  if (error) return err(ERR.generic);
+  revalidateCandidate();
+  return ok(null);
 }

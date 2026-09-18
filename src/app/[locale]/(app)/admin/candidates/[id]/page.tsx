@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { interviewBand } from "@/lib/interview/scoring";
 import { getAdminCandidateDetail, listOpenJobsForRecommendation } from "@/server/services/admin";
 
 export default async function AdminCandidateDetailPage({
@@ -24,13 +25,14 @@ export default async function AdminCandidateDetailPage({
 }: PageProps<"/[locale]/admin/candidates/[id]">) {
   await pageLocale(params);
   const { id } = await params;
-  const [detail, jobs, t, tc, te, tn, format] = await Promise.all([
+  const [detail, jobs, t, tc, te, tn, ti, format] = await Promise.all([
     getAdminCandidateDetail(id),
     listOpenJobsForRecommendation(),
     getTranslations("admin.candidates.detail"),
     getTranslations("common"),
     getTranslations("enums"),
     getTranslations("nav.admin"),
+    getTranslations("interview"),
     getFormatter(),
   ]);
   if (!detail) notFound();
@@ -43,6 +45,7 @@ export default async function AdminCandidateDetailPage({
     applications,
     notes,
     attempts,
+    interviews,
     dataRequests,
   } = detail;
   const appliedJobIds = new Set(applications.map((a) => a.job_id));
@@ -187,6 +190,47 @@ export default async function AdminCandidateDetailPage({
                 )}
               </ul>
             </div>
+          </section>
+          <section className="border-border rounded-[12px] border bg-white p-5">
+            <h2 className="text-base">{ti("admin.title")}</h2>
+            {interviews.length === 0 ? (
+              <p className="text-muted-foreground mt-2 text-sm">{ti("admin.none")}</p>
+            ) : (
+              <ul className="divide-border mt-3 divide-y text-sm">
+                {interviews.map((i) => {
+                  const report = i.report as {
+                    scores?: Record<string, number>;
+                    summary?: string;
+                  } | null;
+                  return (
+                    <li key={i.id} className="py-3">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-navy font-medium">
+                          {te(`role_family.${i.role_family}`)} · {i.language.toUpperCase()} ·{" "}
+                          {format.dateTime(new Date(i.created_at), "short")}
+                        </p>
+                        {i.overall_score !== null ? (
+                          <Badge variant="accent">
+                            {ti("admin.score", { score: Math.round(i.overall_score) })} ·{" "}
+                            {ti(`report.band.${interviewBand(i.overall_score)}`)}
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary">{i.status}</Badge>
+                        )}
+                      </div>
+                      {report?.scores ? (
+                        <p className="text-muted-foreground mt-1 text-xs">
+                          {Object.entries(report.scores)
+                            .map(([k, v]) => `${ti(`report.scores.${k as "communication"}`)} ${v}`)
+                            .join(" · ")}
+                        </p>
+                      ) : null}
+                      {report?.summary ? <p className="mt-2 text-sm">{report.summary}</p> : null}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </section>
           <section className="grid gap-6 sm:grid-cols-2">
             <div className="border-border rounded-[12px] border bg-white p-5">

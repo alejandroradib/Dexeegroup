@@ -597,6 +597,7 @@ export type Database = {
           data_consent_version: string
           created_at: string
           updated_at: string
+          consent_flags: Json
         }
         Insert: {
           id: string
@@ -626,6 +627,7 @@ export type Database = {
           data_consent_version: string
           created_at?: string
           updated_at?: string
+          consent_flags?: Json
         }
         Update: {
           id?: string
@@ -655,6 +657,7 @@ export type Database = {
           data_consent_version?: string
           created_at?: string
           updated_at?: string
+          consent_flags?: Json
         }
         Relationships: [
           {
@@ -1081,6 +1084,68 @@ export type Database = {
           }
         ]
       }
+      mock_interviews: {
+        Row: {
+          id: string
+          candidate_id: string
+          role_family: Database["public"]["Enums"]["role_family"]
+          language: Database["public"]["Enums"]["locale"]
+          status: Database["public"]["Enums"]["interview_status"]
+          questions: Json
+          answers: Json
+          report: Json | null
+          overall_score: number | null
+          started_at: string
+          expires_at: string
+          completed_at: string | null
+          processing_attempts: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          candidate_id: string
+          role_family: Database["public"]["Enums"]["role_family"]
+          language?: Database["public"]["Enums"]["locale"]
+          status?: Database["public"]["Enums"]["interview_status"]
+          questions?: Json
+          answers?: Json
+          report?: Json | null
+          overall_score?: number | null
+          started_at?: string
+          expires_at?: string
+          completed_at?: string | null
+          processing_attempts?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          candidate_id?: string
+          role_family?: Database["public"]["Enums"]["role_family"]
+          language?: Database["public"]["Enums"]["locale"]
+          status?: Database["public"]["Enums"]["interview_status"]
+          questions?: Json
+          answers?: Json
+          report?: Json | null
+          overall_score?: number | null
+          started_at?: string
+          expires_at?: string
+          completed_at?: string | null
+          processing_attempts?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mock_interviews_candidate_id_fkey"
+            columns: ["candidate_id"]
+            isOneToOne: false
+            referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       notes: {
         Row: {
           id: string
@@ -1480,6 +1545,7 @@ export type Database = {
       company_status: "pending" | "verified" | "suspended"
       contract_type: "independent_contractor" | "dexee_eor" | "direct_hire" | "project_based"
       employment_type: "full_time" | "part_time"
+      interview_status: "in_progress" | "completed" | "failed" | "expired"
       job_status: "draft" | "pending_review" | "changes_requested" | "published" | "paused" | "closed"
       locale: "en" | "es"
       member_role: "owner" | "member"

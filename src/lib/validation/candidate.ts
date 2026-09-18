@@ -1,6 +1,12 @@
 import { z } from "zod";
 
-import { AVAILABILITIES, CEFR_LEVELS, CONTRACT_TYPES, ROLE_FAMILIES } from "@/lib/validation/enums";
+import {
+  AVAILABILITIES,
+  CEFR_LEVELS,
+  CONTRACT_TYPES,
+  COUNTRIES,
+  ROLE_FAMILIES,
+} from "@/lib/validation/enums";
 
 const URL_PATTERN = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
 const optionalUrl = z
@@ -14,6 +20,7 @@ export const identityStepSchema = z.object({
   first_name: z.string().trim().min(2, "tooShort").max(80, "tooLong"),
   last_name: z.string().trim().min(2, "tooShort").max(80, "tooLong"),
   city: z.string().trim().min(2, "tooShort").max(80, "tooLong"),
+  country: z.enum(COUNTRIES, { error: "required" }),
   phone: z.string().trim().max(30, "tooLong").optional(),
   linkedin_url: optionalUrl,
   portfolio_url: optionalUrl,

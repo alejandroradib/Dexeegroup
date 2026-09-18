@@ -6,10 +6,12 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 import { FormField } from "@/components/shared/form-field";
+import { NativeSelect } from "@/components/shared/native-select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
 import { identityStepSchema, type IdentityStepInput } from "@/lib/validation/candidate";
+import { COUNTRIES } from "@/lib/validation/enums";
 import { saveIdentityStep } from "@/server/actions/candidate";
 import type { CandidateProfile } from "@/server/services/candidates";
 
@@ -22,6 +24,8 @@ export function IdentityStep({
 }) {
   const t = useTranslations("candidate.onboarding.identity");
   const tc = useTranslations("common");
+  const tco = useTranslations("enums.country");
+  const ta = useTranslations("auth.signUpCandidate");
   const { toast } = useToast();
   const [pending, start] = useTransition();
   const form = useForm<IdentityStepInput>({
@@ -30,6 +34,9 @@ export function IdentityStep({
       first_name: profile.candidate.first_name,
       last_name: profile.candidate.last_name,
       city: profile.candidate.city ?? "",
+      country: (COUNTRIES as readonly string[]).includes(profile.candidate.country)
+        ? (profile.candidate.country as IdentityStepInput["country"])
+        : "OT",
       phone: profile.contact?.phone ?? "",
       linkedin_url: profile.contact?.linkedin_url ?? "",
       portfolio_url: profile.contact?.portfolio_url ?? "",
@@ -56,7 +63,14 @@ export function IdentityStep({
           <Input id="last_name" autoComplete="family-name" {...form.register("last_name")} />
         </FormField>
       </div>
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-5 sm:grid-cols-3">
+        <FormField id="country" label={ta("country")} error={e.country?.message}>
+          <NativeSelect
+            id="country"
+            options={COUNTRIES.map((c) => ({ value: c, label: tco(c) }))}
+            {...form.register("country")}
+          />
+        </FormField>
         <FormField id="city" label={t("city")} error={e.city?.message}>
           <Input id="city" autoComplete="address-level2" {...form.register("city")} />
         </FormField>

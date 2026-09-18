@@ -138,19 +138,17 @@ export async function confirmAudioUpload(input: unknown): Promise<Result<null>> 
   if (!parsed.data.path.startsWith(`attempts/${parsed.data.attempt_id}/`))
     return err(ERR.forbidden);
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("assessment_answers")
-    .upsert(
-      {
-        attempt_id: parsed.data.attempt_id,
-        question_id: parsed.data.question_id,
-        audio_path: parsed.data.path,
-        audio_duration_seconds: parsed.data.duration_seconds,
-        transcript: null,
-        ai_feedback: null,
-      },
-      { onConflict: "attempt_id,question_id" },
-    );
+  const { error } = await supabase.from("assessment_answers").upsert(
+    {
+      attempt_id: parsed.data.attempt_id,
+      question_id: parsed.data.question_id,
+      audio_path: parsed.data.path,
+      audio_duration_seconds: parsed.data.duration_seconds,
+      transcript: null,
+      ai_feedback: null,
+    },
+    { onConflict: "attempt_id,question_id" },
+  );
   if (error) return err(error.code === "42501" ? "attemptClosed" : ERR.generic);
   return ok(null);
 }

@@ -693,5 +693,116 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
       )) === 1,
   );
 
+  // Mock interviews -------------------------------------------------------------------------
+  await expectError(
+    "anon cannot read mock_interviews",
+    anon,
+    "select * from public.mock_interviews",
+  );
+  await expectError(
+    "company cannot insert mock_interviews",
+    harborOwner,
+    "insert into public.mock_interviews (candidate_id, role_family, questions) values ($1, 'sales_sdr', '[]'::jsonb)",
+    [SEED.owners.harbor],
+  );
+  await expectError(
+    "candidate cannot insert an interview for another candidate",
+    laura,
+    "insert into public.mock_interviews (candidate_id, role_family, questions) values ($1, 'sales_sdr', '[]'::jsonb)",
+    [SEED.candidates.andres],
+  );
+  await expectError(
+    "candidate cannot insert an already completed interview",
+    laura,
+    "insert into public.mock_interviews (candidate_id, role_family, status, questions) values ($1, 'sales_sdr', 'completed', '[]'::jsonb)",
+    [SEED.candidates.laura],
+  );
+  await check("candidate runs an interview but cannot close or read another's", async () =>
+    asUser(
+      db,
+      laura,
+      async (tx) => {
+        await tx.query(
+          "insert into public.mock_interviews (candidate_id, role_family, questions) values ($1, 'sales_sdr', '[]'::jsonb)",
+          [SEED.candidates.laura],
+        );
+        await tx.query(
+          "update public.mock_interviews set answers = '[\"a\"]'::jsonb, status = 'completed', overall_score = 20 where candidate_id = $1",
+          [SEED.candidates.laura],
+        );
+        const own = await tx.query<{ n: number }>(
+          "select count(*)::int as n from public.mock_interviews where candidate_id = $1 and status = 'in_progress' and overall_score is null and answers = '[\"a\"]'::jsonb",
+          [SEED.candidates.laura],
+        );
+        let second = false;
+        try {
+          await tx.query(
+            "insert into public.mock_interviews (candidate_id, role_family, questions) values ($1, 'sales_sdr', '[]'::jsonb)",
+            [SEED.candidates.laura],
+          );
+        } catch {
+          second = true;
+        }
+        return Number(own.rows[0]?.n) === 1 && second;
+      },
+      { commit: false },
+    ),
+  );
+  await check("other candidate cannot see a peer interview", async () =>
+    asUser(
+      db,
+      andres,
+      async (tx) => {
+        await asService(
+          tx,
+          () =>
+            tx.query(
+              "insert into public.mock_interviews (candidate_id, role_family, questions) values ($1, 'sales_sdr', '[]'::jsonb)",
+              [SEED.candidates.laura],
+            ),
+          andres,
+        );
+        const res = await tx.query<{ n: number }>(
+          "select count(*)::int as n from public.mock_interviews",
+        );
+        return Number(res.rows[0]?.n) === 0;
+      },
+      { commit: false },
+    ),
+  );
+  await check("candidate cannot edit a completed interview", async () =>
+    asUser(
+      db,
+      laura,
+      async (tx) => {
+        await asService(
+          tx,
+          () =>
+            tx.query(
+              "insert into public.mock_interviews (candidate_id, role_family, status, questions) values ($1, 'sales_sdr', 'completed', '[]'::jsonb)",
+              [SEED.candidates.laura],
+            ),
+          laura,
+        );
+        try {
+          await tx.query(
+            "update public.mock_interviews set answers = '[]'::jsonb where candidate_id = $1",
+            [SEED.candidates.laura],
+          );
+          return false;
+        } catch (error) {
+          return (error as Error).message.includes("interview_closed");
+        }
+      },
+      { commit: false },
+    ),
+  );
+  await check(
+    "consent_flags default to empty object",
+    async () =>
+      (await count(admin, "select * from public.candidates where consent_flags = '{}'::jsonb")) >=
+      1,
+  );
+
   return summary;
 }

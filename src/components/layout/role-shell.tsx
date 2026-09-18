@@ -7,6 +7,7 @@ import {
   FileTextIcon,
   HandshakeIcon,
   LayoutDashboardIcon,
+  MessageSquareTextIcon,
   SearchIcon,
   SettingsIcon,
   ShieldIcon,
@@ -41,6 +42,7 @@ const NAV: Record<UserRole, NavSpec[]> = {
     { href: "/candidate/jobs", key: "jobs", icon: SearchIcon },
     { href: "/candidate/applications", key: "applications", icon: FileTextIcon },
     { href: "/candidate/assessments", key: "assessments", icon: ClipboardCheckIcon },
+    { href: "/candidate/interview", key: "interview", icon: MessageSquareTextIcon },
     { href: "/candidate/settings", key: "settings", icon: SettingsIcon },
   ],
   admin: [

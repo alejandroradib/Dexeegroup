@@ -144,7 +144,8 @@
       "jobs": "Vacantes",
       "applications": "Postulaciones",
       "assessments": "Evaluaciones",
-      "settings": "Configuración"
+      "settings": "Configuración",
+      "interview": "Entrevista de práctica"
     },
     "admin": {
       "dashboard": "Panel",
@@ -342,6 +343,28 @@
     "note_visibility": {
       "company": "Empresa",
       "dexee_only": "Solo Dexee"
+    },
+    "country": {
+      "CO": "Colombia",
+      "MX": "México",
+      "AR": "Argentina",
+      "PE": "Perú",
+      "CL": "Chile",
+      "EC": "Ecuador",
+      "VE": "Venezuela",
+      "BO": "Bolivia",
+      "UY": "Uruguay",
+      "PY": "Paraguay",
+      "CR": "Costa Rica",
+      "PA": "Panamá",
+      "GT": "Guatemala",
+      "HN": "Honduras",
+      "SV": "El Salvador",
+      "NI": "Nicaragua",
+      "DO": "República Dominicana",
+      "BR": "Brasil",
+      "US": "Estados Unidos",
+      "OT": "Otro"
     }
   },
   "marketing": {
@@ -657,7 +680,14 @@
       "consentLink": "Leer la política de privacidad",
       "submit": "Crear mi perfil",
       "companyInstead": "¿Quieres contratar?",
-      "companyLink": "Crear cuenta de empresa"
+      "companyLink": "Crear cuenta de empresa",
+      "consentTitle": "Autorizaciones",
+      "consentTerms": "Acepto los <terms>Términos del servicio</terms>.",
+      "consentData": "Autorizo a Dexee S.A.S. a tratar mis datos personales conforme a la Ley 1581 de 2012 con fines de evaluación y reclutamiento, según la <privacy>Política de privacidad</privacy>.",
+      "consentJobContact": "Dexee puede contactarme sobre oportunidades laborales acordes con mi perfil.",
+      "consentAnalytics": "Dexee puede usar mi información de forma agregada y anonimizada para mejorar la plataforma.",
+      "consentRequiredHint": "Las dos primeras son obligatorias para crear la cuenta.",
+      "country": "País de residencia"
     },
     "verify": {
       "title": "Revisa tu correo",
@@ -1148,7 +1178,12 @@
         "submit": "Enviar solicitud",
         "sent": "Solicitud recibida. Dexee responderá dentro del término legal.",
         "history": "Solicitudes anteriores",
-        "consent": "Consentimiento versión {version}, otorgado el {date}."
+        "consent": "Consentimiento versión {version}, otorgado el {date}.",
+        "consentsTitle": "Tus autorizaciones",
+        "consentsBody": "Cambia las autorizaciones opcionales cuando quieras. Los términos y el tratamiento de datos siguen siendo obligatorios para mantener la cuenta.",
+        "jobContact": "Contactarme sobre oportunidades laborales",
+        "analytics": "Usar mis datos de forma agregada para mejorar la plataforma",
+        "consentsSaved": "Autorizaciones actualizadas."
       },
       "notifications": {
         "title": "Notificaciones por correo",
@@ -1170,7 +1205,15 @@
       "byLevel": "Candidatos por nivel de inglés verificado",
       "notVerified": "Sin verificar",
       "funnel": "Postulaciones por estado",
-      "review": "Revisar"
+      "review": "Revisar",
+      "adoptionTitle": "Adopción de herramientas gratuitas",
+      "registered": "Candidatos registrados",
+      "withResume": "Con hoja de vida",
+      "withAssessment": "Al menos una evaluación",
+      "allAssessments": "Las tres evaluaciones",
+      "withInterview": "Entrevista de práctica completada",
+      "applied": "Se postularon a un rol",
+      "hired": "Contratados"
     },
     "companies": {
       "title": "Empresas",
@@ -1295,7 +1338,8 @@
         "availability": "Disponibilidad",
         "experience": "Experiencia",
         "education": "Educación"
-      }
+      },
+      "country": "País"
     },
     "applications": {
       "title": "Postulaciones",
@@ -1568,6 +1612,84 @@
       "writingResponse": "Texto del candidato",
       "mcqSummary": "Opción múltiple: {correct} de {total} ({level})",
       "reasons": "Enviado a validación por: {reasons}"
+    }
+  },
+  "interview": {
+    "title": "Entrevista de práctica",
+    "subtitle": "Seis preguntas escritas con retroalimentación del reclutador IA de Dexee. Gratis, y una señal valiosa para nuestro equipo al armar listas cortas.",
+    "nav": "Entrevista de práctica",
+    "intro": {
+      "roleFamily": "Rol para el que te preparas",
+      "language": "Idioma de la entrevista",
+      "start": "Comenzar entrevista de práctica",
+      "starting": "Preparando tus preguntas",
+      "cooldown": "Podrás practicar de nuevo el {date}.",
+      "continue": "Continuar entrevista",
+      "rules": "Cómo funciona",
+      "rule1": "Seis preguntas: cuatro sobre tu experiencia y dos específicas del rol.",
+      "rule2": "Responde por escrito, entre 60 y 150 palabras por pregunta. Las situaciones, acciones y resultados concretos puntúan mejor.",
+      "rule3": "Tienes dos horas; las respuestas se guardan mientras escribes.",
+      "rule4": "Recibes puntajes de comunicación, claridad de logros, estructura y relevancia, más recomendaciones. Dexee conserva los puntajes para conectarte con roles.",
+      "history": "Entrevistas anteriores",
+      "noHistory": "Aún no hay entrevistas.",
+      "viewReport": "Ver informe"
+    },
+    "runner": {
+      "question": "Pregunta {current} de {total}",
+      "words": "{count} palabras",
+      "minWords": "Procura al menos {count} palabras.",
+      "saved": "Guardado",
+      "saving": "Guardando",
+      "submit": "Recibir mi retroalimentación",
+      "submitConfirm": "¿Enviar tus respuestas? No podrás editarlas después.",
+      "submitting": "Revisando tus respuestas",
+      "incomplete": "Responde todas las preguntas antes de enviar.",
+      "closed": "Esta entrevista ya no está abierta.",
+      "aiUnavailable": "La retroalimentación con IA no está configurada en este entorno. Tus respuestas quedaron guardadas.",
+      "aiFailed": "No pudimos generar la retroalimentación. Inténtalo en un momento.",
+      "retry": "Generar la retroalimentación de nuevo",
+      "focus": {
+        "experience": "Experiencia",
+        "achievement": "Logro",
+        "motivation": "Motivación",
+        "collaboration": "Colaboración remota",
+        "role": "Específica del rol"
+      }
+    },
+    "report": {
+      "title": "Retroalimentación de la entrevista",
+      "overall": "Total",
+      "band": {
+        "developing": "En desarrollo",
+        "solid": "Sólido",
+        "strong": "Fuerte"
+      },
+      "scores": {
+        "communication": "Comunicación",
+        "clarity_of_achievements": "Claridad de logros",
+        "structure": "Estructura",
+        "relevance": "Relevancia para el rol"
+      },
+      "strengths": "Fortalezas",
+      "improvements": "Qué mejorar",
+      "perQuestion": "Pregunta por pregunta",
+      "yourAnswer": "Tu respuesta",
+      "summary": "Resumen",
+      "failed": "No se pudo generar la retroalimentación.",
+      "practiceAgain": "Practicar de nuevo",
+      "notice": "Esta es retroalimentación de práctica del reclutador IA de Dexee, no una evaluación de una empresa."
+    },
+    "dashboard": {
+      "title": "Entrevista de práctica",
+      "body": "Ensaya seis preguntas de entrevista y recibe retroalimentación escrita. Dexee usa los puntajes al armar listas cortas.",
+      "cta": "Practicar ahora",
+      "lastScore": "Último puntaje {score}/20"
+    },
+    "admin": {
+      "title": "Entrevistas de práctica",
+      "none": "Sin entrevistas de práctica.",
+      "score": "{score}/20",
+      "role": "Rol"
     }
   }
 }

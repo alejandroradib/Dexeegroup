@@ -127,3 +127,27 @@ export function cefrMin(
   if (!b) return a;
   return CEFR_RANK[a] <= CEFR_RANK[b] ? a : b;
 }
+
+/** Countries offered at sign-up and in the identity step (Latin America plus US and Other). */
+export const COUNTRIES = [
+  "CO",
+  "MX",
+  "AR",
+  "PE",
+  "CL",
+  "EC",
+  "VE",
+  "BO",
+  "UY",
+  "PY",
+  "CR",
+  "PA",
+  "GT",
+  "HN",
+  "SV",
+  "NI",
+  "DO",
+  "BR",
+  "US",
+  "OT",
+] as const;

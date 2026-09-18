@@ -453,14 +453,12 @@ export async function dispatchEvent(event: PlatformEvent): Promise<void> {
         return;
       }
       case "admin_invite": {
-        await admin
-          .from("email_outbox")
-          .insert({
-            to: event.email,
-            template: "invite",
-            locale: event.locale,
-            payload: { company: "Dexee", link: `/${event.locale}/sign-in`, kind: "admin" } as Json,
-          });
+        await admin.from("email_outbox").insert({
+          to: event.email,
+          template: "invite",
+          locale: event.locale,
+          payload: { company: "Dexee", link: `/${event.locale}/sign-in`, kind: "admin" } as Json,
+        });
         return;
       }
       case "placement_pending": {

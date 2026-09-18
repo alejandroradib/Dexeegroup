@@ -19,7 +19,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
 import { PAGE_SIZE, pageRange, parsePage, totalPages } from "@/lib/pagination";
-import { AVAILABILITIES, CEFR_LEVELS, ROLE_FAMILIES } from "@/lib/validation/enums";
+import { AVAILABILITIES, CEFR_LEVELS, COUNTRIES, ROLE_FAMILIES } from "@/lib/validation/enums";
 import { listAdminCandidates, type CandidateFilter } from "@/server/services/admin";
 
 function pick<T extends string>(
@@ -36,14 +36,16 @@ export default async function AdminCandidatesPage({
 }: PageProps<"/[locale]/admin/candidates">) {
   await pageLocale(params);
   const query = await searchParams;
-  const [t, te, tf, format] = await Promise.all([
+  const [t, te, tf, tco, format] = await Promise.all([
     getTranslations("admin.candidates"),
     getTranslations("enums"),
     getTranslations("marketing.jobs.filters"),
+    getTranslations("enums.country"),
     getFormatter(),
   ]);
   const page = parsePage(query.page);
   const filter: CandidateFilter = {
+    country: pick(query.country, COUNTRIES),
     q: typeof query.q === "string" ? query.q : undefined,
     role_family: pick(query.role_family, ROLE_FAMILIES),
     level: pick(query.level, CEFR_LEVELS),
@@ -72,6 +74,9 @@ export default async function AdminCandidatesPage({
       <FilterBar>
         <FilterField label={t("search")}>
           <input name="q" defaultValue={filter.q ?? ""} className={filterInputClass} />
+        </FilterField>
+        <FilterField label={t("country")}>
+          <select name="country" defaultValue={filter.country ?? ""} className={filterInputClass}><option value="">{tf("any")}</option>{COUNTRIES.map((v) => <option key={v} value={v}>{tco(v)}</option>)}</select>
         </FilterField>
         <FilterField label={t("roleFamily")}>
           <select

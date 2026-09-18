@@ -408,15 +408,13 @@ export async function addCompanyNote(input: unknown): Promise<Result<null>> {
     .eq("id", parsed.data.application_id)
     .maybeSingle();
   if (!application) return err(ERR.notFound);
-  const { error } = await supabase
-    .from("notes")
-    .insert({
-      application_id: parsed.data.application_id,
-      candidate_id: application.candidate_id,
-      author_user_id: user.id,
-      body: parsed.data.body,
-      visibility: "company",
-    });
+  const { error } = await supabase.from("notes").insert({
+    application_id: parsed.data.application_id,
+    candidate_id: application.candidate_id,
+    author_user_id: user.id,
+    body: parsed.data.body,
+    visibility: "company",
+  });
   return error ? err(ERR.generic) : ok(null);
 }
 

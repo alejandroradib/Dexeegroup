@@ -25,9 +25,17 @@ export const signUpCandidateSchema = z.object({
   last_name: z.string().trim().min(2, "tooShort").max(80, "tooLong"),
   email: emailSchema,
   password: passwordSchema,
-  consent: z.literal(true, { error: "consentRequired" }),
+  country: z.string().length(2, "required"),
+  // Granular consents (MVP document section 6): terms and data policy are required, the rest are optional
+  consent_terms: z.literal(true, { error: "consentRequired" }),
+  consent_data: z.literal(true, { error: "consentRequired" }),
+  consent_job_contact: z.boolean(),
+  consent_analytics: z.boolean(),
   next: z.string().max(500).optional(),
 });
+
+export const consentFlagsSchema = z.object({ job_contact: z.boolean(), analytics: z.boolean() });
+export type ConsentFlagsInput = z.infer<typeof consentFlagsSchema>;
 
 export const forgotPasswordSchema = z.object({ email: emailSchema });
 

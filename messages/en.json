@@ -144,7 +144,8 @@
       "jobs": "Jobs",
       "applications": "Applications",
       "assessments": "Assessments",
-      "settings": "Settings"
+      "settings": "Settings",
+      "interview": "Practice interview"
     },
     "admin": {
       "dashboard": "Dashboard",
@@ -342,6 +343,28 @@
     "note_visibility": {
       "company": "Company",
       "dexee_only": "Dexee only"
+    },
+    "country": {
+      "CO": "Colombia",
+      "MX": "Mexico",
+      "AR": "Argentina",
+      "PE": "Peru",
+      "CL": "Chile",
+      "EC": "Ecuador",
+      "VE": "Venezuela",
+      "BO": "Bolivia",
+      "UY": "Uruguay",
+      "PY": "Paraguay",
+      "CR": "Costa Rica",
+      "PA": "Panama",
+      "GT": "Guatemala",
+      "HN": "Honduras",
+      "SV": "El Salvador",
+      "NI": "Nicaragua",
+      "DO": "Dominican Republic",
+      "BR": "Brazil",
+      "US": "United States",
+      "OT": "Other"
     }
   },
   "marketing": {
@@ -657,7 +680,14 @@
       "consentLink": "Read the privacy policy",
       "submit": "Create my profile",
       "companyInstead": "Hiring instead?",
-      "companyLink": "Create a company account"
+      "companyLink": "Create a company account",
+      "consentTitle": "Consents",
+      "consentTerms": "I accept the <terms>Terms of service</terms>.",
+      "consentData": "I authorize Dexee S.A.S. to process my personal data under Colombian Law 1581 of 2012 for evaluation and recruitment purposes, as described in the <privacy>Privacy policy</privacy>.",
+      "consentJobContact": "Dexee may contact me about job opportunities that match my profile.",
+      "consentAnalytics": "Dexee may use my information in aggregated, anonymized form to improve the platform.",
+      "consentRequiredHint": "The first two are required to create an account.",
+      "country": "Country of residence"
     },
     "verify": {
       "title": "Check your inbox",
@@ -1148,7 +1178,12 @@
         "submit": "Send request",
         "sent": "Request received. Dexee will respond within the legal term.",
         "history": "Previous requests",
-        "consent": "Consent version {version}, given {date}."
+        "consent": "Consent version {version}, given {date}.",
+        "consentsTitle": "Your consents",
+        "consentsBody": "Change the optional authorizations at any time. Terms and data processing remain required to keep an account.",
+        "jobContact": "Contact me about job opportunities",
+        "analytics": "Use my data in aggregated form to improve the platform",
+        "consentsSaved": "Consents updated."
       },
       "notifications": {
         "title": "Email notifications",
@@ -1170,7 +1205,15 @@
       "byLevel": "Candidates by verified English level",
       "notVerified": "Not verified",
       "funnel": "Applications by status",
-      "review": "Review"
+      "review": "Review",
+      "adoptionTitle": "Free-tools adoption",
+      "registered": "Registered candidates",
+      "withResume": "With resume",
+      "withAssessment": "At least one assessment",
+      "allAssessments": "All three assessments",
+      "withInterview": "Practice interview completed",
+      "applied": "Applied to a role",
+      "hired": "Hired"
     },
     "companies": {
       "title": "Companies",
@@ -1295,7 +1338,8 @@
         "availability": "Availability",
         "experience": "Experience",
         "education": "Education"
-      }
+      },
+      "country": "Country"
     },
     "applications": {
       "title": "Applications",
@@ -1568,6 +1612,84 @@
       "writingResponse": "Candidate text",
       "mcqSummary": "Multiple choice: {correct} of {total} ({level})",
       "reasons": "Sent to validation because: {reasons}"
+    }
+  },
+  "interview": {
+    "title": "Practice interview",
+    "subtitle": "Six written questions, feedback from Dexee's AI recruiter. Free, and a strong signal for our team when we shortlist.",
+    "nav": "Practice interview",
+    "intro": {
+      "roleFamily": "Role you are preparing for",
+      "language": "Interview language",
+      "start": "Start practice interview",
+      "starting": "Preparing your questions",
+      "cooldown": "You can practice again on {date}.",
+      "continue": "Continue interview",
+      "rules": "How it works",
+      "rule1": "Six questions: four about your experience and two specific to the role.",
+      "rule2": "Answer in writing, about 60 to 150 words each. Concrete situations, actions and results score best.",
+      "rule3": "You have two hours; answers save as you type.",
+      "rule4": "You receive scores on communication, clarity of achievements, structure and relevance, plus recommendations. Dexee keeps the scores to match you with roles.",
+      "history": "Previous interviews",
+      "noHistory": "No interviews yet.",
+      "viewReport": "View report"
+    },
+    "runner": {
+      "question": "Question {current} of {total}",
+      "words": "{count} words",
+      "minWords": "Aim for at least {count} words.",
+      "saved": "Saved",
+      "saving": "Saving",
+      "submit": "Get my feedback",
+      "submitConfirm": "Submit your answers? You cannot edit them afterwards.",
+      "submitting": "Reviewing your answers",
+      "incomplete": "Answer every question before submitting.",
+      "closed": "This interview is no longer open.",
+      "aiUnavailable": "AI feedback is not configured in this environment. Your answers were saved.",
+      "aiFailed": "We could not generate the feedback. Try again in a moment.",
+      "retry": "Generate feedback again",
+      "focus": {
+        "experience": "Experience",
+        "achievement": "Achievement",
+        "motivation": "Motivation",
+        "collaboration": "Remote collaboration",
+        "role": "Role specific"
+      }
+    },
+    "report": {
+      "title": "Interview feedback",
+      "overall": "Overall",
+      "band": {
+        "developing": "Developing",
+        "solid": "Solid",
+        "strong": "Strong"
+      },
+      "scores": {
+        "communication": "Communication",
+        "clarity_of_achievements": "Clarity of achievements",
+        "structure": "Structure",
+        "relevance": "Relevance to the role"
+      },
+      "strengths": "Strengths",
+      "improvements": "What to improve",
+      "perQuestion": "Question by question",
+      "yourAnswer": "Your answer",
+      "summary": "Summary",
+      "failed": "The feedback could not be generated.",
+      "practiceAgain": "Practice again",
+      "notice": "This is practice feedback from Dexee's AI recruiter, not an evaluation by a company."
+    },
+    "dashboard": {
+      "title": "Practice interview",
+      "body": "Rehearse six interview questions and get written feedback. Dexee uses the scores when shortlisting.",
+      "cta": "Practice now",
+      "lastScore": "Last score {score}/20"
+    },
+    "admin": {
+      "title": "Practice interviews",
+      "none": "No practice interviews.",
+      "score": "{score}/20",
+      "role": "Role"
     }
   }
 }

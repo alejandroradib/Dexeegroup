@@ -1,4 +1,4 @@
-import { ClipboardCheckIcon } from "lucide-react";
+import { ClipboardCheckIcon, MessageSquareTextIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
@@ -16,18 +16,22 @@ import {
   listCandidateApplications,
   listRecommendedJobs,
 } from "@/server/services/candidates";
+import { getInterviewOverview } from "@/server/services/interviews";
 
 export default async function CandidateDashboardPage({ params }: PageProps<"/[locale]/candidate">) {
   await pageLocale(params);
   const user = await getSessionUser();
   const profile = await getCurrentCandidateProfile(user!.id);
   if (!profile) notFound();
-  const [t, tk, applications, recommended] = await Promise.all([
+  const [t, tk, ti, applications, recommended, interviews] = await Promise.all([
     getTranslations("candidate.dashboard"),
     getTranslations("candidate.checklist"),
+    getTranslations("interview.dashboard"),
     listCandidateApplications(user!.id),
     listRecommendedJobs(profile.candidate),
+    getInterviewOverview(user!.id),
   ]);
+  const lastInterview = interviews.history.find((i) => i.status === "completed");
   const checklist = completenessChecklist({
     first_name: profile.candidate.first_name,
     last_name: profile.candidate.last_name,
@@ -47,7 +51,7 @@ export default async function CandidateDashboardPage({ params }: PageProps<"/[lo
   return (
     <>
       <PageHeader title={t("welcome", { name: profile.candidate.first_name })} />
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-4">
         <section className="border-border rounded-[12px] border bg-white p-5 lg:col-span-2">
           <div className="flex items-center justify-between gap-3">
             <h2 className="text-base">{t("completeness")}</h2>
@@ -71,6 +75,27 @@ export default async function CandidateDashboardPage({ params }: PageProps<"/[lo
           <p className="mt-1 text-sm text-white/80">{t("assessmentsPrompt")}</p>
           <Button asChild variant="accent" size="sm" className="mt-4">
             <Link href="/candidate/assessments">{t("goToAssessments")}</Link>
+          </Button>
+        </section>
+        <section className="border-border rounded-[12px] border bg-white p-5">
+          <MessageSquareTextIcon className="text-deep-green size-6" aria-hidden />
+          <h2 className="mt-3 text-base">{ti("title")}</h2>
+          <p className="text-muted-foreground mt-1 text-sm">{ti("body")}</p>
+          {lastInterview?.overall_score !== null && lastInterview?.overall_score !== undefined ? (
+            <p className="text-deep-green mt-2 text-xs font-medium">
+              {ti("lastScore", { score: Math.round(lastInterview.overall_score) })}
+            </p>
+          ) : null}
+          <Button asChild variant="outline" size="sm" className="mt-4">
+            <Link
+              href={
+                interviews.open
+                  ? `/candidate/interview/${interviews.open.id}`
+                  : "/candidate/interview"
+              }
+            >
+              {ti("cta")}
+            </Link>
           </Button>
         </section>
       </div>

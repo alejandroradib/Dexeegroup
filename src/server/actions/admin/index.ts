@@ -231,15 +231,13 @@ export async function addDexeeNote(input: unknown): Promise<Result<null>> {
   const parsed = dexeeNoteSchema.safeParse(input);
   if (!parsed.success) return err(ERR.validation, fieldErrors(parsed.error));
   const supabase = await createClient();
-  const { error } = await supabase
-    .from("notes")
-    .insert({
-      candidate_id: parsed.data.candidate_id,
-      application_id: parsed.data.application_id ?? null,
-      author_user_id: admin.id,
-      body: parsed.data.body,
-      visibility: "dexee_only",
-    });
+  const { error } = await supabase.from("notes").insert({
+    candidate_id: parsed.data.candidate_id,
+    application_id: parsed.data.application_id ?? null,
+    author_user_id: admin.id,
+    body: parsed.data.body,
+    visibility: "dexee_only",
+  });
   if (error) return err(ERR.generic);
   await logAdminActivity({
     actorUserId: admin.id,
@@ -549,15 +547,13 @@ export async function inviteAdmin(input: unknown): Promise<Result<null>> {
   });
   if (error || !data.user) return err(error?.code === "email_exists" ? "emailTaken" : ERR.generic);
   // handle_new_user creates the profile as candidate; promote it right away.
-  const { error: roleError } = await service
-    .from("profiles")
-    .upsert({
-      id: data.user.id,
-      role: "admin",
-      email: parsed.data.email,
-      full_name: parsed.data.full_name,
-      locale,
-    });
+  const { error: roleError } = await service.from("profiles").upsert({
+    id: data.user.id,
+    role: "admin",
+    email: parsed.data.email,
+    full_name: parsed.data.full_name,
+    locale,
+  });
   if (roleError) return err(ERR.generic);
   await dispatchEvent({ type: "admin_invite", email: parsed.data.email, locale });
   await logAdminActivity({
