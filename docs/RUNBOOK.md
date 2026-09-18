@@ -33,6 +33,15 @@ Operational procedures for the Dexee Talent Platform. Assumes a Vercel project a
 - Application: redeploy the previous Vercel deployment.
 - Database: migrations are forward-only. Write a new migration that reverts the change; never edit an applied migration.
 
+## Domain and DNS
+
+- Registrar: Squarespace, under `aradi@dexeegroup.com`. Renewal 11 Sep 2027.
+- Authoritative DNS as of 18 Sep 2026: Cloudflare (`vin.ns.cloudflare.com`, `sloan.ns.cloudflare.com`). The account holding the zone is not the one under `alejandroradib@gmail.com`; confirm which login owns it before editing records.
+- The application is served by Vercel. Both `dexeegroup.com` and `www.dexeegroup.com` are CNAMEs to the target Vercel prints under Settings, Domains. On Cloudflare they must be `DNS only` (grey cloud); the orange-cloud proxy breaks domain validation and can loop the certificate.
+- Email is Google Workspace and does not live in this repo's control: one MX to `smtp.google.com` priority 1, the SPF TXT on the apex, and the DKIM TXT on `google._domainkey`. Never delete these three, and recreate them **before** changing nameservers, not after.
+- Changing DNS provider: create every record listed above in the new provider first, then repoint nameservers at the registrar. Read the live values with `dns.resolveMx` / `dns.resolveTxt` before starting, since the DKIM public key is only recoverable from the current DNS or from the Google Workspace admin console.
+- After any domain change: set `NEXT_PUBLIC_SITE_URL` in Vercel to the new origin and redeploy, then update Site URL and Redirect URLs in Supabase Authentication.
+
 ## Rotate keys
 
 1. Supabase service role: rotate in Project settings, update `SUPABASE_SERVICE_ROLE_KEY` in Vercel and redeploy.
