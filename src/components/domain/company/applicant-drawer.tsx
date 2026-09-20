@@ -354,6 +354,31 @@ function DrawerBody({
           ) : null}
 
           <section>
+            <h3 className="text-navy text-sm font-semibold">{t("validResults")}</h3>
+            {detail.results.length === 0 ? (
+              <p className="text-muted-foreground mt-2 text-xs">{t("noValidResults")}</p>
+            ) : (
+              <ul className="mt-2 grid gap-2 text-sm sm:grid-cols-2">
+                {detail.results.map((r) => (
+                  <li key={r.type} className="bg-mist rounded-[8px] px-3 py-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-medium">{te(`assessment_type.${r.type}`)}</span>
+                      {r.finalLevel ? <Badge variant="success">{r.finalLevel}</Badge> : null}
+                    </div>
+                    {r.validUntil ? (
+                      <p className="text-muted-foreground mt-1 text-xs">
+                        {t("validUntil", {
+                          date: format.dateTime(new Date(r.validUntil), "short"),
+                        })}
+                      </p>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          <section>
             <h3 className="text-navy text-sm font-semibold">{t("workstyle")}</h3>
             {detail.workstyleBands ? (
               <ul className="mt-2 grid grid-cols-2 gap-2 text-sm">
@@ -369,6 +394,25 @@ function DrawerBody({
               </ul>
             ) : (
               <p className="text-muted-foreground mt-2 text-xs">{t("workstyleHidden")}</p>
+            )}
+          </section>
+
+          <section>
+            <h3 className="text-navy text-sm font-semibold">{t("disc")}</h3>
+            {detail.discBands ? (
+              <ul className="mt-2 grid grid-cols-2 gap-2 text-sm">
+                {Object.entries(detail.discBands).map(([style, band]) => (
+                  <li
+                    key={style}
+                    className="bg-mist flex justify-between gap-2 rounded-[8px] px-3 py-2"
+                  >
+                    <span>{te(`disc_style.${style as "D"}`)}</span>
+                    <span className="font-medium">{te(`workstyle_band.${band as "mid"}`)}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted-foreground mt-2 text-xs">{t("discHidden")}</p>
             )}
           </section>
 

@@ -1299,7 +1299,12 @@
       "desiredSalary": "Expected salary",
       "availability": "Availability",
       "englishSelf": "Self-reported English",
-      "source": "Source"
+      "source": "Source",
+      "validResults": "Valid assessment results",
+      "validUntil": "valid until {date}",
+      "noValidResults": "No valid results at the moment.",
+      "disc": "DISC profile",
+      "discHidden": "The candidate has not shared the DISC summary."
     },
     "candidates": {
       "title": "Candidates",
@@ -1365,8 +1370,12 @@
       "applicationsEmpty": "You have not applied to any role yet.",
       "viewApplications": "View applications",
       "assessments": "Assessments",
-      "assessmentsPrompt": "Take the three free assessments to add Dexee screening badges to your profile.",
-      "goToAssessments": "Go to assessments"
+      "assessmentsPrompt": "Take the four free assessments to unlock applications and add Dexee screening badges to your profile.",
+      "goToAssessments": "Go to assessments",
+      "requirementsTitle": "Ready to apply",
+      "requirementsBody": "Four free assessments and a resume unlock every role on Dexee. Results stay valid for 90 days.",
+      "requirementsProgress": "{done} of {total} complete",
+      "requirementsDone": "You can apply to any open role. Results are valid until they expire; we will remind you."
     },
     "checklist": {
       "identity": "Name and headline",
@@ -1500,7 +1509,16 @@
       "withdraw": "Withdraw application",
       "withdrawConfirm": "Withdraw your application? You cannot apply again to this role.",
       "withdrawn": "Application withdrawn.",
-      "withdrawNotAllowed": "This application can no longer be withdrawn."
+      "withdrawNotAllowed": "This application can no longer be withdrawn.",
+      "requirementsTitle": "Before you can apply",
+      "requirementsBody": "Dexee asks every candidate for the same four free assessments and a resume. Results are valid for 90 days and travel with every application you send.",
+      "requirementResume": "Resume uploaded",
+      "requirementDone": "Done",
+      "requirementValidUntil": "Valid until {date}",
+      "requirementExpired": "Expired, take it again",
+      "requirementMissing": "Pending",
+      "requirementGo": "Go",
+      "requirementsMissingError": "You cannot apply yet: {items}. Complete them and come back; the role stays open for you."
     },
     "applications": {
       "title": "Applications",
@@ -1516,7 +1534,7 @@
     "assessments": {
       "title": "Assessments",
       "subtitle": "Three free screenings. Results attach to your profile as Dexee badges.",
-      "notice": "Assessment results are Dexee screening results, not certifications or clinical assessments. Each assessment can be taken once every {days} days.",
+      "notice": "Every candidate takes the same four free assessments before applying. Results are valid for {days} days, after which you take the assessment again; you may also repeat one after its cooldown to improve it.",
       "start": "Start",
       "continue": "Continue",
       "viewResult": "View result",
@@ -1529,7 +1547,9 @@
         "completed": "Completed",
         "failed": "Processing failed. Dexee has been notified.",
         "available_again": "Available again on {date}",
-        "expired": "Your previous attempt expired"
+        "expired": "Your previous attempt expired",
+        "validUntil": "Valid until {date}",
+        "expiredResult": "Result expired on {date}. Take it again to apply."
       },
       "level": "Level {level}",
       "timeLimit": "{minutes} minutes",

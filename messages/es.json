@@ -1299,7 +1299,12 @@
       "desiredSalary": "Expectativa salarial",
       "availability": "Disponibilidad",
       "englishSelf": "Inglés autodeclarado",
-      "source": "Origen"
+      "source": "Origen",
+      "validResults": "Resultados de pruebas vigentes",
+      "validUntil": "vigente hasta el {date}",
+      "noValidResults": "Sin resultados vigentes por ahora.",
+      "disc": "Perfil DISC",
+      "discHidden": "El candidato no ha compartido el resumen DISC."
     },
     "candidates": {
       "title": "Candidatos",
@@ -1364,9 +1369,13 @@
       "applications": "Tus postulaciones",
       "applicationsEmpty": "Aún no te has postulado a ninguna vacante.",
       "viewApplications": "Ver postulaciones",
-      "assessments": "Evaluaciones",
-      "assessmentsPrompt": "Presenta las tres evaluaciones gratuitas para agregar insignias de tamizaje Dexee a tu perfil.",
-      "goToAssessments": "Ir a evaluaciones"
+      "assessments": "Pruebas",
+      "assessmentsPrompt": "Presente las cuatro pruebas gratuitas para desbloquear las aplicaciones y sumar las insignias Dexee a su perfil.",
+      "goToAssessments": "Ir a las pruebas",
+      "requirementsTitle": "Listo para aplicar",
+      "requirementsBody": "Cuatro pruebas gratuitas y una hoja de vida desbloquean todas las vacantes en Dexee. Los resultados valen 90 días.",
+      "requirementsProgress": "{done} de {total} completos",
+      "requirementsDone": "Puede aplicar a cualquier vacante abierta. Los resultados valen hasta que venzan; le avisaremos."
     },
     "checklist": {
       "identity": "Nombre y titular",
@@ -1500,7 +1509,16 @@
       "withdraw": "Retirar postulación",
       "withdrawConfirm": "¿Retirar tu postulación? No podrás postularte de nuevo a este rol.",
       "withdrawn": "Postulación retirada.",
-      "withdrawNotAllowed": "Esta postulación ya no se puede retirar."
+      "withdrawNotAllowed": "Esta postulación ya no se puede retirar.",
+      "requirementsTitle": "Antes de poder aplicar",
+      "requirementsBody": "Dexee le pide a todo candidato las mismas cuatro pruebas gratuitas y una hoja de vida. Los resultados valen 90 días y acompañan cada aplicación que envíe.",
+      "requirementResume": "Hoja de vida cargada",
+      "requirementDone": "Listo",
+      "requirementValidUntil": "Vigente hasta el {date}",
+      "requirementExpired": "Vencida, vuelva a presentarla",
+      "requirementMissing": "Pendiente",
+      "requirementGo": "Ir",
+      "requirementsMissingError": "Todavía no puede aplicar: {items}. Complételo y vuelva; la vacante sigue abierta para usted."
     },
     "applications": {
       "title": "Postulaciones",
@@ -1516,7 +1534,7 @@
     "assessments": {
       "title": "Evaluaciones",
       "subtitle": "Tres tamizajes gratuitos. Los resultados se agregan a tu perfil como insignias Dexee.",
-      "notice": "Los resultados son resultados de tamizaje de Dexee, no certificaciones ni evaluaciones clínicas. Cada evaluación puede presentarse una vez cada {days} días.",
+      "notice": "Todo candidato presenta las mismas cuatro pruebas gratuitas antes de aplicar. Los resultados valen {days} días; después vuelve a presentar la prueba, y también puede repetir una tras su periodo de espera para mejorarla.",
       "start": "Comenzar",
       "continue": "Continuar",
       "viewResult": "Ver resultado",
@@ -1529,7 +1547,9 @@
         "completed": "Completada",
         "failed": "El procesamiento falló. Dexee fue notificado.",
         "available_again": "Disponible de nuevo el {date}",
-        "expired": "Tu intento anterior expiró"
+        "expired": "Tu intento anterior expiró",
+        "validUntil": "Vigente hasta el {date}",
+        "expiredResult": "El resultado venció el {date}. Preséntela de nuevo para aplicar."
       },
       "level": "Nivel {level}",
       "timeLimit": "{minutes} minutos",

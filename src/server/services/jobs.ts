@@ -49,12 +49,54 @@ export async function getCompanyJob(jobId: string): Promise<Job | null> {
   return data;
 }
 
+/** A valid assessment result the hiring company may see: level and dates, bands when shared, never scores. */
+export type ValidResult = {
+  type: Database["public"]["Enums"]["assessment_type"];
+  finalLevel: Database["public"]["Enums"]["cefr_level"] | null;
+  validatedAt: string | null;
+  validUntil: string | null;
+  bands: Record<string, string> | null;
+};
+
 export type PipelineCard = {
   application: Database["public"]["Tables"]["applications"]["Row"];
   candidate: Database["public"]["Views"]["candidate_cards"]["Row"] | null;
   saved: boolean;
   workstyleVisible: boolean;
+  /** Valid results at the time of reading, one per assessment type. */
+  results: ValidResult[];
 };
+
+/** Reads candidate_valid_results() for many candidates; the function itself applies the access rule. */
+export async function listValidResults(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  candidateIds: string[],
+): Promise<Map<string, ValidResult[]>> {
+  const entries = await Promise.all(
+    [...new Set(candidateIds)].map(async (candidateId) => {
+      const { data } = await supabase.rpc("candidate_valid_results", {
+        target_candidate_id: candidateId,
+      });
+      // The local type generator emits unknown[] for table-returning functions.
+      const rows = (data ?? []) as {
+        type: ValidResult["type"];
+        final_level: ValidResult["finalLevel"];
+        validated_at: string | null;
+        valid_until: string | null;
+        bands: Record<string, string> | null;
+      }[];
+      const results: ValidResult[] = rows.map((row) => ({
+        type: row.type,
+        finalLevel: row.final_level,
+        validatedAt: row.validated_at,
+        validUntil: row.valid_until,
+        bands: row.bands ?? null,
+      }));
+      return [candidateId, results] as const;
+    }),
+  );
+  return new Map(entries);
+}
 
 export async function getPipeline(
   jobId: string,
@@ -70,24 +112,27 @@ export async function getPipeline(
     .order("created_at", { ascending: false });
   if (error) return err(error.message);
   const candidateIds = (applications ?? []).map((a) => a.candidate_id);
-  const [{ data: cards }, { data: saved }, { data: visibleAttempts }] = await Promise.all([
+  const [{ data: cards }, { data: saved }, resultsByCandidate] = await Promise.all([
     candidateIds.length
       ? supabase.from("candidate_cards").select("*").in("id", candidateIds)
       : Promise.resolve({ data: [] as Database["public"]["Views"]["candidate_cards"]["Row"][] }),
     supabase.from("saved_candidates").select("candidate_id").eq("company_id", companyId),
-    Promise.resolve({ data: [] as { candidate_id: string }[] }),
+    listValidResults(supabase, candidateIds),
   ]);
   const cardById = new Map((cards ?? []).map((c) => [c.id, c]));
   const savedSet = new Set((saved ?? []).map((s) => s.candidate_id));
-  const visibleSet = new Set((visibleAttempts ?? []).map((v) => v.candidate_id));
   return ok({
     job,
-    cards: (applications ?? []).map((application) => ({
-      application,
-      candidate: cardById.get(application.candidate_id) ?? null,
-      saved: savedSet.has(application.candidate_id),
-      workstyleVisible: visibleSet.has(application.candidate_id),
-    })),
+    cards: (applications ?? []).map((application) => {
+      const results = resultsByCandidate.get(application.candidate_id) ?? [];
+      return {
+        application,
+        candidate: cardById.get(application.candidate_id) ?? null,
+        saved: savedSet.has(application.candidate_id),
+        workstyleVisible: results.some((r) => r.type === "psychometric" && r.bands !== null),
+        results,
+      };
+    }),
   });
 }
 
@@ -110,21 +155,24 @@ export async function listCompanyApplicants(
   const { data, count } = await query;
   const rows = data ?? [];
   const ids = rows.map((r) => r.candidate_id);
-  const [{ data: cards }, { data: saved }] = await Promise.all([
+  const [{ data: cards }, { data: saved }, resultsByCandidate] = await Promise.all([
     ids.length
       ? supabase.from("candidate_cards").select("*").in("id", ids)
       : Promise.resolve({ data: [] as Database["public"]["Views"]["candidate_cards"]["Row"][] }),
     supabase.from("saved_candidates").select("candidate_id").eq("company_id", companyId),
+    listValidResults(supabase, ids),
   ]);
   const cardById = new Map((cards ?? []).map((c) => [c.id, c]));
   const savedSet = new Set((saved ?? []).map((s) => s.candidate_id));
   let result: ApplicantRow[] = rows.map((row) => {
     const { jobs, ...application } = row;
+    const results = resultsByCandidate.get(row.candidate_id) ?? [];
     return {
       application,
       candidate: cardById.get(row.candidate_id) ?? null,
       saved: savedSet.has(row.candidate_id),
-      workstyleVisible: false,
+      workstyleVisible: results.some((r) => r.type === "psychometric" && r.bands !== null),
+      results,
       job: { id: jobs.id, title: jobs.title, slug: jobs.slug },
     };
   });
@@ -151,6 +199,9 @@ export type ApplicantDetail = {
   })[];
   events: Database["public"]["Tables"]["application_events"]["Row"][];
   workstyleBands: Record<string, string> | null;
+  discBands: Record<string, string> | null;
+  /** Valid results, one per type, as candidate_valid_results() allows this company to see them. */
+  results: ValidResult[];
   saved: boolean;
 };
 
@@ -199,6 +250,7 @@ export async function getApplicantDetail(
       .maybeSingle(),
   ]);
   const { jobs, ...applicationRow } = application;
+  const results = (await listValidResults(supabase, [candidateId])).get(candidateId) ?? [];
   return {
     application: applicationRow,
     job: { id: jobs.id, title: jobs.title },
@@ -208,7 +260,9 @@ export async function getApplicantDetail(
     contact: application.contact_released ? contact.data : null,
     notes: (notes.data ?? []) as ApplicantDetail["notes"],
     events: events.data ?? [],
-    workstyleBands: null,
+    workstyleBands: results.find((r) => r.type === "psychometric")?.bands ?? null,
+    discBands: results.find((r) => r.type === "disc")?.bands ?? null,
+    results,
     saved: Boolean(saved.data),
   };
 }

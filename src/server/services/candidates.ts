@@ -138,7 +138,44 @@ export type AssessmentHubItem = {
   /** Minutes left on the open attempt, computed server-side so components stay pure. */
   remainingMinutes: number | null;
   canStart: boolean;
+  /** When the latest validated result stops counting, or null without one. */
+  validUntil: string | null;
+  /** True when there is a validated result whose window has closed. */
+  expired: boolean;
 };
+
+/** One line of what a candidate still needs before applying; mirrors candidate_apply_requirements(). */
+export type ApplyRequirement = {
+  requirement: Database["public"]["Enums"]["assessment_type"] | "resume";
+  satisfied: boolean;
+  validUntil: string | null;
+};
+
+/**
+ * Reads the requirements from the same function the applications trigger enforces, so the
+ * checklist a candidate sees and the rule that refuses an application cannot drift apart.
+ */
+export async function getApplyRequirements(userId: string): Promise<ApplyRequirement[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("candidate_apply_requirements", {
+    target_candidate_id: userId,
+  });
+  // The local type generator emits unknown[] for table-returning functions.
+  const rows = (data ?? []) as {
+    requirement: string;
+    satisfied: boolean;
+    valid_until: string | null;
+  }[];
+  return rows.map((row) => ({
+    requirement: row.requirement as ApplyRequirement["requirement"],
+    satisfied: row.satisfied,
+    validUntil: row.valid_until,
+  }));
+}
+
+export function missingRequirements(items: ApplyRequirement[]): ApplyRequirement[] {
+  return items.filter((item) => !item.satisfied);
+}
 
 export async function getAssessmentHub(userId: string): Promise<AssessmentHubItem[]> {
   const supabase = await createClient();
@@ -165,7 +202,19 @@ export async function getAssessmentHub(userId: string): Promise<AssessmentHubIte
       ? Math.max(0, Math.round((new Date(open.expires_at).getTime() - now) / 60000))
       : null;
     const canStart = !open && (nextAllowedAt === null || new Date(nextAllowedAt).getTime() <= now);
-    items.push({ assessment, latest, open, nextAllowedAt, remainingMinutes, canStart });
+    const validated = mine.find((a) => a.status === "validated") ?? null;
+    const validUntil = validated?.valid_until ?? null;
+    const expired = validUntil !== null && new Date(validUntil).getTime() <= now;
+    items.push({
+      assessment,
+      latest,
+      open,
+      nextAllowedAt,
+      remainingMinutes,
+      canStart,
+      validUntil,
+      expired,
+    });
   }
   return items;
 }

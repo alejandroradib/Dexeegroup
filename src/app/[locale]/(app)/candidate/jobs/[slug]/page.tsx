@@ -9,6 +9,7 @@ import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
 import { getSessionUser } from "@/lib/auth/session";
 import {
+  getApplyRequirements,
   getCandidateApplicationForJob,
   getCurrentCandidateProfile,
 } from "@/server/services/candidates";
@@ -23,9 +24,10 @@ export default async function CandidateJobPage({
   if (!result.ok || !result.data) notFound();
   const job = result.data;
   const user = await getSessionUser();
-  const [existing, profile, t] = await Promise.all([
+  const [existing, profile, requirements, t] = await Promise.all([
     getCandidateApplicationForJob(user!.id, job.id ?? ""),
     getCurrentCandidateProfile(user!.id),
+    getApplyRequirements(user!.id),
     getTranslations("marketing.jobs"),
   ]);
   return (
@@ -44,6 +46,7 @@ export default async function CandidateJobPage({
               jobTitle={job.title ?? ""}
               existing={existing}
               profileComplete={(profile?.candidate.profile_completeness ?? 0) >= 60}
+              requirements={requirements}
             />
           }
         />

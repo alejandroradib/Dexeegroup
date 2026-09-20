@@ -20,22 +20,33 @@ import { useToast } from "@/components/ui/toast";
 import { Link, useRouter } from "@/i18n/navigation";
 import { track } from "@/lib/analytics/events";
 import { applyToJob, withdrawApplication } from "@/server/actions/candidate";
+import type { ApplyRequirement } from "@/server/services/candidates";
 
 type Existing = { id: string; status: string; created_at: string } | null;
+
+/** Where a candidate goes to clear each requirement. */
+function requirementHref(requirement: ApplyRequirement["requirement"]): string {
+  return requirement === "resume"
+    ? "/candidate/onboarding"
+    : `/candidate/assessments/${requirement}`;
+}
 
 export function ApplyButton({
   jobId,
   jobTitle,
   existing,
   profileComplete,
+  requirements,
 }: {
   jobId: string;
   jobTitle: string;
   existing: Existing;
   profileComplete: boolean;
+  requirements: ApplyRequirement[];
 }) {
   const t = useTranslations("candidate.jobs");
   const tc = useTranslations("common");
+  const te = useTranslations("enums.assessment_type");
   const format = useFormatter();
   const router = useRouter();
   const { toast } = useToast();
@@ -82,6 +93,9 @@ export function ApplyButton({
     );
   }
 
+  const missing = requirements.filter((r) => !r.satisfied);
+  const blocked = missing.length > 0;
+
   return (
     <>
       {!profileComplete ? (
@@ -89,7 +103,64 @@ export function ApplyButton({
           {t("completeProfileFirst")}
         </Alert>
       ) : null}
-      <Button variant="accent" size="lg" className="w-full" onClick={() => setOpen(true)}>
+      <section
+        className="border-border mb-3 rounded-[12px] border bg-white p-4"
+        aria-labelledby="apply-requirements"
+      >
+        <h3 id="apply-requirements" className="text-navy text-sm font-semibold">
+          {t("requirementsTitle")}
+        </h3>
+        <p className="text-muted-foreground mt-1 text-xs">{t("requirementsBody")}</p>
+        <ul className="mt-3 space-y-2 text-sm">
+          {requirements.map((r) => {
+            // validUntil is the latest result's window; unsatisfied with a window means it closed.
+            const expired = !r.satisfied && r.validUntil !== null;
+            return (
+              <li key={r.requirement} className="flex items-center justify-between gap-3">
+                <span className="flex items-center gap-2">
+                  <span
+                    aria-hidden
+                    className={
+                      r.satisfied
+                        ? "bg-success-soft text-success flex size-5 items-center justify-center rounded-full text-xs"
+                        : "bg-mist text-muted-foreground flex size-5 items-center justify-center rounded-full text-xs"
+                    }
+                  >
+                    {r.satisfied ? "✓" : "·"}
+                  </span>
+                  <span>
+                    {r.requirement === "resume" ? t("requirementResume") : te(r.requirement)}
+                  </span>
+                </span>
+                <span className="text-muted-foreground flex items-center gap-2 text-xs">
+                  {r.satisfied
+                    ? r.validUntil
+                      ? t("requirementValidUntil", {
+                          date: format.dateTime(new Date(r.validUntil), "short"),
+                        })
+                      : t("requirementDone")
+                    : expired
+                      ? t("requirementExpired")
+                      : t("requirementMissing")}
+                  {!r.satisfied ? (
+                    <Link href={requirementHref(r.requirement)} className="text-link underline">
+                      {t("requirementGo")}
+                    </Link>
+                  ) : null}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+      <Button
+        variant="accent"
+        size="lg"
+        className="w-full"
+        disabled={blocked}
+        aria-disabled={blocked}
+        onClick={() => setOpen(true)}
+      >
         {t("apply")}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -118,7 +189,18 @@ export function ApplyButton({
                 ? t("duplicate")
                 : error === "forbidden"
                   ? t("forbidden")
-                  : tc("errors.generic")}
+                  : error.startsWith("requirementsMissing:")
+                    ? t("requirementsMissingError", {
+                        items: error
+                          .slice("requirementsMissing:".length)
+                          .split(",")
+                          .filter(Boolean)
+                          .map((item) =>
+                            item === "resume" ? t("requirementResume") : te(item as "disc"),
+                          )
+                          .join(", "),
+                      })
+                    : tc("errors.generic")}
             </Alert>
           ) : null}
           <DialogFooter>
@@ -136,6 +218,9 @@ export function ApplyButton({
                     track("apply_job");
                     toast({ title: t("success"), variant: "success" });
                     setOpen(false);
+                    router.refresh();
+                  } else if (result.error === "requirementsMissing") {
+                    setError(`requirementsMissing:${(result.details?.missing ?? []).join(",")}`);
                     router.refresh();
                   } else setError(result.error);
                 })

@@ -110,8 +110,11 @@ function Card({
           written={c?.english_written_level}
           self={c?.english_self_level}
         />
-        {card.workstyleVisible ? (
-          <WorkStyleBadge completedAt={c?.psychometric_completed_at} />
+        {card.results.some((r) => r.type === "psychometric" && r.bands) ? (
+          <WorkStyleBadge completedAt={c?.psychometric_completed_at ?? "shared"} />
+        ) : null}
+        {card.results.some((r) => r.type === "disc" && r.bands) ? (
+          <WorkStyleBadge type="disc" completedAt="shared" />
         ) : null}
         {card.application.source === "dexee_recommended" ? (
           <Badge variant="accent">{tc("labels.dexeeRecommended")}</Badge>

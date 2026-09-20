@@ -12,6 +12,7 @@ import { pageLocale } from "@/i18n/server";
 import { getSessionUser } from "@/lib/auth/session";
 import { completenessChecklist } from "@/lib/profile/completeness";
 import {
+  getApplyRequirements,
   getCurrentCandidateProfile,
   listCandidateApplications,
   listRecommendedJobs,
@@ -23,14 +24,17 @@ export default async function CandidateDashboardPage({ params }: PageProps<"/[lo
   const user = await getSessionUser();
   const profile = await getCurrentCandidateProfile(user!.id);
   if (!profile) notFound();
-  const [t, tk, ti, applications, recommended, interviews] = await Promise.all([
+  const [t, tk, ti, te, applications, recommended, interviews, requirements] = await Promise.all([
     getTranslations("candidate.dashboard"),
     getTranslations("candidate.checklist"),
     getTranslations("interview.dashboard"),
+    getTranslations("enums.assessment_type"),
     listCandidateApplications(user!.id),
     listRecommendedJobs(profile.candidate),
     getInterviewOverview(user!.id),
+    getApplyRequirements(user!.id),
   ]);
+  const requirementsDone = requirements.filter((r) => r.satisfied).length;
   const lastInterview = interviews.history.find((i) => i.status === "completed");
   const checklist = completenessChecklist({
     first_name: profile.candidate.first_name,
@@ -71,8 +75,27 @@ export default async function CandidateDashboardPage({ params }: PageProps<"/[lo
         </section>
         <section className="bg-navy rounded-[12px] p-5 text-white">
           <ClipboardCheckIcon className="text-green size-6" aria-hidden />
-          <h2 className="mt-3 text-base text-white">{t("assessments")}</h2>
-          <p className="mt-1 text-sm text-white/80">{t("assessmentsPrompt")}</p>
+          <h2 className="mt-3 text-base text-white">{t("requirementsTitle")}</h2>
+          <p className="mt-1 text-sm text-white/80">
+            {requirementsDone === requirements.length && requirements.length > 0
+              ? t("requirementsDone")
+              : t("requirementsBody")}
+          </p>
+          <p className="text-green mt-3 text-xs font-semibold tracking-wide uppercase">
+            {t("requirementsProgress", { done: requirementsDone, total: requirements.length })}
+          </p>
+          <ul className="mt-2 space-y-1 text-sm">
+            {requirements.map((r) => (
+              <li key={r.requirement} className="flex items-center gap-2">
+                <span aria-hidden className={r.satisfied ? "text-green" : "text-white/40"}>
+                  {r.satisfied ? "✓" : "·"}
+                </span>
+                <span className={r.satisfied ? "text-white/90" : "text-white/70"}>
+                  {r.requirement === "resume" ? tk("resume") : te(r.requirement)}
+                </span>
+              </li>
+            ))}
+          </ul>
           <Button asChild variant="accent" size="sm" className="mt-4">
             <Link href="/candidate/assessments">{t("goToAssessments")}</Link>
           </Button>

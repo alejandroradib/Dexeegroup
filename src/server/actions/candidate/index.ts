@@ -19,6 +19,7 @@ import {
   identityStepSchema,
   professionalStepSchema,
 } from "@/lib/validation/candidate";
+import { getApplyRequirements, missingRequirements } from "@/server/services/candidates";
 import { dispatchEvent } from "@/server/services/events";
 import { ERR, err, ok, type Result } from "@/server/services/result";
 import type { Json } from "@/types/database";
@@ -246,6 +247,12 @@ export async function applyToJob(input: unknown): Promise<Result<{ applicationId
   if (!user) return err(ERR.unauthorized);
   const parsed = applySchema.safeParse(input);
   if (!parsed.success) return err(ERR.validation, fieldErrors(parsed.error));
+  // The database trigger is the rule; this read gives the candidate a named list instead
+  // of a refused insert, and returns the same items the checklist shows.
+  const missing = missingRequirements(await getApplyRequirements(user.id));
+  if (missing.length > 0) {
+    return err("requirementsMissing", { missing: missing.map((m) => m.requirement) });
+  }
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("applications")
@@ -259,6 +266,8 @@ export async function applyToJob(input: unknown): Promise<Result<{ applicationId
   if (error) {
     if (error.code === "23505") return err(ERR.duplicate);
     if (error.code === "42501") return err(ERR.forbidden);
+    const refused = error.message.match(/requirements_missing:(\S+)/);
+    if (refused) return err("requirementsMissing", { missing: (refused[1] ?? "").split(",") });
     logger.warn({ err: error.message }, "apply_failed");
     return err(ERR.generic);
   }
