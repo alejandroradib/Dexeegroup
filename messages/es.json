@@ -483,16 +483,54 @@
       "pricingGuaranteeCta": "Leer la garantía",
       "verificationCta": "Cómo verificamos",
       "faqTitle": "Preguntas frecuentes",
-      "faq1Q": "¿Cuánto tarda la lista corta?",
-      "faq1A": "Normalmente entre una y tres semanas según el perfil. Verá a los postulantes en su pipeline a medida que se verifican.",
-      "faq2Q": "¿Cuándo veo los datos de contacto de un candidato?",
-      "faq2A": "Cuando Dexee los libera para una postulación específica. Hasta entonces ve el perfil profesional, las insignias de evaluación y el nombre de pila.",
-      "faq3Q": "¿Quién es el empleador legal?",
-      "faq3A": "Depende del tipo de contrato. Con Dexee como empleador legal, Dexee contrata en Colombia y le factura mensualmente. Con contratación directa o contratista, su empresa contrata al profesional.",
-      "faq4Q": "¿Qué pasa si la contratación no funciona?",
-      "faq4A": "Cada compromiso incluye garantía de reemplazo dentro del periodo acordado, sin costo adicional.",
-      "faq5Q": "¿Verifican el nivel de inglés?",
-      "faq5A": "Sí. El resultado escrito es automático; el oral lo valida un revisor de Dexee. La insignia muestra el menor de los dos niveles.",
+      "faqSubtitle": "Las preguntas que hace un comprador antes de una primera llamada, respondidas sin llamada.",
+      "faqMoreLabel": "Ver el detalle",
+      "faq": {
+        "timeline": {
+          "q": "¿Cuánto toma recibir una terna?",
+          "a": "Diez días hábiles desde el brief aprobado para la primera terna, y normalmente entre una y tres semanas hasta una oferta firmada, según el perfil. Usted ve a los aplicantes en su pipeline a medida que llegan, no solo al final."
+        },
+        "contactDetails": {
+          "q": "¿Cuándo veo los datos de contacto de un candidato?",
+          "a": "Cuando Dexee los libera para una aplicación específica, lo que ocurre apenas usted decide entrevistar. Hasta ese momento ve el perfil profesional, el reporte de verificación y los resultados de las pruebas, identificados por referencia."
+        },
+        "classification": {
+          "q": "¿Contratista o empleado, y quién asume el riesgo de la clasificación?",
+          "a": "Con Dexee como empleador de registro, Dexee es el empleador legal en Colombia, tiene el contrato y asume las obligaciones laborales. Con un contratista independiente, la persona contrata directamente con usted y esa relación es suya. Le decimos cuál encaja con el rol antes de que elija."
+        },
+        "guarantee": {
+          "q": "¿Qué pasa si la contratación no funciona?",
+          "a": "Toda colocación lleva garantía de reemplazo de 90 días, 120 para clientes fundadores. La ventana, las cinco exclusiones, cómo reclamar y el remedio están publicados completos, no resumidos."
+        },
+        "english": {
+          "q": "¿Cómo verifican el nivel de inglés?",
+          "a": "El inglés escrito se califica en el servidor. El hablado lo precalifica un modelo en cuatro dimensiones de rúbrica y luego un revisor de Dexee escucha las grabaciones y asigna el nivel MCER final. La insignia muestra el menor de los dos niveles, nunca el más favorable."
+        },
+        "ip": {
+          "q": "¿Quién es dueño de la propiedad intelectual del trabajo?",
+          "a": "Usted. La cesión del producto del trabajo al cliente queda escrita en el contrato laboral o de prestación antes de que la persona empiece, y cubre código, diseños, documentos y todo lo demás que se produzca para usted. Pídanos la cláusula y su abogado la revisa antes de firmar."
+        },
+        "timezone": {
+          "q": "¿Cuánta superposición horaria voy a tener?",
+          "a": "Colombia está en UTC-5 todo el año, sin horario de verano. Es el mismo reloj que el Este de Estados Unidos la mayor parte del año y una hora adelante en invierno, así que hay una jornada completa de superposición con cualquier huso estadounidense."
+        },
+        "dataProtection": {
+          "q": "¿Cómo se manejan los datos personales?",
+          "a": "Los datos de los candidatos se tratan bajo la Ley 1581 de 2012, con el consentimiento registrado al momento del registro y la versión estampada en el registro. Los datos de contacto y las hojas de vida están en almacenamiento restringido y llegan a un cliente solo para una aplicación que está entrevistando. Hay acuerdo de tratamiento de datos disponible."
+        },
+        "security": {
+          "q": "¿Cómo se aseguran los equipos y la información?",
+          "a": "Bajo empleo con Dexee podemos entregar y administrar el computador, con cifrado de disco y bloqueo de pantalla exigidos. El acceso a sus sistemas lo otorga y lo revoca usted. Pedimos que la desvinculación pase por Dexee para que el acceso se corte el mismo día en que termina la relación."
+        },
+        "payment": {
+          "q": "¿En qué moneda y por qué medio se paga?",
+          "a": "Una factura en USD, pagadera por transferencia bancaria o ACH. Los salarios se cotizan en USD por mes en todo este sitio. Sin entidad local, sin cuenta bancaria local y sin conversión de moneda de su lado."
+        },
+        "candidateCost": {
+          "q": "¿Qué pagan los candidatos, y por qué es gratis?",
+          "a": "Nada, nunca. Las pruebas, el perfil y aplicar son gratis para el candidato. A Dexee le paga la empresa que contrata, que es el único arreglo bajo el cual un candidato puede confiar en el resultado. Una plataforma que le cobra al candidato le está vendiendo esperanza."
+        }
+      },
       "ctaTitle": "Publique su primer rol",
       "ctaBody": "Cree una cuenta de empresa, publique la vacante y reciba postulantes verificados. Dexee verifica las empresas en un día hábil."
     },

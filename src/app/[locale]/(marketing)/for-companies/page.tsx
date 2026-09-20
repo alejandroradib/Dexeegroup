@@ -2,14 +2,9 @@ import { ClockIcon, ShieldCheckIcon, UsersIcon, WalletIcon } from "lucide-react"
 import { getTranslations } from "next-intl/server";
 
 import { BookCallButton } from "@/components/domain/marketing/book-call-button";
+import { BuyerFaq } from "@/components/domain/marketing/buyer-faq";
 import { PricingSummary } from "@/components/domain/marketing/pricing-table";
 import { FeatureCard, Section, SectionTitle, Steps } from "@/components/domain/marketing/sections";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { EVIDENCE } from "@/content/proof";
 import { Link } from "@/i18n/navigation";
@@ -42,7 +37,6 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
     year: "numeric",
     month: "long",
   });
-  const faqs = [1, 2, 3, 4, 5] as const;
 
   return (
     <>
@@ -130,30 +124,21 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
         </div>
       </Section>
       <Section tone="mist">
-        <div className="grid gap-10 lg:grid-cols-2">
-          <div>
-            <SectionTitle title={t("pricingTitle")} subtitle={t("pricingBody")} />
-            <PricingSummary locale={locale} />
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild variant="accent">
-                <Link href="/pricing">{t("pricingSeeAll")}</Link>
-              </Button>
-              <Button asChild variant="ghost">
-                <Link href="/guarantee">{t("pricingGuaranteeCta")}</Link>
-              </Button>
-            </div>
-          </div>
-          <div>
-            <SectionTitle title={t("faqTitle")} />
-            <Accordion type="single" collapsible>
-              {faqs.map((n) => (
-                <AccordionItem key={n} value={`faq-${n}`}>
-                  <AccordionTrigger>{t(`faq${n}Q` as "faq1Q")}</AccordionTrigger>
-                  <AccordionContent>{t(`faq${n}A` as "faq1A")}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
+        <SectionTitle title={t("pricingTitle")} subtitle={t("pricingBody")} />
+        <PricingSummary locale={locale} />
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Button asChild variant="accent">
+            <Link href="/pricing">{t("pricingSeeAll")}</Link>
+          </Button>
+          <Button asChild variant="ghost">
+            <Link href="/guarantee">{t("pricingGuaranteeCta")}</Link>
+          </Button>
+        </div>
+      </Section>
+      <Section id="faq">
+        <div className="mx-auto max-w-3xl">
+          <SectionTitle title={t("faqTitle")} subtitle={t("faqSubtitle")} />
+          <BuyerFaq />
         </div>
       </Section>
       <Section>

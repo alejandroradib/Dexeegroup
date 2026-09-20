@@ -483,16 +483,54 @@
       "pricingGuaranteeCta": "Read the guarantee",
       "verificationCta": "How we verify",
       "faqTitle": "Frequently asked questions",
-      "faq1Q": "How long does it take to receive a shortlist?",
-      "faq1A": "Typically between one and three weeks depending on the profile. You see applicants in your pipeline as they are vetted.",
-      "faq2Q": "When do I see a candidate's contact details?",
-      "faq2A": "After Dexee releases them for a specific application. Until then you see the professional profile, assessment badges and a first name.",
-      "faq3Q": "Who is the legal employer?",
-      "faq3A": "It depends on the contract type. With Dexee as employer of record, Dexee hires in Colombia and bills you monthly. With direct hire or contractor, your company contracts the professional.",
-      "faq4Q": "What happens if the hire does not work out?",
-      "faq4A": "Every engagement includes a replacement guarantee within the agreed period, at no additional cost.",
-      "faq5Q": "Do you verify English levels?",
-      "faq5A": "Yes. Written results are automatic; oral results are validated by Dexee reviewers. Badges show the lower of the two levels.",
+      "faqSubtitle": "The questions a buyer asks before a first call, answered without a call.",
+      "faqMoreLabel": "Read the detail",
+      "faq": {
+        "timeline": {
+          "q": "How long does it take to receive a shortlist?",
+          "a": "Ten business days from an approved role brief for the first shortlist, and usually one to three weeks to a signed offer depending on the profile. You see applicants in your pipeline as they arrive, not only at the end."
+        },
+        "contactDetails": {
+          "q": "When do I see a candidate's contact details?",
+          "a": "After Dexee releases them for a specific application, which happens once you decide to interview. Until then you see the professional profile, the verification report and the assessment results, identified by reference."
+        },
+        "classification": {
+          "q": "Contractor or employee, and who carries the classification risk?",
+          "a": "With Dexee as employer of record, Dexee is the legal employer in Colombia, holds the contract and carries the employment obligations. With an independent contractor, the person contracts with you directly and you carry that relationship. We will tell you which one fits the role before you choose."
+        },
+        "guarantee": {
+          "q": "What happens if the hire does not work out?",
+          "a": "Every placement carries a 90-day replacement guarantee, 120 days for founding clients. The window, the five exclusions, how to claim and the remedy are published in full, not summarized."
+        },
+        "english": {
+          "q": "How do you verify English levels?",
+          "a": "Written English is scored on the server. Spoken English is pre-scored by a model on four rubric dimensions and then a Dexee reviewer listens to the recordings and assigns the final CEFR level. The badge shows the lower of the two levels, never the flattering one."
+        },
+        "ip": {
+          "q": "Who owns the intellectual property of the work?",
+          "a": "You do. The assignment of work product to the client is written into the employment or contractor agreement before the person starts, and it covers code, designs, documents and anything else produced for you. Ask us for the clause and your counsel can read it before you sign."
+        },
+        "timezone": {
+          "q": "How much time-zone overlap will I get?",
+          "a": "Colombia runs on UTC-5 all year, with no daylight saving. That is the same clock as US Eastern for most of the year and one hour ahead in winter, so a full working day overlaps with every US time zone."
+        },
+        "dataProtection": {
+          "q": "How is personal data handled?",
+          "a": "Candidate data is processed under Colombia's Ley 1581 de 2012, with consent recorded at sign-up and a version stamped on the record. Contact details and resumes sit in restricted storage and reach a client only for an application they are interviewing for. A data processing agreement is available."
+        },
+        "security": {
+          "q": "How are devices and information secured?",
+          "a": "Under Dexee employment we can supply and manage the laptop, with disk encryption and a screen lock enforced. Access to your systems is yours to grant and revoke. We ask that offboarding runs through Dexee so access is cut the same day the engagement ends."
+        },
+        "payment": {
+          "q": "What currency and payment method do you use?",
+          "a": "One invoice in USD, payable by bank transfer or ACH. Salaries are quoted in USD per month everywhere on this site. No local entity, no local bank account and no currency conversion on your side."
+        },
+        "candidateCost": {
+          "q": "What do candidates pay, and why is it free?",
+          "a": "Nothing, ever. Assessments, the profile and applying are free for candidates. Dexee is paid by the company that hires, which is the only arrangement under which a candidate can trust the result. A platform that charges candidates is selling them hope."
+        }
+      },
       "ctaTitle": "Post your first role",
       "ctaBody": "Create a company account, post the vacancy and receive vetted applicants. Dexee verifies companies within one business day."
     },
