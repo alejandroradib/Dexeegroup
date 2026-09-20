@@ -401,7 +401,7 @@
       "guarantee": "Garantía de reemplazo",
       "guaranteeDescription": "La ventana de reemplazo, las exclusiones y cómo reclamar, escritas para que el abogado del comprador las lea antes de una llamada.",
       "howWeVerify": "Cómo verificamos",
-      "howWeVerifyDescription": "Identidad, inglés hablado calificado por un revisor humano contra el MCER, inglés escrito y competencias del rol. Cuatro chequeos antes de que un candidato llegue a su terna.",
+      "howWeVerifyDescription": "Identidad, inglés hablado calificado por un revisor humano contra el MCER, inglés escrito, dos perfiles de trabajo y un análisis de ajuste sobre la hoja de vida. Cinco chequeos antes de que un candidato llegue a su terna.",
       "sampleReport": "Reporte de verificación de muestra",
       "sampleReportDescription": "Lo que contiene un reporte Dexee Verified, en una página y sin necesidad de cuenta.",
       "compare": "Comparaciones",
@@ -471,7 +471,7 @@
       "value1Title": "Mismo horario, misma página",
       "value1Body": "Colombia opera en horario Central y del Este de EE. UU. todo el año. Inglés C1 mínimo en roles de contacto con el cliente.",
       "value2Title": "Personas calificadas, no solo puestos",
-      "value2Body": "Profesionales senior en finanzas, ingeniería, soporte y operaciones, seleccionados contra su perfil.",
+      "value2Body": "Profesionales senior en finanzas, ingeniería, soporte y operaciones, seleccionados contra su perfil y ordenados por ajuste antes de que usted abra el pipeline.",
       "value3Title": "Garantías que puede firmar",
       "value3Body": "Reemplazo sin costo, SLA contractuales, auditorías y reportes de KPI, confidencialidad y cumplimiento.",
       "value4Title": "Menor costo, sin cargos ocultos",
@@ -480,7 +480,7 @@
       "how1Title": "Diagnóstico",
       "how1Body": "Mapeamos el rol, definimos el perfil y acordamos las condiciones.",
       "how2Title": "Selección",
-      "how2Body": "Una lista corta de candidatos verificados con niveles de inglés validados y perfiles de estilo de trabajo.",
+      "how2Body": "Cada postulante llega con cuatro pruebas vigentes y hoja de vida. Dexee analiza cada uno contra su brief y los ordena: un top 3 y un top 5 para entrevistar primero.",
       "how3Title": "Incorporación",
       "how3Body": "Contratos, equipos, accesos y un plan de integración de 30 días.",
       "how4Title": "Operación",
@@ -571,7 +571,8 @@
             "verification": "Reporte Dexee Verified de cada finalista, sin costo adicional",
             "shortlist": "Primera terna dentro de diez días hábiles desde el brief aprobado",
             "guarantee": "Garantía de reemplazo de 90 días, escrita en el contrato",
-            "noSalaryPercentage": "Tarifa plana. No sube porque suba el salario"
+            "noSalaryPercentage": "Tarifa plana. No sube porque suba el salario",
+            "rankedShortlist": "Cada postulante analizado contra su brief; un top 3 y un top 5 ordenados para entrevistar primero"
           }
         },
         "eor": {
@@ -603,7 +604,7 @@
             "identity": "Documento de identidad contrastado con una sesión en vivo con el candidato",
             "spokenEnglish": "Inglés hablado calificado contra el MCER por un revisor humano",
             "writtenEnglish": "Evaluación de inglés escrito, calificada en el servidor",
-            "roleSkills": "Prueba de competencias del rol, con la clave de respuestas en poder de Dexee",
+            "workProfile": "Perfiles de trabajo Big Five y DISC, compartidos como descriptores",
             "report": "Un solo reporte que puede reenviar a su gerente de contratación"
           }
         }
@@ -690,7 +691,7 @@
     },
     "verify": {
       "title": "Cómo verificamos",
-      "subtitle": "Cuatro chequeos antes de que un candidato llegue a su terna, y una persona, no un modelo, asigna el nivel de inglés.",
+      "subtitle": "Cinco chequeos antes de que un candidato llegue a su terna, y una persona, no un modelo, asigna el nivel de inglés.",
       "problemTitle": "El problema que esto resuelve",
       "problemBody": "La contratación remota entre países tiene un problema de suplantación. Está documentado, y es la razón por la que Dexee verifica antes de presentar, no después de una oferta.",
       "evidenceSourceLabel": "Fuente",
@@ -721,11 +722,17 @@
           "produces": "Un nivel MCER y el puntaje bruto",
           "decidedBy": "Calificación en el servidor, revisada cuando las dos partes no concuerdan"
         },
-        "roleSkills": {
-          "title": "Competencias del rol",
-          "body": "Una prueba específica de la familia de rol a la que aplica el candidato. Casos situacionales tomados del trabajo real, no preguntas de memoria.",
-          "produces": "Un puntaje sobre cien contra la familia de rol",
-          "decidedBy": "Calificación en el servidor contra una clave en poder de Dexee"
+        "workProfile": {
+          "title": "Perfiles de trabajo",
+          "body": "Dos instrumentos cortos sobre modelos públicos: el Big Five con diez situaciones de trabajo remoto, y un perfil tipo DISC de cuatro factores. Ambos describen cómo prefiere trabajar la persona.",
+          "produces": "Descriptores por banda para cada factor y un estilo principal",
+          "decidedBy": "Calificación determinística. Nunca se usa para ordenar ni descartar"
+        },
+        "fit": {
+          "title": "Ajuste con el rol",
+          "body": "La hoja de vida del candidato se lee con los datos de contacto y los atributos protegidos eliminados, y se compara con el brief del rol, el perfil y los resultados vigentes. Cada postulante recibe un puntaje, un resumen, fortalezas y brechas.",
+          "produces": "Una terna ordenada para la empresa: top 3 y top 5",
+          "decidedBy": "Un modelo, como recomendación. La empresa decide a quién entrevista"
         }
       },
       "humanTitle": "Lo que un modelo por sí solo no puede hacer",
@@ -760,11 +767,12 @@
         "identity": "Identidad",
         "writtenEnglish": "Inglés escrito",
         "spokenEnglish": "Inglés hablado",
-        "roleSkills": "Competencias del rol"
+        "workProfile": "Perfiles de trabajo"
       },
       "results": {
         "verified": "Verificado",
-        "strong": "Sólido"
+        "strong": "Sólido",
+        "shared": "Compartido"
       },
       "decidedBy": {
         "reviewer": "Revisor de Dexee",
@@ -801,7 +809,22 @@
       "ctaTitle": "¿Quiere uno de estos para un rol que está contratando?",
       "ctaBody": "Publique la vacante y la primera terna llega con un reporte por cada candidato.",
       "ctaPost": "Publicar una vacante",
-      "ctaPricing": "Ver precios"
+      "ctaPricing": "Ver precios",
+      "fitTitle": "Ajuste con el rol",
+      "fitBody": "Calculado cuando el candidato aplicó. Los datos de contacto y los atributos protegidos se eliminaron de la hoja de vida antes del análisis. Es una recomendación para el orden de las entrevistas, no una decisión.",
+      "fitScoreLabel": "Puntaje de ajuste",
+      "fitSummary": "Cinco años en soporte entrante para clientes de salud en Estados Unidos, tres de ellos liderando un equipo pequeño. Inglés escrito y hablado en el nivel que exige el rol. La brecha principal es la plataforma de tiquetes que nombra el brief, que el candidato no ha usado.",
+      "fitStrengths": {
+        "1": "Lideró un equipo de soporte de cuatro personas con SLA publicados",
+        "2": "B2 verificado en inglés escrito y hablado",
+        "3": "Experiencia con clientes de salud en EE. UU. y procesos cercanos a HIPAA"
+      },
+      "fitGaps": {
+        "1": "Sin experiencia práctica con la plataforma de tiquetes del brief",
+        "2": "La experiencia como líder es reciente, menos de dos años"
+      },
+      "strengthsLabel": "Fortalezas",
+      "gapsLabel": "Brechas por indagar"
     },
     "lead": {
       "title": "Cuéntenos qué necesita cubrir",
@@ -850,7 +873,7 @@
     },
     "talent": {
       "heroTitle": "Roles remotos con empresas de EE. UU., desde Colombia",
-      "heroSubtitle": "Crea tu perfil una vez, presenta tres evaluaciones gratuitas y postúlate. Dexee protege tus datos de contacto hasta que una empresa avanza en serio.",
+      "heroSubtitle": "Cree su perfil una vez, presente cuatro pruebas gratuitas, cargue su hoja de vida y aplique. Dexee protege sus datos de contacto hasta que una empresa va en serio.",
       "valueTitle": "Por qué los profesionales eligen Dexee",
       "value1Title": "Roles reales en USD",
       "value1Body": "Cada vacante muestra el tipo de contrato y, en la mayoría de los casos, el rango salarial mensual en dólares.",
@@ -858,30 +881,32 @@
       "value2Body": "Las empresas ven tu perfil y tus insignias. Correo, teléfono y hoja de vida los libera Dexee solo cuando una empresa avanza.",
       "value3Title": "Empleo formal cuando lo quieras",
       "value3Body": "En los roles con Dexee como empleador legal tienes contrato laboral colombiano con prestaciones, pagado por Dexee.",
-      "assessmentsTitle": "Tres evaluaciones gratuitas",
-      "assessmentsIntro": "Los resultados se agregan a tu perfil como insignias de tamizaje de Dexee. No son certificaciones.",
+      "assessmentsTitle": "Cuatro pruebas gratuitas, obligatorias para aplicar",
+      "assessmentsIntro": "Todo candidato presenta las mismas cuatro antes de aplicar, para que las empresas comparen igual con igual. Los resultados se adjuntan a su perfil como insignias Dexee, valen 90 días y acompañan cada aplicación. No son certificaciones.",
       "assessWrittenTitle": "Inglés escrito",
       "assessWrittenBody": "40 preguntas de gramática, vocabulario y lectura más una tarea corta de escritura. 45 minutos. Nivel CEFR automático.",
       "assessOralTitle": "Inglés oral",
       "assessOralBody": "Cuatro respuestas grabadas de 60 a 90 segundos. Un revisor de Dexee valida el nivel, que aparece como verificado.",
       "assessWorkstyleTitle": "Perfil de estilo de trabajo",
-      "assessWorkstyleBody": "Cincuenta afirmaciones y diez situaciones de trabajo remoto. Recibes un informe completo y decides si las empresas ven un resumen.",
+      "assessWorkstyleBody": "Cincuenta afirmaciones y diez situaciones de trabajo remoto sobre el modelo público Big Five. Usted recibe un informe completo; las empresas ven descriptores por banda, nunca puntajes.",
+      "assessDiscTitle": "Perfil de trabajo DISC",
+      "assessDiscBody": "Veintiocho afirmaciones sobre el modelo de cuatro factores de conducta laboral. Su estilo principal y los entornos que le sientan. Contexto para una conversación, nunca un filtro.",
       "assessmentsReceive": "Qué recibes",
       "assessmentsReceive1": "Un nivel CEFR de inglés escrito y oral, con retroalimentación.",
-      "assessmentsReceive2": "Un informe de estilo de trabajo con tus fortalezas para el trabajo remoto.",
-      "assessmentsReceive3": "Insignias en tu perfil en las que las empresas pueden confiar.",
+      "assessmentsReceive2": "Dos perfiles de trabajo, Big Five y DISC, con sus fortalezas para el trabajo remoto.",
+      "assessmentsReceive3": "Insignias en su perfil en las que las empresas pueden confiar, y un análisis de ajuste por cada rol al que aplique.",
       "howTitle": "Cómo funcionan las postulaciones",
-      "how1": "Completa tu perfil y sube tu hoja de vida en PDF.",
-      "how2": "Postúlate a un rol con un clic y una nota opcional.",
+      "how1": "Complete su perfil, cargue su hoja de vida en PDF y presente las cuatro pruebas gratuitas.",
+      "how2": "Aplique a un rol con un clic y una nota opcional. Dexee analiza su hoja de vida y sus resultados contra el rol.",
       "how3": "Sigue cada postulación por preselección, entrevista y oferta.",
       "how4": "Dexee libera tus datos de contacto cuando una empresa avanza.",
       "faqTitle": "Preguntas frecuentes",
       "faq1Q": "¿Dexee es gratis para candidatos?",
       "faq1A": "Sí. Las empresas pagan a Dexee. Tú nunca pagas por evaluaciones ni colocaciones.",
-      "faq2Q": "¿Cada cuánto puedo repetir una evaluación?",
-      "faq2A": "Una vez cada 90 días por evaluación. Tu mejor resultado vigente permanece en tu perfil.",
-      "faq3Q": "¿Puedo ocultar mi perfil de estilo de trabajo?",
-      "faq3A": "Sí. Está oculto para las empresas por defecto y puedes cambiarlo en cualquier momento en Configuración.",
+      "faq2Q": "¿Cuánto valen los resultados, y puedo repetir una prueba?",
+      "faq2A": "Los resultados valen 90 días; después vuelve a presentar la prueba para seguir aplicando. También puede repetir una tras su periodo de espera de 90 días para mejorarla. Las empresas ven su último resultado vigente.",
+      "faq3Q": "¿Puedo ocultar mis perfiles de trabajo?",
+      "faq3A": "Las empresas ven descriptores por banda de sus perfiles Big Five y DISC por defecto, porque alimentan el análisis de ajuste. Puede ocultar cualquiera de los dos en Configuración cuando quiera; el análisis de ajuste sigue corriendo sobre su aplicación completa.",
       "faq4Q": "¿Qué datos recopilan?",
       "faq4A": "Solo lo que necesita un proceso de selección: experiencia profesional, habilidades, datos de contacto y resultados de evaluaciones. Nunca fotos, edad u otras características protegidas.",
       "ctaTitle": "Crea tu perfil",

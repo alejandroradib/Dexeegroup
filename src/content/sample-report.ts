@@ -16,7 +16,7 @@ import type { Factor } from "@/lib/assessments/workstyle";
 
 export type SampleCheck = {
   /** Message key suffix under `marketing.sampleReport.checks.*`. */
-  id: "identity" | "writtenEnglish" | "spokenEnglish" | "roleSkills";
+  id: "identity" | "writtenEnglish" | "spokenEnglish" | "workProfile";
   /** Headline result, already formatted. Levels render as a CEFR badge. */
   result: string;
   /** Score out of `outOf`, when the check produces one. */
@@ -41,7 +41,7 @@ export const SAMPLE_CHECKS: readonly SampleCheck[] = [
   { id: "identity", result: "verified", decidedBy: "reviewer" },
   { id: "writtenEnglish", result: "B2", score: 42, outOf: 50, decidedBy: "system" },
   { id: "spokenEnglish", result: "B2", score: 15.5, outOf: 20, decidedBy: "reviewer" },
-  { id: "roleSkills", result: "strong", score: 78, outOf: 100, decidedBy: "system" },
+  { id: "workProfile", result: "shared", decidedBy: "system" },
 ] as const;
 
 /** The four dimensions the oral rubric scores, each out of five. */
@@ -77,3 +77,12 @@ export const SAMPLE_EXCLUDED_FIELDS = [
   "religion",
   "politicalViews",
 ] as const;
+
+/**
+ * The fit analysis block. Score and evidence dimensions only; the prose lives in
+ * `marketing.sampleReport.fit*` so both languages read naturally.
+ */
+export const SAMPLE_FIT = {
+  score: 82,
+  evidence: { experience_match: 4, skills_match: 4, english_match: 5, seniority_match: 3 },
+} as const;

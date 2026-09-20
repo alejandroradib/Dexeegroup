@@ -38,7 +38,14 @@ export const PRICING: readonly PricedProduct[] = [
     amountUsd: 3500,
     unit: "oneTime",
     depositUsd: 500,
-    includes: ["sourcing", "verification", "shortlist", "guarantee", "noSalaryPercentage"],
+    includes: [
+      "sourcing",
+      "verification",
+      "rankedShortlist",
+      "shortlist",
+      "guarantee",
+      "noSalaryPercentage",
+    ],
     provisional: true,
     marketAnchor:
       "HireLATAM publishes USD 3,500 split USD 500 deposit and USD 3,000 on placement, with a 90-day replacement guarantee.",
@@ -66,7 +73,7 @@ export const PRICING: readonly PricedProduct[] = [
     id: "verified",
     amountUsd: 149,
     unit: "perCandidate",
-    includes: ["identity", "spokenEnglish", "writtenEnglish", "roleSkills", "report"],
+    includes: ["identity", "spokenEnglish", "writtenEnglish", "workProfile", "report"],
     provisional: true,
     marketAnchor:
       "US background checks run USD 30 to 150; standardized English tests run USD 70 (Duolingo) to USD 195-325 (TOEFL, IELTS).",

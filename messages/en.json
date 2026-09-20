@@ -401,7 +401,7 @@
       "guarantee": "Replacement guarantee",
       "guaranteeDescription": "The replacement window, the exclusions and how to claim, written so a buyer's counsel can read them before a call.",
       "howWeVerify": "How we verify",
-      "howWeVerifyDescription": "Identity, spoken English graded by a human reviewer against CEFR, written English and role skills. Four checks before a candidate reaches your shortlist.",
+      "howWeVerifyDescription": "Identity, spoken English graded by a human reviewer against CEFR, written English, two work profiles and a resume-based fit analysis. Five checks before a candidate reaches your shortlist.",
       "sampleReport": "Sample verification report",
       "sampleReportDescription": "What a Dexee Verified report contains, on one page, with no account needed.",
       "compare": "Comparisons",
@@ -471,7 +471,7 @@
       "value1Title": "Same hours, same page",
       "value1Body": "Colombia runs on US Central and Eastern time all year. English C1 minimum in client-facing roles.",
       "value2Title": "Skilled people, not just seats",
-      "value2Body": "Senior professionals in finance, engineering, support and operations, selected against your profile.",
+      "value2Body": "Senior professionals in finance, engineering, support and operations, selected against your profile and ranked by fit before you open the pipeline.",
       "value3Title": "Guarantees you can sign",
       "value3Body": "Replacement at no cost, contracted SLAs, audits and KPI reporting, confidentiality and compliance.",
       "value4Title": "Lower cost, no hidden fees",
@@ -480,7 +480,7 @@
       "how1Title": "Diagnose",
       "how1Body": "We map the role, define the profile and agree the terms.",
       "how2Title": "Match",
-      "how2Body": "A shortlist of vetted candidates with verified English levels and work-style profiles.",
+      "how2Body": "Every applicant arrives with four valid assessments and a resume. Dexee analyses each one against your brief and ranks them: a top 3 and a top 5 to interview first.",
       "how3Title": "Onboard",
       "how3Body": "Contracts, equipment, access and a 30-day integration plan.",
       "how4Title": "Run",
@@ -571,7 +571,8 @@
             "verification": "Dexee Verified report on every shortlisted candidate, at no extra cost",
             "shortlist": "First shortlist within ten business days of an approved role brief",
             "guarantee": "90-day replacement guarantee, written into the contract",
-            "noSalaryPercentage": "A flat fee. It does not rise because the salary does"
+            "noSalaryPercentage": "A flat fee. It does not rise because the salary does",
+            "rankedShortlist": "Every applicant analysed against your brief; a ranked top 3 and top 5 to interview first"
           }
         },
         "eor": {
@@ -603,7 +604,7 @@
             "identity": "Government ID checked against a live session with the candidate",
             "spokenEnglish": "Spoken English graded against CEFR by a human reviewer",
             "writtenEnglish": "Written English assessment, scored server-side",
-            "roleSkills": "Role-specific skills assessment with the answer key held by Dexee",
+            "workProfile": "Big Five and DISC work profiles, shared as descriptors",
             "report": "A single report you can forward to your hiring manager"
           }
         }
@@ -690,7 +691,7 @@
     },
     "verify": {
       "title": "How we verify",
-      "subtitle": "Four checks before a candidate reaches your shortlist, and a person, not a model, assigns the English level.",
+      "subtitle": "Five checks before a candidate reaches your shortlist, and a person, not a model, assigns the English level.",
       "problemTitle": "The problem this solves",
       "problemBody": "Remote hiring across borders has an impersonation problem. It is documented, and it is the reason Dexee verifies before presenting, not after an offer.",
       "evidenceSourceLabel": "Source",
@@ -721,11 +722,17 @@
           "produces": "A CEFR level and the raw score",
           "decidedBy": "Server-side scoring, reviewed when the two parts disagree"
         },
-        "roleSkills": {
-          "title": "Role skills",
-          "body": "A role-specific assessment built for the role family the candidate applies in. Situational items drawn from the work itself, not trivia.",
-          "produces": "A score out of one hundred against the role family",
-          "decidedBy": "Server-side scoring against a key held by Dexee"
+        "workProfile": {
+          "title": "Work profiles",
+          "body": "Two short instruments on public models: the Big Five with ten remote-work situations, and a four-factor DISC-style profile. Both describe how the person prefers to work.",
+          "produces": "Band descriptors per factor and a primary style",
+          "decidedBy": "Deterministic scoring. Never used to rank or reject"
+        },
+        "fit": {
+          "title": "Fit against the role",
+          "body": "The candidate's resume is read with contact data and protected attributes removed, then compared with the role brief, the profile and the valid results. Each applicant gets a score, a summary, strengths and gaps.",
+          "produces": "A ranked shortlist for the company: top 3 and top 5",
+          "decidedBy": "A model, as a recommendation. The company decides whom to interview"
         }
       },
       "humanTitle": "What a model on its own cannot do",
@@ -760,11 +767,12 @@
         "identity": "Identity",
         "writtenEnglish": "Written English",
         "spokenEnglish": "Spoken English",
-        "roleSkills": "Role skills"
+        "workProfile": "Work profiles"
       },
       "results": {
         "verified": "Verified",
-        "strong": "Strong"
+        "strong": "Strong",
+        "shared": "Shared"
       },
       "decidedBy": {
         "reviewer": "Dexee reviewer",
@@ -801,7 +809,22 @@
       "ctaTitle": "Want one of these for a role you are hiring?",
       "ctaBody": "Post the role and the first shortlist arrives with a report for every candidate on it.",
       "ctaPost": "Post a role",
-      "ctaPricing": "See pricing"
+      "ctaPricing": "See pricing",
+      "fitTitle": "Fit against the role",
+      "fitBody": "Computed when the candidate applied. Contact data and protected attributes were removed from the resume before analysis. This is a recommendation for the interview order, not a decision.",
+      "fitScoreLabel": "Fit score",
+      "fitSummary": "Five years in inbound support for US healthcare clients, three of them leading a small team. Written and spoken English at the level the role requires. The main gap is the ticketing platform named in the brief, which the candidate has not used.",
+      "fitStrengths": {
+        "1": "Led a four-person support team with published SLAs",
+        "2": "Verified B2 in both written and spoken English",
+        "3": "Experience with US healthcare clients and HIPAA-adjacent processes"
+      },
+      "fitGaps": {
+        "1": "No hands-on experience with the ticketing platform in the brief",
+        "2": "Team lead experience is recent, under two years"
+      },
+      "strengthsLabel": "Strengths",
+      "gapsLabel": "Gaps to probe"
     },
     "lead": {
       "title": "Tell us what you need to fill",
@@ -850,7 +873,7 @@
     },
     "talent": {
       "heroTitle": "Remote roles with US companies, from Colombia",
-      "heroSubtitle": "Build your profile once, take three free assessments and apply. Dexee protects your contact details until a company is serious.",
+      "heroSubtitle": "Build your profile once, take four free assessments, upload your resume and apply. Dexee protects your contact details until a company is serious.",
       "valueTitle": "Why professionals choose Dexee",
       "value1Title": "Real roles in USD",
       "value1Body": "Every vacancy shows the contract type and, in most cases, the monthly salary range in US dollars.",
@@ -858,30 +881,32 @@
       "value2Body": "Companies see your profile and badges. Email, phone and resume are released by Dexee only when a company moves forward.",
       "value3Title": "Formal employment when you want it",
       "value3Body": "For Dexee as employer of record roles you get a Colombian employment contract with benefits, paid by Dexee.",
-      "assessmentsTitle": "Three free assessments",
-      "assessmentsIntro": "Results attach to your profile as Dexee screening badges. They are not certifications.",
+      "assessmentsTitle": "Four free assessments, required to apply",
+      "assessmentsIntro": "Every candidate takes the same four before applying, so companies compare like with like. Results attach to your profile as Dexee screening badges, stay valid for 90 days, and travel with every application. They are not certifications.",
       "assessWrittenTitle": "English written",
       "assessWrittenBody": "40 questions on grammar, vocabulary and reading plus one short writing task. 45 minutes. Automatic CEFR level.",
       "assessOralTitle": "English oral",
       "assessOralBody": "Four recorded answers of 60 to 90 seconds. A Dexee reviewer validates the level, which then appears as verified.",
       "assessWorkstyleTitle": "Work-style profile",
-      "assessWorkstyleBody": "Fifty statements and ten remote-work situations. You receive a full report and decide whether companies see a summary.",
+      "assessWorkstyleBody": "Fifty statements and ten remote-work situations on the public Big Five model. You receive a full report; companies see band descriptors, never scores.",
+      "assessDiscTitle": "DISC work profile",
+      "assessDiscBody": "Twenty-eight statements on the four-factor model of workplace behaviour. Your primary style and the environments that suit it. Context for a conversation, never a filter.",
       "assessmentsReceive": "What you receive",
       "assessmentsReceive1": "A CEFR level for written and oral English, with feedback.",
-      "assessmentsReceive2": "A work-style report with your strengths for remote work.",
-      "assessmentsReceive3": "Badges on your profile that companies can trust.",
+      "assessmentsReceive2": "Two work profiles, Big Five and DISC, with your strengths for remote work.",
+      "assessmentsReceive3": "Badges on your profile that companies can trust, and a fit analysis for every role you apply to.",
       "howTitle": "How applications work",
-      "how1": "Complete your profile and upload a PDF resume.",
-      "how2": "Apply to a role with one click and an optional note.",
+      "how1": "Complete your profile, upload a PDF resume and take the four free assessments.",
+      "how2": "Apply to a role with one click and an optional note. Dexee analyses your resume and results against the role.",
       "how3": "Track each application through screening, interview and offer.",
       "how4": "Dexee releases your contact details when a company moves forward.",
       "faqTitle": "Frequently asked questions",
       "faq1Q": "Is Dexee free for candidates?",
       "faq1A": "Yes. Companies pay Dexee. You never pay for assessments or placements.",
-      "faq2Q": "How often can I retake an assessment?",
-      "faq2A": "Once every 90 days per assessment. Your best current result stays on your profile.",
-      "faq3Q": "Can I hide my work-style profile?",
-      "faq3A": "Yes. It is hidden from companies by default and you can change that at any time in Settings.",
+      "faq2Q": "How long are results valid, and can I retake an assessment?",
+      "faq2A": "Results are valid for 90 days; after that you take the assessment again to keep applying. You can also retake one after its 90-day cooldown to improve it. Your latest valid result is the one companies see.",
+      "faq3Q": "Can I hide my work profiles?",
+      "faq3A": "Companies see band descriptors of your Big Five and DISC profiles by default, because they feed the fit analysis. You can hide either at any time in Settings; the fit analysis still runs on your full application.",
       "faq4Q": "What data do you collect?",
       "faq4A": "Only what a hiring process needs: professional experience, skills, contact details and assessment results. Never photos, age or other protected characteristics.",
       "ctaTitle": "Create your profile",

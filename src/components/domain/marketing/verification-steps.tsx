@@ -1,18 +1,19 @@
-import { FingerprintIcon, MicIcon, PenLineIcon, TargetIcon } from "lucide-react";
+import { FileSearchIcon, FingerprintIcon, MicIcon, PenLineIcon, ShapesIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import type { LucideIcon } from "lucide-react";
 
-/** The four checks behind a Dexee Verified report, in the order they run. */
+/** The checks behind a Dexee Verified report and the fit analysis, in the order they run. */
 const CHECKS = [
   { id: "identity", icon: FingerprintIcon },
   { id: "spokenEnglish", icon: MicIcon },
   { id: "writtenEnglish", icon: PenLineIcon },
-  { id: "roleSkills", icon: TargetIcon },
+  { id: "workProfile", icon: ShapesIcon },
+  { id: "fit", icon: FileSearchIcon },
 ] as const satisfies readonly { id: string; icon: LucideIcon }[];
 
 /**
- * Renders the four checks with what each one produces and who decides it. The "decided by"
+ * Renders the five checks with what each one produces and who decides it. The "decided by"
  * line is the point of the section: on spoken English a person assigns the final level,
  * and the model only pre-scores.
  */

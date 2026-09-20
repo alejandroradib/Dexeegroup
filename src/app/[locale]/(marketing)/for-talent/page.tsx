@@ -1,10 +1,11 @@
 import {
+  FileCheckIcon,
   LanguagesIcon,
   LockIcon,
   MicIcon,
+  ShapesIcon,
   SparklesIcon,
   WalletIcon,
-  FileCheckIcon,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
@@ -76,7 +77,7 @@ export default async function ForTalentPage({ params }: PageProps<"/[locale]/for
       </Section>
       <Section tone="mist" id="assessments">
         <SectionTitle title={t("assessmentsTitle")} subtitle={t("assessmentsIntro")} />
-        <div className="grid gap-6 sm:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
           <FeatureCard
             icon={LanguagesIcon}
             title={t("assessWrittenTitle")}
@@ -88,6 +89,7 @@ export default async function ForTalentPage({ params }: PageProps<"/[locale]/for
             title={t("assessWorkstyleTitle")}
             body={t("assessWorkstyleBody")}
           />
+          <FeatureCard icon={ShapesIcon} title={t("assessDiscTitle")} body={t("assessDiscBody")} />
         </div>
         <div className="border-border mt-10 rounded-[12px] border bg-white p-6">
           <h3 className="text-lg">{t("assessmentsReceive")}</h3>

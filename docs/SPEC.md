@@ -101,7 +101,7 @@ Postgres, schema `public`. `id` columns are `uuid default gen_random_uuid()`. `c
 - `note_visibility`: company, dexee_only
 - `member_role`: owner, member
 - `placement_status`: active, ended
-- `assessment_type`: english_written, english_oral, psychometric
+- `assessment_type`: english_written, english_oral, psychometric, disc (added in Phase 10, see section 17)
 - `question_type`: mcq, writing, audio, likert, situational
 - `attempt_status`: in_progress, submitted, processing, ai_scored, pending_validation, validated, expired, failed
 
@@ -275,6 +275,12 @@ All banks are original content authored during the build (Phase 6) and stored in
 - Report generated deterministically from templates (no LLM): per factor a neutral descriptor for its band from `src/lib/assessments/workstyle-copy.{en,es}.ts` (working preferences, environments where the person tends to perform well), SJT summary, three strengths derived from the two highest factors and SJT ≥ 7. No time limit; attempt expires after 24 hours.
 - Candidate sees full report with scales. Companies see band descriptors only when `visible_to_companies` is on (toggle in candidate settings and on the result page). Admins see everything.
 
+### 11.3a DISC work profile (Phase 10)
+
+- Instrument: 28 original Likert items (1–5) on the four-factor model of workplace behaviour (dominance, influence, steadiness, conscientiousness), seven per style, two reverse-keyed, in `supabase/seed/disc.json`. Generic "DISC"; never presented as a certified DiSC(R) product.
+- Scoring (`src/lib/assessments/disc.ts`, no LLM): style raw = sum with reversed items as `6 − value`, range 7–35, scaled `(raw − 7) / 28 × 100`, bands as in 11.3; unanswered items count as the midpoint. Primary style = highest scaled; secondary = second highest when within 15 points, else none. Report from templates in `disc-copy.{en,es}.ts` with a headline, one descriptor per style and a fixed disclaimer.
+- Visibility and lifecycle as in 11.3: candidate sees scales, companies see band descriptors when shared, no time limit, attempt expires after 24 hours. Shipped inactive; activation procedure in `docs/RUNBOOK.md`.
+
 ### 11.4 Integrity and lifecycle
 
 - Server-side expiry; one `in_progress` attempt per assessment; cooldown enforced by trigger and surfaced as "available again on".
@@ -334,3 +340,16 @@ Environment variables: `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT
 - Pricing is not shown; "Talk to us" until Dexee decides.
 - Assessment thresholds are initial values to calibrate with real data.
 - Dexee will operate `dexee_eor` placements; if not, remove the option from the enum labels shown in the UI (keep the enum value).
+
+## 17. Phase 10 amendment — mandatory assessments, validity and fit analysis
+
+Requested by Dexee on 2026-09-20 and built in Phase 10. Where this section and the sections above disagree, this section wins.
+
+- **Four free assessments, all required to apply.** `assessments.required_to_apply bool` (default true for the four seeded rows). A candidate may register, complete the profile and browse jobs without them; sending an application requires a valid result for every active required assessment plus a resume on file. The candidate assessments hub (10.3) shows four cards, not three.
+- **Validity.** `assessments.validity_days int` (1–90, default 90). `assessment_attempts.valid_until timestamptz` is set by trigger `attempts_set_validity` to `validated_at + validity_days` when an attempt becomes `validated`, and is null otherwise. A result is valid while `valid_until > now()`. Expired results stay visible to the candidate as history and count for nothing else. The 90-day cooldown in 11.4 is unchanged.
+- **Apply gate.** `candidate_apply_requirements(candidate_id)` returns one row per requirement (`english_written`, `english_oral`, `psychometric`, `disc`, `resume`) with `satisfied` and `valid_until`; callable only by the candidate, an admin or the service role. Trigger `applications_before_insert` raises `requirements_missing:<comma list>` for `source = 'candidate'` inserts by a non-admin user. `applyToJob` checks the function first and returns the list to the UI, which links each pending item to the assessment or the resume step.
+- **Valid results travel with the application.** `candidate_valid_results(candidate_id)` returns the latest valid attempt per type (type, level, score, `valid_until`, and `bands` for psychometric and disc only when `visible_to_companies`), gated by self, admin or `company_can_view_candidate`. Pipeline cards and the applicant drawer render from it. `visible_to_companies` defaults to true on first validation of psychometric and disc; the candidate can turn either off in Settings.
+- **Fit analysis.** Table `application_fit` (pk `application_id`, status pending/ready/failed/skipped, score 0–100, summary, strengths[], gaps[], evidence jsonb, model, prompt_version, inputs_hash, attempts, last_error, computed_at). RLS: admins all; a company reads rows for applications to its jobs; candidates never read it; anon revoked. Computed server-side after each application with `after()` and retried by `/api/cron/process-attempts` (max 3 attempts). Inputs: job fields, candidate profile, valid results and the resume text extracted with `unpdf` and passed through `src/lib/resume/redact.ts`, which removes contact data and any line mentioning protected attributes before the model sees it. Prompt `candidate-fit.v1` in `src/lib/ai/prompts/candidate-fit.ts`; response validated with zod; work profiles are context and may not lower a score. Without `ANTHROPIC_API_KEY` rows are `skipped` with `last_error = ai_unavailable`.
+- **Company report.** The pipeline page shows a recommended panel: applicants ranked by fit score (ties by earlier application), top 3 and top 5 tiers, pending and skipped states, and a refresh action limited to five applications per call. The panel informs interviews; it never changes an application's stage or hides an applicant.
+- **Marketing.** `/for-talent`, `/how-we-verify`, `/sample-report`, `/pricing` describe four assessments, 90-day validity, the apply requirement and the fit report. The former "role skills" check, which never existed, is removed (see `docs/CLAIMS.md`).
+- **Unchanged.** Rules 1–9 of CLAUDE.md; answer keys server-side; contact release; the pricing and guarantee content of Phase 9.

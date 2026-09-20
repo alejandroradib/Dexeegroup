@@ -107,12 +107,14 @@ does not limit its liability below the placement fee paid.
 
 ## Verification log
 
-| Date       | Claim                      | Action                                | By                |
-| ---------- | -------------------------- | ------------------------------------- | ----------------- |
-| 2026-09-20 | Three home-page metrics    | Removed, unsupported                  | Claude, Phase 9.0 |
-| 2026-09-20 | Two anonymous testimonials | Removed, fabricated                   | Claude, Phase 9.0 |
-| 2026-09-20 | Three fraud statistics     | Added with publisher, date and link   | Claude, Phase 9.0 |
-| 2026-09-20 | Four prices                | Added as provisional, market-anchored | Claude, Phase 9.1 |
+| Date       | Claim                      | Action                                                             | By                 |
+| ---------- | -------------------------- | ------------------------------------------------------------------ | ------------------ |
+| 2026-09-20 | Three home-page metrics    | Removed, unsupported                                               | Claude, Phase 9.0  |
+| 2026-09-20 | Two anonymous testimonials | Removed, fabricated                                                | Claude, Phase 9.0  |
+| 2026-09-20 | Three fraud statistics     | Added with publisher, date and link                                | Claude, Phase 9.0  |
+| 2026-09-20 | Four prices                | Added as provisional, market-anchored                              | Claude, Phase 9.1  |
+| 2026-09-20 | "Role skills" assessment   | Removed, never existed; replaced by work profiles and fit analysis | Claude, Phase 10.5 |
+| 2026-09-20 | Four assessments, 90 days  | Added; matches `assessments` seed and `validity_days`              | Claude, Phase 10.5 |
 
 ---
 

@@ -9,6 +9,7 @@ import {
   SAMPLE_CANDIDATE,
   SAMPLE_CHECKS,
   SAMPLE_EXCLUDED_FIELDS,
+  SAMPLE_FIT,
   SAMPLE_ORAL_DECISION,
   SAMPLE_ORAL_RUBRIC,
   SAMPLE_WORKSTYLE,
@@ -103,8 +104,8 @@ export default async function SampleReportPage({ params }: PageProps<"/[locale]/
                       {t(`checks.${check.id}` as "checks.identity")}
                     </th>
                     <td className="py-3">
-                      {check.result === "verified" || check.result === "strong" ? (
-                        <Badge variant="success">
+                      {check.result === "verified" || check.result === "shared" ? (
+                        <Badge variant={check.result === "verified" ? "success" : "accent"}>
                           {t(`results.${check.result}` as "results.verified")}
                         </Badge>
                       ) : (
@@ -189,6 +190,34 @@ export default async function SampleReportPage({ params }: PageProps<"/[locale]/
                 </div>
               ))}
             </dl>
+
+            <h2 className="mt-10 text-xl">{t("fitTitle")}</h2>
+            <p className="text-muted-foreground mt-2 text-sm">{t("fitBody")}</p>
+            <div className="bg-mist mt-4 rounded-[12px] p-4">
+              <p className="text-muted-foreground text-xs">{t("fitScoreLabel")}</p>
+              <p className="font-heading text-navy mt-1 text-3xl font-extrabold">
+                {SAMPLE_FIT.score} / 100
+              </p>
+              <p className="mt-3 text-sm">{t("fitSummary")}</p>
+              <div className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
+                <div>
+                  <p className="text-muted-foreground text-xs font-medium">{t("strengthsLabel")}</p>
+                  <ul className="mt-1 list-disc pl-4">
+                    {(["1", "2", "3"] as const).map((k) => (
+                      <li key={k}>{t(`fitStrengths.${k}`)}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs font-medium">{t("gapsLabel")}</p>
+                  <ul className="mt-1 list-disc pl-4">
+                    {(["1", "2"] as const).map((k) => (
+                      <li key={k}>{t(`fitGaps.${k}`)}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
 
             <h2 className="mt-10 text-xl">{t("contactTitle")}</h2>
             <p className="mt-2 text-sm">{t("contactBody")}</p>

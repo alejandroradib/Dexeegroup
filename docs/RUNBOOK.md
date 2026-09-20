@@ -82,6 +82,45 @@ Supabase, pasando el contenido del archivo y su nombre lógico, y después confi
 consulta al catálogo que las columnas, los triggers y las vistas quedaron. Corra
 `npm run db:verify` antes, que es la verificación real del esquema y sí usa los archivos.
 
+## Activar DISC en producción
+
+La migración `20260922000002` crea la fila de `assessments` para `disc` con `is_active = false`,
+porque el banco de preguntas no viaja en la migración. Orden obligatorio:
+
+1. Generar el SQL del banco y quedarse solo con las sentencias de `disc`:
+   `npx tsx scripts/demo/load-banks.ts` imprime inserciones idempotentes para las cuatro
+   pruebas (coinciden por `options->>'bank_id'`, así que repetirlas no duplica). Ejecute las
+   28 inserciones cuyo `where a.type = 'disc'` con `execute_sql` del MCP de Supabase o con psql.
+2. Confirmar: `select count(*) from assessment_questions q join assessments a on a.id = q.assessment_id where a.type = 'disc' and q.is_active;` debe devolver 28.
+3. Activar: `update assessments set is_active = true where type = 'disc';`
+
+Activar antes de cargar el banco hace fallar `startAttempt` para todos los candidatos.
+Mientras `disc` esté inactiva, no cuenta como requisito para postular, aunque
+`required_to_apply` sea `true`; la función `candidate_apply_requirements` solo considera
+pruebas activas.
+
+## Vigencia de resultados
+
+`assessments.validity_days` (1–90, hoy 90 en las cuatro) fija cuántos días vale un resultado
+validado. El trigger sella `valid_until` al validar; cambiar la columna no afecta los intentos
+ya validados. Un candidato con un resultado vencido ve la prueba como pendiente en el hub y no
+puede postular hasta repetirla; el cooldown de 90 días coincide con la vigencia, así que nunca
+queda bloqueado por ambos a la vez. Registre cualquier cambio en `docs/DECISIONS.md`.
+
+## Análisis de ajuste
+
+- Requiere `ANTHROPIC_API_KEY` en Vercel. Sin ella cada postulación deja una fila `skipped`
+  con `last_error = ai_unavailable` y el panel de recomendados lo indica. Al configurar la
+  clave, el botón "Actualizar" del panel recalcula hasta cinco postulaciones por vacante, y
+  el cron `process-attempts` toma el resto (diez por corrida mientras el plan sea Hobby).
+- `select status, count(*) from application_fit group by 1;` da la foto del backlog.
+  Filas `failed` con `attempts >= 3` no se reintentan solas; revise `last_error` y, si
+  procede, fuerce con `computeApplicationFit(id, { force: true })` desde un script. Una hoja
+  de vida sin capa de texto (PDF escaneado) no falla la fila: el modelo recibe la nota
+  `resume_unreadable` y calcula el ajuste con el perfil y los resultados.
+- El texto de la hoja de vida se anonimiza antes de salir hacia Anthropic
+  (`src/lib/resume/redact.ts`). No añada campos al prompt sin pasar por esa función.
+
 ## Lead queue
 
 Inbound briefs land in `contact_requests` with `request_type = 'hire'` and `status = 'new'`.
