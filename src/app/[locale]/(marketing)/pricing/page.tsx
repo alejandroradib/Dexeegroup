@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { GUARANTEE, hasProvisionalPricing } from "@/content/pricing";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 import type { Metadata } from "next";
 
@@ -20,10 +21,7 @@ export async function generateMetadata({
   return {
     title: t("pricing"),
     description: t("pricingDescription"),
-    alternates: {
-      canonical: `/${locale}/pricing`,
-      languages: { en: "/en/pricing", es: "/es/pricing" },
-    },
+    alternates: buildAlternates(locale, "/pricing"),
   };
 }
 

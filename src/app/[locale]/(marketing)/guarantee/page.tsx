@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { GUARANTEE } from "@/content/pricing";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 import type { Metadata } from "next";
 
@@ -17,10 +18,7 @@ export async function generateMetadata({
   return {
     title: t("guarantee"),
     description: t("guaranteeDescription"),
-    alternates: {
-      canonical: `/${locale}/guarantee`,
-      languages: { en: "/en/guarantee", es: "/es/guarantee" },
-    },
+    alternates: buildAlternates(locale, "/guarantee"),
   };
 }
 

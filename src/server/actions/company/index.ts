@@ -10,7 +10,9 @@ import {
   jobDraftUser,
 } from "@/lib/ai/prompts/job-draft";
 import { getSessionUser } from "@/lib/auth/session";
+import { publicEnv } from "@/lib/env";
 import { logger } from "@/lib/logger";
+import { notifyJobIndexed } from "@/lib/seo/indexing-api";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -220,11 +222,28 @@ export async function submitJob(
     logger.warn({ err: error.message, jobId }, "job_submit_failed");
     return err(error.message.includes("company_not_verified") ? "companyNotVerified" : ERR.generic);
   }
-  if (status === "published")
+  if (status === "published") {
     await dispatchEvent({ type: "job_status", jobId, status: "published" });
+    await pingIndexing(jobId, "URL_UPDATED");
+  }
   revalidatePath("/[locale]/company/jobs", "page");
   revalidatePath("/[locale]/jobs", "page");
   return ok({ status });
+}
+
+/**
+ * Tells Google the job URL changed. Feature-flagged inside `notifyJobIndexed`: without
+ * `INDEXING_API_CREDENTIALS` it is a no-op. Never fails the action that called it.
+ */
+async function pingIndexing(jobId: string, action: "URL_UPDATED" | "URL_DELETED") {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.from("jobs").select("slug").eq("id", jobId).maybeSingle();
+    if (!data?.slug) return;
+    await notifyJobIndexed(publicEnv().NEXT_PUBLIC_SITE_URL, data.slug, action);
+  } catch (error) {
+    logger.warn({ err: (error as Error).message, jobId }, "indexing_ping_failed");
+  }
 }
 
 export async function changeJobStatus(
@@ -253,7 +272,9 @@ export async function changeJobStatus(
     .eq("id", jobId);
   if (error)
     return err(error.message.includes("company_not_verified") ? "companyNotVerified" : ERR.generic);
+  await pingIndexing(jobId, status === "published" ? "URL_UPDATED" : "URL_DELETED");
   revalidatePath("/[locale]/company/jobs", "page");
+  revalidatePath("/[locale]/jobs", "page");
   return ok(null);
 }
 

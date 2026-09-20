@@ -1512,6 +1512,19 @@ export type Database = {
         }
         Relationships: []
       }
+      public_jobs_closed: {
+        Row: {
+          id: string | null
+          title: string | null
+          slug: string | null
+          role_family: Database["public"]["Enums"]["role_family"] | null
+          seniority: Database["public"]["Enums"]["seniority"] | null
+          company_name: string | null
+          published_at: string | null
+          closed_at: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       application_company_id: {

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { FOUNDING_CLIENT_PROGRAM } from "@/content/proof";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 import type { Metadata } from "next";
 
@@ -22,10 +23,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]">): Prom
   return {
     title: t("home"),
     description: t("defaultDescription"),
-    alternates: {
-      canonical: `/${locale}`,
-      languages: { en: "/en", es: "/es", "x-default": "/en" },
-    },
+    alternates: buildAlternates(locale),
   };
 }
 

@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { EVIDENCE } from "@/content/proof";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { buildAlternates } from "@/lib/seo/alternates";
 import { CONTRACT_TYPES } from "@/lib/validation/enums";
 
 import type { Metadata } from "next";
@@ -22,10 +23,7 @@ export async function generateMetadata({
   return {
     title: t("forCompanies"),
     description: t("forCompaniesDescription"),
-    alternates: {
-      canonical: `/${locale}/for-companies`,
-      languages: { en: "/en/for-companies", es: "/es/for-companies" },
-    },
+    alternates: buildAlternates(locale, "/for-companies"),
   };
 }
 

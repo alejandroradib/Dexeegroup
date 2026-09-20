@@ -24,6 +24,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 import type { Metadata } from "next";
 
@@ -35,10 +36,7 @@ export async function generateMetadata({
   return {
     title: t("forTalent"),
     description: t("forTalentDescription"),
-    alternates: {
-      canonical: `/${locale}/for-talent`,
-      languages: { en: "/en/for-talent", es: "/es/for-talent" },
-    },
+    alternates: buildAlternates(locale, "/for-talent"),
   };
 }
 

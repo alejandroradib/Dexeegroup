@@ -4,6 +4,7 @@ import { ContactForm } from "@/components/domain/marketing/contact-form";
 import { Button } from "@/components/ui/button";
 import { pageLocale } from "@/i18n/server";
 import { serverEnv } from "@/lib/env";
+import { buildAlternates } from "@/lib/seo/alternates";
 import { SITE } from "@/lib/site";
 
 import type { Metadata } from "next";
@@ -16,10 +17,7 @@ export async function generateMetadata({
   return {
     title: t("contact"),
     description: t("contactDescription"),
-    alternates: {
-      canonical: `/${locale}/contact`,
-      languages: { en: "/en/contact", es: "/es/contact" },
-    },
+    alternates: buildAlternates(locale, "/contact"),
   };
 }
 

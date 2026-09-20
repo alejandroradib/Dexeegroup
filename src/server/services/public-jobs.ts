@@ -6,6 +6,7 @@ import type { Database } from "@/types/database";
 import { err, ok, type Result } from "./result";
 
 export type PublicJob = Database["public"]["Views"]["public_jobs"]["Row"];
+export type ClosedPublicJob = Database["public"]["Views"]["public_jobs_closed"]["Row"];
 
 export async function listPublicJobs(
   filter: JobsFilter,
@@ -67,4 +68,35 @@ export async function listAllPublicJobSlugs(): Promise<
   return (data ?? []).filter((r): r is { slug: string; published_at: string | null } =>
     Boolean(r.slug),
   );
+}
+
+/**
+ * A vacancy that was published and is no longer open (PHASES-GTM 9.5). Backs the closed
+ * notice instead of a bare 404, so an inbound link lands on something useful. The view
+ * exposes only title, company and dates: a closed listing needs nothing more.
+ */
+export async function getClosedPublicJobBySlug(slug: string): Promise<ClosedPublicJob | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("public_jobs_closed")
+    .select("*")
+    .eq("slug", slug)
+    .maybeSingle();
+  return data ?? null;
+}
+
+/** Open roles in the same family, to offer someone who arrived at a closed one. */
+export async function listOpenJobsInFamily(
+  roleFamily: NonNullable<PublicJob["role_family"]> | null,
+  limit = 3,
+): Promise<PublicJob[]> {
+  const supabase = await createClient();
+  let query = supabase
+    .from("public_jobs")
+    .select("*")
+    .order("published_at", { ascending: false })
+    .limit(limit);
+  if (roleFamily) query = query.eq("role_family", roleFamily);
+  const { data } = await query;
+  return data ?? [];
 }

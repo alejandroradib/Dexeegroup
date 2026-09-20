@@ -7,6 +7,7 @@ import {
   SectionTitle,
 } from "@/components/domain/marketing/sections";
 import { pageLocale } from "@/i18n/server";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 import type { Metadata } from "next";
 
@@ -18,7 +19,7 @@ export async function generateMetadata({
   return {
     title: t("about"),
     description: t("aboutDescription"),
-    alternates: { canonical: `/${locale}/about`, languages: { en: "/en/about", es: "/es/about" } },
+    alternates: buildAlternates(locale, "/about"),
   };
 }
 

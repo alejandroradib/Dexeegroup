@@ -3,7 +3,9 @@
 import { revalidatePath } from "next/cache";
 
 import { getSessionUser } from "@/lib/auth/session";
+import { publicEnv } from "@/lib/env";
 import { logger } from "@/lib/logger";
+import { notifyJobIndexed } from "@/lib/seo/indexing-api";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -113,6 +115,14 @@ export async function approveJob(jobId: string): Promise<Result<null>> {
   const { error } = await supabase.from("jobs").update({ status: "published" }).eq("id", jobId);
   if (error) return err(ERR.generic);
   await dispatchEvent({ type: "job_status", jobId, status: "approved" });
+  const { data: approved } = await supabase
+    .from("jobs")
+    .select("slug")
+    .eq("id", jobId)
+    .maybeSingle();
+  if (approved?.slug) {
+    await notifyJobIndexed(publicEnv().NEXT_PUBLIC_SITE_URL, approved.slug, "URL_UPDATED");
+  }
   await logAdminActivity({
     actorUserId: admin.id,
     action: "job.approved",

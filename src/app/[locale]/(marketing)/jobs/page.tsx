@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { JobsBoard } from "@/components/domain/jobs/jobs-board";
 import { JobsBoardSkeleton } from "@/components/domain/jobs/jobs-board-skeleton";
 import { pageLocale } from "@/i18n/server";
+import { buildAlternates } from "@/lib/seo/alternates";
 import { parseJobsFilter } from "@/lib/validation/jobs-filter";
 
 import type { Metadata } from "next";
@@ -14,7 +15,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/jobs">):
   return {
     title: t("jobs"),
     description: t("jobsDescription"),
-    alternates: { canonical: `/${locale}/jobs`, languages: { en: "/en/jobs", es: "/es/jobs" } },
+    alternates: buildAlternates(locale, "/jobs"),
   };
 }
 

@@ -904,7 +904,14 @@
       "backToJobs": "All roles",
       "shareTitle": "Know someone for this role?",
       "similar": "Similar roles",
-      "contractExplainer": "What this contract means"
+      "contractExplainer": "What this contract means",
+      "closed": {
+        "badge": "Position closed",
+        "metaTitle": "{title} (closed)",
+        "body": "This role at {company} is no longer open. It stayed on this page so the link you followed still leads somewhere.",
+        "browseCta": "See open roles",
+        "openInFamily": "Open roles in the same field"
+      }
     },
     "about": {
       "heroTitle": "The nearshore talent and back-office partner for US growth companies",

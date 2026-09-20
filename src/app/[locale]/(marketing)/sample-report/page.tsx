@@ -14,6 +14,7 @@ import {
 } from "@/content/sample-report";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 import type { Metadata } from "next";
 
@@ -25,10 +26,7 @@ export async function generateMetadata({
   return {
     title: t("sampleReport"),
     description: t("sampleReportDescription"),
-    alternates: {
-      canonical: `/${locale}/sample-report`,
-      languages: { en: "/en/sample-report", es: "/es/sample-report" },
-    },
+    alternates: buildAlternates(locale, "/sample-report"),
   };
 }
 

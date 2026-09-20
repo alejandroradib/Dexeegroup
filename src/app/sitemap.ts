@@ -1,5 +1,6 @@
 import { locales } from "@/i18n/routing";
 import { publicEnv } from "@/lib/env";
+import { buildAbsoluteAlternates } from "@/lib/seo/alternates";
 import { listAllPublicJobSlugs } from "@/server/services/public-jobs";
 
 import type { MetadataRoute } from "next";
@@ -28,9 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: `${base}/${locale}${path}`,
         changeFrequency: path === "/jobs" ? "daily" : "monthly",
         priority: path === "" ? 1 : 0.7,
-        alternates: {
-          languages: Object.fromEntries(locales.map((l) => [l, `${base}/${l}${path}`])),
-        },
+        alternates: { languages: buildAbsoluteAlternates(base, path) },
       });
     }
   }
@@ -47,9 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: job.published_at ?? undefined,
         changeFrequency: "weekly",
         priority: 0.8,
-        alternates: {
-          languages: Object.fromEntries(locales.map((l) => [l, `${base}/${l}/jobs/${job.slug}`])),
-        },
+        alternates: { languages: buildAbsoluteAlternates(base, `/jobs/${job.slug}`) },
       });
     }
   }

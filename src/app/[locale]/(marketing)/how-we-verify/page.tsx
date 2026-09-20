@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { EVIDENCE } from "@/content/proof";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 import type { Metadata } from "next";
 
@@ -17,10 +18,7 @@ export async function generateMetadata({
   return {
     title: t("howWeVerify"),
     description: t("howWeVerifyDescription"),
-    alternates: {
-      canonical: `/${locale}/how-we-verify`,
-      languages: { en: "/en/how-we-verify", es: "/es/how-we-verify" },
-    },
+    alternates: buildAlternates(locale, "/how-we-verify"),
   };
 }
 

@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 
 import { LegalPage } from "@/components/domain/marketing/legal-page";
 import { pageLocale } from "@/i18n/server";
+import { buildAlternates } from "@/lib/seo/alternates";
 
 import type { Metadata } from "next";
 
@@ -12,10 +13,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "marketing.meta" });
   return {
     title: t("privacy"),
-    alternates: {
-      canonical: `/${locale}/privacy`,
-      languages: { en: "/en/privacy", es: "/es/privacy" },
-    },
+    alternates: buildAlternates(locale, "/privacy"),
   };
 }
 

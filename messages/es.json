@@ -904,7 +904,14 @@
       "backToJobs": "Todas las vacantes",
       "shareTitle": "¿Conoces a alguien para este rol?",
       "similar": "Vacantes similares",
-      "contractExplainer": "Qué significa este contrato"
+      "contractExplainer": "Qué significa este contrato",
+      "closed": {
+        "badge": "Vacante cerrada",
+        "metaTitle": "{title} (cerrada)",
+        "body": "Este rol en {company} ya no está abierto. La página se mantiene para que el enlace que usted siguió lleve a alguna parte.",
+        "browseCta": "Ver vacantes abiertas",
+        "openInFamily": "Vacantes abiertas en el mismo campo"
+      }
     },
     "about": {
       "heroTitle": "El socio de talento y back office nearshore para empresas en crecimiento en EE. UU.",

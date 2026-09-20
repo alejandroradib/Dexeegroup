@@ -87,3 +87,88 @@ describe("buildJobPostingJsonLd", () => {
     expect(ld.description).toContain("&lt;script&gt;");
   });
 });
+
+/**
+ * PHASES-GTM 9.5: the structure check Google's Rich Results Test runs. Asserted here over
+ * the shapes the seed produces, so a missing field fails the build rather than the test
+ * tool weeks later.
+ */
+function expectValidStructure(ld: ReturnType<typeof buildJobPostingJsonLd>) {
+  expect(ld["@context"]).toBe("https://schema.org");
+  expect(ld["@type"]).toBe("JobPosting");
+  expect(ld.title.trim()).not.toBe("");
+  expect(ld.description.trim()).not.toBe("");
+  expect(Date.parse(ld.datePosted)).not.toBeNaN();
+  expect(Date.parse(ld.validThrough ?? "")).not.toBeNaN();
+  // Google rejects a posting whose validThrough is not after datePosted.
+  expect(Date.parse(ld.validThrough ?? "")).toBeGreaterThan(Date.parse(ld.datePosted));
+  expect(ld.employmentType.length).toBeGreaterThan(0);
+  expect(ld.hiringOrganization.name.trim()).not.toBe("");
+  expect(ld.jobLocationType).toBe("TELECOMMUTE");
+  expect(ld.applicantLocationRequirements.name).toBe("Colombia");
+  expect(ld.identifier.value.trim()).not.toBe("");
+  expect(ld.url).toMatch(/^https:\/\/[^/]+\/(en|es)\/jobs\/.+/);
+  if (ld.baseSalary) {
+    expect(ld.baseSalary.currency).toBe("USD");
+    expect(ld.baseSalary.value.unitText).toBe("MONTH");
+    const { minValue, maxValue } = ld.baseSalary.value;
+    expect(minValue ?? maxValue).toBeDefined();
+    if (minValue !== undefined && maxValue !== undefined) {
+      expect(maxValue).toBeGreaterThanOrEqual(minValue);
+    }
+  }
+}
+
+describe("Rich Results structure check", () => {
+  const jobs: { label: string; job: PublicJob; locale: string }[] = [
+    { label: "salary shown, named company", job: base, locale: "en" },
+    {
+      label: "confidential company with the salary hidden",
+      job: {
+        ...base,
+        confidential_company: true,
+        company_name: "Confidential",
+        show_salary: false,
+        salary_min_usd: null,
+        salary_max_usd: null,
+      },
+      locale: "es",
+    },
+    {
+      label: "part-time contractor with a close date",
+      job: {
+        ...base,
+        employment_type: "part_time",
+        contract_type: "independent_contractor",
+        closes_at: "2026-12-31T00:00:00.000Z",
+      },
+      locale: "en",
+    },
+  ];
+
+  for (const { label, job, locale } of jobs) {
+    it(`passes for a job with ${label}`, () => {
+      expectValidStructure(
+        buildJobPostingJsonLd(job, { siteUrl: "https://dexeegroup.com", locale }),
+      );
+    });
+  }
+
+  it("omits baseSalary when show_salary is on but no bound is set", () => {
+    const ld = buildJobPostingJsonLd(
+      { ...base, show_salary: true, salary_min_usd: null, salary_max_usd: null },
+      { siteUrl: "https://dexeegroup.com", locale: "en" },
+    );
+    // An empty MonetaryAmount invalidates the whole posting, so it must be left out.
+    expect(ld.baseSalary).toBeUndefined();
+    expectValidStructure(ld);
+  });
+
+  it("still validates when the company never set a description", () => {
+    const ld = buildJobPostingJsonLd(
+      { ...base, description: null, responsibilities: null, requirements: null },
+      { siteUrl: "https://dexeegroup.com", locale: "en" },
+    );
+    expectValidStructure(ld);
+  });
+});
