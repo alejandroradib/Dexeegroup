@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 
 import { BookCallButton } from "@/components/domain/marketing/book-call-button";
 import { CostCalculator } from "@/components/domain/marketing/cost-calculator";
+import { LeadForm } from "@/components/domain/marketing/lead-form";
 import { PricingTable } from "@/components/domain/marketing/pricing-table";
 import { Section, SectionTitle } from "@/components/domain/marketing/sections";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ export async function generateMetadata({
 export default async function PricingPage({ params }: PageProps<"/[locale]/pricing">) {
   const locale = await pageLocale(params);
   const t = await getTranslations("marketing.pricing");
+  const tl = await getTranslations("marketing.lead");
 
   return (
     <>
@@ -72,6 +74,15 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/prici
       <Section tone="mist">
         <SectionTitle title={t("calculatorTitle")} subtitle={t("calculatorSubtitle")} />
         <CostCalculator />
+      </Section>
+
+      <Section tone="mist" id="brief">
+        <div className="mx-auto max-w-3xl">
+          <SectionTitle title={tl("title")} subtitle={tl("subtitle")} />
+          <div className="border-border rounded-[16px] border bg-white p-8">
+            <LeadForm />
+          </div>
+        </div>
       </Section>
 
       <Section>

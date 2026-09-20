@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 
 import { BookCallButton } from "@/components/domain/marketing/book-call-button";
 import { BuyerFaq } from "@/components/domain/marketing/buyer-faq";
+import { LeadForm } from "@/components/domain/marketing/lead-form";
 import { PricingSummary } from "@/components/domain/marketing/pricing-table";
 import { FeatureCard, Section, SectionTitle, Steps } from "@/components/domain/marketing/sections";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,7 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
   const t = await getTranslations("marketing.companies");
   const te = await getTranslations("enums");
   const tv = await getTranslations("marketing.verify");
+  const tl = await getTranslations("marketing.lead");
   const evidenceDate = new Intl.DateTimeFormat(locale === "es" ? "es-CO" : "en-US", {
     year: "numeric",
     month: "long",
@@ -141,13 +143,21 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
           <BuyerFaq />
         </div>
       </Section>
-      <Section>
-        <div className="bg-navy rounded-[16px] p-8 text-white sm:p-12">
-          <h2 className="text-2xl text-white sm:text-3xl">{t("ctaTitle")}</h2>
-          <p className="mt-3 max-w-xl text-white/80">{t("ctaBody")}</p>
-          <Button asChild variant="accent" size="lg" className="mt-8">
-            <Link href="/sign-up/company">{t("ctaTitle")}</Link>
-          </Button>
+      <Section id="brief" tone="mist">
+        <div className="mx-auto max-w-3xl">
+          <SectionTitle title={tl("title")} subtitle={tl("subtitle")} />
+          <div className="border-border rounded-[16px] border bg-white p-8">
+            <LeadForm />
+          </div>
+          <p className="text-muted-foreground mt-6 text-sm">
+            {t.rich("briefOrSignUp", {
+              link: (chunks) => (
+                <Link className="text-link underline" href="/sign-up/company">
+                  {chunks}
+                </Link>
+              ),
+            })}
+          </p>
         </div>
       </Section>
     </>

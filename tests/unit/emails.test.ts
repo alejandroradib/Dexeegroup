@@ -16,6 +16,7 @@ describe("email templates", () => {
       "recommendation",
       "assessment-result",
       "invite",
+      "lead-acknowledgement",
     ]) {
       expect(isTemplateName(template)).toBe(true);
       expect(EMAIL_COPY[template as keyof typeof EMAIL_COPY].en.subject).toBeTruthy();

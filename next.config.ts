@@ -44,6 +44,9 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   // Keep next dev from appending its agent-rules block to CLAUDE.md (the project file is curated by hand).
   agentRules: false,
+  // Dev only: without this, next dev blocks /_next/hmr over 127.0.0.1 and the client
+  // bundle never loads, so every form falls back to a native GET submit.
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
   reactStrictMode: true,
   poweredByHeader: false,
   images: {

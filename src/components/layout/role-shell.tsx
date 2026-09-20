@@ -34,6 +34,7 @@ const NAV: Record<UserRole, NavSpec[]> = {
     { href: "/admin/jobs", key: "jobs", icon: "jobs" },
     { href: "/admin/candidates", key: "candidates", icon: "users" },
     { href: "/admin/applications", key: "applications", icon: "file" },
+    { href: "/admin/leads", key: "leads", icon: "inbox" },
     { href: "/admin/placements", key: "placements", icon: "handshake" },
     { href: "/admin/assessments", key: "assessments", icon: "clipboard" },
     { href: "/admin/team", key: "team", icon: "shield" },

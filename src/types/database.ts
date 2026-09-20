@@ -812,10 +812,19 @@ export type Database = {
           email: string
           company: string | null
           request_type: string
-          message: string
+          message: string | null
           locale: Database["public"]["Enums"]["locale"]
           ip_hash: string | null
           created_at: string
+          role_to_fill: string | null
+          seniority: Database["public"]["Enums"]["seniority"] | null
+          budget_band: string | null
+          needed_by: string | null
+          status: Database["public"]["Enums"]["lead_status"]
+          answered_at: string | null
+          answered_by: string | null
+          company_id: string | null
+          updated_at: string
         }
         Insert: {
           id?: string
@@ -823,10 +832,19 @@ export type Database = {
           email: string
           company?: string | null
           request_type: string
-          message: string
+          message?: string | null
           locale?: Database["public"]["Enums"]["locale"]
           ip_hash?: string | null
           created_at?: string
+          role_to_fill?: string | null
+          seniority?: Database["public"]["Enums"]["seniority"] | null
+          budget_band?: string | null
+          needed_by?: string | null
+          status?: Database["public"]["Enums"]["lead_status"]
+          answered_at?: string | null
+          answered_by?: string | null
+          company_id?: string | null
+          updated_at?: string
         }
         Update: {
           id?: string
@@ -834,12 +852,36 @@ export type Database = {
           email?: string
           company?: string | null
           request_type?: string
-          message?: string
+          message?: string | null
           locale?: Database["public"]["Enums"]["locale"]
           ip_hash?: string | null
           created_at?: string
+          role_to_fill?: string | null
+          seniority?: Database["public"]["Enums"]["seniority"] | null
+          budget_band?: string | null
+          needed_by?: string | null
+          status?: Database["public"]["Enums"]["lead_status"]
+          answered_at?: string | null
+          answered_by?: string | null
+          company_id?: string | null
+          updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "contact_requests_answered_by_fkey"
+            columns: ["answered_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       data_requests: {
         Row: {
@@ -1547,6 +1589,7 @@ export type Database = {
       employment_type: "full_time" | "part_time"
       interview_status: "in_progress" | "completed" | "failed" | "expired"
       job_status: "draft" | "pending_review" | "changes_requested" | "published" | "paused" | "closed"
+      lead_status: "new" | "answered" | "converted" | "discarded"
       locale: "en" | "es"
       member_role: "owner" | "member"
       note_visibility: "company" | "dexee_only"

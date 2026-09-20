@@ -9,7 +9,8 @@ export type TemplateName =
   | "contact-released"
   | "recommendation"
   | "assessment-result"
-  | "invite";
+  | "invite"
+  | "lead-acknowledgement";
 
 type TemplateCopy = { subject: string; heading: string; body: string; cta: string };
 
@@ -124,6 +125,22 @@ export const EMAIL_COPY: Record<TemplateName, Record<EmailLocale, TemplateCopy>>
       heading: "Únase a {company} en Dexee",
       body: "Le invitaron a unirse a {company} en la Plataforma de Talento Dexee. Cree su contraseña para aceptar la invitación.",
       cta: "Aceptar invitación",
+    },
+  },
+  // Goes to an inbound lead, who has no Dexee account. The CTA points at the public
+  // pricing page rather than a dashboard they cannot reach.
+  "lead-acknowledgement": {
+    en: {
+      subject: "We have your request for {role}",
+      heading: "Your request reached Dexee",
+      body: "Thank you for the detail on {role} at {company}. A partner is reviewing it now and will write back within one business day with whether we can fill the role, in what timeframe and at what cost. If the answer is no, we will say so and tell you why. Meanwhile, our prices and our replacement guarantee are published in full.",
+      cta: "See pricing and guarantee",
+    },
+    es: {
+      subject: "Recibimos su solicitud para {role}",
+      heading: "Su solicitud llegó a Dexee",
+      body: "Gracias por el detalle sobre {role} en {company}. Un socio la está revisando y le escribirá dentro de un día hábil para decirle si podemos cubrir el rol, en qué plazo y a qué costo. Si la respuesta es que no, se lo diremos y le explicaremos por qué. Mientras tanto, nuestros precios y nuestra garantía de reemplazo están publicados completos.",
+      cta: "Ver precios y garantía",
     },
   },
 };

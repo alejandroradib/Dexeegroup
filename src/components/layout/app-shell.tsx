@@ -9,6 +9,7 @@ import {
   ClipboardCheckIcon,
   FileTextIcon,
   HandshakeIcon,
+  InboxIcon,
   LayoutDashboardIcon,
   LogOutIcon,
   MenuIcon,
@@ -59,6 +60,7 @@ const NAV_ICONS = {
   handshake: HandshakeIcon,
   shield: ShieldIcon,
   activity: ActivityIcon,
+  inbox: InboxIcon,
 } satisfies Record<string, LucideIcon>;
 
 export type NavIcon = keyof typeof NAV_ICONS;

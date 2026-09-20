@@ -797,6 +797,72 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
       { commit: false },
     ),
   );
+  // Leads (contact_requests) ----------------------------------------------------------------
+  await expectError(
+    "anon cannot read contact_requests",
+    anon,
+    "select * from public.contact_requests",
+  );
+  await check(
+    "candidate sees no contact_requests",
+    async () => (await count(laura, "select * from public.contact_requests")) === 0,
+  );
+  await check(
+    "company sees no contact_requests",
+    async () => (await count(harborOwner, "select * from public.contact_requests")) === 0,
+  );
+  await check("admin reads the lead queue", async () => {
+    await asUser(
+      db,
+      admin,
+      async (tx) => {
+        await tx.query(
+          `insert into public.contact_requests
+             (name, email, company, request_type, role_to_fill, seniority, budget_band, needed_by)
+           values ('Dana', 'dana@northstar.com', 'Northstar', 'hire', 'Support lead', 'senior', '2k_4k', 'one_month')`,
+        );
+      },
+      { commit: true },
+    );
+    return (
+      (await count(
+        admin,
+        "select * from public.contact_requests where status = 'new' and role_to_fill = 'Support lead'",
+      )) === 1
+    );
+  });
+  await expectError(
+    "a lead cannot carry a budget band the form does not offer",
+    admin,
+    `insert into public.contact_requests (name, email, request_type, budget_band)
+       values ('x', 'x@x.com', 'hire', 'negotiable')`,
+  );
+  await expectError(
+    "a lead cannot carry a delivery window the form does not offer",
+    admin,
+    `insert into public.contact_requests (name, email, request_type, needed_by)
+       values ('x', 'x@x.com', 'hire', 'someday')`,
+  );
+  await check("marking a lead answered stamps who answered and when", async () =>
+    asUser(
+      db,
+      admin,
+      async (tx) => {
+        await tx.query(
+          "update public.contact_requests set status = 'answered' where role_to_fill = 'Support lead'",
+        );
+        const stamped = await tx.query<{ n: number }>(
+          `select count(*)::int as n from public.contact_requests
+             where role_to_fill = 'Support lead' and status = 'answered'
+               and answered_at is not null and answered_by = $1`,
+          [SEED.admin],
+        );
+        return stamped.rows[0]?.n === 1;
+      },
+      { commit: false },
+    ),
+  );
+
   await check(
     "consent_flags default to empty object",
     async () =>

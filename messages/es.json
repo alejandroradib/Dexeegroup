@@ -159,6 +159,7 @@
       "jobs": "Vacantes",
       "candidates": "Candidatos",
       "applications": "Postulaciones",
+      "leads": "Leads",
       "placements": "Colocaciones",
       "assessments": "Evaluaciones",
       "team": "Equipo",
@@ -482,6 +483,7 @@
       "pricingSeeAll": "Ver precios completos",
       "pricingGuaranteeCta": "Leer la garantía",
       "verificationCta": "Cómo verificamos",
+      "briefOrSignUp": "¿Prefiere hacerlo usted mismo? <link>Cree una cuenta de empresa</link> y publique la vacante directamente.",
       "faqTitle": "Preguntas frecuentes",
       "faqSubtitle": "Las preguntas que hace un comprador antes de una primera llamada, respondidas sin llamada.",
       "faqMoreLabel": "Ver el detalle",
@@ -791,6 +793,36 @@
       "ctaBody": "Publique la vacante y la primera terna llega con un reporte por cada candidato.",
       "ctaPost": "Publicar una vacante",
       "ctaPricing": "Ver precios"
+    },
+    "lead": {
+      "title": "Cuéntenos qué necesita cubrir",
+      "subtitle": "Seis campos. Sin teléfono y sin llamada exploratoria antes de que usted sepa si podemos ayudar.",
+      "name": "Su nombre",
+      "email": "Correo corporativo",
+      "company": "Empresa",
+      "roleToFill": "Rol por cubrir",
+      "roleToFillPlaceholder": "Líder de servicio al cliente, contador, SDR",
+      "seniority": "Seniority",
+      "budgetBand": "Presupuesto mensual por persona",
+      "neededBy": "Cuándo lo necesita",
+      "budget": {
+        "under_2k": "Menos de USD 2.000",
+        "2k_4k": "USD 2.000 a 4.000",
+        "4k_7k": "USD 4.000 a 7.000",
+        "7k_plus": "Más de USD 7.000",
+        "not_sure": "Todavía no lo sé"
+      },
+      "timing": {
+        "immediate": "Lo antes posible",
+        "one_month": "Dentro de un mes",
+        "quarter": "Este trimestre",
+        "exploring": "Explorando opciones"
+      },
+      "submit": "Enviar el brief",
+      "promise": "Un socio responde dentro de un día hábil diciendo si podemos cubrir el rol, en qué plazo y a qué costo. Si la respuesta es que no, se lo decimos.",
+      "successTitle": "Su brief llegó a Dexee",
+      "successBody": "Revise su correo para la confirmación. Un socio responde dentro de un día hábil.",
+      "error": "No se pudo enviar el brief. Escriba a info@dexeegroup.com y lo tomamos desde ahí."
     },
     "talent": {
       "heroTitle": "Roles remotos con empresas de EE. UU., desde Colombia",
@@ -1695,6 +1727,50 @@
       "notRequested": "No solicitados",
       "changeStatus": "Cambiar estado",
       "statusChanged": "Estado actualizado."
+    },
+    "leads": {
+      "title": "Leads",
+      "subtitle": "Briefs entrantes de empresas. Dexee promete una respuesta escrita dentro de un día hábil.",
+      "empty": "No hay leads en esta vista.",
+      "search": "Nombre, empresa, correo o rol",
+      "filterStatus": "Estado",
+      "filterSeniority": "Seniority",
+      "allStatuses": "Todos",
+      "status": {
+        "new": "Nuevo",
+        "answered": "Respondido",
+        "converted": "Convertido",
+        "discarded": "Descartado"
+      },
+      "columns": {
+        "received": "Recibido",
+        "contact": "Contacto",
+        "role": "Rol",
+        "budget": "Presupuesto",
+        "needed": "Necesita",
+        "waiting": "Esperando",
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "overdue": "Fuera del compromiso",
+      "overdueCount": "{count} fuera del compromiso de un día hábil",
+      "waitingHours": "{hours} horas hábiles",
+      "answeredIn": "Respondido en {hours} horas hábiles",
+      "openLead": "Abrir",
+      "markAnswered": "Marcar respondido",
+      "markDiscarded": "Descartar",
+      "reopen": "Reabrir",
+      "convert": "Convertir a empresa",
+      "convertHint": "Pegue el id de la empresa cuando el cliente ya tenga cuenta.",
+      "convertSubmit": "Vincular empresa",
+      "stats": {
+        "new": "Esperando respuesta",
+        "overdue": "Fuera del compromiso",
+        "medianResponse": "Mediana de respuesta",
+        "medianResponseUnit": "{hours} horas hábiles"
+      },
+      "detailTitle": "Lead de {company}",
+      "noMedian": "Todavía no hay suficientes leads respondidos"
     },
     "placements": {
       "title": "Colocaciones",

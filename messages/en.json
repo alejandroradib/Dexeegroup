@@ -159,6 +159,7 @@
       "jobs": "Jobs",
       "candidates": "Candidates",
       "applications": "Applications",
+      "leads": "Leads",
       "placements": "Placements",
       "assessments": "Assessments",
       "team": "Team",
@@ -482,6 +483,7 @@
       "pricingSeeAll": "See full pricing",
       "pricingGuaranteeCta": "Read the guarantee",
       "verificationCta": "How we verify",
+      "briefOrSignUp": "Would rather do it yourself? <link>Create a company account</link> and post the role directly.",
       "faqTitle": "Frequently asked questions",
       "faqSubtitle": "The questions a buyer asks before a first call, answered without a call.",
       "faqMoreLabel": "Read the detail",
@@ -791,6 +793,36 @@
       "ctaBody": "Post the role and the first shortlist arrives with a report for every candidate on it.",
       "ctaPost": "Post a role",
       "ctaPricing": "See pricing"
+    },
+    "lead": {
+      "title": "Tell us what you need to fill",
+      "subtitle": "Six fields. No phone number, no discovery call before you know whether we can help.",
+      "name": "Your name",
+      "email": "Work email",
+      "company": "Company",
+      "roleToFill": "Role to fill",
+      "roleToFillPlaceholder": "Customer support lead, bookkeeper, SDR",
+      "seniority": "Seniority",
+      "budgetBand": "Monthly budget per person",
+      "neededBy": "When you need them",
+      "budget": {
+        "under_2k": "Under USD 2,000",
+        "2k_4k": "USD 2,000 to 4,000",
+        "4k_7k": "USD 4,000 to 7,000",
+        "7k_plus": "Over USD 7,000",
+        "not_sure": "Not sure yet"
+      },
+      "timing": {
+        "immediate": "As soon as possible",
+        "one_month": "Within a month",
+        "quarter": "This quarter",
+        "exploring": "Exploring options"
+      },
+      "submit": "Send the brief",
+      "promise": "A partner writes back within one business day with whether we can fill the role, in what timeframe and at what cost. If the answer is no, we say so.",
+      "successTitle": "Your brief reached Dexee",
+      "successBody": "Check your inbox for the confirmation. A partner answers within one business day.",
+      "error": "The brief could not be sent. Write to info@dexeegroup.com and we will pick it up from there."
     },
     "talent": {
       "heroTitle": "Remote roles with US companies, from Colombia",
@@ -1695,6 +1727,50 @@
       "notRequested": "Not requested",
       "changeStatus": "Change status",
       "statusChanged": "Status updated."
+    },
+    "leads": {
+      "title": "Leads",
+      "subtitle": "Inbound briefs from companies. Dexee promises a written answer within one business day.",
+      "empty": "No leads in this view.",
+      "search": "Name, company, email or role",
+      "filterStatus": "Status",
+      "filterSeniority": "Seniority",
+      "allStatuses": "All",
+      "status": {
+        "new": "New",
+        "answered": "Answered",
+        "converted": "Converted",
+        "discarded": "Discarded"
+      },
+      "columns": {
+        "received": "Received",
+        "contact": "Contact",
+        "role": "Role",
+        "budget": "Budget",
+        "needed": "Needed",
+        "waiting": "Waiting",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "overdue": "Past the promise",
+      "overdueCount": "{count} past the one-business-day promise",
+      "waitingHours": "{hours} business hours",
+      "answeredIn": "Answered in {hours} business hours",
+      "openLead": "Open",
+      "markAnswered": "Mark answered",
+      "markDiscarded": "Discard",
+      "reopen": "Reopen",
+      "convert": "Convert to company",
+      "convertHint": "Paste the company id once the client has an account.",
+      "convertSubmit": "Link company",
+      "stats": {
+        "new": "Waiting for an answer",
+        "overdue": "Past the promise",
+        "medianResponse": "Median response",
+        "medianResponseUnit": "{hours} business hours"
+      },
+      "detailTitle": "Lead from {company}",
+      "noMedian": "Not enough answered leads yet"
     },
     "placements": {
       "title": "Placements",

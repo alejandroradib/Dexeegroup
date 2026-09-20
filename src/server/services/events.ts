@@ -33,7 +33,8 @@ export type PlatformEvent =
   | { type: "admin_invite"; email: string; locale: Locale }
   | { type: "placement_pending"; applicationId: string }
   | { type: "data_request"; dataRequestId: string }
-  | { type: "processing_failed"; attemptId: string };
+  | { type: "processing_failed"; attemptId: string }
+  | { type: "lead_received"; leadId: string };
 
 type Recipient = { userId: string; email: string; locale: Locale; digest: boolean };
 
@@ -99,6 +100,10 @@ const COPY: Record<Locale, Record<string, { title: string; body: string }>> = {
       body: "{candidate} was hired for {job} at {company}. Record the placement.",
     },
     data_request: { title: "Data request received", body: "{candidate} requested {kind}." },
+    lead_received: {
+      title: "New lead: {role}",
+      body: "{name} at {company} needs a {seniority} {role}, {needed}. Answer within one business day.",
+    },
     processing_failed: {
       title: "Assessment processing failed",
       body: "Attempt {attempt} failed three times and needs a retry.",
@@ -165,6 +170,10 @@ const COPY: Record<Locale, Record<string, { title: string; body: string }>> = {
       body: "{candidate} fue contratado para {job} en {company}. Registra la colocación.",
     },
     data_request: { title: "Solicitud de datos recibida", body: "{candidate} solicitó {kind}." },
+    lead_received: {
+      title: "Nuevo lead: {role}",
+      body: "{name} de {company} necesita un {role} {seniority}, {needed}. Responder dentro de un día hábil.",
+    },
     processing_failed: {
       title: "Falló el procesamiento de una evaluación",
       body: "El intento {attempt} falló tres veces y requiere reintento.",
@@ -494,6 +503,28 @@ export async function dispatchEvent(event: PlatformEvent): Promise<void> {
             kind: request.kind,
           },
           link: `/admin/candidates?data_request=${request.id}`,
+          template: null,
+        });
+        return;
+      }
+      case "lead_received": {
+        const { data: lead } = await admin
+          .from("contact_requests")
+          .select("id, name, company, role_to_fill, seniority, needed_by")
+          .eq("id", event.leadId)
+          .maybeSingle();
+        if (!lead) return;
+        await deliver(event.type, {
+          recipients: await adminRecipients(),
+          key: "lead_received",
+          vars: {
+            name: lead.name,
+            company: lead.company ?? "",
+            role: lead.role_to_fill ?? "",
+            seniority: lead.seniority ?? "",
+            needed: lead.needed_by ?? "",
+          },
+          link: `/admin/leads?lead=${lead.id}`,
           template: null,
         });
         return;
