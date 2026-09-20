@@ -104,6 +104,8 @@
       "jobs": "Vacantes",
       "pricing": "Precios",
       "guarantee": "Garantía",
+      "howWeVerify": "Cómo verificamos",
+      "sampleReport": "Reporte de muestra",
       "about": "Nosotros",
       "contact": "Contacto",
       "privacy": "Política de privacidad",
@@ -125,6 +127,7 @@
       "forCompanies": "Para empresas",
       "forTalent": "Para talento",
       "pricing": "Precios",
+      "howWeVerify": "Cómo verificamos",
       "jobs": "Vacantes",
       "about": "Nosotros",
       "contact": "Contacto",
@@ -389,6 +392,10 @@
       "pricingDescription": "Colocación, empleador de registro y staffing gestionado con precios en USD, y la garantía de reemplazo publicada completa.",
       "guarantee": "Garantía de reemplazo",
       "guaranteeDescription": "La ventana de reemplazo, las exclusiones y cómo reclamar, escritas para que el abogado del comprador las lea antes de una llamada.",
+      "howWeVerify": "Cómo verificamos",
+      "howWeVerifyDescription": "Identidad, inglés hablado calificado por un revisor humano contra el MCER, inglés escrito y competencias del rol. Cuatro chequeos antes de que un candidato llegue a su terna.",
+      "sampleReport": "Reporte de verificación de muestra",
+      "sampleReportDescription": "Lo que contiene un reporte Dexee Verified, en una página y sin necesidad de cuenta.",
       "privacy": "Política de privacidad",
       "terms": "Términos del servicio"
     },
@@ -474,6 +481,7 @@
       "pricingCta": "Hablemos",
       "pricingSeeAll": "Ver precios completos",
       "pricingGuaranteeCta": "Leer la garantía",
+      "verificationCta": "Cómo verificamos",
       "faqTitle": "Preguntas frecuentes",
       "faq1Q": "¿Cuánto tarda la lista corta?",
       "faq1A": "Normalmente entre una y tres semanas según el perfil. Verá a los postulantes en su pipeline a medida que se verifican.",
@@ -498,6 +506,8 @@
       "ctaStart": "Publicar una vacante",
       "ctaGuarantee": "Leer la garantía",
       "bookCta": "Hablar con un socio",
+      "sampleReportBody": "Cada finalista llega con un reporte Dexee Verified. Lea un ejemplo antes de publicar una vacante.",
+      "sampleReportCta": "Ver un reporte de muestra",
       "units": {
         "oneTime": "pago único",
         "perPersonMonth": "por persona, al mes",
@@ -628,6 +638,121 @@
       "questionsTitle": "Preguntas antes de firmar",
       "questionsBody": "Envíe los términos a su abogado y escríbanos con lo que haya que ajustar. Dexee prefiere negociar el texto ahora que discutirlo después.",
       "questionsCta": "Contáctenos"
+    },
+    "verify": {
+      "title": "Cómo verificamos",
+      "subtitle": "Cuatro chequeos antes de que un candidato llegue a su terna, y una persona, no un modelo, asigna el nivel de inglés.",
+      "problemTitle": "El problema que esto resuelve",
+      "problemBody": "La contratación remota entre países tiene un problema de suplantación. Está documentado, y es la razón por la que Dexee verifica antes de presentar, no después de una oferta.",
+      "evidenceSourceLabel": "Fuente",
+      "evidence": {
+        "checkr-impersonation-2025": "El 35% de 3.000 gerentes de contratación en Estados Unidos dijo que alguien distinto del postulante participó en una entrevista virtual, y el 23% reportó pérdidas superiores a USD 50.000 en el último año por fraude de contratación o de identidad.",
+        "gartner-fake-candidates-2028": "Gartner proyecta que para 2028 uno de cada cuatro perfiles de candidato en el mundo será falso.",
+        "ftc-job-scam-losses": "Las pérdidas reportadas por estafas de empleo y agencias de empleo en Estados Unidos pasaron de USD 90 millones en 2020 a USD 501 millones en 2024."
+      },
+      "stepLabel": "Chequeo {number}",
+      "producesLabel": "Produce",
+      "decidedByLabel": "Lo decide",
+      "checks": {
+        "identity": {
+          "title": "Identidad",
+          "body": "El candidato entra a una sesión de video en vivo y muestra su documento de identidad. El revisor compara el documento con la persona en la llamada y con el rostro que aparece en las respuestas grabadas de inglés.",
+          "produces": "Verificado o no verificado, con la fecha de la sesión",
+          "decidedBy": "Un revisor de Dexee en Barranquilla"
+        },
+        "spokenEnglish": {
+          "title": "Inglés hablado",
+          "body": "El candidato graba respuestas a preguntas que no ha visto, con cronómetro. El modelo precalifica fluidez, coherencia, rango léxico y precisión gramatical, cada una sobre cinco. Luego un revisor escucha las grabaciones y asigna el nivel final.",
+          "produces": "Un nivel MCER de A1 a C2, con las cuatro notas de la rúbrica",
+          "decidedBy": "Un revisor humano. El modelo solo precalifica"
+        },
+        "writtenEnglish": {
+          "title": "Inglés escrito",
+          "body": "Una evaluación cronometrada con preguntas de selección múltiple y una respuesta escrita, calificada en el servidor. La clave de respuestas nunca llega al navegador, así que el puntaje no se puede deducir desde la página.",
+          "produces": "Un nivel MCER y el puntaje bruto",
+          "decidedBy": "Calificación en el servidor, revisada cuando las dos partes no concuerdan"
+        },
+        "roleSkills": {
+          "title": "Competencias del rol",
+          "body": "Una prueba específica de la familia de rol a la que aplica el candidato. Casos situacionales tomados del trabajo real, no preguntas de memoria.",
+          "produces": "Un puntaje sobre cien contra la familia de rol",
+          "decidedBy": "Calificación en el servidor contra una clave en poder de Dexee"
+        }
+      },
+      "humanTitle": "Lo que un modelo por sí solo no puede hacer",
+      "humanBody": "Una revisión automática puede calificar una transcripción. No puede decirle si la persona en la llamada es la persona que va a hacer el trabajo. Un revisor de Dexee está en la sesión de identidad, escucha las respuestas grabadas y firma el nivel MCER final. Cuando el revisor no coincide con el modelo, manda el revisor y el reporte lo dice.",
+      "humanPoints": {
+        "impersonation": "La identidad se verifica en una llamada en vivo, contra el mismo rostro que aparece en las respuestas grabadas.",
+        "override": "El revisor puede subir o bajar el nivel de inglés, y el reporte registra quién decidió.",
+        "keys": "Las claves de respuestas quedan en el servidor, así que un candidato no puede leerlas desde la página.",
+        "reuse": "El reporte se emite una vez por candidato y va fechado, para que usted sepa qué tan reciente es."
+      },
+      "reportTitle": "Vea un reporte",
+      "reportBody": "El reporte Dexee Verified es de una página. Lea un ejemplo antes de hablar con nosotros.",
+      "reportCta": "Abrir el reporte de muestra"
+    },
+    "sampleReport": {
+      "title": "Reporte de verificación de muestra",
+      "subtitle": "Lo que contiene un reporte Dexee Verified, en una página y sin necesidad de cuenta.",
+      "illustrativeNotice": "Este es un ejemplo construido, no una persona real. Dexee todavía no ha emitido un reporte que pudiera anonimizar y publicar, así que las cifras se escribieron para mostrar el formato y la rúbrica. Un reporte real tiene la misma estructura y los mismos campos.",
+      "candidateTitle": "Candidato",
+      "referenceLabel": "Referencia",
+      "roleLabel": "Familia de rol",
+      "seniorityLabel": "Seniority",
+      "experienceLabel": "Experiencia relevante",
+      "experienceValue": "{years} años",
+      "issuedLabel": "Emitido",
+      "checksTitle": "Chequeos",
+      "checkLabel": "Chequeo",
+      "resultLabel": "Resultado",
+      "scoreLabel": "Puntaje",
+      "decidedLabel": "Lo decidió",
+      "checks": {
+        "identity": "Identidad",
+        "writtenEnglish": "Inglés escrito",
+        "spokenEnglish": "Inglés hablado",
+        "roleSkills": "Competencias del rol"
+      },
+      "results": {
+        "verified": "Verificado",
+        "strong": "Sólido"
+      },
+      "decidedBy": {
+        "reviewer": "Revisor de Dexee",
+        "system": "Calificación en el servidor"
+      },
+      "rubricTitle": "Inglés hablado, por dimensión de la rúbrica",
+      "rubric": {
+        "fluency": "Fluidez",
+        "coherence": "Coherencia",
+        "lexical_range": "Rango léxico",
+        "grammatical_accuracy": "Precisión gramatical"
+      },
+      "rubricScale": "sobre 5",
+      "decisionTitle": "Quién asignó el nivel",
+      "decisionAi": "Precalificación del modelo",
+      "decisionReviewer": "Nivel final del revisor",
+      "reviewerNotes": {
+        "confirmed": "El revisor escuchó las cuatro grabaciones y confirmó el nivel del modelo. La expresión es clara a velocidad normal, con fallos ocasionales de artículos y preposiciones que no afectan el sentido."
+      },
+      "workstyleTitle": "Estilo de trabajo",
+      "workstyleBody": "Cinco factores de un inventario de personalidad de dominio público, escalados de 0 a 100. Es contexto para una conversación de contratación, no un aprobado o reprobado, y nunca determina si un candidato entra a la terna.",
+      "workstyleScale": "de 100",
+      "excludedTitle": "Lo que este reporte nunca contiene",
+      "excludedBody": "Dexee no recoge estos campos, así que ningún cliente puede pedirlos.",
+      "excluded": {
+        "photo": "Fotografía",
+        "dateOfBirth": "Fecha de nacimiento o edad",
+        "maritalStatus": "Estado civil o familiar",
+        "religion": "Religión",
+        "politicalViews": "Opiniones políticas"
+      },
+      "contactTitle": "Datos de contacto",
+      "contactBody": "Nombre, correo, teléfono y hoja de vida quedan con Dexee hasta que usted decida entrevistar y los liberemos para esa aplicación. Este reporte identifica al candidato solo por referencia.",
+      "ctaTitle": "¿Quiere uno de estos para un rol que está contratando?",
+      "ctaBody": "Publique la vacante y la primera terna llega con un reporte por cada candidato.",
+      "ctaPost": "Publicar una vacante",
+      "ctaPricing": "Ver precios"
     },
     "talent": {
       "heroTitle": "Roles remotos con empresas de EE. UU., desde Colombia",

@@ -104,6 +104,8 @@
       "jobs": "Jobs",
       "pricing": "Pricing",
       "guarantee": "Guarantee",
+      "howWeVerify": "How we verify",
+      "sampleReport": "Sample report",
       "about": "About",
       "contact": "Contact",
       "privacy": "Privacy policy",
@@ -125,6 +127,7 @@
       "forCompanies": "For companies",
       "forTalent": "For talent",
       "pricing": "Pricing",
+      "howWeVerify": "How we verify",
       "jobs": "Jobs",
       "about": "About",
       "contact": "Contact",
@@ -389,6 +392,10 @@
       "pricingDescription": "Placement, employer of record and managed staffing priced in USD, with the replacement guarantee published in full.",
       "guarantee": "Replacement guarantee",
       "guaranteeDescription": "The replacement window, the exclusions and how to claim, written so a buyer's counsel can read them before a call.",
+      "howWeVerify": "How we verify",
+      "howWeVerifyDescription": "Identity, spoken English graded by a human reviewer against CEFR, written English and role skills. Four checks before a candidate reaches your shortlist.",
+      "sampleReport": "Sample verification report",
+      "sampleReportDescription": "What a Dexee Verified report contains, on one page, with no account needed.",
       "privacy": "Privacy policy",
       "terms": "Terms of service"
     },
@@ -474,6 +481,7 @@
       "pricingCta": "Talk to us",
       "pricingSeeAll": "See full pricing",
       "pricingGuaranteeCta": "Read the guarantee",
+      "verificationCta": "How we verify",
       "faqTitle": "Frequently asked questions",
       "faq1Q": "How long does it take to receive a shortlist?",
       "faq1A": "Typically between one and three weeks depending on the profile. You see applicants in your pipeline as they are vetted.",
@@ -498,6 +506,8 @@
       "ctaStart": "Post a role",
       "ctaGuarantee": "Read the guarantee",
       "bookCta": "Talk to a partner",
+      "sampleReportBody": "Every shortlisted candidate arrives with a Dexee Verified report. Read an example before you post a role.",
+      "sampleReportCta": "See a sample report",
       "units": {
         "oneTime": "one-time",
         "perPersonMonth": "per person, per month",
@@ -628,6 +638,121 @@
       "questionsTitle": "Questions before you sign",
       "questionsBody": "Send the terms to your counsel and write to us with what needs changing. Dexee would rather negotiate the language now than argue about it later.",
       "questionsCta": "Contact us"
+    },
+    "verify": {
+      "title": "How we verify",
+      "subtitle": "Four checks before a candidate reaches your shortlist, and a person, not a model, assigns the English level.",
+      "problemTitle": "The problem this solves",
+      "problemBody": "Remote hiring across borders has an impersonation problem. It is documented, and it is the reason Dexee verifies before presenting, not after an offer.",
+      "evidenceSourceLabel": "Source",
+      "evidence": {
+        "checkr-impersonation-2025": "35% of 3,000 US hiring managers said someone other than the listed applicant took part in a virtual interview, and 23% reported losses above USD 50,000 in the past year from hiring or identity fraud.",
+        "gartner-fake-candidates-2028": "Gartner projects that by 2028 one in four candidate profiles worldwide will be fake.",
+        "ftc-job-scam-losses": "Reported losses from job and employment-agency scams in the United States rose from USD 90 million in 2020 to USD 501 million in 2024."
+      },
+      "stepLabel": "Check {number}",
+      "producesLabel": "Produces",
+      "decidedByLabel": "Decided by",
+      "checks": {
+        "identity": {
+          "title": "Identity",
+          "body": "The candidate joins a live video session and shows a government ID. The reviewer compares the document with the person on the call and with the face that appears in the recorded English answers.",
+          "produces": "Verified or not verified, with the date of the session",
+          "decidedBy": "A Dexee reviewer in Barranquilla"
+        },
+        "spokenEnglish": {
+          "title": "Spoken English",
+          "body": "The candidate records answers to unseen questions under a timer. The model pre-scores fluency, coherence, lexical range and grammatical accuracy out of five each. A reviewer then listens to the recordings and assigns the final level.",
+          "produces": "A CEFR level from A1 to C2, with the four rubric scores",
+          "decidedBy": "A human reviewer. The model only pre-scores"
+        },
+        "writtenEnglish": {
+          "title": "Written English",
+          "body": "A timed assessment with multiple-choice items and a written response, scored on the server. The answer key never reaches the browser, so the score cannot be reverse-engineered from the page.",
+          "produces": "A CEFR level and the raw score",
+          "decidedBy": "Server-side scoring, reviewed when the two parts disagree"
+        },
+        "roleSkills": {
+          "title": "Role skills",
+          "body": "A role-specific assessment built for the role family the candidate applies in. Situational items drawn from the work itself, not trivia.",
+          "produces": "A score out of one hundred against the role family",
+          "decidedBy": "Server-side scoring against a key held by Dexee"
+        }
+      },
+      "humanTitle": "What a model on its own cannot do",
+      "humanBody": "An automated screen can score a transcript. It cannot tell you whether the person on the call is the person who will do the work. A Dexee reviewer sits on the identity session, listens to the recorded answers and signs the final CEFR level. Where the reviewer disagrees with the model, the reviewer wins and the report says so.",
+      "humanPoints": {
+        "impersonation": "Identity is checked on a live call, against the same face that appears in the recorded answers.",
+        "override": "The reviewer can move the English level up or down, and the report records who decided.",
+        "keys": "Answer keys stay on the server, so a candidate cannot read them from the page.",
+        "reuse": "A report is issued once per candidate and dated, so you know how fresh it is."
+      },
+      "reportTitle": "See a report",
+      "reportBody": "The Dexee Verified report is one page. Read an example before you talk to us.",
+      "reportCta": "Open the sample report"
+    },
+    "sampleReport": {
+      "title": "Sample verification report",
+      "subtitle": "What a Dexee Verified report contains, on one page, with no account needed.",
+      "illustrativeNotice": "This is a worked example, not a real person. Dexee has not yet issued a report it could anonymize and publish, so the figures here were written to show the layout and the rubric. A real report has the same structure and the same fields.",
+      "candidateTitle": "Candidate",
+      "referenceLabel": "Reference",
+      "roleLabel": "Role family",
+      "seniorityLabel": "Seniority",
+      "experienceLabel": "Relevant experience",
+      "experienceValue": "{years} years",
+      "issuedLabel": "Issued",
+      "checksTitle": "Checks",
+      "checkLabel": "Check",
+      "resultLabel": "Result",
+      "scoreLabel": "Score",
+      "decidedLabel": "Decided by",
+      "checks": {
+        "identity": "Identity",
+        "writtenEnglish": "Written English",
+        "spokenEnglish": "Spoken English",
+        "roleSkills": "Role skills"
+      },
+      "results": {
+        "verified": "Verified",
+        "strong": "Strong"
+      },
+      "decidedBy": {
+        "reviewer": "Dexee reviewer",
+        "system": "Server-side scoring"
+      },
+      "rubricTitle": "Spoken English, by rubric dimension",
+      "rubric": {
+        "fluency": "Fluency",
+        "coherence": "Coherence",
+        "lexical_range": "Lexical range",
+        "grammatical_accuracy": "Grammatical accuracy"
+      },
+      "rubricScale": "out of 5",
+      "decisionTitle": "Who assigned the level",
+      "decisionAi": "Model pre-score",
+      "decisionReviewer": "Reviewer's final level",
+      "reviewerNotes": {
+        "confirmed": "The reviewer listened to all four recordings and confirmed the model's level. Delivery is clear at speed, with occasional article and preposition slips that do not affect meaning."
+      },
+      "workstyleTitle": "Work style",
+      "workstyleBody": "Five factors from a public-domain personality inventory, scaled 0 to 100. This is context for a hiring conversation, not a pass or fail, and it never determines whether a candidate is shortlisted.",
+      "workstyleScale": "of 100",
+      "excludedTitle": "What this report never contains",
+      "excludedBody": "Dexee does not collect these fields at all, so no client can ask for them.",
+      "excluded": {
+        "photo": "Photograph",
+        "dateOfBirth": "Date of birth or age",
+        "maritalStatus": "Marital or family status",
+        "religion": "Religion",
+        "politicalViews": "Political views"
+      },
+      "contactTitle": "Contact details",
+      "contactBody": "Name, email, phone and resume stay with Dexee until you decide to interview and we release them for that application. This report identifies the candidate by reference only.",
+      "ctaTitle": "Want one of these for a role you are hiring?",
+      "ctaBody": "Post the role and the first shortlist arrives with a report for every candidate on it.",
+      "ctaPost": "Post a role",
+      "ctaPricing": "See pricing"
     },
     "talent": {
       "heroTitle": "Remote roles with US companies, from Colombia",

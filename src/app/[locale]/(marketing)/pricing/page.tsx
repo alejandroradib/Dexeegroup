@@ -58,6 +58,12 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/prici
 
       <Section>
         <PricingTable locale={locale} />
+        <div className="border-border mt-10 flex flex-wrap items-center gap-4 rounded-[12px] border p-6">
+          <p className="text-muted-foreground grow text-sm">{t("sampleReportBody")}</p>
+          <Button asChild variant="outline">
+            <Link href="/sample-report">{t("sampleReportCta")}</Link>
+          </Button>
+        </div>
         {hasProvisionalPricing() ? (
           <p className="text-muted-foreground mt-8 max-w-3xl text-sm">{t("provisionalNote")}</p>
         ) : null}

@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { EVIDENCE } from "@/content/proof";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
 import { CONTRACT_TYPES } from "@/lib/validation/enums";
@@ -36,6 +37,11 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
   const locale = await pageLocale(params);
   const t = await getTranslations("marketing.companies");
   const te = await getTranslations("enums");
+  const tv = await getTranslations("marketing.verify");
+  const evidenceDate = new Intl.DateTimeFormat(locale === "es" ? "es-CO" : "en-US", {
+    year: "numeric",
+    month: "long",
+  });
   const faqs = [1, 2, 3, 4, 5] as const;
 
   return (
@@ -84,6 +90,43 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
               body={te(`contract_type_description.${type}`)}
             />
           ))}
+        </div>
+      </Section>
+      <Section id="verification" tone="navy">
+        <SectionTitle title={tv("title")} subtitle={tv("problemBody")} />
+        <ul className="grid gap-6 md:grid-cols-3">
+          {EVIDENCE.map((item) => (
+            <li key={item.id} className="rounded-[12px] bg-white/5 p-6">
+              <p className="text-sm text-white/90">
+                {tv(`evidence.${item.id}` as "evidence.ftc-job-scam-losses")}
+              </p>
+              <p className="mt-4 text-xs text-white/60">
+                {tv("evidenceSourceLabel")}:{" "}
+                <a
+                  className="text-green underline"
+                  href={item.url}
+                  target="_blank"
+                  rel="noreferrer nofollow"
+                >
+                  {item.publisher}
+                </a>
+                , {evidenceDate.format(new Date(item.date))}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-10 max-w-3xl text-white/80">{tv("humanBody")}</p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Button asChild variant="accent">
+            <Link href="/how-we-verify">{t("verificationCta")}</Link>
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            className="border-white/30 bg-transparent text-white hover:bg-white/10"
+          >
+            <Link href="/sample-report">{tv("reportCta")}</Link>
+          </Button>
         </div>
       </Section>
       <Section tone="mist">

@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
 
+import en from "@/../messages/en.json";
+import es from "@/../messages/es.json";
+
 import {
   CLAIMS,
   EVIDENCE,
@@ -91,5 +94,36 @@ describe("third-party evidence", () => {
   it("uses stable unique ids", () => {
     const ids = EVIDENCE.map((e) => e.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+});
+
+describe("evidence is published in both languages", () => {
+  it("every cited statistic has a message in English and in Spanish", () => {
+    for (const item of EVIDENCE) {
+      const english =
+        en.marketing.verify.evidence[item.id as keyof typeof en.marketing.verify.evidence];
+      const spanish =
+        es.marketing.verify.evidence[item.id as keyof typeof es.marketing.verify.evidence];
+      expect(english, `evidence "${item.id}" has no English message`).toBeTruthy();
+      expect(spanish, `evidence "${item.id}" has no Spanish message`).toBeTruthy();
+    }
+  });
+
+  it("the English message is the verbatim record in proof.ts, so the two cannot drift", () => {
+    for (const item of EVIDENCE) {
+      const english =
+        en.marketing.verify.evidence[item.id as keyof typeof en.marketing.verify.evidence];
+      expect(english, `evidence "${item.id}" was reworded in messages/en.json`).toBe(
+        item.statement,
+      );
+    }
+  });
+
+  it("the Spanish message is a translation, not the English text copied over", () => {
+    for (const item of EVIDENCE) {
+      const spanish =
+        es.marketing.verify.evidence[item.id as keyof typeof es.marketing.verify.evidence];
+      expect(spanish, `evidence "${item.id}" is not translated`).not.toBe(item.statement);
+    }
   });
 });

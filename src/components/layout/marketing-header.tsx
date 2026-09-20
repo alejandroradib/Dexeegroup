@@ -15,8 +15,8 @@ const NAV = [
   { href: "/for-companies", key: "forCompanies" },
   { href: "/for-talent", key: "forTalent" },
   { href: "/pricing", key: "pricing" },
+  { href: "/how-we-verify", key: "howWeVerify" },
   { href: "/jobs", key: "jobs" },
-  { href: "/about", key: "about" },
   { href: "/contact", key: "contact" },
 ] as const;
 
@@ -37,7 +37,7 @@ export function MarketingHeader({
       key={item.href}
       href={item.href}
       className={cn(
-        "text-navy hover:bg-mist rounded-[8px] px-3 py-2 text-sm font-medium",
+        "text-navy hover:bg-mist rounded-[8px] px-3 py-2 text-sm font-medium whitespace-nowrap",
         pathname === item.href && "bg-mist",
       )}
       onClick={() => setOpen(false)}
@@ -49,8 +49,8 @@ export function MarketingHeader({
   return (
     <header className="border-border sticky top-0 z-40 border-b bg-white/95 backdrop-blur">
       <div className="container-marketing flex h-16 items-center justify-between gap-4">
-        <Logo height={26} />
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
+        <Logo height={26} className="shrink-0" />
+        <nav className="hidden items-center gap-1 xl:flex" aria-label="Main">
           {links}
         </nav>
         <div className="flex items-center gap-2">
@@ -69,7 +69,7 @@ export function MarketingHeader({
           </Button>
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden" aria-label={tc("openMenu")}>
+              <Button variant="ghost" size="icon" className="xl:hidden" aria-label={tc("openMenu")}>
                 <MenuIcon />
               </Button>
             </SheetTrigger>

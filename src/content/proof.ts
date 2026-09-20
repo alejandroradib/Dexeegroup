@@ -35,7 +35,14 @@ export type Testimonial = {
   asOf: string;
 };
 
-/** Third-party research cited on the verification pages. Always attributed. */
+/**
+ * Third-party research cited on the verification pages. Always attributed.
+ *
+ * `statement` is the verbatim English record of what the publisher said, kept here so
+ * `docs/CLAIMS.md` has one place to check. Pages render the translated text from
+ * `marketing.verify.evidence.<id>`; `tests/unit/proof.test.ts` asserts the English message
+ * matches this string exactly, so the two cannot drift.
+ */
 export type Evidence = {
   id: string;
   statement: string;

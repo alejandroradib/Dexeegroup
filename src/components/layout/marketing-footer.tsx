@@ -15,6 +15,8 @@ export function MarketingFooter() {
         { href: "/jobs", label: t("footer.jobs") },
         { href: "/pricing", label: t("footer.pricing") },
         { href: "/guarantee", label: t("footer.guarantee") },
+        { href: "/how-we-verify", label: t("footer.howWeVerify") },
+        { href: "/sample-report", label: t("footer.sampleReport") },
       ],
     },
     {
