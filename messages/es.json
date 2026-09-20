@@ -1268,7 +1268,25 @@
       "dragHint": "Arrastre las tarjetas entre columnas o use el menú de estado de cada tarjeta.",
       "moveTo": "Mover a",
       "yearsExperience": "{years} años",
-      "openCard": "Abrir detalles"
+      "openCard": "Abrir detalles",
+      "recommended": {
+        "title": "Recomendados para este rol",
+        "body": "Dexee lee la hoja de vida, el perfil y los resultados vigentes de cada postulante contra su brief y los ordena. El orden es una recomendación para decidir a quién entrevistar primero; no es una decisión, y los perfiles de trabajo nunca lo afectan.",
+        "top3": "Top 3",
+        "top5": "Top 5",
+        "rest": "Otros postulantes",
+        "pending": "Análisis pendiente",
+        "score": "{score} de 100",
+        "strengths": "Fortalezas",
+        "gaps": "Brechas por indagar",
+        "refresh": "Actualizar recomendaciones",
+        "refreshing": "Analizando",
+        "refreshed": "{count, plural, =0 {Nada nuevo por analizar} =1 {1 postulante analizado} other {# postulantes analizados}}",
+        "refreshFailed": "El análisis no pudo correr. Intente de nuevo en un momento.",
+        "unavailable": "El servicio de análisis no está configurado en este entorno.",
+        "empty": "Las recomendaciones aparecen cuando los postulantes han sido analizados.",
+        "computedAt": "Analizado el {date}"
+      }
     },
     "drawer": {
       "profile": "Perfil",
@@ -1304,7 +1322,11 @@
       "validUntil": "vigente hasta el {date}",
       "noValidResults": "Sin resultados vigentes por ahora.",
       "disc": "Perfil DISC",
-      "discHidden": "El candidato no ha compartido el resumen DISC."
+      "discHidden": "El candidato no ha compartido el resumen DISC.",
+      "fit": "Ajuste para este rol",
+      "fitPending": "Análisis pendiente. Corre poco después de que llega la postulación.",
+      "fitStrengths": "Fortalezas",
+      "fitGaps": "Brechas por indagar"
     },
     "candidates": {
       "title": "Candidatos",

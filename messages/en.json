@@ -1268,7 +1268,25 @@
       "dragHint": "Drag cards between columns or use the status menu on each card.",
       "moveTo": "Move to",
       "yearsExperience": "{years} years",
-      "openCard": "Open details"
+      "openCard": "Open details",
+      "recommended": {
+        "title": "Recommended for this role",
+        "body": "Dexee reads each applicant's resume, profile and valid assessment results against your brief and ranks them. The ranking is a recommendation to decide whom to interview first; it is not a decision, and work-style profiles never affect it.",
+        "top3": "Top 3",
+        "top5": "Top 5",
+        "rest": "Other applicants",
+        "pending": "Analysis pending",
+        "score": "{score} of 100",
+        "strengths": "Strengths",
+        "gaps": "Gaps to probe",
+        "refresh": "Update recommendations",
+        "refreshing": "Analysing",
+        "refreshed": "{count, plural, =0 {Nothing new to analyse} =1 {1 applicant analysed} other {# applicants analysed}}",
+        "refreshFailed": "The analysis could not run. Try again in a moment.",
+        "unavailable": "The analysis service is not configured in this environment.",
+        "empty": "Recommendations appear once applicants have been analysed.",
+        "computedAt": "Analysed {date}"
+      }
     },
     "drawer": {
       "profile": "Profile",
@@ -1304,7 +1322,11 @@
       "validUntil": "valid until {date}",
       "noValidResults": "No valid results at the moment.",
       "disc": "DISC profile",
-      "discHidden": "The candidate has not shared the DISC summary."
+      "discHidden": "The candidate has not shared the DISC summary.",
+      "fit": "Fit for this role",
+      "fitPending": "Analysis pending. It runs shortly after the application arrives.",
+      "fitStrengths": "Strengths",
+      "fitGaps": "Gaps to probe"
     },
     "candidates": {
       "title": "Candidates",

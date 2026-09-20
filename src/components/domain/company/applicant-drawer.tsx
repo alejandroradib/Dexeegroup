@@ -354,6 +354,30 @@ function DrawerBody({
           ) : null}
 
           <section>
+            <h3 className="text-navy text-sm font-semibold">{t("fit")}</h3>
+            {detail.fit?.status === "ready" ? (
+              <div className="bg-mist mt-2 rounded-[8px] p-3 text-sm">
+                <p className="text-navy font-semibold tabular-nums">{detail.fit.score} / 100</p>
+                {detail.fit.summary ? <p className="mt-1">{detail.fit.summary}</p> : null}
+                {detail.fit.strengths.length > 0 ? (
+                  <p className="mt-2 text-xs">
+                    <span className="font-medium">{t("fitStrengths")}:</span>{" "}
+                    {detail.fit.strengths.join(" · ")}
+                  </p>
+                ) : null}
+                {detail.fit.gaps.length > 0 ? (
+                  <p className="mt-1 text-xs">
+                    <span className="font-medium">{t("fitGaps")}:</span>{" "}
+                    {detail.fit.gaps.join(" · ")}
+                  </p>
+                ) : null}
+              </div>
+            ) : (
+              <p className="text-muted-foreground mt-2 text-xs">{t("fitPending")}</p>
+            )}
+          </section>
+
+          <section>
             <h3 className="text-navy text-sm font-semibold">{t("validResults")}</h3>
             {detail.results.length === 0 ? (
               <p className="text-muted-foreground mt-2 text-xs">{t("noValidResults")}</p>

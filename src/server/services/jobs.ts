@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { listFitForApplications, type FitRow } from "@/server/services/fit";
 import type { Database } from "@/types/database";
 
 import { err, ok, type Result } from "./result";
@@ -65,7 +66,30 @@ export type PipelineCard = {
   workstyleVisible: boolean;
   /** Valid results at the time of reading, one per assessment type. */
   results: ValidResult[];
+  /** Fit analysis when ready; RLS returns it only to the hiring company. */
+  fit: FitSummary | null;
 };
+
+export type FitSummary = {
+  status: string;
+  score: number | null;
+  summary: string | null;
+  strengths: string[];
+  gaps: string[];
+  computedAt: string | null;
+};
+
+function toFitSummary(row: FitRow | undefined): FitSummary | null {
+  if (!row) return null;
+  return {
+    status: row.status,
+    score: row.score,
+    summary: row.summary,
+    strengths: row.strengths ?? [],
+    gaps: row.gaps ?? [],
+    computedAt: row.computed_at,
+  };
+}
 
 /** Reads candidate_valid_results() for many candidates; the function itself applies the access rule. */
 export async function listValidResults(
@@ -112,12 +136,13 @@ export async function getPipeline(
     .order("created_at", { ascending: false });
   if (error) return err(error.message);
   const candidateIds = (applications ?? []).map((a) => a.candidate_id);
-  const [{ data: cards }, { data: saved }, resultsByCandidate] = await Promise.all([
+  const [{ data: cards }, { data: saved }, resultsByCandidate, fitById] = await Promise.all([
     candidateIds.length
       ? supabase.from("candidate_cards").select("*").in("id", candidateIds)
       : Promise.resolve({ data: [] as Database["public"]["Views"]["candidate_cards"]["Row"][] }),
     supabase.from("saved_candidates").select("candidate_id").eq("company_id", companyId),
     listValidResults(supabase, candidateIds),
+    listFitForApplications((applications ?? []).map((a) => a.id)),
   ]);
   const cardById = new Map((cards ?? []).map((c) => [c.id, c]));
   const savedSet = new Set((saved ?? []).map((s) => s.candidate_id));
@@ -131,6 +156,7 @@ export async function getPipeline(
         saved: savedSet.has(application.candidate_id),
         workstyleVisible: results.some((r) => r.type === "psychometric" && r.bands !== null),
         results,
+        fit: toFitSummary(fitById.get(application.id)),
       };
     }),
   });
@@ -173,6 +199,7 @@ export async function listCompanyApplicants(
       saved: savedSet.has(row.candidate_id),
       workstyleVisible: results.some((r) => r.type === "psychometric" && r.bands !== null),
       results,
+      fit: null,
       job: { id: jobs.id, title: jobs.title, slug: jobs.slug },
     };
   });
@@ -202,6 +229,7 @@ export type ApplicantDetail = {
   discBands: Record<string, string> | null;
   /** Valid results, one per type, as candidate_valid_results() allows this company to see them. */
   results: ValidResult[];
+  fit: FitSummary | null;
   saved: boolean;
 };
 
@@ -250,7 +278,11 @@ export async function getApplicantDetail(
       .maybeSingle(),
   ]);
   const { jobs, ...applicationRow } = application;
-  const results = (await listValidResults(supabase, [candidateId])).get(candidateId) ?? [];
+  const [resultsMap, fitMap] = await Promise.all([
+    listValidResults(supabase, [candidateId]),
+    listFitForApplications([applicationId]),
+  ]);
+  const results = resultsMap.get(candidateId) ?? [];
   return {
     application: applicationRow,
     job: { id: jobs.id, title: jobs.title },
@@ -263,6 +295,7 @@ export async function getApplicantDetail(
     workstyleBands: results.find((r) => r.type === "psychometric")?.bands ?? null,
     discBands: results.find((r) => r.type === "disc")?.bands ?? null,
     results,
+    fit: toFitSummary(fitMap.get(applicationId)),
     saved: Boolean(saved.data),
   };
 }

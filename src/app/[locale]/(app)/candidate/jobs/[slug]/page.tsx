@@ -15,6 +15,9 @@ import {
 } from "@/server/services/candidates";
 import { getPublicJobBySlug } from "@/server/services/public-jobs";
 
+/** applyToJob runs the fit analysis after the response; give the function time to finish it. */
+export const maxDuration = 60;
+
 export default async function CandidateJobPage({
   params,
 }: PageProps<"/[locale]/candidate/jobs/[slug]">) {

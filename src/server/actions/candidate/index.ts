@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 import { getSessionUser } from "@/lib/auth/session";
 import { logger } from "@/lib/logger";
@@ -21,6 +22,7 @@ import {
 } from "@/lib/validation/candidate";
 import { getApplyRequirements, missingRequirements } from "@/server/services/candidates";
 import { dispatchEvent } from "@/server/services/events";
+import { computeApplicationFit } from "@/server/services/fit";
 import { ERR, err, ok, type Result } from "@/server/services/result";
 import type { Json } from "@/types/database";
 
@@ -272,6 +274,15 @@ export async function applyToJob(input: unknown): Promise<Result<{ applicationId
     return err(ERR.generic);
   }
   await dispatchEvent({ type: "new_application", applicationId: data.id });
+  // The analysis takes seconds; it runs after the response, and the daily cron catches
+  // anything that did not finish here.
+  after(async () => {
+    try {
+      await computeApplicationFit(data.id);
+    } catch (error) {
+      logger.warn({ err: (error as Error).message, applicationId: data.id }, "fit_after_failed");
+    }
+  });
   revalidateCandidate();
   return ok({ applicationId: data.id });
 }

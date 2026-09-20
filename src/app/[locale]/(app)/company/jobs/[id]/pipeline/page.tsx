@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { KanbanBoard } from "@/components/domain/company/kanban-board";
+import { RecommendedPanel } from "@/components/domain/company/recommended-panel";
 import { PageHeader } from "@/components/layout/page-header";
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatusChip } from "@/components/shared/status-chip";
@@ -50,10 +51,17 @@ export default async function PipelinePage({
       {cards.length === 0 ? (
         <EmptyState icon={UsersIcon} title={t("empty")} description={t("emptyBody")} />
       ) : (
-        <KanbanBoard
-          cards={cards}
-          initialOpen={typeof query.application === "string" ? query.application : null}
-        />
+        <>
+          <RecommendedPanel
+            jobId={job.id}
+            cards={cards}
+            onOpen={(applicationId) => `?application=${applicationId}`}
+          />
+          <KanbanBoard
+            cards={cards}
+            initialOpen={typeof query.application === "string" ? query.application : null}
+          />
+        </>
       )}
     </>
   );

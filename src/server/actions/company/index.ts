@@ -29,6 +29,7 @@ import {
 import { APPLICATION_STATUSES } from "@/lib/validation/enums";
 import { getCurrentCompany } from "@/server/services/companies";
 import { dispatchEvent } from "@/server/services/events";
+import { computeApplicationFit, listApplicationsNeedingFit } from "@/server/services/fit";
 import { ERR, err, ok, type Result } from "@/server/services/result";
 import type { Database, Json } from "@/types/database";
 
@@ -244,6 +245,29 @@ async function pingIndexing(jobId: string, action: "URL_UPDATED" | "URL_DELETED"
   } catch (error) {
     logger.warn({ err: (error as Error).message, jobId }, "indexing_ping_failed");
   }
+}
+
+/**
+ * Computes the missing fit analyses for one of the company's jobs, a few at a time, so the
+ * recommended panel fills in without waiting for the daily cron.
+ */
+export async function refreshJobFit(jobId: string): Promise<Result<{ computed: number }>> {
+  const user = await requireCompanyUser();
+  if (!user) return err(ERR.unauthorized);
+  const company = await getCurrentCompany();
+  if (!company) return err(ERR.notFound);
+  const supabase = await createClient();
+  const { data: job } = await supabase
+    .from("jobs")
+    .select("id")
+    .eq("id", jobId)
+    .eq("company_id", company.id)
+    .maybeSingle();
+  if (!job) return err(ERR.notFound);
+  const ids = await listApplicationsNeedingFit(jobId, 5);
+  for (const id of ids) await computeApplicationFit(id);
+  revalidatePath("/[locale]/company/jobs/[id]/pipeline", "page");
+  return ok({ computed: ids.length });
 }
 
 export async function changeJobStatus(
