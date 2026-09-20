@@ -397,6 +397,8 @@
       "howWeVerifyDescription": "Identidad, inglés hablado calificado por un revisor humano contra el MCER, inglés escrito y competencias del rol. Cuatro chequeos antes de que un candidato llegue a su terna.",
       "sampleReport": "Reporte de verificación de muestra",
       "sampleReportDescription": "Lo que contiene un reporte Dexee Verified, en una página y sin necesidad de cuenta.",
+      "compare": "Comparaciones",
+      "compareDescription": "Cómo se compara Dexee con contratar en Estados Unidos, con una plataforma global de EOR y con un marketplace de freelancers, incluyendo dónde gana cada uno.",
       "privacy": "Política de privacidad",
       "terms": "Términos del servicio"
     },
@@ -823,6 +825,21 @@
       "successTitle": "Su brief llegó a Dexee",
       "successBody": "Revise su correo para la confirmación. Un socio responde dentro de un día hábil.",
       "error": "No se pudo enviar el brief. Escriba a info@dexeegroup.com y lo tomamos desde ahí."
+    },
+    "compare": {
+      "eyebrow": "Comparación",
+      "updated": "Contrastado con precios publicados el {date}",
+      "concessionTitle": "Cuándo la alternativa es la mejor opción",
+      "ctaBrief": "Envíenos el rol",
+      "ctaPricing": "Ver precios",
+      "othersTitle": "Otras comparaciones",
+      "titles": {
+        "hiring-in-colombia-vs-us": "Contratar en Colombia frente a contratar en Estados Unidos",
+        "dexee-vs-eor-platforms": "Dexee frente a una plataforma global de EOR",
+        "dexee-vs-freelance-marketplaces": "Dexee frente a un marketplace de freelancers"
+      },
+      "sectionTitle": "Nosotros frente a la alternativa",
+      "sectionBody": "Tres comparaciones que dicen con claridad dónde gana la otra opción."
     },
     "talent": {
       "heroTitle": "Roles remotos con empresas de EE. UU., desde Colombia",

@@ -397,6 +397,8 @@
       "howWeVerifyDescription": "Identity, spoken English graded by a human reviewer against CEFR, written English and role skills. Four checks before a candidate reaches your shortlist.",
       "sampleReport": "Sample verification report",
       "sampleReportDescription": "What a Dexee Verified report contains, on one page, with no account needed.",
+      "compare": "Comparisons",
+      "compareDescription": "How Dexee compares with hiring in the United States, with a global EOR platform and with a freelance marketplace, including where each one wins.",
       "privacy": "Privacy policy",
       "terms": "Terms of service"
     },
@@ -823,6 +825,21 @@
       "successTitle": "Your brief reached Dexee",
       "successBody": "Check your inbox for the confirmation. A partner answers within one business day.",
       "error": "The brief could not be sent. Write to info@dexeegroup.com and we will pick it up from there."
+    },
+    "compare": {
+      "eyebrow": "Comparison",
+      "updated": "Checked against published pricing on {date}",
+      "concessionTitle": "When the alternative is the better choice",
+      "ctaBrief": "Send us the role",
+      "ctaPricing": "See pricing",
+      "othersTitle": "Other comparisons",
+      "titles": {
+        "hiring-in-colombia-vs-us": "Hiring in Colombia versus hiring in the United States",
+        "dexee-vs-eor-platforms": "Dexee versus a global EOR platform",
+        "dexee-vs-freelance-marketplaces": "Dexee versus a freelance marketplace"
+      },
+      "sectionTitle": "Weighing us against the alternative",
+      "sectionBody": "Three comparisons that say plainly where the other option wins."
     },
     "talent": {
       "heroTitle": "Remote roles with US companies, from Colombia",

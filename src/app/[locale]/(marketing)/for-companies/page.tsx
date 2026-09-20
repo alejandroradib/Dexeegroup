@@ -1,4 +1,4 @@
-import { ClockIcon, ShieldCheckIcon, UsersIcon, WalletIcon } from "lucide-react";
+import { ChevronRightIcon, ClockIcon, ShieldCheckIcon, UsersIcon, WalletIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { BookCallButton } from "@/components/domain/marketing/book-call-button";
@@ -10,7 +10,9 @@ import { Button } from "@/components/ui/button";
 import { EVIDENCE } from "@/content/proof";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { COMPARE_SLUGS } from "@/lib/content/compare";
 import { buildAlternates } from "@/lib/seo/alternates";
+import { dateOnly } from "@/lib/utils";
 import { CONTRACT_TYPES } from "@/lib/validation/enums";
 
 import type { Metadata } from "next";
@@ -33,6 +35,7 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
   const te = await getTranslations("enums");
   const tv = await getTranslations("marketing.verify");
   const tl = await getTranslations("marketing.lead");
+  const tcmp = await getTranslations("marketing.compare");
   const evidenceDate = new Intl.DateTimeFormat(locale === "es" ? "es-CO" : "en-US", {
     year: "numeric",
     month: "long",
@@ -104,7 +107,7 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
                 >
                   {item.publisher}
                 </a>
-                , {evidenceDate.format(new Date(item.date))}
+                , {evidenceDate.format(dateOnly(item.date))}
               </p>
             </li>
           ))}
@@ -133,6 +136,24 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
           <Button asChild variant="ghost">
             <Link href="/guarantee">{t("pricingGuaranteeCta")}</Link>
           </Button>
+        </div>
+      </Section>
+      <Section>
+        <div className="mx-auto max-w-3xl">
+          <SectionTitle title={tcmp("sectionTitle")} subtitle={tcmp("sectionBody")} />
+          <ul className="divide-border border-border divide-y rounded-[12px] border bg-white">
+            {COMPARE_SLUGS.map((slug) => (
+              <li key={slug}>
+                <Link
+                  href={`/compare/${slug}`}
+                  className="hover:bg-mist flex items-center justify-between gap-4 px-5 py-4 text-sm font-medium"
+                >
+                  {tcmp(`titles.${slug}` as "titles.dexee-vs-eor-platforms")}
+                  <ChevronRightIcon className="text-green size-4 shrink-0" aria-hidden />
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </Section>
       <Section id="faq">

@@ -76,7 +76,14 @@ export default async function AdminCandidatesPage({
           <input name="q" defaultValue={filter.q ?? ""} className={filterInputClass} />
         </FilterField>
         <FilterField label={t("country")}>
-          <select name="country" defaultValue={filter.country ?? ""} className={filterInputClass}><option value="">{tf("any")}</option>{COUNTRIES.map((v) => <option key={v} value={v}>{tco(v)}</option>)}</select>
+          <select name="country" defaultValue={filter.country ?? ""} className={filterInputClass}>
+            <option value="">{tf("any")}</option>
+            {COUNTRIES.map((v) => (
+              <option key={v} value={v}>
+                {tco(v)}
+              </option>
+            ))}
+          </select>
         </FilterField>
         <FilterField label={t("roleFamily")}>
           <select

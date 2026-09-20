@@ -15,6 +15,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
 import { buildAlternates } from "@/lib/seo/alternates";
+import { dateOnly } from "@/lib/utils";
 
 import type { Metadata } from "next";
 
@@ -37,7 +38,7 @@ export default async function SampleReportPage({ params }: PageProps<"/[locale]/
   const dateFormat = new Intl.DateTimeFormat(locale === "es" ? "es-CO" : "en-US", {
     dateStyle: "long",
   });
-  const issued = dateFormat.format(new Date(SAMPLE_CANDIDATE.issuedAt));
+  const issued = dateFormat.format(dateOnly(SAMPLE_CANDIDATE.issuedAt));
 
   return (
     <>

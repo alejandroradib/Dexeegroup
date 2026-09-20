@@ -1,4 +1,5 @@
 import { locales } from "@/i18n/routing";
+import { COMPARE_SLUGS } from "@/lib/content/compare";
 import { publicEnv } from "@/lib/env";
 import { buildAbsoluteAlternates } from "@/lib/seo/alternates";
 import { listAllPublicJobSlugs } from "@/server/services/public-jobs";
@@ -13,6 +14,7 @@ const STATIC_PATHS = [
   "/guarantee",
   "/how-we-verify",
   "/sample-report",
+  ...COMPARE_SLUGS.map((slug) => `/compare/${slug}`),
   "/jobs",
   "/about",
   "/contact",

@@ -7,6 +7,7 @@ import { EVIDENCE } from "@/content/proof";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
 import { buildAlternates } from "@/lib/seo/alternates";
+import { dateOnly } from "@/lib/utils";
 
 import type { Metadata } from "next";
 
@@ -60,7 +61,7 @@ export default async function HowWeVerifyPage({ params }: PageProps<"/[locale]/h
                 >
                   {item.publisher}
                 </a>
-                , {dateFormat.format(new Date(item.date))}
+                , {dateFormat.format(dateOnly(item.date))}
               </p>
             </li>
           ))}

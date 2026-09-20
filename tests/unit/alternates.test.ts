@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { buildAbsoluteAlternates, buildAlternates } from "@/lib/seo/alternates";
+import { dateOnly } from "@/lib/utils";
 
 describe("hreflang alternates", () => {
   it("emits every locale plus x-default", () => {
@@ -29,5 +30,23 @@ describe("hreflang alternates", () => {
       es: "https://dexeegroup.com/es/jobs/accountant",
       "x-default": "https://dexeegroup.com/en/jobs/accountant",
     });
+  });
+});
+
+describe("date-only formatting", () => {
+  it("keeps a content date on its own calendar day in Bogotá", () => {
+    const formatted = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/Bogota",
+      dateStyle: "long",
+    }).format(dateOnly("2026-09-20"));
+    expect(formatted).toContain("September 20");
+  });
+
+  it("keeps it on the same day east of UTC too", () => {
+    const formatted = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Tokyo",
+      dateStyle: "long",
+    }).format(dateOnly("2026-09-20"));
+    expect(formatted).toContain("September 20");
   });
 });
