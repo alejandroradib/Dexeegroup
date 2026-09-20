@@ -73,6 +73,15 @@ Requests appear in `/admin/candidates/<id>` and notify admins. For deletion: exp
 
 CI runs gitleaks on every pull request. Never commit `.env.local`.
 
+## Aplicar una migración al proyecto remoto
+
+`supabase db push` no funciona contra `cvvilveklqsznsefaaek`: las versiones registradas allí
+no coinciden con los nombres de archivo del repositorio (ver decisión 46), así que la CLI
+intentaría reaplicar todo. Aplique cada migración nueva con `apply_migration` del MCP de
+Supabase, pasando el contenido del archivo y su nombre lógico, y después confirme con una
+consulta al catálogo que las columnas, los triggers y las vistas quedaron. Corra
+`npm run db:verify` antes, que es la verificación real del esquema y sí usa los archivos.
+
 ## Lead queue
 
 Inbound briefs land in `contact_requests` with `request_type = 'hire'` and `status = 'new'`.
