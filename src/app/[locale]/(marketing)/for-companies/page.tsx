@@ -2,6 +2,7 @@ import { ClockIcon, ShieldCheckIcon, UsersIcon, WalletIcon } from "lucide-react"
 import { getTranslations } from "next-intl/server";
 
 import { BookCallButton } from "@/components/domain/marketing/book-call-button";
+import { PricingSummary } from "@/components/domain/marketing/pricing-table";
 import { FeatureCard, Section, SectionTitle, Steps } from "@/components/domain/marketing/sections";
 import {
   Accordion,
@@ -32,7 +33,7 @@ export async function generateMetadata({
 }
 
 export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/for-companies">) {
-  await pageLocale(params);
+  const locale = await pageLocale(params);
   const t = await getTranslations("marketing.companies");
   const te = await getTranslations("enums");
   const faqs = [1, 2, 3, 4, 5] as const;
@@ -89,7 +90,15 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
         <div className="grid gap-10 lg:grid-cols-2">
           <div>
             <SectionTitle title={t("pricingTitle")} subtitle={t("pricingBody")} />
-            <BookCallButton label={t("pricingCta")} variant="accent" size="default" />
+            <PricingSummary locale={locale} />
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button asChild variant="accent">
+                <Link href="/pricing">{t("pricingSeeAll")}</Link>
+              </Button>
+              <Button asChild variant="ghost">
+                <Link href="/guarantee">{t("pricingGuaranteeCta")}</Link>
+              </Button>
+            </div>
           </div>
           <div>
             <SectionTitle title={t("faqTitle")} />

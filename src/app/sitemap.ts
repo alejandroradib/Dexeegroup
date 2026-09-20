@@ -8,6 +8,8 @@ const STATIC_PATHS = [
   "",
   "/for-companies",
   "/for-talent",
+  "/pricing",
+  "/guarantee",
   "/jobs",
   "/about",
   "/contact",

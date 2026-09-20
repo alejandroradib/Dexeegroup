@@ -88,6 +88,23 @@ not yet a considered margin decision.
 | Managed staffing, all in | from USD 4,500 per month                            | LATAM band USD 4,500 to 13,000 by seniority                  |
 | Dexee Verified report    | USD 149 per candidate, free with a placement        | Background checks USD 30 to 150; English tests USD 70 to 325 |
 
+## Guarantee terms
+
+Published on `/guarantee` from `GUARANTEE` in `src/content/pricing.ts`. These are
+commitments Dexee chooses, not measurements, so they need no source. They do need counsel:
+the page carries a notice saying they are a draft and that the signed contract governs.
+
+| Term                            | Published value  |
+| ------------------------------- | ---------------- |
+| Replacement window              | 90 days          |
+| Replacement window, founding    | 120 days         |
+| Client's window to open a claim | 15 days          |
+| Dexee's written response        | 5 business days  |
+| First replacement shortlist     | 10 business days |
+
+Five exclusions are published in full, along with the remedy and a statement that Dexee
+does not limit its liability below the placement fee paid.
+
 ## Verification log
 
 | Date       | Claim                      | Action                                | By                |

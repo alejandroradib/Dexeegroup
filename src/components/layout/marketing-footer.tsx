@@ -13,6 +13,8 @@ export function MarketingFooter() {
         { href: "/for-companies", label: t("footer.companies") },
         { href: "/for-talent", label: t("footer.talent") },
         { href: "/jobs", label: t("footer.jobs") },
+        { href: "/pricing", label: t("footer.pricing") },
+        { href: "/guarantee", label: t("footer.guarantee") },
       ],
     },
     {

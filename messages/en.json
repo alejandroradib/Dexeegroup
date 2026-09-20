@@ -102,6 +102,8 @@
       "companies": "For companies",
       "talent": "For talent",
       "jobs": "Jobs",
+      "pricing": "Pricing",
+      "guarantee": "Guarantee",
       "about": "About",
       "contact": "Contact",
       "privacy": "Privacy policy",
@@ -122,6 +124,7 @@
     "marketing": {
       "forCompanies": "For companies",
       "forTalent": "For talent",
+      "pricing": "Pricing",
       "jobs": "Jobs",
       "about": "About",
       "contact": "Contact",
@@ -382,6 +385,10 @@
       "aboutDescription": "Nearshore talent and back-office partner for US companies, based in Barranquilla, Colombia.",
       "contact": "Contact",
       "contactDescription": "Tell us what you need. We reply within one business day.",
+      "pricing": "Pricing",
+      "pricingDescription": "Placement, employer of record and managed staffing priced in USD, with the replacement guarantee published in full.",
+      "guarantee": "Replacement guarantee",
+      "guaranteeDescription": "The replacement window, the exclusions and how to claim, written so a buyer's counsel can read them before a call.",
       "privacy": "Privacy policy",
       "terms": "Terms of service"
     },
@@ -463,8 +470,10 @@
       "how4Body": "Monthly KPI reporting and a named account lead.",
       "contractsTitle": "Four ways to contract",
       "pricingTitle": "Pricing",
-      "pricingBody": "Pricing depends on the role, the contract type and the seniority. Talk to us and we will send a quote within a week.",
+      "pricingBody": "Prices are published. Placement is a flat fee, Dexee as employer of record is a monthly fee per person, and managed staffing is one all-in monthly figure. No quote needed to see them.",
       "pricingCta": "Talk to us",
+      "pricingSeeAll": "See full pricing",
+      "pricingGuaranteeCta": "Read the guarantee",
       "faqTitle": "Frequently asked questions",
       "faq1Q": "How long does it take to receive a shortlist?",
       "faq1A": "Typically between one and three weeks depending on the profile. You see applicants in your pipeline as they are vetted.",
@@ -478,6 +487,147 @@
       "faq5A": "Yes. Written results are automatic; oral results are validated by Dexee reviewers. Badges show the lower of the two levels.",
       "ctaTitle": "Post your first role",
       "ctaBody": "Create a company account, post the vacancy and receive vetted applicants. Dexee verifies companies within one business day."
+    },
+    "pricing": {
+      "title": "Pricing",
+      "subtitle": "What each service costs, what it includes and what is guaranteed. No quote needed to read this page.",
+      "provisionalBadge": "Provisional",
+      "provisionalNote": "These are published prices and Dexee honours them. They are marked provisional because they are anchored to public market pricing while Dexee builds its own cost history. If a price changes, clients already under contract keep the price they signed.",
+      "fromAmount": "from {amount} {unit}",
+      "depositSplit": "{deposit} at kickoff, {balance} when the person starts.",
+      "ctaStart": "Post a role",
+      "ctaGuarantee": "Read the guarantee",
+      "bookCta": "Talk to a partner",
+      "units": {
+        "oneTime": "one-time",
+        "perPersonMonth": "per person, per month",
+        "perCandidate": "per candidate"
+      },
+      "products": {
+        "placement": {
+          "name": "Placement",
+          "summary": "You hire the person directly. Dexee finds, verifies and presents them, and stands behind the hire.",
+          "includes": {
+            "sourcing": "Sourcing and screening until you have a shortlist you would interview",
+            "verification": "Dexee Verified report on every shortlisted candidate, at no extra cost",
+            "shortlist": "First shortlist within ten business days of an approved role brief",
+            "guarantee": "90-day replacement guarantee, written into the contract",
+            "noSalaryPercentage": "A flat fee. It does not rise because the salary does"
+          }
+        },
+        "eor": {
+          "name": "Dexee as employer of record",
+          "summary": "Dexee employs the person in Colombia on your behalf. You direct the work; we carry the employment.",
+          "includes": {
+            "contract": "Colombian employment contract in the person's name, compliant with local law",
+            "payroll": "Monthly payroll, social security and severance handled and reported",
+            "compliance": "Termination, vacation and statutory benefits administered by Dexee",
+            "benefits": "Health coverage and the statutory benefits package",
+            "support": "A named contact in Barranquilla for you and for the employee"
+          }
+        },
+        "managedStaffing": {
+          "name": "Managed staffing, all in",
+          "summary": "One monthly figure per person that covers salary, employment and Dexee's management. One invoice.",
+          "includes": {
+            "allIn": "Salary, employer contributions and Dexee's fee in a single monthly figure",
+            "replacement": "Replacement at no cost if the person leaves or is not working out",
+            "management": "Performance check-ins and escalation handled by Dexee",
+            "equipment": "Equipment and connectivity arranged on request, billed at cost",
+            "singleInvoice": "One invoice in USD, no local entity required"
+          }
+        },
+        "verified": {
+          "name": "Dexee Verified",
+          "summary": "The verification report on its own, for candidates you found yourself.",
+          "includes": {
+            "identity": "Government ID checked against a live session with the candidate",
+            "spokenEnglish": "Spoken English graded against CEFR by a human reviewer",
+            "writtenEnglish": "Written English assessment, scored server-side",
+            "roleSkills": "Role-specific skills assessment with the answer key held by Dexee",
+            "report": "A single report you can forward to your hiring manager"
+          }
+        }
+      },
+      "calculatorTitle": "What the same hire costs, both ways",
+      "calculatorSubtitle": "Change any figure. The calculation runs in your browser and nothing is saved or sent.",
+      "calculator": {
+        "modeLabel": "How you would engage Dexee",
+        "mode": {
+          "placement": "Placement, you employ",
+          "eor": "Dexee employs"
+        },
+        "fields": {
+          "usMonthlySalaryUsd": "US salary, monthly",
+          "dexeeMonthlySalaryUsd": "Colombia salary, monthly",
+          "usEmployerLoadPct": "US employer taxes and benefits",
+          "dexeeEmployerLoadPct": "Colombia employer contributions",
+          "usRecruitingFeePct": "US agency fee, on first-year salary",
+          "months": "Period compared"
+        },
+        "suffix": {
+          "usd": "USD",
+          "pct": "%",
+          "months": "months"
+        },
+        "resultTitle": "Total cost over {months} months",
+        "usTitle": "Hiring in the United States",
+        "dexeeTitle": "Hiring through Dexee",
+        "lineSalary": "Salary",
+        "lineEmployerLoad": "Employer contributions",
+        "lineRecruiting": "Agency fee",
+        "linePlacement": "Placement fee",
+        "lineManagement": "Dexee management fee",
+        "lineTotal": "Total",
+        "savings": "less over {months} months, {percent}% below the US figure, using the numbers you entered",
+        "extraCost": "more over {months} months, {percent}% above the US figure, using the numbers you entered",
+        "assumptionNote": "The starting figures are assumptions, not Dexee measurements. Salaries vary by role and seniority, and employer contribution rates depend on the contract and the salary band. Replace them with your own numbers."
+      },
+      "guaranteeTeaserTitle": "What happens if the hire does not work out",
+      "guaranteeTeaserBody": "Every placement carries a {days}-day replacement guarantee. The terms, the exclusions and how to claim are published in full.",
+      "guaranteeTeaserCta": "Read the guarantee terms"
+    },
+    "guarantee": {
+      "title": "Replacement guarantee",
+      "subtitle": "What Dexee owes you if a placement does not work out, in the words that go into the contract.",
+      "draftNotice": "These terms are published so a buyer's counsel can read them before a call. They are a draft pending review by Dexee's counsel, and the signed contract governs. Where the two differ, the contract wins.",
+      "windowTitle": "The window",
+      "windowBody": "If a placed person leaves, or you end the engagement for performance, within {days} calendar days of their start date, Dexee replaces them at no additional fee. Founding clients have {foundingDays} days.",
+      "windowFoundingNote": "The window runs from the start date, not from the signature date, and it is not paused by holidays.",
+      "stepsTitle": "How to claim",
+      "steps": {
+        "notify": {
+          "label": "Step 1",
+          "body": "Write to your Dexee contact within {claimDays} calendar days of the person's last working day, stating the start date, the last day and what went wrong."
+        },
+        "review": {
+          "label": "Step 2",
+          "body": "Dexee answers in writing within {responseDays} business days, accepting the claim or stating which exclusion applies and why."
+        },
+        "shortlist": {
+          "label": "Step 3",
+          "body": "On an accepted claim, Dexee presents the first replacement shortlist within {shortlistDays} business days, against the original role brief."
+        },
+        "replace": {
+          "label": "Step 4",
+          "body": "You interview and select as you did the first time. There is no second placement fee, and the guarantee window restarts with the replacement."
+        }
+      },
+      "exclusionsTitle": "What is not covered",
+      "exclusionsIntro": "The guarantee is a commitment about the person Dexee presented, not about changes on your side after they started. It does not apply when:",
+      "exclusions": {
+        "roleChanged": "The role changed materially from the brief Dexee sourced against, in scope, seniority or reporting line.",
+        "noOnboarding": "The person was not given the access, equipment or direction needed to do the work in the first three weeks.",
+        "redundancy": "The position was eliminated, put on hold or absorbed for budget or restructuring reasons.",
+        "unpaidInvoice": "A Dexee invoice for the engagement is more than thirty days overdue when the claim is filed.",
+        "directOffer": "The person was moved to a different role, entity or contract without Dexee being informed."
+      },
+      "remedyTitle": "The remedy",
+      "remedyBody": "The remedy is a replacement. If Dexee accepts a claim and does not present a shortlist within {shortlistDays} business days, you may take a credit for the placement fee against any Dexee service within twelve months, or ask for it back. Dexee does not limit its liability below the fee you paid for that placement.",
+      "remedyNote": "Nothing here limits rights you have under the law that applies to your contract.",
+      "questionsTitle": "Questions before you sign",
+      "questionsBody": "Send the terms to your counsel and write to us with what needs changing. Dexee would rather negotiate the language now than argue about it later.",
+      "questionsCta": "Contact us"
     },
     "talent": {
       "heroTitle": "Remote roles with US companies, from Colombia",

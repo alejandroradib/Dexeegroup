@@ -102,6 +102,8 @@
       "companies": "Para empresas",
       "talent": "Para talento",
       "jobs": "Vacantes",
+      "pricing": "Precios",
+      "guarantee": "Garantía",
       "about": "Nosotros",
       "contact": "Contacto",
       "privacy": "Política de privacidad",
@@ -122,6 +124,7 @@
     "marketing": {
       "forCompanies": "Para empresas",
       "forTalent": "Para talento",
+      "pricing": "Precios",
       "jobs": "Vacantes",
       "about": "Nosotros",
       "contact": "Contacto",
@@ -382,6 +385,10 @@
       "aboutDescription": "Socio de talento y back office nearshore para empresas en Estados Unidos, con sede en Barranquilla, Colombia.",
       "contact": "Contacto",
       "contactDescription": "Cuéntenos qué necesita. Respondemos en un día hábil.",
+      "pricing": "Precios",
+      "pricingDescription": "Colocación, empleador de registro y staffing gestionado con precios en USD, y la garantía de reemplazo publicada completa.",
+      "guarantee": "Garantía de reemplazo",
+      "guaranteeDescription": "La ventana de reemplazo, las exclusiones y cómo reclamar, escritas para que el abogado del comprador las lea antes de una llamada.",
       "privacy": "Política de privacidad",
       "terms": "Términos del servicio"
     },
@@ -463,8 +470,10 @@
       "how4Body": "Reporte mensual de KPI y un responsable de cuenta asignado.",
       "contractsTitle": "Cuatro formas de contratar",
       "pricingTitle": "Precios",
-      "pricingBody": "El precio depende del rol, del tipo de contrato y de la seniority. Hable con nosotros y le enviamos una cotización en una semana.",
+      "pricingBody": "Los precios están publicados. La colocación es una tarifa plana, Dexee como empleador es una tarifa mensual por persona y el staffing gestionado es una sola cifra mensual todo incluido. No hace falta cotización para verlos.",
       "pricingCta": "Hablemos",
+      "pricingSeeAll": "Ver precios completos",
+      "pricingGuaranteeCta": "Leer la garantía",
       "faqTitle": "Preguntas frecuentes",
       "faq1Q": "¿Cuánto tarda la lista corta?",
       "faq1A": "Normalmente entre una y tres semanas según el perfil. Verá a los postulantes en su pipeline a medida que se verifican.",
@@ -478,6 +487,147 @@
       "faq5A": "Sí. El resultado escrito es automático; el oral lo valida un revisor de Dexee. La insignia muestra el menor de los dos niveles.",
       "ctaTitle": "Publique su primer rol",
       "ctaBody": "Cree una cuenta de empresa, publique la vacante y reciba postulantes verificados. Dexee verifica las empresas en un día hábil."
+    },
+    "pricing": {
+      "title": "Precios",
+      "subtitle": "Cuánto cuesta cada servicio, qué incluye y qué se garantiza. No necesita pedir cotización para leer esta página.",
+      "provisionalBadge": "Preliminar",
+      "provisionalNote": "Son precios publicados y Dexee los respeta. Están marcados como preliminares porque se anclan a precios públicos de mercado mientras Dexee construye su propio historial de costos. Si un precio cambia, quien ya firmó conserva el precio que firmó.",
+      "fromAmount": "desde {amount} {unit}",
+      "depositSplit": "{deposit} al iniciar la búsqueda y {balance} cuando la persona empieza.",
+      "ctaStart": "Publicar una vacante",
+      "ctaGuarantee": "Leer la garantía",
+      "bookCta": "Hablar con un socio",
+      "units": {
+        "oneTime": "pago único",
+        "perPersonMonth": "por persona, al mes",
+        "perCandidate": "por candidato"
+      },
+      "products": {
+        "placement": {
+          "name": "Colocación",
+          "summary": "Usted contrata directamente a la persona. Dexee la busca, la verifica, la presenta y responde por la contratación.",
+          "includes": {
+            "sourcing": "Búsqueda y filtro hasta tener una terna que usted entrevistaría",
+            "verification": "Reporte Dexee Verified de cada finalista, sin costo adicional",
+            "shortlist": "Primera terna dentro de diez días hábiles desde el brief aprobado",
+            "guarantee": "Garantía de reemplazo de 90 días, escrita en el contrato",
+            "noSalaryPercentage": "Tarifa plana. No sube porque suba el salario"
+          }
+        },
+        "eor": {
+          "name": "Dexee como empleador",
+          "summary": "Dexee emplea a la persona en Colombia por cuenta suya. Usted dirige el trabajo; nosotros cargamos con la relación laboral.",
+          "includes": {
+            "contract": "Contrato laboral colombiano a nombre de la persona, conforme a la ley local",
+            "payroll": "Nómina mensual, seguridad social y cesantías gestionadas y reportadas",
+            "compliance": "Terminación, vacaciones y prestaciones de ley administradas por Dexee",
+            "benefits": "Afiliación a salud y el paquete de prestaciones de ley",
+            "support": "Un contacto con nombre en Barranquilla para usted y para el empleado"
+          }
+        },
+        "managedStaffing": {
+          "name": "Staffing gestionado, todo incluido",
+          "summary": "Una cifra mensual por persona que cubre salario, empleo y la gestión de Dexee. Una sola factura.",
+          "includes": {
+            "allIn": "Salario, aportes patronales y la tarifa de Dexee en una sola cifra mensual",
+            "replacement": "Reemplazo sin costo si la persona se va o no está funcionando",
+            "management": "Seguimiento de desempeño y escalamiento a cargo de Dexee",
+            "equipment": "Equipos y conectividad gestionados a pedido, facturados al costo",
+            "singleInvoice": "Una factura en USD, sin necesidad de entidad local"
+          }
+        },
+        "verified": {
+          "name": "Dexee Verified",
+          "summary": "El reporte de verificación por separado, para candidatos que usted mismo encontró.",
+          "includes": {
+            "identity": "Documento de identidad contrastado con una sesión en vivo con el candidato",
+            "spokenEnglish": "Inglés hablado calificado contra el MCER por un revisor humano",
+            "writtenEnglish": "Evaluación de inglés escrito, calificada en el servidor",
+            "roleSkills": "Prueba de competencias del rol, con la clave de respuestas en poder de Dexee",
+            "report": "Un solo reporte que puede reenviar a su gerente de contratación"
+          }
+        }
+      },
+      "calculatorTitle": "Lo que cuesta la misma contratación por cada vía",
+      "calculatorSubtitle": "Cambie cualquier cifra. El cálculo corre en su navegador y no se guarda ni se envía nada.",
+      "calculator": {
+        "modeLabel": "Cómo trabajaría con Dexee",
+        "mode": {
+          "placement": "Colocación, usted emplea",
+          "eor": "Dexee emplea"
+        },
+        "fields": {
+          "usMonthlySalaryUsd": "Salario en EE. UU., mensual",
+          "dexeeMonthlySalaryUsd": "Salario en Colombia, mensual",
+          "usEmployerLoadPct": "Impuestos y beneficios patronales en EE. UU.",
+          "dexeeEmployerLoadPct": "Aportes patronales en Colombia",
+          "usRecruitingFeePct": "Comisión de agencia en EE. UU., sobre el salario del primer año",
+          "months": "Periodo comparado"
+        },
+        "suffix": {
+          "usd": "USD",
+          "pct": "%",
+          "months": "meses"
+        },
+        "resultTitle": "Costo total en {months} meses",
+        "usTitle": "Contratando en Estados Unidos",
+        "dexeeTitle": "Contratando con Dexee",
+        "lineSalary": "Salario",
+        "lineEmployerLoad": "Aportes patronales",
+        "lineRecruiting": "Comisión de agencia",
+        "linePlacement": "Tarifa de colocación",
+        "lineManagement": "Tarifa de gestión Dexee",
+        "lineTotal": "Total",
+        "savings": "menos en {months} meses, {percent}% por debajo de la cifra estadounidense, con los números que usted ingresó",
+        "extraCost": "más en {months} meses, {percent}% por encima de la cifra estadounidense, con los números que usted ingresó",
+        "assumptionNote": "Las cifras iniciales son supuestos, no mediciones de Dexee. Los salarios varían por rol y seniority, y las tasas de aportes patronales dependen del contrato y del rango salarial. Reemplácelas por sus propios números."
+      },
+      "guaranteeTeaserTitle": "Qué pasa si la contratación no funciona",
+      "guaranteeTeaserBody": "Toda colocación lleva garantía de reemplazo de {days} días. Los términos, las exclusiones y cómo reclamar están publicados completos.",
+      "guaranteeTeaserCta": "Leer los términos de la garantía"
+    },
+    "guarantee": {
+      "title": "Garantía de reemplazo",
+      "subtitle": "Lo que Dexee le debe si una colocación no funciona, en las palabras que quedan en el contrato.",
+      "draftNotice": "Estos términos se publican para que el abogado del comprador los lea antes de una llamada. Son un borrador pendiente de revisión por el abogado de Dexee, y el contrato firmado es el que manda. Donde ambos difieran, prevalece el contrato.",
+      "windowTitle": "La ventana",
+      "windowBody": "Si la persona colocada se retira, o usted termina la relación por desempeño, dentro de los {days} días calendario siguientes a su fecha de inicio, Dexee la reemplaza sin cobrar de nuevo. Los clientes fundadores tienen {foundingDays} días.",
+      "windowFoundingNote": "La ventana corre desde la fecha de inicio, no desde la firma, y no se suspende por festivos.",
+      "stepsTitle": "Cómo reclamar",
+      "steps": {
+        "notify": {
+          "label": "Paso 1",
+          "body": "Escriba a su contacto en Dexee dentro de los {claimDays} días calendario siguientes al último día de trabajo de la persona, indicando fecha de inicio, último día y qué falló."
+        },
+        "review": {
+          "label": "Paso 2",
+          "body": "Dexee responde por escrito dentro de {responseDays} días hábiles, aceptando el reclamo o indicando qué exclusión aplica y por qué."
+        },
+        "shortlist": {
+          "label": "Paso 3",
+          "body": "Con el reclamo aceptado, Dexee presenta la primera terna de reemplazo dentro de {shortlistDays} días hábiles, contra el brief original del rol."
+        },
+        "replace": {
+          "label": "Paso 4",
+          "body": "Usted entrevista y selecciona como la primera vez. No hay segunda tarifa de colocación, y la ventana de garantía vuelve a empezar con el reemplazo."
+        }
+      },
+      "exclusionsTitle": "Qué no cubre",
+      "exclusionsIntro": "La garantía es un compromiso sobre la persona que Dexee presentó, no sobre cambios de su lado después de que empezó. No aplica cuando:",
+      "exclusions": {
+        "roleChanged": "El rol cambió de forma material frente al brief con el que Dexee buscó, en alcance, seniority o línea de reporte.",
+        "noOnboarding": "La persona no recibió los accesos, el equipo o la dirección necesarios para hacer el trabajo en las primeras tres semanas.",
+        "redundancy": "El cargo se eliminó, se congeló o se absorbió por razones de presupuesto o reestructuración.",
+        "unpaidInvoice": "Una factura de Dexee por esa relación lleva más de treinta días vencida al momento del reclamo.",
+        "directOffer": "La persona fue trasladada a otro rol, entidad o contrato sin informar a Dexee."
+      },
+      "remedyTitle": "El remedio",
+      "remedyBody": "El remedio es un reemplazo. Si Dexee acepta un reclamo y no presenta una terna dentro de {shortlistDays} días hábiles, usted puede tomar un crédito por la tarifa de colocación contra cualquier servicio de Dexee durante doce meses, o pedir su devolución. Dexee no limita su responsabilidad por debajo de la tarifa que usted pagó por esa colocación.",
+      "remedyNote": "Nada de lo aquí escrito limita los derechos que le otorgue la ley aplicable a su contrato.",
+      "questionsTitle": "Preguntas antes de firmar",
+      "questionsBody": "Envíe los términos a su abogado y escríbanos con lo que haya que ajustar. Dexee prefiere negociar el texto ahora que discutirlo después.",
+      "questionsCta": "Contáctenos"
     },
     "talent": {
       "heroTitle": "Roles remotos con empresas de EE. UU., desde Colombia",
