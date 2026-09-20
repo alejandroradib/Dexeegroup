@@ -2,12 +2,20 @@ import { defineConfig, devices } from "@playwright/test";
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000";
 
+/**
+ * Some environments ship a Chromium that does not match the version this @playwright/test
+ * pins, so `playwright install` is not available. Point PLAYWRIGHT_CHROMIUM_PATH at the
+ * binary and the runs use it instead of downloading one.
+ */
+const executablePath = process.env.PLAYWRIGHT_CHROMIUM_PATH;
+const launchOptions = executablePath ? { executablePath } : undefined;
+
 export default defineConfig({
   testDir: "tests/e2e",
   timeout: 60_000,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? "github" : "list",
-  use: { baseURL, trace: "on-first-retry" },
+  use: { baseURL, trace: "on-first-retry", launchOptions },
   webServer: process.env.PLAYWRIGHT_BASE_URL
     ? undefined
     : { command: "npm run dev", url: baseURL, reuseExistingServer: true, timeout: 120_000 },

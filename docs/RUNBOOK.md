@@ -72,3 +72,40 @@ Requests appear in `/admin/candidates/<id>` and notify admins. For deletion: exp
 ## Secrets scan
 
 CI runs gitleaks on every pull request. Never commit `.env.local`.
+
+## Lead queue
+
+Inbound briefs land in `contact_requests` with `request_type = 'hire'` and `status = 'new'`.
+`/admin/leads` is the queue.
+
+- **The promise.** The form commits Dexee to a written answer within one business day,
+  saying whether the role can be filled, in what timeframe and at what cost. The queue
+  measures against that: a lead still `new` after nine business hours (Monday to Friday,
+  09:00 to 18:00 Bogotá) is flagged "past the promise".
+- **Marking answered.** Use the button in the queue, not SQL. `answered_at` and
+  `answered_by` are stamped by a database trigger so the response-time figures on the
+  admin dashboard cannot be written around.
+- **Converting.** Once the client has an account, paste the company id into the convert
+  field. That links the lead to the company and moves it to `converted`.
+- **The acknowledgement email.** Queued in `email_outbox` with `dedupe_key = lead:{id}`
+  and sent by the outbox cron. If Resend is down, the lead is still saved: the insert
+  happens first and on its own. A lead with no matching outbox row means the queue insert
+  failed, and `lead_acknowledgement_queue_failed` is in the logs.
+
+## Analytics
+
+Behind `NEXT_PUBLIC_ANALYTICS_PROVIDER` (`plausible` or `ga4`) plus
+`NEXT_PUBLIC_ANALYTICS_ID`. With neither set, nothing loads and `track()` is a no-op.
+
+Nine events: `view_pricing`, `use_calculator`, `view_sample_report`, `start_lead_form`,
+`submit_lead`, `start_candidate_signup`, `complete_assessment`, `view_job`, `apply_job`.
+Properties are categories only; `sanitizeProps` drops anything personal before it leaves
+the browser. To add an event, add the name to `ANALYTICS_EVENTS` and a case to
+`tests/e2e/events.spec.ts`; the unit test fails if the catalogue and the doc disagree.
+
+## Google Indexing API
+
+Optional. Set `INDEXING_API_CREDENTIALS` to a service-account JSON key, as one line, for
+an account granted Owner on the property in Search Console. Publishing, approving,
+pausing and closing a vacancy then ping Google for both locale URLs. Without the
+credential every call is a silent no-op and nothing else changes.

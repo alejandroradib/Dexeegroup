@@ -51,6 +51,24 @@ export default async function AdminDashboardPage({ params }: PageProps<"/[locale
           action={link("/admin/applications")}
         />
         <StatCard
+          label={t("leadsThisWeek")}
+          value={stats.leadsThisWeek}
+          hint={
+            stats.leadsAwaiting > 0 ? t("leadsAwaiting", { count: stats.leadsAwaiting }) : undefined
+          }
+          action={link("/admin/leads?status=new")}
+        />
+        <StatCard
+          label={t("leadResponse")}
+          value={
+            stats.medianLeadResponseHours === null
+              ? "—"
+              : t("leadResponseValue", { hours: stats.medianLeadResponseHours })
+          }
+          hint={t("leadAnswerRate", { rate: stats.leadToAnswerRate })}
+          action={link("/admin/leads?status=answered")}
+        />
+        <StatCard
           label={t("contactRequests")}
           value={stats.contactRequestsPending}
           action={link("/admin/applications?contact=requested")}

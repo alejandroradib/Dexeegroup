@@ -13,6 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link, useRouter } from "@/i18n/navigation";
+import { track } from "@/lib/analytics/events";
 import { CONSENT_VERSION } from "@/lib/legal";
 import { signUpCandidateSchema, type SignUpCandidateInput } from "@/lib/validation/auth";
 import { COUNTRIES } from "@/lib/validation/enums";
@@ -89,9 +90,10 @@ export function SignUpCandidateForm({ next }: { next?: string }) {
     setError(null);
     start(async () => {
       const result = await signUpCandidate(values);
-      if (result.ok)
+      if (result.ok) {
+        track("start_candidate_signup");
         router.push({ pathname: "/verify-email", query: { email: result.data.email } });
-      else setError(result.error);
+      } else setError(result.error);
     });
   });
 

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { useId, useState, useTransition } from "react";
+import { useId, useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 import { FieldError } from "@/components/shared/field-error";
@@ -10,6 +10,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { track } from "@/lib/analytics/events";
 import { BUDGET_BANDS, NEEDED_BY, leadSchema, type LeadInput } from "@/lib/validation/lead";
 import { createLead } from "@/server/actions/leads";
 
@@ -29,6 +30,7 @@ export function LeadForm() {
   const fieldId = useId();
   const [pending, start] = useTransition();
   const [status, setStatus] = useState<"idle" | "success" | "error" | "rateLimited">("idle");
+  const started = useRef(false);
 
   const form = useForm<LeadInput>({
     resolver: zodResolver(leadSchema),
@@ -48,6 +50,7 @@ export function LeadForm() {
     start(async () => {
       const result = await createLead(values);
       if (result.ok) {
+        track("submit_lead", { seniority: values.seniority, budget: values.budget_band });
         setStatus("success");
         form.reset();
       } else if (result.error === "rateLimited") setStatus("rateLimited");
@@ -64,8 +67,16 @@ export function LeadForm() {
     );
   }
 
+  // One per visitor, on the first field they touch: the point of the event is intent,
+  // not keystrokes.
+  const onFirstInput = () => {
+    if (started.current) return;
+    started.current = true;
+    track("start_lead_form");
+  };
+
   return (
-    <form onSubmit={onSubmit} className="grid gap-5" noValidate>
+    <form onSubmit={onSubmit} onFocusCapture={onFirstInput} className="grid gap-5" noValidate>
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="grid gap-1.5">
           <Label htmlFor={`${fieldId}-name`}>{t("name")}</Label>

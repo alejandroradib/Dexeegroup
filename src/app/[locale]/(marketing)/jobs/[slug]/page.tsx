@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 import { JobCard } from "@/components/domain/jobs/job-card";
 import { JobDetail } from "@/components/domain/jobs/job-detail";
+import { TrackView } from "@/components/shared/track-view";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
@@ -79,6 +80,7 @@ export default async function JobPage({ params }: PageProps<"/[locale]/jobs/[slu
 
   return (
     <div className="container-marketing py-12">
+      <TrackView event="view_job" props={{ role_family: job.role_family ?? "unknown" }} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

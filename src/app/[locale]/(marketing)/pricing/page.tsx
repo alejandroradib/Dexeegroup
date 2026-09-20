@@ -5,6 +5,7 @@ import { CostCalculator } from "@/components/domain/marketing/cost-calculator";
 import { LeadForm } from "@/components/domain/marketing/lead-form";
 import { PricingTable } from "@/components/domain/marketing/pricing-table";
 import { Section, SectionTitle } from "@/components/domain/marketing/sections";
+import { TrackView } from "@/components/shared/track-view";
 import { Button } from "@/components/ui/button";
 import { GUARANTEE, hasProvisionalPricing } from "@/content/pricing";
 import { Link } from "@/i18n/navigation";
@@ -32,6 +33,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/prici
 
   return (
     <>
+      <TrackView event="view_pricing" />
       <Section tone="navy" className="py-20">
         <div className="max-w-3xl">
           <h1 className="text-4xl font-extrabold text-white sm:text-5xl">{t("title")}</h1>

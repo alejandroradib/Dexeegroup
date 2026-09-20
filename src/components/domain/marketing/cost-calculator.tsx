@@ -1,11 +1,12 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CALCULATOR_DEFAULTS, productById } from "@/content/pricing";
+import { track } from "@/lib/analytics/events";
 import { compareHireCost, type EngagementMode } from "@/lib/pricing/calculator";
 import { cn, formatUsd } from "@/lib/utils";
 
@@ -39,6 +40,7 @@ export function CostCalculator() {
   const locale = useLocale();
   const formId = useId();
   const [mode, setMode] = useState<EngagementMode>("placement");
+  const used = useRef(false);
   const [values, setValues] = useState<Record<FieldId, string>>({
     usMonthlySalaryUsd: String(CALCULATOR_DEFAULTS.usMonthlySalaryUsd),
     dexeeMonthlySalaryUsd: String(CALCULATOR_DEFAULTS.dexeeMonthlySalaryUsd),
@@ -66,6 +68,13 @@ export function CostCalculator() {
 
   const money = (amount: number) => formatUsd(amount, locale);
 
+  // Once per visitor: what matters is that they engaged, not how many digits they typed.
+  const onFirstChange = () => {
+    if (used.current) return;
+    used.current = true;
+    track("use_calculator");
+  };
+
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
       <div>
@@ -77,7 +86,10 @@ export function CostCalculator() {
                 key={option}
                 type="button"
                 aria-pressed={mode === option}
-                onClick={() => setMode(option)}
+                onClick={() => {
+                  onFirstChange();
+                  setMode(option);
+                }}
                 className={cn(
                   "focus-visible:ring-ring/40 rounded-[10px] border px-4 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none",
                   mode === option
@@ -105,9 +117,10 @@ export function CostCalculator() {
                   min={0}
                   step={field.suffix === "pct" ? 1 : 100}
                   value={values[field.id]}
-                  onChange={(event) =>
-                    setValues((current) => ({ ...current, [field.id]: event.target.value }))
-                  }
+                  onChange={(event) => {
+                    onFirstChange();
+                    setValues((current) => ({ ...current, [field.id]: event.target.value }));
+                  }}
                 />
                 <span className="text-muted-foreground w-16 shrink-0 text-xs">
                   {t(`suffix.${field.suffix}` as "suffix.usd")}

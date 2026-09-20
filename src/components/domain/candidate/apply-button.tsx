@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/toast";
 import { Link, useRouter } from "@/i18n/navigation";
+import { track } from "@/lib/analytics/events";
 import { applyToJob, withdrawApplication } from "@/server/actions/candidate";
 
 type Existing = { id: string; status: string; created_at: string } | null;
@@ -132,6 +133,7 @@ export function ApplyButton({
                   setError(null);
                   const result = await applyToJob({ job_id: jobId, cover_note: note || undefined });
                   if (result.ok) {
+                    track("apply_job");
                     toast({ title: t("success"), variant: "success" });
                     setOpen(false);
                     router.refresh();

@@ -8,6 +8,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { useRouter } from "@/i18n/navigation";
+import { track } from "@/lib/analytics/events";
 import { uploadViaSignedUrl } from "@/lib/upload";
 import { confirmAudioUpload, recordTabLeave, submitAttempt } from "@/server/actions/assessments";
 import type { AnswerRow, Attempt, PublicQuestion } from "@/server/services/assessments";
@@ -180,6 +181,7 @@ export function OralRunner({
     start(async () => {
       const result = await submitAttempt(attempt.id);
       if (result.ok) {
+        track("complete_assessment", { type: "english_oral" });
         toast({ title: tr("submitted"), variant: "success" });
         router.push(resultHref);
         router.refresh();

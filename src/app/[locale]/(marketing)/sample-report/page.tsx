@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import { Section } from "@/components/domain/marketing/sections";
+import { TrackView } from "@/components/shared/track-view";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,7 @@ export default async function SampleReportPage({ params }: PageProps<"/[locale]/
 
   return (
     <>
+      <TrackView event="view_sample_report" />
       <Section tone="navy" className="py-16">
         <div className="max-w-3xl">
           <h1 className="text-4xl font-extrabold text-white sm:text-5xl">{t("title")}</h1>

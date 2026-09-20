@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/components/ui/toast";
 import { useRouter } from "@/i18n/navigation";
+import { track } from "@/lib/analytics/events";
 import { cn } from "@/lib/utils";
 import { submitAttempt } from "@/server/actions/assessments";
 import type { AnswerRow, Attempt, PublicQuestion } from "@/server/services/assessments";
@@ -75,6 +76,7 @@ export function WorkstyleRunner({
       await flush();
       const result = await submitAttempt(attempt.id);
       if (result.ok) {
+        track("complete_assessment", { type: "psychometric" });
         toast({ title: t("submitted"), variant: "success" });
         router.push(resultHref);
         router.refresh();

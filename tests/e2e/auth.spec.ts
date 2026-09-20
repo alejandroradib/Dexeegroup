@@ -8,7 +8,7 @@ test.describe("authentication", () => {
     await page.getByLabel("Correo").fill(`e2e-${Date.now()}@example.com`);
     await page.getByLabel("Contraseña", { exact: true }).fill("Password123!");
     await page.getByRole("button", { name: "Crear mi perfil" }).click();
-    await expect(page.getByRole("alert").filter({ hasText: "autorización" })).toBeVisible();
+    await expect(page.getByRole("alert").filter({ hasText: "autorización" }).first()).toBeVisible();
   });
 
   test("sign-in with seeded admin lands on the admin dashboard", async ({ page }) => {
@@ -26,6 +26,7 @@ test.describe("authentication", () => {
     await page.getByLabel("Email").fill("owner@brightline.example.com");
     await page.getByLabel("Password").fill("DexeeSeed2026!");
     await page.getByRole("button", { name: "Sign in" }).click();
+    await page.waitForURL(/\/en\/company/);
     const payloads: string[] = [];
     page.on("response", async (response) => {
       if (response.request().method() === "POST" && response.url().includes("/company/"))

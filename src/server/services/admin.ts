@@ -1,3 +1,4 @@
+import { businessHoursBetween } from "@/lib/leads/response-time";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/types/database";
 
@@ -20,6 +21,13 @@ export type AdminDashboard = {
   jobsPendingReview: number;
   applications7d: number;
   contactRequestsPending: number;
+  /** Lead queue (PHASES-GTM 9.7). */
+  leadsThisWeek: number;
+  leadsAwaiting: number;
+  /** Business hours to a written answer, median over the answered leads. Null until there are any. */
+  medianLeadResponseHours: number | null;
+  /** Share of leads that reached "answered" or beyond, as a percentage. */
+  leadToAnswerRate: number;
   attemptsPendingValidation: number;
   activePlacements: number;
   candidatesByLevel: Record<Enums["cefr_level"] | "none", number>;
@@ -29,35 +37,43 @@ export type AdminDashboard = {
 export async function getAdminDashboard(): Promise<AdminDashboard> {
   const supabase = await createClient();
   const since = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
-  const [companies, jobs, apps, attempts, placements, candidates, contacts, validated, interviews] =
-    await Promise.all([
-      supabase
-        .from("companies")
-        .select("id", { count: "exact", head: true })
-        .eq("status", "pending"),
-      supabase
-        .from("jobs")
-        .select("id", { count: "exact", head: true })
-        .eq("status", "pending_review"),
-      supabase
-        .from("applications")
-        .select("id, status, created_at, contact_requested_at, contact_released, candidate_id"),
-      supabase
-        .from("assessment_attempts")
-        .select("id", { count: "exact", head: true })
-        .eq("status", "pending_validation"),
-      supabase
-        .from("placements")
-        .select("id", { count: "exact", head: true })
-        .eq("status", "active"),
-      supabase.from("candidates").select("id, english_verified_level"),
-      supabase.from("candidate_contacts").select("candidate_id").not("resume_path", "is", null),
-      supabase
-        .from("assessment_attempts")
-        .select("candidate_id, assessment_id")
-        .eq("status", "validated"),
-      supabase.from("mock_interviews").select("candidate_id").eq("status", "completed"),
-    ]);
+  const [
+    companies,
+    jobs,
+    apps,
+    attempts,
+    placements,
+    candidates,
+    contacts,
+    validated,
+    interviews,
+    leads,
+  ] = await Promise.all([
+    supabase.from("companies").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    supabase
+      .from("jobs")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending_review"),
+    supabase
+      .from("applications")
+      .select("id, status, created_at, contact_requested_at, contact_released, candidate_id"),
+    supabase
+      .from("assessment_attempts")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending_validation"),
+    supabase.from("placements").select("id", { count: "exact", head: true }).eq("status", "active"),
+    supabase.from("candidates").select("id, english_verified_level"),
+    supabase.from("candidate_contacts").select("candidate_id").not("resume_path", "is", null),
+    supabase
+      .from("assessment_attempts")
+      .select("candidate_id, assessment_id")
+      .eq("status", "validated"),
+    supabase.from("mock_interviews").select("candidate_id").eq("status", "completed"),
+    supabase
+      .from("contact_requests")
+      .select("status, created_at, answered_at")
+      .eq("request_type", "hire"),
+  ]);
   const perCandidate = new Map<string, Set<string>>();
   for (const a of validated.data ?? []) {
     const set = perCandidate.get(a.candidate_id) ?? new Set<string>();
@@ -101,8 +117,31 @@ export async function getAdminDashboard(): Promise<AdminDashboard> {
     none: 0,
   } as AdminDashboard["candidatesByLevel"];
   for (const c of candidates.data ?? []) candidatesByLevel[c.english_verified_level ?? "none"] += 1;
+  const leadRows = leads.data ?? [];
+  const leadsThisWeek = leadRows.filter((l) => l.created_at >= since).length;
+  const leadsAwaiting = leadRows.filter((l) => l.status === "new").length;
+  const answeredLeads = leadRows.filter((l) => l.answered_at !== null);
+  const responseHours = answeredLeads
+    .map((l) => businessHoursBetween(new Date(l.created_at), new Date(l.answered_at as string)))
+    .sort((a, b) => a - b);
+  const middle = Math.floor(responseHours.length / 2);
+  const medianLeadResponseHours =
+    responseHours.length === 0
+      ? null
+      : Math.round(
+          (responseHours.length % 2 === 0
+            ? ((responseHours[middle - 1] ?? 0) + (responseHours[middle] ?? 0)) / 2
+            : (responseHours[middle] ?? 0)) * 10,
+        ) / 10;
+  const leadToAnswerRate =
+    leadRows.length === 0 ? 0 : Math.round((answeredLeads.length / leadRows.length) * 100);
+
   return {
     adoption,
+    leadsThisWeek,
+    leadsAwaiting,
+    medianLeadResponseHours,
+    leadToAnswerRate,
     companiesPending: companies.count ?? 0,
     jobsPendingReview: jobs.count ?? 0,
     applications7d,
