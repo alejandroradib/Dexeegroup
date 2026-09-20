@@ -108,3 +108,19 @@ describe("fit prompt", () => {
     ).toBe(true);
   });
 });
+
+describe("band summary for the recommended panel", async () => {
+  const { summarizeBands } = await import("@/lib/fit/profile");
+  it("keeps high and low, drops mid", () => {
+    expect(
+      summarizeBands({ conscientiousness: "high", extraversion: "mid", intellect: "low" }),
+    ).toEqual({ high: ["conscientiousness"], low: ["intellect"], allMid: false });
+  });
+  it("flags a profile with nothing outside the mid range", () => {
+    expect(summarizeBands({ D: "mid", I: "mid", S: "mid", C: "mid" })).toEqual({
+      high: [],
+      low: [],
+      allMid: true,
+    });
+  });
+});

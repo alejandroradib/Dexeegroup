@@ -1310,7 +1310,20 @@
         "refreshFailed": "El análisis no pudo correr. Intente de nuevo en un momento.",
         "unavailable": "El servicio de análisis no está configurado en este entorno.",
         "empty": "Las recomendaciones aparecen cuando los postulantes han sido analizados.",
-        "computedAt": "Analizado el {date}"
+        "computedAt": "Analizado el {date}",
+        "profile": {
+          "heading": "Perfil evaluado",
+          "english": "Inglés",
+          "oral": "Oral {level}",
+          "written": "Escrito {level}",
+          "bigFive": "Big Five",
+          "disc": "DISC",
+          "band": "{name} ({band})",
+          "allMid": "Todos los factores en rango medio",
+          "hidden": "Perfil no compartido por el candidato",
+          "noResult": "Sin resultado vigente"
+        },
+        "pendingBody": "Análisis pendiente. Se muestra el perfil evaluado; el orden llega cuando corra el análisis."
       }
     },
     "drawer": {

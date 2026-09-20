@@ -1310,7 +1310,20 @@
         "refreshFailed": "The analysis could not run. Try again in a moment.",
         "unavailable": "The analysis service is not configured in this environment.",
         "empty": "Recommendations appear once applicants have been analysed.",
-        "computedAt": "Analysed {date}"
+        "computedAt": "Analysed {date}",
+        "profile": {
+          "heading": "Evaluated profile",
+          "english": "English",
+          "oral": "Oral {level}",
+          "written": "Written {level}",
+          "bigFive": "Big Five",
+          "disc": "DISC",
+          "band": "{name} ({band})",
+          "allMid": "All factors in the mid range",
+          "hidden": "Profile not shared by the candidate",
+          "noResult": "No valid result"
+        },
+        "pendingBody": "Analysis pending. The evaluated profile is shown; the ranking follows once the analysis runs."
       }
     },
     "drawer": {

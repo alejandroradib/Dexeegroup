@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { rankFits } from "@/lib/fit/rank";
 import type { PipelineCard } from "@/server/services/jobs";
 
+import { RecommendedProfile } from "./recommended-profile";
 import { RefreshFitButton } from "./refresh-fit-button";
 
 /**
@@ -78,6 +79,7 @@ export async function RecommendedPanel({
                     {t("score", { score: item.score ?? 0 })}
                   </span>
                 </div>
+                <RecommendedProfile results={item.card.results} />
                 {fit?.summary ? <p className="mt-2 text-sm">{fit.summary}</p> : null}
                 <div className="mt-3 grid gap-3 text-xs sm:grid-cols-2">
                   {fit && fit.strengths.length > 0 ? (
@@ -112,9 +114,31 @@ export async function RecommendedPanel({
         </ol>
       )}
       {pending.length > 0 ? (
-        <p className="text-muted-foreground mt-3 text-xs">
-          {t("pending")}: {pending.map((p) => p.card.candidate?.first_name ?? "—").join(", ")}
-        </p>
+        <div className="mt-4">
+          <p className="text-muted-foreground text-xs">{t("pendingBody")}</p>
+          <ul className="mt-2 grid gap-3">
+            {pending.map((item) => {
+              const c = item.card.candidate;
+              return (
+                <li
+                  key={item.applicationId}
+                  className="border-border rounded-[12px] border border-dashed p-4"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <a
+                      href={onOpen(item.applicationId)}
+                      className="text-navy font-semibold hover:underline"
+                    >
+                      {c ? `${c.first_name} ${c.last_initial ?? ""}.` : "—"}
+                    </a>
+                    <Badge variant="outline">{t("pending")}</Badge>
+                  </div>
+                  <RecommendedProfile results={item.card.results} />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       ) : null}
     </section>
   );
