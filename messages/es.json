@@ -392,11 +392,6 @@
       "intentHire": "Quiero contratar",
       "intentJob": "Busco un empleo remoto",
       "intentAssess": "Quiero evaluar mi nivel de inglés",
-      "metricsTitle": "En cifras",
-      "metricCandidates": "profesionales en la base de datos",
-      "metricDays": "días promedio hasta la lista corta",
-      "metricRetention": "retención de clientes",
-      "metricsNote": "Cifras actualizadas cada trimestre.",
       "timelineTitle": "De la vacante a la contratación",
       "timelineTodayLabel": "Hoy",
       "timelineToday": "Publique el rol. Cuéntenos el perfil, el tipo de contrato y el presupuesto.",
@@ -413,7 +408,28 @@
       "serviceEnglishBody": "Tamizaje escrito y oral con niveles CEFR. Los resultados orales los valida un revisor de Dexee antes de llegar a una empresa.",
       "serviceWorkstyle": "Perfil de estilo de trabajo gratuito",
       "serviceWorkstyleBody": "Un tamizaje de preferencias de trabajo y criterio en trabajo remoto. El candidato decide si las empresas ven el resumen.",
-      "testimonialsTitle": "Lo que dicen los clientes",
+      "foundingTitle": "Programa de clientes fundadores",
+      "foundingBody": "Dexee abre {seats} cupos de cliente fundador. Somos una compañía joven y preferimos decirlo: en lugar de cifras que todavía no podemos demostrar, ofrecemos condiciones que sí podemos sostener por escrito.",
+      "founding": {
+        "prioritySourcing": {
+          "title": "Búsqueda prioritaria",
+          "body": "Su rol entra primero en la cola de selección y recibe la atención directa de un socio."
+        },
+        "lockedPrice": {
+          "title": "Precio congelado {months} meses",
+          "body": "La tarifa publicada el día que firma no cambia durante {months} meses, sin importar cómo evolucione nuestra lista de precios."
+        },
+        "extendedGuarantee": {
+          "title": "Garantía extendida",
+          "body": "El periodo de reemplazo sin costo se amplía frente al estándar publicado, y queda en el contrato."
+        }
+      },
+      "foundingNote": "Cuando tengamos resultados medidos y clientes que autoricen su nombre, los publicaremos aquí con su fuente y su fecha.",
+      "transparencyTitle": "Cómo trabajamos, sin letra menuda",
+      "transparency1": "Le decimos en una semana si podemos cubrir el rol y a qué costo, incluso cuando la respuesta es que no.",
+      "transparency2": "El precio está publicado. No hay cotización sorpresa ni cargos que aparezcan al final.",
+      "transparency3": "El nivel de inglés hablado lo asigna un revisor de Dexee, no un modelo automático.",
+      "transparency4": "Los datos de contacto de un candidato se liberan solo cuando usted avanza en serio con esa persona.",
       "ctaTitle": "Empiece con un rol",
       "ctaBody": "Le decimos en una semana si podemos cubrir el rol y a qué costo.",
       "ctaPost": "Publicar vacante",

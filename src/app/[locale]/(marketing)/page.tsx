@@ -1,19 +1,18 @@
 import { BriefcaseIcon, LanguagesIcon, SparklesIcon, UsersIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { BookCallButton } from "@/components/domain/marketing/book-call-button";
 import {
   ChevronList,
   FeatureCard,
-  Metric,
   Section,
   SectionTitle,
   Steps,
 } from "@/components/domain/marketing/sections";
 import { Button } from "@/components/ui/button";
+import { FOUNDING_CLIENT_PROGRAM } from "@/content/proof";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
-import { serverEnv } from "@/lib/env";
-import { SITE_METRICS, TESTIMONIALS } from "@/lib/site";
 
 import type { Metadata } from "next";
 
@@ -31,9 +30,8 @@ export async function generateMetadata({ params }: PageProps<"/[locale]">): Prom
 }
 
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
-  const locale = await pageLocale(params);
+  await pageLocale(params);
   const t = await getTranslations("marketing.home");
-  const calendly = serverEnv().CALENDLY_URL;
 
   return (
     <>
@@ -69,16 +67,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <Button asChild variant="accent" size="lg">
               <Link href="/sign-up/company">{t("ctaPost")}</Link>
             </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
+            <BookCallButton
+              label={t("ctaCall")}
               className="border-white/30 bg-transparent text-white hover:bg-white/10"
-            >
-              <a href={calendly} target="_blank" rel="noreferrer">
-                {t("ctaCall")}
-              </a>
-            </Button>
+            />
           </div>
         </div>
       </Section>
@@ -121,18 +113,27 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       </Section>
 
       <Section tone="navy">
-        <SectionTitle title={t("metricsTitle")} />
-        <div className="grid gap-6 sm:grid-cols-3">
-          <Metric
-            value={SITE_METRICS.candidatesInDatabase.toLocaleString(
-              locale === "es" ? "es-CO" : "en-US",
-            )}
-            label={t("metricCandidates")}
-          />
-          <Metric value={String(SITE_METRICS.averageDaysToShortlist)} label={t("metricDays")} />
-          <Metric value={`${SITE_METRICS.clientRetentionPercent}%`} label={t("metricRetention")} />
-        </div>
-        <p className="mt-6 text-xs text-white/50">{t("metricsNote")}</p>
+        <SectionTitle
+          title={t("foundingTitle")}
+          subtitle={t("foundingBody", { seats: FOUNDING_CLIENT_PROGRAM.seats })}
+        />
+        <ul className="mt-8 grid gap-4 sm:grid-cols-3">
+          {(["prioritySourcing", "lockedPrice", "extendedGuarantee"] as const).map((benefit) => (
+            <li key={benefit} className="rounded-[12px] bg-white/5 p-6">
+              <p className="text-green text-sm font-semibold">
+                {t(`founding.${benefit}.title` as "founding.prioritySourcing.title", {
+                  months: FOUNDING_CLIENT_PROGRAM.priceLockMonths,
+                })}
+              </p>
+              <p className="mt-2 text-sm text-white/80">
+                {t(`founding.${benefit}.body` as "founding.prioritySourcing.body", {
+                  months: FOUNDING_CLIENT_PROGRAM.priceLockMonths,
+                })}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 text-xs text-white/50">{t("foundingNote")}</p>
       </Section>
 
       <Section>
@@ -144,18 +145,15 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             />
           </div>
           <div>
-            <SectionTitle title={t("testimonialsTitle")} />
-            <div className="space-y-4">
-              {TESTIMONIALS.map((item) => (
-                <blockquote
-                  key={item.author}
-                  className="border-border bg-mist rounded-[12px] border p-6"
-                >
-                  <p className="text-navy text-base">“{item.quote}”</p>
-                  <footer className="text-muted-foreground mt-3 text-sm">{item.author}</footer>
-                </blockquote>
-              ))}
-            </div>
+            <SectionTitle title={t("transparencyTitle")} />
+            <ChevronList
+              items={[
+                t("transparency1"),
+                t("transparency2"),
+                t("transparency3"),
+                t("transparency4"),
+              ]}
+            />
           </div>
         </div>
       </Section>
@@ -168,11 +166,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <Button asChild variant="accent" size="lg">
               <Link href="/sign-up/company">{t("ctaPost")}</Link>
             </Button>
-            <Button asChild variant="outline" size="lg">
-              <a href={calendly} target="_blank" rel="noreferrer">
-                {t("ctaCall")}
-              </a>
-            </Button>
+            <BookCallButton label={t("ctaCall")} />
           </div>
         </div>
       </Section>

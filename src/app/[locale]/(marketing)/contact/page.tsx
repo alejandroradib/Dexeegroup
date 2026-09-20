@@ -26,6 +26,7 @@ export async function generateMetadata({
 export default async function ContactPage({ params }: PageProps<"/[locale]/contact">) {
   await pageLocale(params);
   const t = await getTranslations("marketing.contact");
+  const calendly = serverEnv().CALENDLY_URL;
   return (
     <div className="container-marketing grid gap-12 py-16 lg:grid-cols-[1fr_360px]">
       <div>
@@ -45,13 +46,17 @@ export default async function ContactPage({ params }: PageProps<"/[locale]/conta
         </p>
       </div>
       <aside className="bg-navy rounded-[12px] p-8 text-white lg:self-start">
-        <h2 className="text-xl text-white">{t("bookTitle")}</h2>
-        <p className="mt-2 text-white/80">{t("bookBody")}</p>
-        <Button asChild variant="accent" className="mt-6">
-          <a href={serverEnv().CALENDLY_URL} target="_blank" rel="noreferrer">
-            {t("bookCta")}
-          </a>
-        </Button>
+        {calendly ? (
+          <>
+            <h2 className="text-xl text-white">{t("bookTitle")}</h2>
+            <p className="mt-2 text-white/80">{t("bookBody")}</p>
+            <Button asChild variant="accent" className="mt-6">
+              <a href={calendly} target="_blank" rel="noreferrer">
+                {t("bookCta")}
+              </a>
+            </Button>
+          </>
+        ) : null}
         <p className="mt-8 text-sm text-white/60">
           {SITE.legalName}
           <br />

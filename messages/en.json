@@ -392,11 +392,6 @@
       "intentHire": "I want to hire",
       "intentJob": "I am looking for a remote job",
       "intentAssess": "I want my English level assessed",
-      "metricsTitle": "In numbers",
-      "metricCandidates": "professionals in the database",
-      "metricDays": "average days to a shortlist",
-      "metricRetention": "client retention",
-      "metricsNote": "Figures updated quarterly.",
       "timelineTitle": "From role to hire",
       "timelineTodayLabel": "Today",
       "timelineToday": "Post the role. Tell us the profile, the contract type and the budget.",
@@ -413,7 +408,28 @@
       "serviceEnglishBody": "Written and oral screening mapped to CEFR levels. Oral results are validated by Dexee reviewers before they reach a company.",
       "serviceWorkstyle": "Free work-style profile",
       "serviceWorkstyleBody": "A screening of working preferences and remote-work judgment. Candidates decide whether companies see the summary.",
-      "testimonialsTitle": "What clients say",
+      "foundingTitle": "Founding client program",
+      "foundingBody": "Dexee is opening {seats} founding client seats. We are a young company and would rather say so: instead of numbers we cannot yet prove, we offer terms we can put in writing.",
+      "founding": {
+        "prioritySourcing": {
+          "title": "Priority sourcing",
+          "body": "Your role goes to the front of the sourcing queue and gets a partner's direct attention."
+        },
+        "lockedPrice": {
+          "title": "Price locked for {months} months",
+          "body": "The published rate on the day you sign holds for {months} months, whatever happens to our price list."
+        },
+        "extendedGuarantee": {
+          "title": "Extended guarantee",
+          "body": "The no-cost replacement window is longer than the published standard, and it goes in the contract."
+        }
+      },
+      "foundingNote": "Once we have measured results and clients who authorize their name, we will publish them here with source and date.",
+      "transparencyTitle": "How we work, no fine print",
+      "transparency1": "We tell you within a week whether we can fill the role and at what cost, including when the answer is no.",
+      "transparency2": "The price is published. No surprise quote, no charges that appear at the end.",
+      "transparency3": "A Dexee reviewer assigns the spoken English level, not an automated model.",
+      "transparency4": "A candidate's contact details are released only when you move forward seriously with that person.",
       "ctaTitle": "Start with one role",
       "ctaBody": "We tell you within a week whether we can fill the role, and at what cost.",
       "ctaPost": "Post a job",

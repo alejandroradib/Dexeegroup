@@ -1,6 +1,7 @@
 import { ClockIcon, ShieldCheckIcon, UsersIcon, WalletIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { BookCallButton } from "@/components/domain/marketing/book-call-button";
 import { FeatureCard, Section, SectionTitle, Steps } from "@/components/domain/marketing/sections";
 import {
   Accordion,
@@ -11,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
-import { serverEnv } from "@/lib/env";
 import { CONTRACT_TYPES } from "@/lib/validation/enums";
 
 import type { Metadata } from "next";
@@ -35,7 +35,6 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
   await pageLocale(params);
   const t = await getTranslations("marketing.companies");
   const te = await getTranslations("enums");
-  const calendly = serverEnv().CALENDLY_URL;
   const faqs = [1, 2, 3, 4, 5] as const;
 
   return (
@@ -48,16 +47,10 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
             <Button asChild variant="accent" size="lg">
               <Link href="/sign-up/company">{t("ctaTitle")}</Link>
             </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
+            <BookCallButton
+              label={t("pricingCta")}
               className="border-white/30 bg-transparent text-white hover:bg-white/10"
-            >
-              <a href={calendly} target="_blank" rel="noreferrer">
-                {t("pricingCta")}
-              </a>
-            </Button>
+            />
           </div>
         </div>
       </Section>
@@ -96,11 +89,7 @@ export default async function ForCompaniesPage({ params }: PageProps<"/[locale]/
         <div className="grid gap-10 lg:grid-cols-2">
           <div>
             <SectionTitle title={t("pricingTitle")} subtitle={t("pricingBody")} />
-            <Button asChild variant="accent">
-              <a href={calendly} target="_blank" rel="noreferrer">
-                {t("pricingCta")}
-              </a>
-            </Button>
+            <BookCallButton label={t("pricingCta")} variant="accent" size="default" />
           </div>
           <div>
             <SectionTitle title={t("faqTitle")} />

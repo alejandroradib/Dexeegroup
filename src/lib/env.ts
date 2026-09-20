@@ -25,7 +25,8 @@ export const serverEnvSchema = z.object({
   UPSTASH_REDIS_REST_URL: optionalString,
   UPSTASH_REDIS_REST_TOKEN: optionalString,
   SENTRY_DSN: optionalString,
-  CALENDLY_URL: z.string().default("https://calendly.com/dexee/20min"),
+  /** Booking link. Optional: when unset the "book a call" buttons are not rendered. */
+  CALENDLY_URL: optionalString,
   ADMIN_EMAIL: optionalString,
 });
 
