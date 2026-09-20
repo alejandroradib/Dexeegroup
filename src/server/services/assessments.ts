@@ -15,6 +15,8 @@ import {
 } from "@/lib/ai/prompts/english-writing";
 import { transcribe, transcriptionConfigured } from "@/lib/ai/transcription";
 import type { Cefr } from "@/lib/assessments/cefr";
+import { scoreDisc, type Style } from "@/lib/assessments/disc";
+import { discReport } from "@/lib/assessments/disc-report";
 import { oralLevel, wordsPerMinute } from "@/lib/assessments/english-oral";
 import {
   combineWrittenLevels,
@@ -69,6 +71,7 @@ type WrittenConfig = {
 };
 type OralConfig = { prompts_per_attempt?: number };
 type PsychConfig = { bands?: { low_below: number; high_above: number }; strength_sjt_min?: number };
+type DiscConfig = { bands?: { low_below: number; high_above: number } };
 
 /** Draws the question set for a new attempt, deterministic per attempt id. */
 export async function assignQuestions(
@@ -358,6 +361,43 @@ export async function scorePsychometricAttempt(
     .update({
       status: "validated",
       final_score: scores.sjt.score,
+      ai_result: scores as unknown as Json,
+      report: report as unknown as Json,
+      validated_at: new Date().toISOString(),
+    })
+    .eq("id", attempt.id);
+  await dispatchEvent({ type: "assessment_result", attemptId: attempt.id, stage: "scored" });
+}
+
+/** DISC-style profile: Likert only, scored deterministically, validated on submit like the work-style profile. */
+export async function scoreDiscAttempt(attempt: Attempt, assessment: AssessmentRow): Promise<void> {
+  const admin = createAdminClient();
+  const config = (assessment.config ?? {}) as DiscConfig;
+  const [{ data: questions }, { data: answers }] = await Promise.all([
+    admin.from("assessment_questions").select("*").in("id", attempt.question_ids),
+    admin.from("assessment_answers").select("*").eq("attempt_id", attempt.id),
+  ]);
+  const items = (questions ?? [])
+    .filter((q) => q.question_type === "likert")
+    .map((q) => {
+      const key = (q.answer_key as { style?: Style; reverse?: boolean } | null) ?? {};
+      return {
+        id: q.id,
+        style: (key.style ?? q.factor ?? "D") as Style,
+        reverse: Boolean(key.reverse),
+      };
+    });
+  const scores = scoreDisc(
+    items,
+    (answers ?? []).map((a) => ({ question_id: a.question_id, likert_value: a.likert_value })),
+    config.bands,
+  );
+  const report = discReport(scores);
+  await admin
+    .from("assessment_attempts")
+    .update({
+      status: "validated",
+      final_score: scores.styles[scores.primary].scaled,
       ai_result: scores as unknown as Json,
       report: report as unknown as Json,
       validated_at: new Date().toISOString(),

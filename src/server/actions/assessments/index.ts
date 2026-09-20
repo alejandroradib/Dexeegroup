@@ -14,6 +14,7 @@ import {
   getAssessmentByType,
   isExpired,
   processOralAttempt,
+  scoreDiscAttempt,
   scorePsychometricAttempt,
   scoreWrittenAttempt,
   type AssessmentType,
@@ -185,6 +186,8 @@ export async function submitAttempt(attemptId: string): Promise<Result<{ status:
     await scoreWrittenAttempt(updated, assessment, locale);
   } else if (assessment.type === "psychometric") {
     await scorePsychometricAttempt(updated, assessment);
+  } else if (assessment.type === "disc") {
+    await scoreDiscAttempt(updated, assessment);
   } else {
     // Oral: transcription and grading run in the background and via the cron.
     after(async () => {

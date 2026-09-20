@@ -135,7 +135,7 @@ export async function loadBanksInto(db: PGlite): Promise<number> {
     "select id, type from public.assessments",
   );
   let count = 0;
-  for (const type of ["english_written", "english_oral", "psychometric"] as const) {
+  for (const type of ["english_written", "english_oral", "psychometric", "disc"] as const) {
     const assessment = rows.find((r) => r.type === type);
     if (!assessment) continue;
     for (const q of banks[type]) {

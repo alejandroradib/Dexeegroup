@@ -16,19 +16,22 @@ export default async function CandidateSettingsPage({
   const query = await searchParams;
   const user = await getSessionUser();
   const supabase = await createClient();
-  const [profile, t, dataRequests, { data: workstyle }] = await Promise.all([
-    getCurrentCandidateProfile(user!.id),
-    getTranslations("candidate.settings"),
-    listDataRequests(user!.id),
+  const latestProfile = (type: "psychometric" | "disc") =>
     supabase
       .from("assessment_attempts")
       .select("id, visible_to_companies, assessments!inner (type)")
       .eq("candidate_id", user!.id)
       .eq("status", "validated")
-      .eq("assessments.type", "psychometric")
+      .eq("assessments.type", type)
       .order("validated_at", { ascending: false })
       .limit(1)
-      .maybeSingle(),
+      .maybeSingle();
+  const [profile, t, dataRequests, { data: workstyle }, { data: disc }] = await Promise.all([
+    getCurrentCandidateProfile(user!.id),
+    getTranslations("candidate.settings"),
+    listDataRequests(user!.id),
+    latestProfile("psychometric"),
+    latestProfile("disc"),
   ]);
   if (!profile) notFound();
   const prefs = {
@@ -49,6 +52,7 @@ export default async function CandidateSettingsPage({
             ? { id: workstyle.id, visible_to_companies: workstyle.visible_to_companies }
             : null
         }
+        discAttempt={disc ? { id: disc.id, visible_to_companies: disc.visible_to_companies } : null}
         dataRequests={dataRequests}
         prefs={prefs}
         initialTab={typeof query.tab === "string" ? query.tab : undefined}

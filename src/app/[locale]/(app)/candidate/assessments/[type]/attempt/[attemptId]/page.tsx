@@ -34,12 +34,13 @@ export default async function AttemptPage({
           resultHref={resultHref}
         />
       ) : null}
-      {data.assessment.type === "psychometric" ? (
+      {data.assessment.type === "psychometric" || data.assessment.type === "disc" ? (
         <WorkstyleRunner
           attempt={data.attempt}
           questions={data.questions}
           answers={data.answers}
           resultHref={resultHref}
+          type={data.assessment.type}
         />
       ) : null}
       {data.assessment.type === "english_oral" ? (

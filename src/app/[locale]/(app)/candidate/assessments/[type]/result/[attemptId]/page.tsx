@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import {
+  DiscResult,
   OralResult,
   WorkstyleResult,
   WrittenResult,
@@ -66,6 +67,16 @@ export default async function ResultPage({
         <WrittenResult attempt={data.attempt} />
       ) : data.assessment.type === "english_oral" ? (
         <OralResult attempt={data.attempt} />
+      ) : data.assessment.type === "disc" ? (
+        <DiscResult
+          attempt={data.attempt}
+          visibilityControl={
+            <WorkstyleVisibilityToggle
+              attemptId={attemptId}
+              initial={data.attempt.visible_to_companies}
+            />
+          }
+        />
       ) : (
         <WorkstyleResult
           attempt={data.attempt}

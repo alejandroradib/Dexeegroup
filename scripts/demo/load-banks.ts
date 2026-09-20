@@ -1,13 +1,13 @@
 /**
  * Prints SQL that inserts the JSON question banks into public.assessment_questions and
- * activates the three assessments. Idempotent: rows are matched by options->>'bank_id'.
+ * activates the four assessments. Idempotent: rows are matched by options->>'bank_id'.
  * Used by scripts/demo/setup-db.sh:  npx tsx scripts/demo/load-banks.ts | psql ...
  */
 import path from "node:path";
 
 import { type BankQuestion, loadBanks } from "../lib/banks";
 
-const TYPES = ["english_written", "english_oral", "psychometric"] as const;
+const TYPES = ["english_written", "english_oral", "psychometric", "disc"] as const;
 
 function lit(value: string | null): string {
   if (value === null) return "null";
@@ -44,7 +44,7 @@ function main() {
     }
   }
   out.push(
-    "update public.assessments set is_active = true where type in ('english_written', 'english_oral', 'psychometric');",
+    "update public.assessments set is_active = true where type in ('english_written', 'english_oral', 'psychometric', 'disc');",
   );
   out.push("commit;");
   out.push(`-- ${count} bank questions`);

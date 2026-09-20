@@ -108,6 +108,7 @@ export const ASSESSMENT_TYPES = [
   "english_written",
   "english_oral",
   "psychometric",
+  "disc",
 ] as const satisfies readonly Enums["assessment_type"][];
 export const LOCALES = ["en", "es"] as const satisfies readonly Enums["locale"][];
 

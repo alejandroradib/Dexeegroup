@@ -71,7 +71,7 @@ async function main() {
   const banks = loadBanks(path.resolve(process.cwd(), "supabase/seed"));
   const { data: assessments, error } = await supabase.from("assessments").select("id, type");
   if (error) throw error;
-  for (const type of ["english_written", "english_oral", "psychometric"] as const) {
+  for (const type of ["english_written", "english_oral", "psychometric", "disc"] as const) {
     const assessment = (assessments ?? []).find((a) => a.type === type);
     if (!assessment) {
       console.warn(`No assessments row for ${type}; run the SQL seed first.`);

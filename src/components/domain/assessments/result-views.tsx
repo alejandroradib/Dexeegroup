@@ -3,6 +3,7 @@ import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { StatusChip } from "@/components/shared/status-chip";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import type { DiscReport } from "@/lib/assessments/disc";
 import type { Band } from "@/lib/assessments/english-written";
 import type { WorkstyleReport } from "@/lib/assessments/workstyle";
 import type { Attempt } from "@/server/services/assessments";
@@ -249,6 +250,77 @@ export function WorkstyleResult({
         <section className="bg-navy rounded-[16px] p-6 text-white">
           <h2 className="text-base text-white">{t("strengths")}</h2>
           <ul className="mt-3 space-y-2 text-sm text-white/90">
+            {report.strengths[locale].map((s) => (
+              <li key={s} className="flex gap-2">
+                <span className="text-green">•</span>
+                {s}
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section className="border-border rounded-[12px] border bg-white p-5">
+          {visibilityControl}
+          <p className="text-muted-foreground mt-2 text-xs">{t("visibilityHint")}</p>
+        </section>
+        <p className="text-muted-foreground text-xs">{report.disclaimer[locale]}</p>
+      </aside>
+    </div>
+  );
+}
+
+/** DISC-style profile result. Same shape as the work-style view: descriptors, not verdicts. */
+export function DiscResult({
+  attempt,
+  visibilityControl,
+}: {
+  attempt: Attempt;
+  visibilityControl: React.ReactNode;
+}) {
+  const t = useTranslations("assessments.result.disc");
+  const tr = useTranslations("assessments.result");
+  const locale = useLocale() === "es" ? "es" : "en";
+  const report = attempt.report as DiscReport | null;
+  if (!report) return <Alert>{tr("levelPending")}</Alert>;
+  return (
+    <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+      <div className="grid gap-6">
+        <section className="bg-navy rounded-[16px] p-6 text-white">
+          <p className="text-xs tracking-wide text-white/70 uppercase">{t("headline")}</p>
+          <p className="font-heading mt-2 text-2xl font-bold text-white">
+            {report.headline[locale]}
+          </p>
+        </section>
+        <section className="border-border rounded-[12px] border bg-white p-5">
+          <h2 className="text-base">{t("styles")}</h2>
+          <ul className="mt-4 grid gap-5">
+            {Object.entries(report.styles).map(([style, f]) => (
+              <li key={style}>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-navy font-semibold">
+                    <span className="text-green font-heading mr-2">{style}</span>
+                    {f.label[locale]}
+                  </span>
+                  <span className="text-muted-foreground">{f.scaled}/100</span>
+                </div>
+                <div className="bg-mist mt-1 h-2 rounded-full">
+                  <div className="bg-green h-2 rounded-full" style={{ width: `${f.scaled}%` }} />
+                </div>
+                <p className="mt-2 text-sm">
+                  <span className="font-medium">{t("preferences")}:</span> {f.preferences[locale]}
+                </p>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  <span className="text-foreground font-medium">{t("environments")}:</span>{" "}
+                  {f.environments[locale]}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+      <aside className="grid gap-4 self-start">
+        <section className="border-border rounded-[12px] border bg-white p-5">
+          <h2 className="text-base">{t("strengths")}</h2>
+          <ul className="mt-3 space-y-2 text-sm">
             {report.strengths[locale].map((s) => (
               <li key={s} className="flex gap-2">
                 <span className="text-green">•</span>

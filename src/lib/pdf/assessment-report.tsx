@@ -1,5 +1,6 @@
 import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 
+import type { DiscReport } from "@/lib/assessments/disc";
 import type { WorkstyleReport } from "@/lib/assessments/workstyle";
 import type { Attempt } from "@/server/services/assessments";
 
@@ -56,6 +57,9 @@ type Labels = {
   factors: string;
   sjt: string;
   strengths: string;
+  /** DISC profile: section title for the four styles and the headline label. */
+  styles: string;
+  profile: string;
   disclaimer: string;
   verified: string;
 };
@@ -87,6 +91,7 @@ export function AssessmentReportPdf({
     : "";
   const written = type === "english_written" ? (attempt.report as WrittenReport | null) : null;
   const workstyle = type === "psychometric" ? (attempt.report as WorkstyleReport | null) : null;
+  const disc = type === "disc" ? (attempt.report as DiscReport | null) : null;
   const oral =
     type === "english_oral" ? (attempt.ai_result as { feedback?: string[] } | null) : null;
   return (
@@ -105,7 +110,7 @@ export function AssessmentReportPdf({
         <Text style={styles.subtitle}>
           {labels.candidate}: {candidateName} · {labels.date}: {dateText}
         </Text>
-        {type !== "psychometric" ? (
+        {type !== "psychometric" && type !== "disc" ? (
           <View style={styles.hero}>
             <Text style={styles.heroLabel}>{labels.level}</Text>
             <Text style={styles.heroLevel}>{attempt.final_level ?? "—"}</Text>
@@ -181,6 +186,38 @@ export function AssessmentReportPdf({
                 </Text>
               ))}
             </View>
+          </>
+        ) : null}
+        {disc ? (
+          <>
+            <View style={styles.hero}>
+              <Text style={styles.heroLabel}>{labels.profile}</Text>
+              <Text style={styles.heroLevel}>{disc.headline[locale]}</Text>
+            </View>
+            <View style={styles.section}>
+              <Text style={styles.h2}>{labels.styles}</Text>
+              {Object.entries(disc.styles).map(([style, f]) => (
+                <View key={style} style={{ marginBottom: 6 }}>
+                  <View style={styles.row}>
+                    <Text style={{ fontFamily: "Helvetica-Bold" }}>
+                      {style} · {f.label[locale]}
+                    </Text>
+                    <Text style={styles.muted}>{f.scaled} / 100</Text>
+                  </View>
+                  <Text>{f.preferences[locale]}</Text>
+                  <Text style={styles.muted}>{f.environments[locale]}</Text>
+                </View>
+              ))}
+            </View>
+            <View style={styles.section}>
+              <Text style={styles.h2}>{labels.strengths}</Text>
+              {disc.strengths[locale].map((s) => (
+                <Text key={s} style={styles.bullet}>
+                  • {s}
+                </Text>
+              ))}
+            </View>
+            <Text style={styles.muted}>{disc.disclaimer[locale]}</Text>
           </>
         ) : null}
         <Text style={styles.footer}>{labels.disclaimer} Dexee S.A.S., Barranquilla, Colombia.</Text>

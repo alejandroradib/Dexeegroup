@@ -1,0 +1,43 @@
+{
+  "source": "Original Dexee items on the four-factor model of workplace behaviour described by William Moulton Marston (1928), which is in the public domain. Not derived from, and not to be presented as, any commercial DiSC(R) instrument.",
+  "version": 1,
+  "scale": {
+    "min": 1,
+    "max": 5,
+    "labels_en": ["Very unlike me", "Somewhat unlike me", "Neither", "Somewhat like me", "Very like me"],
+    "labels_es": ["Muy distinto a mí", "Algo distinto a mí", "Ni lo uno ni lo otro", "Algo parecido a mí", "Muy parecido a mí"]
+  },
+  "items": [
+    { "id": "disc-d-01", "style": "D", "reverse": false, "text_en": "I make decisions quickly, even with incomplete information.", "text_es": "Tomo decisiones rápido, incluso con información incompleta." },
+    { "id": "disc-d-02", "style": "D", "reverse": false, "text_en": "I take charge when a group has no clear leader.", "text_es": "Tomo el mando cuando un grupo no tiene un líder claro." },
+    { "id": "disc-d-03", "style": "D", "reverse": false, "text_en": "I push for results even when it creates some friction.", "text_es": "Empujo por resultados aunque genere algo de fricción." },
+    { "id": "disc-d-04", "style": "D", "reverse": false, "text_en": "I prefer to be measured by outcomes rather than by effort.", "text_es": "Prefiero que me midan por resultados y no por esfuerzo." },
+    { "id": "disc-d-05", "style": "D", "reverse": false, "text_en": "I would rather set the goal than be handed one.", "text_es": "Prefiero fijar la meta que recibirla ya definida." },
+    { "id": "disc-d-06", "style": "D", "reverse": true, "text_en": "I avoid confronting people about problems in their work.", "text_es": "Evito confrontar a las personas por problemas en su trabajo." },
+    { "id": "disc-d-07", "style": "D", "reverse": true, "text_en": "In uncertain situations I wait for someone else to make the call.", "text_es": "En situaciones inciertas espero a que otra persona decida." },
+
+    { "id": "disc-i-01", "style": "I", "reverse": false, "text_en": "I enjoy persuading others to see things my way.", "text_es": "Disfruto convencer a otros de ver las cosas a mi manera." },
+    { "id": "disc-i-02", "style": "I", "reverse": false, "text_en": "I find it easy to start a conversation with someone I do not know.", "text_es": "Me resulta fácil iniciar una conversación con alguien que no conozco." },
+    { "id": "disc-i-03", "style": "I", "reverse": false, "text_en": "I bring energy to a team when morale is low.", "text_es": "Le doy energía al equipo cuando el ánimo está bajo." },
+    { "id": "disc-i-04", "style": "I", "reverse": false, "text_en": "I think out loud and refine my ideas by talking them through.", "text_es": "Pienso en voz alta y afino mis ideas conversándolas." },
+    { "id": "disc-i-05", "style": "I", "reverse": false, "text_en": "Recognition from colleagues motivates me.", "text_es": "El reconocimiento de mis colegas me motiva." },
+    { "id": "disc-i-06", "style": "I", "reverse": true, "text_en": "I prefer to communicate in writing rather than in person.", "text_es": "Prefiero comunicarme por escrito y no en persona." },
+    { "id": "disc-i-07", "style": "I", "reverse": true, "text_en": "I keep my opinions to myself in group discussions.", "text_es": "Me guardo mis opiniones en las discusiones de grupo." },
+
+    { "id": "disc-s-01", "style": "S", "reverse": false, "text_en": "I prefer a predictable routine to frequent changes of plan.", "text_es": "Prefiero una rutina predecible a cambios frecuentes de plan." },
+    { "id": "disc-s-02", "style": "S", "reverse": false, "text_en": "I am patient with people who need time to learn.", "text_es": "Tengo paciencia con quienes necesitan tiempo para aprender." },
+    { "id": "disc-s-03", "style": "S", "reverse": false, "text_en": "I would rather keep a team stable than reshuffle it for speed.", "text_es": "Prefiero mantener un equipo estable que reorganizarlo para ir más rápido." },
+    { "id": "disc-s-04", "style": "S", "reverse": false, "text_en": "I listen more than I speak in a meeting.", "text_es": "En una reunión escucho más de lo que hablo." },
+    { "id": "disc-s-05", "style": "S", "reverse": false, "text_en": "I finish what I start before taking on something new.", "text_es": "Termino lo que empiezo antes de asumir algo nuevo." },
+    { "id": "disc-s-06", "style": "S", "reverse": true, "text_en": "I get restless when a task stays the same for weeks.", "text_es": "Me inquieto cuando una tarea sigue igual durante semanas." },
+    { "id": "disc-s-07", "style": "S", "reverse": true, "text_en": "I adapt quickly when priorities change without warning.", "text_es": "Me adapto rápido cuando las prioridades cambian sin aviso." },
+
+    { "id": "disc-c-01", "style": "C", "reverse": false, "text_en": "I check my work twice before I hand it in.", "text_es": "Reviso mi trabajo dos veces antes de entregarlo." },
+    { "id": "disc-c-02", "style": "C", "reverse": false, "text_en": "I prefer a written procedure to improvising.", "text_es": "Prefiero un procedimiento escrito a improvisar." },
+    { "id": "disc-c-03", "style": "C", "reverse": false, "text_en": "I need to understand the reasoning behind a rule before I follow it.", "text_es": "Necesito entender la lógica de una regla antes de seguirla." },
+    { "id": "disc-c-04", "style": "C", "reverse": false, "text_en": "I notice small errors that others miss.", "text_es": "Noto errores pequeños que a otros se les pasan." },
+    { "id": "disc-c-05", "style": "C", "reverse": false, "text_en": "I would rather be accurate than fast.", "text_es": "Prefiero ser preciso que rápido." },
+    { "id": "disc-c-06", "style": "C", "reverse": true, "text_en": "I am comfortable acting on a rough estimate.", "text_es": "Me siento cómodo actuando con una estimación aproximada." },
+    { "id": "disc-c-07", "style": "C", "reverse": true, "text_en": "Detailed instructions slow me down more than they help.", "text_es": "Las instrucciones detalladas me frenan más de lo que me ayudan." }
+  ]
+}

@@ -19,16 +19,19 @@ import { useAttemptAnswers, type AnswerValue } from "./use-attempt-answers";
 
 const PAGE = 10;
 
+/** Likert (plus optional situational) runner shared by the work-style and DISC profiles. */
 export function WorkstyleRunner({
   attempt,
   questions,
   answers: saved,
   resultHref,
+  type = "psychometric",
 }: {
   attempt: Attempt;
   questions: PublicQuestion[];
   answers: AnswerRow[];
   resultHref: string;
+  type?: "psychometric" | "disc";
 }) {
   const t = useTranslations("assessments.runner");
   const tc = useTranslations("common");
@@ -55,8 +58,9 @@ export function WorkstyleRunner({
     ...Array.from({ length: Math.ceil(likert.length / PAGE) }, (_, i) =>
       likert.slice(i * PAGE, (i + 1) * PAGE),
     ),
-    sjt,
+    ...(sjt.length > 0 ? [sjt] : []),
   ];
+  const onSjtPage = sjt.length > 0 && page === pages.length - 1;
   const current = pages[page] ?? [];
   const answered = questions.filter(
     (q) => answers[q.id]?.likert_value || answers[q.id]?.selected_option,
@@ -76,7 +80,7 @@ export function WorkstyleRunner({
       await flush();
       const result = await submitAttempt(attempt.id);
       if (result.ok) {
-        track("complete_assessment", { type: "psychometric" });
+        track("complete_assessment", { type });
         toast({ title: t("submitted"), variant: "success" });
         router.push(resultHref);
         router.refresh();
@@ -92,7 +96,7 @@ export function WorkstyleRunner({
       />
       {saveState === "closed" ? <Alert variant="danger">{t("attemptClosed")}</Alert> : null}
       <p className="text-navy text-sm font-medium">
-        {page < pages.length - 1 ? t("likertScale") : t("sjtIntro")}{" "}
+        {onSjtPage ? t("sjtIntro") : t("likertScale")}{" "}
         <span className="text-muted-foreground">
           ({page + 1}/{pages.length})
         </span>

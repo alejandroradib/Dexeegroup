@@ -14,6 +14,7 @@ const anon: Session = { id: null, role: "anon" };
 const admin: Session = { id: SEED.admin, role: "authenticated" };
 const laura: Session = { id: SEED.candidates.laura, role: "authenticated" };
 const andres: Session = { id: SEED.candidates.andres, role: "authenticated" };
+const santiago: Session = { id: SEED.candidates.santiago, role: "authenticated" };
 const harborOwner: Session = { id: SEED.owners.harbor, role: "authenticated" };
 const brightlineOwner: Session = { id: SEED.owners.brightline, role: "authenticated" };
 const brightlineMember: Session = { id: SEED.owners.brightlineMember, role: "authenticated" };
@@ -28,6 +29,20 @@ async function asService(tx: Tx, fn: () => Promise<unknown>, restore: Session) {
   await fn();
   await tx.query("select set_config('request.jwt.claim.sub', $1, true)", [restore.id]);
   await tx.exec(`set local role ${restore.role}`);
+}
+
+/** Runs `fn` as a different session inside the same transaction, then restores `restore`. */
+async function asAnother<T>(tx: Tx, session: Session, fn: () => Promise<T>): Promise<T> {
+  await tx.exec("reset role");
+  await tx.query("select set_config('request.jwt.claim.sub', $1, true)", [session.id ?? ""]);
+  await tx.exec(`set local role ${session.role}`);
+  try {
+    return await fn();
+  } finally {
+    await tx.exec("reset role");
+    await tx.query("select set_config('request.jwt.claim.sub', $1, true)", [admin.id]);
+    await tx.exec("set local role authenticated");
+  }
 }
 
 export type MatrixSummary = { passed: number; failed: number; failures: string[] };
@@ -861,6 +876,256 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
       },
       { commit: false },
     ),
+  );
+
+  // Phase 10: mandatory assessments, validity, valid results and fit ---------------------------
+  const ACTIVATE_ALL = "update public.assessments set is_active = true";
+  const VALIDATED_ATTEMPT = `
+    insert into public.assessment_attempts (assessment_id, candidate_id, status, validated_at, final_level, report)
+    values ($1, $2, 'validated', now() - interval '1 day', $3, $4::jsonb)`;
+  const APPLY_ANALYST = `
+    insert into public.applications (job_id, candidate_id, source, status)
+    values ($1, $2, 'candidate', 'applied')`;
+
+  await check("candidate without valid assessments or a resume cannot apply", async () =>
+    asUser(
+      db,
+      santiago,
+      async (tx) => {
+        await asService(tx, () => tx.exec(ACTIVATE_ALL), santiago);
+        try {
+          await tx.query(APPLY_ANALYST, [SEED.jobs.executiveAssistant, SEED.candidates.santiago]);
+          return false;
+        } catch (error) {
+          const message = (error as Error).message;
+          return (
+            message.includes("requirements_missing:") &&
+            message.includes("disc") &&
+            message.includes("english_oral") &&
+            message.includes("resume")
+          );
+        }
+      },
+      { commit: false },
+    ),
+  );
+
+  await check("candidate with four valid results and a resume can apply", async () =>
+    asUser(
+      db,
+      laura,
+      async (tx) => {
+        await asService(
+          tx,
+          async () => {
+            await tx.exec(ACTIVATE_ALL);
+            for (const [id, level, report] of [
+              [SEED.assessments.written, "B2", null],
+              [SEED.assessments.oral, "B2", null],
+              [SEED.assessments.psychometric, null, '{"factors":{"extraversion":{"band":"mid"}}}'],
+              [SEED.assessments.disc, null, '{"styles":{"D":{"band":"high"}}}'],
+            ] as const) {
+              await tx.query(VALIDATED_ATTEMPT, [id, SEED.candidates.laura, level, report ?? "{}"]);
+            }
+          },
+          laura,
+        );
+        await tx.query(APPLY_ANALYST, [SEED.jobs.dataAnalyst, SEED.candidates.laura]);
+        const applied = await tx.query<{ n: number }>(
+          "select count(*)::int as n from public.applications where job_id = $1 and candidate_id = $2",
+          [SEED.jobs.dataAnalyst, SEED.candidates.laura],
+        );
+        return applied.rows[0]?.n === 1;
+      },
+      { commit: false },
+    ),
+  );
+
+  await check("an expired result does not satisfy the requirement", async () =>
+    asUser(
+      db,
+      laura,
+      async (tx) => {
+        await asService(
+          tx,
+          async () => {
+            await tx.exec(ACTIVATE_ALL);
+            for (const [id, level] of [
+              [SEED.assessments.written, "B2"],
+              [SEED.assessments.oral, "B2"],
+              [SEED.assessments.psychometric, null],
+            ] as const) {
+              await tx.query(VALIDATED_ATTEMPT, [id, SEED.candidates.laura, level, "{}"]);
+            }
+            // DISC validated 100 days ago: past the 90-day window.
+            await tx.query(
+              `insert into public.assessment_attempts (assessment_id, candidate_id, status, validated_at)
+               values ($1, $2, 'validated', now() - interval '100 days')`,
+              [SEED.assessments.disc, SEED.candidates.laura],
+            );
+          },
+          laura,
+        );
+        try {
+          await tx.query(APPLY_ANALYST, [SEED.jobs.dataAnalyst, SEED.candidates.laura]);
+          return false;
+        } catch (error) {
+          return (error as Error).message.includes("requirements_missing:disc");
+        }
+      },
+      { commit: false },
+    ),
+  );
+
+  await check("validation stamps valid_until at validated_at plus the validity window", async () =>
+    asUser(
+      db,
+      admin,
+      async (tx) => {
+        await tx.query(VALIDATED_ATTEMPT, [
+          SEED.assessments.written,
+          SEED.candidates.laura,
+          "B1",
+          "{}",
+        ]);
+        const row = await tx.query<{ ok: boolean }>(
+          `select valid_until = validated_at + interval '90 days' as ok
+             from public.assessment_attempts
+            where candidate_id = $1 and assessment_id = $2 and status = 'validated'
+            order by created_at desc limit 1`,
+          [SEED.candidates.laura, SEED.assessments.written],
+        );
+        return row.rows[0]?.ok === true;
+      },
+      { commit: false },
+    ),
+  );
+
+  await check(
+    "candidate reads own apply requirements, one row per active requirement plus resume",
+    async () =>
+      asUser(
+        db,
+        laura,
+        async (tx) => {
+          await asService(tx, () => tx.exec(ACTIVATE_ALL), laura);
+          const rows = await tx.query<{ requirement: string; satisfied: boolean }>(
+            "select requirement, satisfied from public.candidate_apply_requirements($1)",
+            [SEED.candidates.laura],
+          );
+          const names = rows.rows.map((r) => r.requirement).sort();
+          const resume = rows.rows.find((r) => r.requirement === "resume");
+          return (
+            names.join(",") === "disc,english_oral,english_written,psychometric,resume" &&
+            resume?.satisfied === true
+          );
+        },
+        { commit: false },
+      ),
+  );
+  await expectError(
+    "candidate cannot read another candidate's apply requirements",
+    andres,
+    "select * from public.candidate_apply_requirements($1)",
+    [SEED.candidates.laura],
+    "requirements_own_only",
+  );
+
+  await check(
+    "the hiring company sees an applicant's valid results, another company sees none",
+    async () =>
+      asUser(
+        db,
+        admin,
+        async (tx) => {
+          await tx.query(VALIDATED_ATTEMPT, [
+            SEED.assessments.written,
+            SEED.candidates.laura,
+            "C1",
+            "{}",
+          ]);
+          await tx.query(VALIDATED_ATTEMPT, [
+            SEED.assessments.psychometric,
+            SEED.candidates.laura,
+            null,
+            '{"factors":{"conscientiousness":{"band":"high"}}}',
+          ]);
+          const owner = await tx.query<{ company_id: string }>(
+            "select company_id from public.jobs where id = $1",
+            [SEED.jobs.seniorAccountant],
+          );
+          const hiring =
+            owner.rows[0]?.company_id === SEED.companies.northwind
+              ? northwindOwner
+              : owner.rows[0]?.company_id === SEED.companies.harbor
+                ? harborOwner
+                : brightlineOwner;
+          const stranger = hiring === brightlineOwner ? northwindOwner : brightlineOwner;
+          const seen = await asAnother(tx, hiring, async () =>
+            tx.query<{ type: string; bands: Record<string, string> | null }>(
+              "select type, bands from public.candidate_valid_results($1)",
+              [SEED.candidates.laura],
+            ),
+          );
+          const hidden = await asAnother(tx, stranger, async () =>
+            tx.query("select type from public.candidate_valid_results($1)", [
+              SEED.candidates.laura,
+            ]),
+          );
+          const psych = seen.rows.find((r) => r.type === "psychometric");
+          return (
+            seen.rows.length === 2 &&
+            psych?.bands?.conscientiousness === "high" &&
+            hidden.rows.length === 0
+          );
+        },
+        { commit: false },
+      ),
+  );
+
+  await check(
+    "fit rows: hiring company reads, other company and candidate do not, anon is refused",
+    async () =>
+      asUser(
+        db,
+        admin,
+        async (tx) => {
+          await tx.query(
+            `insert into public.application_fit (application_id, status, score, summary)
+           values ($1, 'ready', 82, 'Strong match on close and reporting.')`,
+            [SEED.applications.lauraAccountant],
+          );
+          const owner = await tx.query<{ company_id: string }>(
+            "select j.company_id from public.applications a join public.jobs j on j.id = a.job_id where a.id = $1",
+            [SEED.applications.lauraAccountant],
+          );
+          const hiring =
+            owner.rows[0]?.company_id === SEED.companies.northwind
+              ? northwindOwner
+              : owner.rows[0]?.company_id === SEED.companies.harbor
+                ? harborOwner
+                : brightlineOwner;
+          const stranger = hiring === brightlineOwner ? northwindOwner : brightlineOwner;
+          const n = async (session: Session) =>
+            (
+              await asAnother(tx, session, () =>
+                tx.query<{ n: number }>("select count(*)::int as n from public.application_fit"),
+              )
+            ).rows[0]?.n;
+          const counts = [await n(hiring), await n(stranger), await n(laura)];
+          // A refused query aborts the transaction, so the probe runs inside a savepoint.
+          let anonRefused = false;
+          await tx.exec("savepoint anon_probe");
+          try {
+            await asAnother(tx, anon, () => tx.query("select * from public.application_fit"));
+          } catch {
+            anonRefused = true;
+          }
+          await tx.exec("rollback to savepoint anon_probe");
+          return counts[0] === 1 && counts[1] === 0 && counts[2] === 0 && anonRefused;
+        },
+        { commit: false },
+      ),
   );
 
   await check(

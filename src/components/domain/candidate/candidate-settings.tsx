@@ -33,6 +33,7 @@ type Props = {
   fullName: string;
   locale: "en" | "es";
   workstyleAttempt: { id: string; visible_to_companies: boolean } | null;
+  discAttempt: { id: string; visible_to_companies: boolean } | null;
   dataRequests: DataRequest[];
   prefs: { digest: boolean; application_updates: boolean };
   initialTab?: string;
@@ -44,6 +45,7 @@ export function CandidateSettings({
   fullName,
   locale,
   workstyleAttempt,
+  discAttempt,
   dataRequests,
   prefs,
   initialTab,
@@ -158,6 +160,7 @@ export function CandidateSettings({
       <CandidateSettingsPrivacy
         candidate={candidate}
         workstyleAttempt={workstyleAttempt}
+        discAttempt={discAttempt}
         dataRequests={dataRequests}
       />
 

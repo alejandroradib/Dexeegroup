@@ -29,10 +29,12 @@ type DataRequest = Database["public"]["Tables"]["data_requests"]["Row"];
 export function CandidateSettingsPrivacy({
   candidate,
   workstyleAttempt,
+  discAttempt,
   dataRequests,
 }: {
   candidate: Candidate;
   workstyleAttempt: { id: string; visible_to_companies: boolean } | null;
+  discAttempt: { id: string; visible_to_companies: boolean } | null;
   dataRequests: DataRequest[];
 }) {
   const t = useTranslations("candidate.settings");
@@ -77,6 +79,25 @@ export function CandidateSettingsPrivacy({
           </div>
         ) : (
           <p className="text-muted-foreground mt-3 text-sm">{t("privacy.workstyleNone")}</p>
+        )}
+        {discAttempt ? (
+          <div className="mt-4 flex items-center justify-between gap-4">
+            <Label htmlFor="disc_visible" className="font-normal">
+              {t("privacy.discToggle")}
+            </Label>
+            <Switch
+              id="disc_visible"
+              defaultChecked={discAttempt.visible_to_companies}
+              onCheckedChange={(v) =>
+                start(async () => {
+                  const r = await setWorkstyleVisibility(discAttempt.id, v);
+                  notify(r.ok, tc("actions.save"));
+                })
+              }
+            />
+          </div>
+        ) : (
+          <p className="text-muted-foreground mt-3 text-sm">{t("privacy.discNone")}</p>
         )}
       </section>
       <section className="border-border rounded-[12px] border bg-white p-6">

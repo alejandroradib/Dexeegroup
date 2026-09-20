@@ -47,6 +47,16 @@ type IpipBank = {
   scale: unknown;
   items: { id: string; factor: string; reverse: boolean; text_en: string; text_es: string }[];
 };
+type DiscBank = {
+  scale: unknown;
+  items: {
+    id: string;
+    style: "D" | "I" | "S" | "C";
+    reverse: boolean;
+    text_en: string;
+    text_es: string;
+  }[];
+};
 type SjtBank = {
   items: {
     id: string;
@@ -71,6 +81,7 @@ export function loadBanks(dir: string) {
   const oral = read<OralBank>("english_oral.json");
   const ipip = read<IpipBank>("ipip50.json");
   const sjt = read<SjtBank>("sjt_remote.json");
+  const discBank = read<DiscBank>("disc.json");
   const passages = new Map(written.passages.map((p) => [p.id, p]));
 
   const english_written: BankQuestion[] = [
@@ -147,5 +158,18 @@ export function loadBanks(dir: string) {
     })),
   ];
 
-  return { english_written, english_oral, psychometric };
+  // DISC-style profile: Likert only, seven items per style, `factor` carries the style letter.
+  const disc: BankQuestion[] = discBank.items.map((item, i) => ({
+    bank_id: item.id,
+    section: "disc",
+    band: null,
+    sort_order: i,
+    prompt: item.text_en,
+    question_type: "likert" as const,
+    options: { text_es: item.text_es, scale: discBank.scale },
+    answer_key: { style: item.style, reverse: item.reverse },
+    factor: item.style,
+  }));
+
+  return { english_written, english_oral, psychometric, disc };
 }

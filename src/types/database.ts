@@ -132,6 +132,68 @@ export type Database = {
           }
         ]
       }
+      application_fit: {
+        Row: {
+          application_id: string
+          status: string
+          score: number | null
+          summary: string | null
+          strengths: string[]
+          gaps: string[]
+          evidence: Json
+          model: string | null
+          prompt_version: string | null
+          inputs_hash: string | null
+          attempts: number
+          last_error: string | null
+          computed_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          application_id: string
+          status?: string
+          score?: number | null
+          summary?: string | null
+          strengths?: string[]
+          gaps?: string[]
+          evidence?: Json
+          model?: string | null
+          prompt_version?: string | null
+          inputs_hash?: string | null
+          attempts?: number
+          last_error?: string | null
+          computed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          application_id?: string
+          status?: string
+          score?: number | null
+          summary?: string | null
+          strengths?: string[]
+          gaps?: string[]
+          evidence?: Json
+          model?: string | null
+          prompt_version?: string | null
+          inputs_hash?: string | null
+          attempts?: number
+          last_error?: string | null
+          computed_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "application_fit_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: true
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       applications: {
         Row: {
           id: string
@@ -280,6 +342,7 @@ export type Database = {
           cooldown_waived: boolean
           created_at: string
           updated_at: string
+          valid_until: string | null
         }
         Insert: {
           id?: string
@@ -304,6 +367,7 @@ export type Database = {
           cooldown_waived?: boolean
           created_at?: string
           updated_at?: string
+          valid_until?: string | null
         }
         Update: {
           id?: string
@@ -328,6 +392,7 @@ export type Database = {
           cooldown_waived?: boolean
           created_at?: string
           updated_at?: string
+          valid_until?: string | null
         }
         Relationships: [
           {
@@ -421,6 +486,8 @@ export type Database = {
           cooldown_days: number
           config: Json
           created_at: string
+          validity_days: number
+          required_to_apply: boolean
         }
         Insert: {
           id?: string
@@ -433,6 +500,8 @@ export type Database = {
           cooldown_days?: number
           config?: Json
           created_at?: string
+          validity_days?: number
+          required_to_apply?: boolean
         }
         Update: {
           id?: string
@@ -445,6 +514,8 @@ export type Database = {
           cooldown_days?: number
           config?: Json
           created_at?: string
+          validity_days?: number
+          required_to_apply?: boolean
         }
         Relationships: []
       }
@@ -1539,9 +1610,17 @@ export type Database = {
         Args: { target_attempt_id: string }
         Returns: boolean
       }
+      candidate_apply_requirements: {
+        Args: { target_candidate_id: string }
+        Returns: unknown[]
+      }
       candidate_owns_attempt: {
         Args: { target_attempt_id: string }
         Returns: boolean
+      }
+      candidate_valid_results: {
+        Args: { target_candidate_id: string }
+        Returns: unknown[]
       }
       cefr_min: {
         Args: { a: Database["public"]["Enums"]["cefr_level"]; b: Database["public"]["Enums"]["cefr_level"] }
@@ -1591,7 +1670,7 @@ export type Database = {
     Enums: {
       application_source: "candidate" | "dexee_recommended"
       application_status: "applied" | "screening" | "shortlisted" | "interview" | "offer" | "hired" | "rejected" | "withdrawn"
-      assessment_type: "english_written" | "english_oral" | "psychometric"
+      assessment_type: "english_written" | "english_oral" | "psychometric" | "disc"
       attempt_status: "in_progress" | "submitted" | "processing" | "ai_scored" | "pending_validation" | "validated" | "expired" | "failed"
       availability: "immediate" | "two_weeks" | "one_month" | "three_months"
       candidate_visibility: "visible_to_companies" | "dexee_only"

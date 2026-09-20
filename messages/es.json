@@ -304,7 +304,8 @@
     "assessment_type": {
       "english_written": "Inglés escrito",
       "english_oral": "Inglés oral",
-      "psychometric": "Perfil de estilo de trabajo"
+      "psychometric": "Perfil de estilo de trabajo",
+      "disc": "Perfil de trabajo DISC"
     },
     "attempt_status": {
       "in_progress": "En curso",
@@ -331,6 +332,12 @@
       "conscientiousness": "Responsabilidad",
       "emotional_stability": "Estabilidad emocional",
       "intellect": "Apertura"
+    },
+    "disc_style": {
+      "D": "Dominancia",
+      "I": "Influencia",
+      "S": "Estabilidad",
+      "C": "Cumplimiento"
     },
     "workstyle_band": {
       "low": "Rango bajo",
@@ -1549,10 +1556,12 @@
         "passwordSaved": "Contraseña actualizada."
       },
       "privacy": {
-        "workstyleTitle": "Visibilidad del perfil de estilo de trabajo",
-        "workstyleBody": "Cuando está activo, las empresas ven los descriptores por rango de tu perfil de estilo de trabajo. Nunca ven puntajes numéricos.",
+        "workstyleTitle": "Visibilidad de sus perfiles de trabajo",
+        "workstyleBody": "Las empresas ven descriptores por banda de sus perfiles de estilo de trabajo y DISC en los roles a los que aplica, nunca puntajes. Se comparten por defecto porque alimentan el informe de ajuste; desactive cualquiera de los dos aquí si lo prefiere.",
         "workstyleToggle": "Compartir mi resumen de estilo de trabajo con las empresas",
         "workstyleNone": "Aún no has completado el perfil de estilo de trabajo.",
+        "discToggle": "Compartir mi resumen DISC con las empresas",
+        "discNone": "Todavía no ha completado el perfil DISC.",
         "visibilityTitle": "Visibilidad del perfil",
         "visibilityBody": "Solo Dexee: tu perfil es visible para Dexee pero no para las empresas, incluso cuando te postulas.",
         "visibilityToggle": "Visible para las empresas a las que me postulo",
@@ -1919,6 +1928,14 @@
         "rule2": "Elige la respuesta que darías con mayor probabilidad en cada situación.",
         "rule3": "Recibes un informe completo. Las empresas ven descriptores por rango solo si activas el uso compartido.",
         "rule4": "Este es un tamizaje de Dexee, no una evaluación clínica ni certificada."
+      },
+      "disc": {
+        "title": "Perfil de trabajo DISC",
+        "body": "Veintiocho afirmaciones sobre cómo actúa en el trabajo, en cuatro estilos. No hay límite de tiempo ni estilos correctos o incorrectos. Responda como se comporta de verdad, no como cree que una empresa quiere.",
+        "rule1": "Califique cada afirmación desde muy distinto a usted hasta muy parecido a usted.",
+        "rule2": "Recibe un perfil completo con su estilo principal y los entornos que le sientan mejor.",
+        "rule3": "Las empresas ven descriptores, nunca puntajes, y Dexee nunca ordena candidatos por este perfil.",
+        "rule4": "Es una prueba de tamizaje de Dexee sobre el modelo público de cuatro factores. No es una evaluación DiSC certificada."
       }
     },
     "runner": {
@@ -2018,7 +2035,15 @@
         "visibilityHint": "Las empresas nunca ven puntajes numéricos; solo los descriptores por rango."
       },
       "failed": "No pudimos procesar este intento. Dexee fue notificado y te contactará.",
-      "integrityNote": "Intento enviado el {date}."
+      "integrityNote": "Intento enviado el {date}.",
+      "disc": {
+        "styles": "Sus cuatro estilos",
+        "headline": "Su perfil",
+        "preferences": "Preferencias",
+        "environments": "Dónde tiende a funcionar bien",
+        "strengths": "Qué aporta este perfil",
+        "visibilityHint": "Las empresas ven solo descriptores, y solo en los roles a los que usted aplicó. Ocúltelos aquí si lo prefiere; el análisis de ajuste sigue corriendo sobre su aplicación completa."
+      }
     },
     "admin": {
       "title": "Validar intento",

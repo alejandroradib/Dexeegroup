@@ -44,6 +44,8 @@ export async function GET(
     factors: t("result.workstyle.factors"),
     sjt: t("result.workstyle.sjt"),
     strengths: t("result.workstyle.strengths"),
+    styles: t("result.disc.styles"),
+    profile: t("result.disc.headline"),
     disclaimer: tc("consentNotice"),
     verified: tc("labels.verifiedByDexee"),
   };

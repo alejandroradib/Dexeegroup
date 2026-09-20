@@ -304,7 +304,8 @@
     "assessment_type": {
       "english_written": "English written",
       "english_oral": "English oral",
-      "psychometric": "Work-style profile"
+      "psychometric": "Work-style profile",
+      "disc": "DISC work profile"
     },
     "attempt_status": {
       "in_progress": "In progress",
@@ -331,6 +332,12 @@
       "conscientiousness": "Conscientiousness",
       "emotional_stability": "Emotional stability",
       "intellect": "Openness"
+    },
+    "disc_style": {
+      "D": "Dominance",
+      "I": "Influence",
+      "S": "Steadiness",
+      "C": "Conscientiousness"
     },
     "workstyle_band": {
       "low": "Lower range",
@@ -1549,10 +1556,12 @@
         "passwordSaved": "Password updated."
       },
       "privacy": {
-        "workstyleTitle": "Work-style profile visibility",
-        "workstyleBody": "When enabled, companies see the band descriptors of your work-style profile. They never see numeric scores.",
+        "workstyleTitle": "Work profile visibility",
+        "workstyleBody": "Companies see band descriptors of your work-style and DISC profiles for the roles you apply to, never numeric scores. Descriptors are shared by default because they feed the fit report; turn either off here if you prefer.",
         "workstyleToggle": "Share my work-style summary with companies",
         "workstyleNone": "You have not completed the work-style profile yet.",
+        "discToggle": "Share my DISC summary with companies",
+        "discNone": "You have not completed the DISC profile yet.",
         "visibilityTitle": "Profile visibility",
         "visibilityBody": "Dexee only: your profile is visible to Dexee but not to companies, even when you apply.",
         "visibilityToggle": "Visible to companies I apply to",
@@ -1919,6 +1928,14 @@
         "rule2": "Choose the response you would most likely give in each situation.",
         "rule3": "You receive a full report. Companies see band descriptors only if you enable sharing.",
         "rule4": "This is a Dexee screening, not a clinical or certified assessment."
+      },
+      "disc": {
+        "title": "DISC work profile",
+        "body": "Twenty-eight statements about how you act at work, across four styles. There is no time limit and no right or wrong style. Answer as you actually behave, not as you think a company wants.",
+        "rule1": "Rate each statement from very unlike you to very like you.",
+        "rule2": "You receive a full profile with your primary style and what environments suit it.",
+        "rule3": "Companies see descriptors only, never scores, and Dexee never ranks candidates by this profile.",
+        "rule4": "This is a Dexee screening built on the public four-factor model. It is not a certified DiSC assessment."
       }
     },
     "runner": {
@@ -2018,7 +2035,15 @@
         "visibilityHint": "Companies never see numeric scores; only the band descriptors."
       },
       "failed": "We could not process this attempt. Dexee has been notified and will contact you.",
-      "integrityNote": "Attempt submitted {date}."
+      "integrityNote": "Attempt submitted {date}.",
+      "disc": {
+        "styles": "Your four styles",
+        "headline": "Your profile",
+        "preferences": "Preferences",
+        "environments": "Where it tends to work well",
+        "strengths": "What this profile brings",
+        "visibilityHint": "Companies see descriptors only, and only for roles you applied to. Hide them here if you prefer; the fit analysis still runs on your full application."
+      }
     },
     "admin": {
       "title": "Validate attempt",

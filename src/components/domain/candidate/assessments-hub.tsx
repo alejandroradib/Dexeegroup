@@ -1,4 +1,4 @@
-import { ClipboardCheckIcon, LanguagesIcon, MicIcon, SparklesIcon } from "lucide-react";
+import { ClipboardCheckIcon, LanguagesIcon, MicIcon, ShapesIcon, SparklesIcon } from "lucide-react";
 import { getFormatter, getTranslations } from "next-intl/server";
 
 import { EmptyState } from "@/components/shared/empty-state";
@@ -12,6 +12,7 @@ const ICONS = {
   english_written: LanguagesIcon,
   english_oral: MicIcon,
   psychometric: SparklesIcon,
+  disc: ShapesIcon,
 } as const;
 
 export async function AssessmentsHub({ items }: { items: AssessmentHubItem[] }) {
@@ -28,7 +29,7 @@ export async function AssessmentsHub({ items }: { items: AssessmentHubItem[] }) 
       <Alert className="text-xs">
         {t("notice", { days: items[0]?.assessment.cooldown_days ?? 90 })}
       </Alert>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {items.map(({ assessment, latest, open, nextAllowedAt, remainingMinutes, canStart }) => {
           const Icon = ICONS[assessment.type];
           let state: string;
@@ -73,7 +74,8 @@ export async function AssessmentsHub({ items }: { items: AssessmentHubItem[] }) 
               <h3 className="text-lg">{te(`assessment_type.${assessment.type}`)}</h3>
               <p className="text-muted-foreground mt-1 text-sm">{assessment.description}</p>
               <p className="text-muted-foreground mt-2 text-xs">
-                {assessment.time_limit_minutes && assessment.type !== "psychometric"
+                {assessment.time_limit_minutes &&
+                !["psychometric", "disc"].includes(assessment.type)
                   ? t("timeLimit", { minutes: assessment.time_limit_minutes })
                   : t("noTimeLimit")}
               </p>

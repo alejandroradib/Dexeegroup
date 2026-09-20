@@ -192,16 +192,16 @@ on conflict do nothing;
 -- ---------------------------------------------------------------------------
 -- Assessments (inactive until Phase 6 seeds the banks)
 -- ---------------------------------------------------------------------------
-insert into public.assessments (id, type, title, description, version, is_active, time_limit_minutes, cooldown_days, config)
+insert into public.assessments (id, type, title, description, version, is_active, time_limit_minutes, cooldown_days, required_to_apply, config)
 values
-  ('aa000000-0000-4000-8000-000000000001', 'english_written', 'English written assessment', 'Grammar, vocabulary and reading (40 items) plus one writing task. 45 minutes.', 1, false, 45, 90,
+  ('aa000000-0000-4000-8000-000000000001', 'english_written', 'English written assessment', 'Grammar, vocabulary and reading (40 items) plus one writing task. 45 minutes.', 1, false, 45, 90, true,
    '{"mcq_count": 40, "band_quotas": {"band1": 14, "band2": 14, "band3": 12}, "writing_prompts": 1, "grace_seconds": 60,
      "thresholds": {"a1_overall_below": 0.20, "a2_band1_below": 0.70, "b1_band2_below": 0.55, "b2_band3_below": 0.50, "c1_band3_min": 0.50, "c1_overall_min": 0.75, "c2_band3_min": 0.80, "c2_overall_min": 0.90},
      "writing_levels": {"A2": [0, 5], "B1": [6, 9], "B2": [10, 13], "C1": [14, 17], "C2": [18, 20]}, "validation_gap_levels": 2}'),
-  ('aa000000-0000-4000-8000-000000000002', 'english_oral', 'English oral assessment', 'Four recorded answers of 60 to 90 seconds, validated by Dexee.', 1, false, 30, 90,
+  ('aa000000-0000-4000-8000-000000000002', 'english_oral', 'English oral assessment', 'Four recorded answers of 60 to 90 seconds, validated by Dexee.', 1, false, 30, 90, true,
    '{"prompts_per_attempt": 4, "prep_seconds": 20, "min_seconds": 60, "max_seconds": 90, "max_bytes": 3145728, "re_records": 1,
      "levels": {"A2": [0, 5], "B1": [6, 9], "B2": [10, 13], "C1": [14, 17], "C2": [18, 20]}}'),
-  ('aa000000-0000-4000-8000-000000000003', 'psychometric', 'Work-style profile', 'Fifty statements about how you work plus ten remote-work situations. No time limit.', 1, false, 1440, 90,
+  ('aa000000-0000-4000-8000-000000000003', 'psychometric', 'Work-style profile', 'Fifty statements about how you work plus ten remote-work situations. No time limit.', 1, false, 1440, 90, true,
    '{"factors": ["extraversion", "agreeableness", "conscientiousness", "emotional_stability", "intellect"], "items_per_factor": 10, "sjt_items": 10,
      "bands": {"low_below": 40, "high_above": 60}, "strength_sjt_min": 7}')
 on conflict (id) do nothing;
