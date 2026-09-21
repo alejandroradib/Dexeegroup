@@ -88,6 +88,31 @@ The seed also contains 8 jobs (6 published, 1 pending review, 1 draft), a pendin
 invite (`finance.lead@harborhealth.example.com`, token `seed-invite-token-harbor-0001`) and the
 three assessments, which the bank loader activates once the question banks are in place.
 
+## Demo data in the hosted project
+
+`scripts/seed-demo.ts` prints SQL for a labelled demo set that can live next to real data: one
+recruiter account with a verified company ("Demo Health Partners") and four jobs, one candidate
+account with three validated results and DISC left to take, and four background candidates who
+already applied to those jobs with four valid results each and a ready fit analysis. Every row
+uses the id prefix `dd000000-` and every account an `@demo.dexeegroup.com` address, and every
+title, headline and summary says it is demo data.
+
+    npx tsx scripts/seed-demo.ts                 # full SQL, one transaction
+    npx tsx scripts/seed-demo.ts --part=head     # accounts, company, jobs, profiles
+    npx tsx scripts/seed-demo.ts --part=attempts=03
+    npx tsx scripts/seed-demo.ts --part=tail     # applications, fit, note
+    npx tsx scripts/seed-demo.ts --cleanup       # removes everything above
+
+Apply with psql or, for the hosted project, with the Supabase MCP `execute_sql` one part at a
+time (the full file exceeds its size limit). Passwords are hashed in the database with
+`extensions.crypt`, so pgcrypto must be installed in the `extensions` schema, as it is on
+Supabase. Loaded into `cvvilveklqsznsefaaek` on 2026-09-21; the accounts and password are in
+the handover notes, not in this file.
+
+Fit rows are marked `model = 'demo-seed'`. The refresh action only recomputes applications
+without a ready row, so they survive a click; a real `ANTHROPIC_API_KEY` recomputes only new
+applications.
+
 ## Ports and files
 
 | Item           | Value                                         |

@@ -1593,7 +1593,7 @@
     },
     "assessments": {
       "title": "Evaluaciones",
-      "subtitle": "Tres tamizajes gratuitos. Los resultados se agregan a tu perfil como insignias Dexee.",
+      "subtitle": "Cuatro pruebas gratuitas, obligatorias antes de aplicar. Los resultados se agregan a tu perfil como insignias Dexee.",
       "notice": "Todo candidato presenta las mismas cuatro pruebas gratuitas antes de aplicar. Los resultados valen {days} días; después vuelve a presentar la prueba, y también puede repetir una tras su periodo de espera para mejorarla.",
       "start": "Comenzar",
       "continue": "Continuar",

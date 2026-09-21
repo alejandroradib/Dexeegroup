@@ -1593,7 +1593,7 @@
     },
     "assessments": {
       "title": "Assessments",
-      "subtitle": "Three free screenings. Results attach to your profile as Dexee badges.",
+      "subtitle": "Four free assessments, required before you apply. Results attach to your profile as Dexee badges.",
       "notice": "Every candidate takes the same four free assessments before applying. Results are valid for {days} days, after which you take the assessment again; you may also repeat one after its cooldown to improve it.",
       "start": "Start",
       "continue": "Continue",

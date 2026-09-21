@@ -19,6 +19,7 @@ export async function AssessmentsHub({ items }: { items: AssessmentHubItem[] }) 
   const t = await getTranslations("candidate.assessments");
   const tc = await getTranslations("common");
   const te = await getTranslations("enums");
+  const ti = await getTranslations("assessments.intro");
   const format = await getFormatter();
 
   if (items.length === 0)
@@ -62,9 +63,8 @@ export async function AssessmentsHub({ items }: { items: AssessmentHubItem[] }) 
             } else if (latest?.status === "failed") {
               state = t("states.failed");
             } else if (latest?.status === "validated") {
-              state = latest.final_level
-                ? `${t("states.completed")} · ${t("level", { level: latest.final_level })}`
-                : t("states.completed");
+              // The status chip already reads "completed"; the text adds the level when there is one.
+              state = latest.final_level ? t("level", { level: latest.final_level }) : "";
               cta = {
                 label: t("viewResult"),
                 href: `${base}/result/${latest.id}`,
@@ -82,7 +82,9 @@ export async function AssessmentsHub({ items }: { items: AssessmentHubItem[] }) 
                   <Icon className="size-5" aria-hidden />
                 </span>
                 <h3 className="text-lg">{te(`assessment_type.${assessment.type}`)}</h3>
-                <p className="text-muted-foreground mt-1 text-sm">{assessment.description}</p>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  {ti(`${assessment.type}.body` as "psychometric.body")}
+                </p>
                 <p className="text-muted-foreground mt-2 text-xs">
                   {assessment.time_limit_minutes &&
                   !["psychometric", "disc"].includes(assessment.type)
@@ -91,7 +93,7 @@ export async function AssessmentsHub({ items }: { items: AssessmentHubItem[] }) 
                 </p>
                 <div className="mt-4 flex flex-wrap items-center gap-2">
                   {latest ? <StatusChip kind="attempt" status={latest.status} /> : null}
-                  <span className="text-navy text-sm font-medium">{state}</span>
+                  {state ? <span className="text-navy text-sm font-medium">{state}</span> : null}
                 </div>
                 {validUntil ? (
                   <p
