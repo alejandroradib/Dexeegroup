@@ -12,7 +12,7 @@ import { logger } from "@/lib/logger";
  * Failures never propagate: publishing a job must not fail because Google is slow.
  */
 
-type IndexingAction = "URL_UPDATED" | "URL_DELETED";
+export type IndexingAction = "URL_UPDATED" | "URL_DELETED";
 
 type ServiceAccount = { client_email: string; private_key: string };
 

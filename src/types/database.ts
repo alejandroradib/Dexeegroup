@@ -760,6 +760,7 @@ export type Database = {
           verified_by: string | null
           created_at: string
           updated_at: string
+          is_demo: boolean
         }
         Insert: {
           id?: string
@@ -780,6 +781,7 @@ export type Database = {
           verified_by?: string | null
           created_at?: string
           updated_at?: string
+          is_demo?: boolean
         }
         Update: {
           id?: string
@@ -800,6 +802,7 @@ export type Database = {
           verified_by?: string | null
           created_at?: string
           updated_at?: string
+          is_demo?: boolean
         }
         Relationships: [
           {

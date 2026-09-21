@@ -7,7 +7,13 @@
  *
  * Every row carries the id prefix dd000000- and every account uses an @demo.dexeegroup.com
  * address, so `scripts/seed-demo.ts --cleanup` prints the SQL that removes it all.
- * Idempotent: rows are inserted with `on conflict do nothing`.
+ * Idempotent: rows are inserted with `on conflict do nothing`. The company is flagged
+ * `is_demo`, which keeps its jobs off the public board, the sitemap and Google indexing.
+ *
+ * SQL safety: values interpolated directly, such as `'${j.family}'` or `${j.min}`, are safe
+ * only because every value is a literal written in this file. Anything that comes from an
+ * external source (a CSV, an environment variable, user input) must go through `lit()` or
+ * `json()`, which escape quotes, before it is placed in a statement.
  *
  *   npx tsx scripts/seed-demo.ts > demo.sql          # then apply with execute_sql or psql
  *   npx tsx scripts/seed-demo.ts --cleanup > rm.sql
@@ -780,8 +786,8 @@ function seedSql(): string {
   );
 
   out.push(
-    "insert into public.companies (id, owner_user_id, name, legal_name, website, sector, country, state, city, size, description, status, verified_at, verified_by, hiring_needs) values",
-    `  ('${COMPANY}', '${id(RECRUITER.n)}', 'Demo Health Partners', 'Demo Health Partners LLC (cuenta de demostración)', 'https://demo.dexeegroup.com', 'healthcare', 'US', 'FL', 'Tampa', 's51_200', 'Empresa de demostración. Servicios administrativos y de facturación para clínicas ambulatorias en Florida. Todos los datos de esta cuenta son ficticios.', 'verified', ${days(30)}, ${ADMIN}, ${json({ role_families: ["finance_accounting", "customer_support", "operations_va"], expected_hires: 6, preferred_contract_types: ["dexee_eor", "independent_contractor"] })})`,
+    "insert into public.companies (id, owner_user_id, name, legal_name, website, sector, country, state, city, size, description, status, verified_at, verified_by, hiring_needs, is_demo) values",
+    `  ('${COMPANY}', '${id(RECRUITER.n)}', 'Demo Health Partners', 'Demo Health Partners LLC (cuenta de demostración)', 'https://demo.dexeegroup.com', 'healthcare', 'US', 'FL', 'Tampa', 's51_200', 'Empresa de demostración. Servicios administrativos y de facturación para clínicas ambulatorias en Florida. Todos los datos de esta cuenta son ficticios.', 'verified', ${days(30)}, ${ADMIN}, ${json({ role_families: ["finance_accounting", "customer_support", "operations_va"], expected_hires: 6, preferred_contract_types: ["dexee_eor", "independent_contractor"] })}, true)`,
     "on conflict (id) do nothing;",
   );
 

@@ -1264,6 +1264,76 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
       ),
   );
 
+  // Audit B: demo companies never reach public surfaces ------------------------------------
+  await check("anon sees no job of a demo company, the company still sees its own data", async () =>
+    asUser(
+      db,
+      admin,
+      async (tx) => {
+        await asService(
+          tx,
+          () =>
+            tx.query("update public.companies set is_demo = true where id = $1", [
+              SEED.companies.harbor,
+            ]),
+          admin,
+        );
+        const harborSlugs = (
+          await tx.query<{ slug: string }>(
+            "select slug from public.jobs where company_id = $1 and slug is not null",
+            [SEED.companies.harbor],
+          )
+        ).rows.map((r) => r.slug);
+        const anonCount = async (view: string) =>
+          (
+            await asAnother(tx, anon, () =>
+              tx.query<{ n: number }>(
+                `select count(*)::int as n from public.${view} where slug = any($1::text[])`,
+                [harborSlugs],
+              ),
+            )
+          ).rows[0]?.n;
+        const openPublic = await anonCount("public_jobs");
+        const closedPublic = await anonCount("public_jobs_closed");
+        const stillPublic = (
+          await asAnother(tx, anon, () =>
+            tx.query<{ n: number }>("select count(*)::int as n from public.public_jobs"),
+          )
+        ).rows[0]?.n;
+        const own = await asAnother(tx, harborOwner, async () => ({
+          jobs: (
+            await tx.query<{ n: number }>(
+              "select count(*)::int as n from public.jobs where company_id = $1",
+              [SEED.companies.harbor],
+            )
+          ).rows[0]?.n,
+          applications: (
+            await tx.query<{ n: number }>(
+              "select count(*)::int as n from public.applications a join public.jobs j on j.id = a.job_id where j.company_id = $1",
+              [SEED.companies.harbor],
+            )
+          ).rows[0]?.n,
+        }));
+        return (
+          harborSlugs.length > 0 &&
+          openPublic === 0 &&
+          closedPublic === 0 &&
+          (stillPublic ?? 0) > 0 &&
+          (own.jobs ?? 0) > 0 &&
+          (own.applications ?? 0) > 0
+        );
+      },
+      { commit: false },
+    ),
+  );
+  await expectError(
+    "company cannot flag itself as demo",
+    harborOwner,
+    "update public.companies set is_demo = true where id = $1",
+    [SEED.companies.harbor],
+    "company_fields_locked",
+  );
+
   await check(
     "consent_flags default to empty object",
     async () =>

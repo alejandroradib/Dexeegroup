@@ -3,9 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { getSessionUser } from "@/lib/auth/session";
-import { publicEnv } from "@/lib/env";
 import { logger } from "@/lib/logger";
-import { notifyJobIndexed } from "@/lib/seo/indexing-api";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -23,6 +21,7 @@ import {
 } from "@/lib/validation/admin";
 import { logAdminActivity } from "@/server/services/admin-activity";
 import { dispatchEvent } from "@/server/services/events";
+import { pingJobIndexing } from "@/server/services/indexing";
 import { ERR, err, ok, type Result } from "@/server/services/result";
 import type { Database, Json } from "@/types/database";
 
@@ -115,14 +114,7 @@ export async function approveJob(jobId: string): Promise<Result<null>> {
   const { error } = await supabase.from("jobs").update({ status: "published" }).eq("id", jobId);
   if (error) return err(ERR.generic);
   await dispatchEvent({ type: "job_status", jobId, status: "approved" });
-  const { data: approved } = await supabase
-    .from("jobs")
-    .select("slug")
-    .eq("id", jobId)
-    .maybeSingle();
-  if (approved?.slug) {
-    await notifyJobIndexed(publicEnv().NEXT_PUBLIC_SITE_URL, approved.slug, "URL_UPDATED");
-  }
+  await pingJobIndexing(jobId, "URL_UPDATED");
   await logAdminActivity({
     actorUserId: admin.id,
     action: "job.approved",
