@@ -29,6 +29,7 @@ import {
   type Thresholds,
   type WritingGrade,
 } from "@/lib/assessments/english-written";
+import { toPublicQuestion, type PublicQuestion } from "@/lib/assessments/public-question";
 import { scoreWorkstyle, type Factor } from "@/lib/assessments/workstyle";
 import { workstyleReport } from "@/lib/assessments/workstyle-report";
 import { logger } from "@/lib/logger";
@@ -44,16 +45,10 @@ export type QuestionRow = Tables["assessment_questions"]["Row"];
 export type AnswerRow = Tables["assessment_answers"]["Row"];
 export type AssessmentType = Database["public"]["Enums"]["assessment_type"];
 
-/** Question as served to the candidate: never includes answer_key. */
-export type PublicQuestion = Omit<QuestionRow, "answer_key">;
+export type { PublicQuestion } from "@/lib/assessments/public-question";
 
 const GRACE_SECONDS = 60;
 const MAX_PROCESSING_ATTEMPTS = 3;
-
-function stripKey(q: QuestionRow): PublicQuestion {
-  const { answer_key: _key, ...rest } = q;
-  return rest;
-}
 
 export async function getAssessmentByType(type: AssessmentType): Promise<AssessmentRow | null> {
   const admin = createAdminClient();
@@ -171,7 +166,7 @@ export async function getAttemptWithQuestions(
   const order = new Map(attempt.question_ids.map((id, i) => [id, i]));
   const ordered = [...(questions ?? [])]
     .sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0))
-    .map(stripKey);
+    .map(toPublicQuestion);
   return { attempt, assessment, questions: ordered, answers: answers ?? [] };
 }
 

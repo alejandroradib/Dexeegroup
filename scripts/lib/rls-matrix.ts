@@ -1334,6 +1334,21 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
     "company_fields_locked",
   );
 
+  // Audit C1 / C7 -----------------------------------------------------------------------------
+  await expectError(
+    "public questions view exposes no factor column",
+    laura,
+    "select factor from public.assessment_questions_public limit 1",
+  );
+  await check(
+    "invites carry an expiry that defaults to seven days",
+    async () =>
+      (await count(
+        admin,
+        "select 1 from public.company_members where invite_token is not null and invite_expires_at is not null and invite_expires_at <= now() + interval '7 days 1 minute'",
+      )) >= 1,
+  );
+
   await check(
     "consent_flags default to empty object",
     async () =>

@@ -1,7 +1,10 @@
 import "server-only";
 
+import { after } from "next/server";
+
 import { logger } from "@/lib/logger";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { processOutbox } from "@/server/services/outbox";
 import type { Database, Json } from "@/types/database";
 
 type Locale = Database["public"]["Enums"]["locale"];
@@ -289,7 +292,27 @@ async function deliver(type: string, outbound: Outbound) {
         .from("email_outbox")
         .upsert(emails, { onConflict: "dedupe_key", ignoreDuplicates: true });
       if (error) logger.error({ err: error.message, type }, "outbox_insert_failed");
+      else scheduleOutboxFlush();
     }
+  }
+}
+
+/**
+ * Sends what was just queued once the response is out, so an acknowledgement or an invite
+ * leaves within seconds instead of at the next daily cron (audit C8). The cron stays as the
+ * retry path. `after()` only works inside a request; elsewhere the cron picks the rows up.
+ */
+function scheduleOutboxFlush() {
+  try {
+    after(async () => {
+      try {
+        await processOutbox(20);
+      } catch (error) {
+        logger.warn({ err: (error as Error).message }, "outbox_flush_failed");
+      }
+    });
+  } catch {
+    // Outside a request scope (scripts, tests): the cron remains the delivery path.
   }
 }
 

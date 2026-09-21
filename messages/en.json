@@ -1033,7 +1033,8 @@
     "fileType": "Only PDF files are accepted.",
     "fileSize": "The file must be 5 MB or smaller.",
     "invalidDate": "Enter a valid date.",
-    "endBeforeStart": "The end date must be after the start date."
+    "endBeforeStart": "The end date must be after the start date.",
+    "passwordIncorrect": "The current password is not correct."
   },
   "auth": {
     "meta": {
@@ -1640,7 +1641,8 @@
         "password": "Change password",
         "newPassword": "New password",
         "confirm": "Confirm new password",
-        "passwordSaved": "Password updated."
+        "passwordSaved": "Password updated.",
+        "currentPassword": "Current password"
       },
       "privacy": {
         "workstyleTitle": "Work profile visibility",

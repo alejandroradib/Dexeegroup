@@ -30,6 +30,8 @@ enable_refresh_token_rotation = true
 enable_signup = true
 enable_anonymous_sign_ins = false
 minimum_password_length = 8
+# Audit C3: updating the password requires a recent sign-in with the current one.
+secure_password_change = true
 
 [auth.email]
 enable_signup = true

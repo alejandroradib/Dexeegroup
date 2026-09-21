@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 
 import { getSessionUser } from "@/lib/auth/session";
+import { validateUploadPath } from "@/lib/storage/upload-path";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 
@@ -45,27 +46,27 @@ export async function POST(request: NextRequest) {
   }
 
   const supabase = await createClient();
-  const segments = path.split("/");
+  // Shape first (fixed depth, no dot segments; audit C6), ownership second.
+  const shape = validateUploadPath(bucket, path);
+  if (!shape.ok) return NextResponse.json({ error: "invalid_path" }, { status: 400 });
   if (bucket === "logos") {
-    if (segments[0] !== "companies" || !segments[1])
-      return NextResponse.json({ error: "invalid_path" }, { status: 400 });
     const { data: company } = await supabase
       .from("companies")
       .select("id, owner_user_id")
-      .eq("id", segments[1])
+      .eq("id", shape.ownerId)
       .maybeSingle();
     if (!company || (company.owner_user_id !== user.id && user.role !== "admin"))
       return NextResponse.json({ error: "forbidden" }, { status: 403 });
   } else if (bucket === "resumes") {
-    if (path !== `candidates/${user.id}/resume.pdf` || user.role !== "candidate")
+    if (shape.ownerId !== user.id || user.role !== "candidate")
       return NextResponse.json({ error: "invalid_path" }, { status: 400 });
   } else {
-    if (segments[0] !== "attempts" || !segments[1] || user.role !== "candidate")
+    if (user.role !== "candidate")
       return NextResponse.json({ error: "invalid_path" }, { status: 400 });
     const { data: attempt } = await supabase
       .from("assessment_attempts")
       .select("id, status, candidate_id")
-      .eq("id", segments[1])
+      .eq("id", shape.ownerId)
       .maybeSingle();
     if (!attempt || attempt.candidate_id !== user.id || attempt.status !== "in_progress")
       return NextResponse.json({ error: "forbidden" }, { status: 403 });

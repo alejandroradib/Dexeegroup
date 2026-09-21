@@ -62,7 +62,7 @@ export function CandidateSettings({
   });
   const password = useForm<ChangePasswordInput>({
     resolver: zodResolver(changePasswordSchema),
-    defaultValues: { password: "", confirm: "" },
+    defaultValues: { current: "", password: "", confirm: "" },
   });
   const prefsForm = useForm<{ digest: boolean; application_updates: boolean }>({
     defaultValues: prefs,
@@ -121,12 +121,28 @@ export function CandidateSettings({
           onSubmit={password.handleSubmit((v) =>
             start(async () => {
               const r = await changePassword(v);
+              if (!r.ok && r.error === "passwordIncorrect") {
+                password.setError("current", { message: "passwordIncorrect" });
+                return;
+              }
               notify(r.ok, t("account.passwordSaved"));
               password.reset();
             }),
           )}
         >
           <h3 className="text-navy text-sm font-semibold">{t("account.password")}</h3>
+          <FormField
+            id="current_password"
+            label={t("account.currentPassword")}
+            error={password.formState.errors.current?.message}
+          >
+            <Input
+              id="current_password"
+              type="password"
+              autoComplete="current-password"
+              {...password.register("current")}
+            />
+          </FormField>
           <FormField
             id="new_password"
             label={t("account.newPassword")}

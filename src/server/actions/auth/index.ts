@@ -6,6 +6,7 @@ import { redirect } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { getSessionUser, roleHome } from "@/lib/auth/session";
 import { publicEnv } from "@/lib/env";
+import { inviteIsUsable } from "@/lib/invites";
 import { CONSENT_VERSION } from "@/lib/legal";
 import { logger } from "@/lib/logger";
 import { hashIdentifier, rateLimit } from "@/lib/rate-limit";
@@ -211,10 +212,10 @@ export async function acceptInvite(input: unknown): Promise<Result<{ redirectTo:
   const admin = createAdminClient();
   const { data: invite } = await admin
     .from("company_members")
-    .select("id, company_id, invited_email, accepted_at, role")
+    .select("id, company_id, invited_email, accepted_at, invite_expires_at, role")
     .eq("invite_token", parsed.data.token)
     .maybeSingle();
-  if (!invite || invite.accepted_at || !invite.invited_email) return err("inviteInvalid");
+  if (!invite || !inviteIsUsable(invite) || !invite.invited_email) return err("inviteInvalid");
   const locale = await currentLocale();
 
   const { data: created, error } = await admin.auth.admin.createUser({
@@ -246,10 +247,10 @@ export async function acceptInviteSignedIn(token: string): Promise<Result<{ redi
   const admin = createAdminClient();
   const { data: invite } = await admin
     .from("company_members")
-    .select("id, invited_email, accepted_at, company_id")
+    .select("id, invited_email, accepted_at, invite_expires_at, company_id")
     .eq("invite_token", token)
     .maybeSingle();
-  if (!invite || invite.accepted_at) return err("inviteInvalid");
+  if (!invite || !inviteIsUsable(invite)) return err("inviteInvalid");
   if (invite.invited_email?.toLowerCase() !== user.email.toLowerCase())
     return err("inviteEmailMismatch");
   if (user.role !== "company") return err(ERR.forbidden);

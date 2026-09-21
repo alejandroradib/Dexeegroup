@@ -832,6 +832,7 @@ export type Database = {
           invited_by: string | null
           accepted_at: string | null
           created_at: string
+          invite_expires_at: string | null
         }
         Insert: {
           id?: string
@@ -843,6 +844,7 @@ export type Database = {
           invited_by?: string | null
           accepted_at?: string | null
           created_at?: string
+          invite_expires_at?: string | null
         }
         Update: {
           id?: string
@@ -854,6 +856,7 @@ export type Database = {
           invited_by?: string | null
           accepted_at?: string | null
           created_at?: string
+          invite_expires_at?: string | null
         }
         Relationships: [
           {
@@ -1521,7 +1524,6 @@ export type Database = {
           question_type: Database["public"]["Enums"]["question_type"] | null
           options: Json | null
           weight: number | null
-          factor: string | null
           is_active: boolean | null
           created_at: string | null
         }

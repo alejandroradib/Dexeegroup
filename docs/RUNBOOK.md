@@ -122,6 +122,20 @@ queda bloqueado por ambos a la vez. Registre cualquier cambio en `docs/DECISIONS
 - El texto de la hoja de vida se anonimiza antes de salir hacia Anthropic
   (`src/lib/resume/redact.ts`). No añada campos al prompt sin pasar por esa función.
 
+## Correo saliente y cron
+
+Desde la fase C de la auditoría, cada correo se intenta enviar en la misma petición que lo
+encola (`after()` en `deliver`); el cron `process-outbox` de las 06:00 UTC es solo reintento de
+lo que falló. Restaurar `*/5 * * * *` en `vercel.json` requiere el plan Pro de Vercel; en Hobby
+solo se permite una ejecución diaria por cron.
+
+## Cambio de contraseña seguro en el proyecto alojado
+
+`supabase/config.toml` activa `secure_password_change` para el stack local. En el proyecto
+alojado es un ajuste del panel: Authentication, Providers, Email, "Secure password change".
+Actívelo; la acción `changePassword` ya exige la contraseña actual por su cuenta, así que el
+ajuste es una segunda barrera y no un requisito para que funcione.
+
 ## Lead queue
 
 Inbound briefs land in `contact_requests` with `request_type = 'hire'` and `status = 'new'`.

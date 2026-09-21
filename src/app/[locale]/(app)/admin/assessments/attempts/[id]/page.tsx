@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { requireRole } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 type AiAnswer = {
@@ -39,8 +40,11 @@ type WrittenReport = {
 export default async function AdminAttemptPage({
   params,
 }: PageProps<"/[locale]/admin/assessments/attempts/[id]">) {
-  await pageLocale(params);
+  const locale = await pageLocale(params);
   const { id } = await params;
+  // This page reads with the service role, which bypasses RLS, so the role check happens here
+  // and not only in the proxy and layout (audit C2).
+  await requireRole("admin", locale);
   const admin = createAdminClient();
   const [{ data: attempt }, t, te, tn, format] = await Promise.all([
     admin

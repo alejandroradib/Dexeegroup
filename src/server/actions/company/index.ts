@@ -10,6 +10,7 @@ import {
   jobDraftUser,
 } from "@/lib/ai/prompts/job-draft";
 import { getSessionUser } from "@/lib/auth/session";
+import { inviteExpiryFrom } from "@/lib/invites";
 import { logger } from "@/lib/logger";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -487,6 +488,7 @@ export async function inviteTeamMember(input: unknown): Promise<Result<null>> {
       company_id: company.id,
       invited_email: parsed.data.email.toLowerCase(),
       invite_token: token,
+      invite_expires_at: inviteExpiryFrom(),
       invited_by: user.id,
       role: "member",
     })

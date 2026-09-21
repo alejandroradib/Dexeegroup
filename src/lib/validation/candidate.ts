@@ -93,7 +93,11 @@ export const accountSchema = z.object({
 });
 
 export const changePasswordSchema = z
-  .object({ password: z.string().min(8, "passwordMin").max(128, "tooLong"), confirm: z.string() })
+  .object({
+    current: z.string().min(1, "required").max(128, "tooLong"),
+    password: z.string().min(8, "passwordMin").max(128, "tooLong"),
+    confirm: z.string(),
+  })
   .refine((v) => v.password === v.confirm, { path: ["confirm"], error: "passwordMatch" });
 
 export type IdentityStepInput = z.infer<typeof identityStepSchema>;

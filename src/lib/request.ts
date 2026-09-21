@@ -2,10 +2,9 @@ import "server-only";
 
 import { headers } from "next/headers";
 
-/** Best-effort client IP behind Vercel or another proxy. */
+import { pickClientIp } from "@/lib/client-ip";
+
+/** Client IP behind Vercel or another proxy; see pickClientIp for the header order (audit C5). */
 export async function clientIp(): Promise<string> {
-  const h = await headers();
-  const forwarded = h.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0]?.trim() ?? "unknown";
-  return h.get("x-real-ip") ?? "unknown";
+  return pickClientIp(await headers());
 }

@@ -1,10 +1,13 @@
 "use server";
 
+import { createClient as createBareClient } from "@supabase/supabase-js";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
 import { getSessionUser } from "@/lib/auth/session";
+import { publicEnv } from "@/lib/env";
 import { logger } from "@/lib/logger";
+import { hashIdentifier, rateLimit } from "@/lib/rate-limit";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { consentFlagsSchema } from "@/lib/validation/auth";
@@ -364,11 +367,30 @@ export async function updateAccount(input: unknown): Promise<Result<null>> {
   return ok(null);
 }
 
+/**
+ * Requires the current password (audit C3): a stolen session must not be enough to take the
+ * account over. The check signs in on a throwaway client so the browser session is untouched,
+ * and is rate limited per user so it cannot be used to guess the current password.
+ */
 export async function changePassword(input: unknown): Promise<Result<null>> {
   const user = await getSessionUser();
   if (!user) return err(ERR.unauthorized);
   const parsed = changePasswordSchema.safeParse(input);
   if (!parsed.success) return err(ERR.validation, fieldErrors(parsed.error));
+  const limit = await rateLimit("password-change", hashIdentifier(user.id), {
+    limit: 5,
+    windowSeconds: 900,
+  });
+  if (!limit.success) return err(ERR.rateLimited);
+  const env = publicEnv();
+  const probe = createBareClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+  });
+  const { error: wrong } = await probe.auth.signInWithPassword({
+    email: user.email,
+    password: parsed.data.current,
+  });
+  if (wrong) return err("passwordIncorrect", { current: ["passwordIncorrect"] });
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
   return error ? err(ERR.generic) : ok(null);
