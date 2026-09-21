@@ -270,22 +270,48 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
     "candidate gets no rows from assessment_questions table",
     async () => (await count(laura, "select answer_key from public.assessment_questions")) === 0,
   );
+  // Audit G1: no authenticated role reads question rows by any path. The old public view
+  // handed the whole active bank to any free account; the app serves questions only through
+  // the service client, limited to the attempt's question_ids.
   await check(
-    "candidate reads active questions through the public view without answer keys",
+    "the public questions view no longer exists",
+    async () =>
+      (await count(
+        admin,
+        "select 1 from information_schema.views where table_schema = 'public' and table_name = 'assessment_questions_public'",
+      )) === 0,
+  );
+  await check(
+    "company gets no rows from assessment_questions",
+    async () => (await count(harborOwner, "select id from public.assessment_questions")) === 0,
+  );
+  await check(
+    "candidate without an open attempt gets no rows from assessment_questions",
+    async () => (await count(laura, "select id from public.assessment_questions")) === 0,
+  );
+  await check(
+    "candidate with an open attempt still gets no rows from assessment_questions",
     async () =>
       asUser(
         db,
         laura,
         async (tx) => {
+          await asService(
+            tx,
+            () =>
+              tx.query("update public.assessments set is_active = true where id = $1", [
+                SEED.assessments.written,
+              ]),
+            laura,
+          );
+          await tx.query(
+            "insert into public.assessment_attempts (assessment_id, candidate_id) values ($1, $2)",
+            [SEED.assessments.written, SEED.candidates.laura],
+          );
           const res = await tx.query<{ n: number }>(
-            "select count(*)::int as n from public.assessment_questions_public",
+            "select count(*)::int as n from public.assessment_questions",
           );
-          const cols = await tx.query<{ column_name: string }>(
-            "select column_name from information_schema.columns where table_schema = 'public' and table_name = 'assessment_questions_public'",
-          );
-          return (
-            Number(res.rows[0]?.n) > 100 && !cols.rows.some((c) => c.column_name === "answer_key")
-          );
+          return Number(res.rows[0]?.n) === 0;
         },
         { commit: false },
       ),
@@ -1150,6 +1176,98 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
     [SEED.jobs.dispatchPending],
     "job_locked_for_edit",
   );
+  // Audit G4: the applicants' terms snapshot is written by the trigger and is read-only for
+  // the company. Audit G3: the outbox can park a row as skipped.
+  await check("withdrawing a live job with applicants snapshots its terms by trigger", async () =>
+    asUser(
+      db,
+      harborOwner,
+      async (tx) => {
+        await tx.query("update public.jobs set status = 'draft' where id = $1", [
+          SEED.jobs.seniorAccountant,
+        ]);
+        const res = await tx.query<{ snap: Record<string, unknown> | null; min: number }>(
+          "select reopen_snapshot as snap, salary_min_usd as min from public.jobs where id = $1",
+          [SEED.jobs.seniorAccountant],
+        );
+        const snap = res.rows[0]?.snap;
+        return (
+          !!snap &&
+          Object.keys(snap).length === 8 &&
+          snap.salary_min_usd === res.rows[0]?.min &&
+          "english_level_required" in snap
+        );
+      },
+      { commit: false },
+    ),
+  );
+  await check("company cannot clear or alter the terms snapshot", async () =>
+    asUser(
+      db,
+      harborOwner,
+      async (tx) => {
+        await tx.query("update public.jobs set status = 'draft' where id = $1", [
+          SEED.jobs.seniorAccountant,
+        ]);
+        await tx.query("update public.jobs set reopen_snapshot = null where id = $1", [
+          SEED.jobs.seniorAccountant,
+        ]);
+        await tx.query(
+          "update public.jobs set reopen_snapshot = '{\"salary_min_usd\": 1}'::jsonb where id = $1",
+          [SEED.jobs.seniorAccountant],
+        );
+        const res = await tx.query<{ snap: Record<string, unknown> | null }>(
+          "select reopen_snapshot as snap from public.jobs where id = $1",
+          [SEED.jobs.seniorAccountant],
+        );
+        const snap = res.rows[0]?.snap;
+        return !!snap && Object.keys(snap).length === 8 && snap.salary_min_usd !== 1;
+      },
+      { commit: false },
+    ),
+  );
+  await check("the service role clears the terms snapshot after the notice", async () =>
+    asUser(
+      db,
+      harborOwner,
+      async (tx) => {
+        await tx.query("update public.jobs set status = 'draft' where id = $1", [
+          SEED.jobs.seniorAccountant,
+        ]);
+        await asService(
+          tx,
+          () =>
+            tx.query("update public.jobs set reopen_snapshot = null where id = $1", [
+              SEED.jobs.seniorAccountant,
+            ]),
+          harborOwner,
+        );
+        const res = await tx.query<{ snap: unknown }>(
+          "select reopen_snapshot as snap from public.jobs where id = $1",
+          [SEED.jobs.seniorAccountant],
+        );
+        return res.rows[0]?.snap === null;
+      },
+      { commit: false },
+    ),
+  );
+  await check("the outbox accepts the skipped status for rows without a provider", async () =>
+    asUser(
+      db,
+      { id: null, role: "service_role" },
+      async (tx) => {
+        await tx.query(
+          "insert into public.email_outbox (\"to\", template, status, last_error) values ('x@example.com', 'lead-acknowledgement', 'skipped', 'no_provider')",
+        );
+        const res = await tx.query<{ n: number }>(
+          "select count(*)::int as n from public.email_outbox where status = 'skipped' and sent_at is null",
+        );
+        return Number(res.rows[0]?.n) === 1;
+      },
+      { commit: false },
+    ),
+  );
+
   await check("company withdraws a published job to draft and then edits it", async () =>
     asUser(
       db,
@@ -1338,9 +1456,9 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
 
   // Audit C1 / C7 -----------------------------------------------------------------------------
   await expectError(
-    "public questions view exposes no factor column",
+    "the public questions view cannot be queried at all",
     laura,
-    "select factor from public.assessment_questions_public limit 1",
+    "select 1 from public.assessment_questions_public limit 1",
   );
   await check(
     "invites carry an expiry that defaults to seven days",

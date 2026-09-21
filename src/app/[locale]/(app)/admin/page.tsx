@@ -4,8 +4,10 @@ import { PageHeader } from "@/components/layout/page-header";
 import { StatCard } from "@/components/shared/stat-card";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { requireRole } from "@/lib/auth/session";
 import { APPLICATION_STATUSES, CEFR_LEVELS } from "@/lib/validation/enums";
 import { getAdminDashboard, type AdoptionMetrics } from "@/server/services/admin";
+import { getEmailHealth } from "@/server/services/outbox";
 
 const ADOPTION_KEYS = [
   "registered",
@@ -18,12 +20,18 @@ const ADOPTION_KEYS = [
 ] as const satisfies readonly (keyof AdoptionMetrics)[];
 
 export default async function AdminDashboardPage({ params }: PageProps<"/[locale]/admin">) {
-  await pageLocale(params);
-  const [t, te, stats] = await Promise.all([
+  const locale = await pageLocale(params);
+  // getEmailHealth reads with the service role; the admin role is verified here, on the page
+  // that uses it (decision 63), not left to the proxy.
+  await requireRole("admin", locale);
+  const [t, te, stats, email] = await Promise.all([
     getTranslations("admin.dashboard"),
     getTranslations("enums"),
     getAdminDashboard(),
+    getEmailHealth(),
   ]);
+  const emailProblems = email.pendingOver15m + email.failed24h + email.skippedNoProvider;
+  const emailAttention = !email.providerConfigured || emailProblems > 0;
   const link = (href: string) => (
     <Link href={href} className="text-link text-sm hover:underline">
       {t("review")}
@@ -82,6 +90,22 @@ export default async function AdminDashboardPage({ params }: PageProps<"/[locale
           label={t("activePlacements")}
           value={stats.activePlacements}
           action={link("/admin/placements")}
+        />
+        <StatCard
+          label={t("emailHealth")}
+          value={email.providerConfigured ? emailProblems : "—"}
+          hint={
+            !email.providerConfigured
+              ? t("emailHealthNoProvider")
+              : emailProblems > 0
+                ? t("emailHealthDetail", {
+                    pending: email.pendingOver15m,
+                    failed: email.failed24h,
+                    skipped: email.skippedNoProvider,
+                  })
+                : t("emailHealthOk")
+          }
+          tone={emailAttention ? "attention" : "neutral"}
         />
       </div>
       <div className="mt-6 grid gap-4 lg:grid-cols-2">

@@ -1713,7 +1713,11 @@
       "allAssessments": "All three assessments",
       "withInterview": "Practice interview completed",
       "applied": "Applied to a role",
-      "hired": "Hired"
+      "hired": "Hired",
+      "emailHealth": "Email delivery",
+      "emailHealthOk": "Provider configured, nothing stuck",
+      "emailHealthNoProvider": "No email provider configured. Nothing is being sent.",
+      "emailHealthDetail": "{pending} pending over 15 min · {failed} failed in 24 h · {skipped} held for lack of provider"
     },
     "companies": {
       "title": "Companies",

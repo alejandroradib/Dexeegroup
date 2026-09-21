@@ -137,7 +137,7 @@ Postgres, schema `public`. `id` columns are `uuid default gen_random_uuid()`. `c
 
 **assessments** — id, type assessment_type unique, title, description, version int default 1, is_active bool default false, time_limit_minutes int, cooldown_days int default 90, config jsonb (thresholds, prompts, item counts), created_at.
 
-**assessment_questions** — id, assessment_id fk, section text, band cefr_level null, sort_order int, prompt text not null, question_type, options jsonb (array of {id, text}), answer_key jsonb (mcq: {correct: "b"}; situational: {best: "c"}; likert: {factor, reverse}), weight numeric default 1, factor text null, is_active bool default true, created_at. Never exposed to non-admin clients; served through the view in 7.3.
+**assessment_questions** — id, assessment_id fk, section text, band cefr_level null, sort_order int, prompt text not null, question_type, options jsonb (array of {id, text}), answer_key jsonb (mcq: {correct: "b"}; situational: {best: "c"}; likert: {factor, reverse}), weight numeric default 1, factor text null, is_active bool default true, created_at. Never exposed to non-admin clients by any path: no view, no policy. Served to the candidate only through the service role, limited to the attempt's `question_ids` (see 7.3).
 
 **assessment_attempts** — id, assessment_id fk, candidate_id fk, status attempt_status default 'in_progress', started_at, expires_at, submitted_at, ai_result jsonb, ai_level cefr_level, final_level cefr_level, final_score numeric, report jsonb, integrity jsonb (tab_leaves int, submitted_after_expiry bool), validated_by, validated_at, validation_comment, visible_to_companies bool default false, created_at, updated_at. Partial unique index: one row per (assessment_id, candidate_id) where status = 'in_progress'.
 
@@ -154,7 +154,7 @@ Postgres, schema `public`. `id` columns are `uuid default gen_random_uuid()`. `c
 ### 7.3 Views and functions
 
 - `public_jobs` (security definer, grant select to anon and authenticated): published jobs with title, slug, role_family, seniority, contract_type, employment_type, work_mode, english_level_required, skills, salary range only when `show_salary`, company name and logo unless `confidential_company` (then "Confidential" and null logo), published_at, closes_at.
-- `assessment_questions_public` (security invoker): all columns of `assessment_questions` except `answer_key`, filtered to `is_active`.
+- Questions are never exposed through a view. The original design had `assessment_questions_public` for candidates; it was removed in audit G1 because any authenticated account could read the whole active bank. Candidates receive only the questions assigned to their attempt (`assessment_attempts.question_ids`), read with the service role and stripped of `answer_key` and `factor` before leaving the server (`src/lib/assessments/public-question.ts`).
 - `candidate_cards` (security invoker): candidates joined to a computed `last_initial`, without contact fields; used by company pipelines and admin lists.
 - `is_admin()`, `current_role()`, `user_company_ids()` (companies where the user is owner or accepted member), `company_can_view_candidate(candidate_id)` (exists an application from that candidate to a job of the user's companies, and the company is not suspended), `company_can_view_contact(candidate_id)` (same, and `contact_released = true`). All `security definer`, `stable`, search_path pinned.
 - `assessment_cooldown_ok(assessment_id, candidate_id)` returns the next allowed date or null.

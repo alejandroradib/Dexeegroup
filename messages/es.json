@@ -1713,7 +1713,11 @@
       "allAssessments": "Las tres evaluaciones",
       "withInterview": "Entrevista de práctica completada",
       "applied": "Se postularon a un rol",
-      "hired": "Contratados"
+      "hired": "Contratados",
+      "emailHealth": "Entrega de correo",
+      "emailHealthOk": "Proveedor configurado, nada atascado",
+      "emailHealthNoProvider": "No hay proveedor de correo configurado. No se está enviando nada.",
+      "emailHealthDetail": "{pending} pendientes de más de 15 min · {failed} fallidos en 24 h · {skipped} retenidos por falta de proveedor"
     },
     "companies": {
       "title": "Empresas",

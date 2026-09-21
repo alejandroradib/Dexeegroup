@@ -1516,22 +1516,6 @@ export type Database = {
       }
     }
     Views: {
-      assessment_questions_public: {
-        Row: {
-          id: string | null
-          assessment_id: string | null
-          section: string | null
-          band: Database["public"]["Enums"]["cefr_level"] | null
-          sort_order: number | null
-          prompt: string | null
-          question_type: Database["public"]["Enums"]["question_type"] | null
-          options: Json | null
-          weight: number | null
-          is_active: boolean | null
-          created_at: string | null
-        }
-        Relationships: []
-      }
       candidate_cards: {
         Row: {
           id: string | null

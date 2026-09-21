@@ -12,7 +12,6 @@ import {
 import { getSessionUser } from "@/lib/auth/session";
 import { inviteExpiryFrom } from "@/lib/invites";
 import {
-  ACTIVE_APPLICATION_STATUSES,
   diffMaterialTerms,
   snapshotMaterialTerms,
   type MaterialTerms,
@@ -248,7 +247,7 @@ export async function submitJob(
       snapshotMaterialTerms(job),
     );
     if (changes.length > 0) await dispatchEvent({ type: "job_terms_changed", jobId, changes });
-    await clearReopenSnapshot(supabase, jobId);
+    await clearReopenSnapshot(jobId);
   }
   if (status === "published") {
     await dispatchEvent({ type: "job_status", jobId, status: "published" });
@@ -289,16 +288,15 @@ export async function refreshJobFit(jobId: string): Promise<Result<{ computed: n
  * first time (decision 59).
  */
 /**
- * Clears the snapshot in its own statement, logging rather than failing. The column is added
- * by migration 20260923000004; until that migration is applied in an environment, the write
- * fails and the submission must still go through. Fold this back into the status update once
- * every environment carries the column.
+ * Clears the snapshot once the applicants have been told. Runs with the service role: the
+ * trigger keeps a company's own client from changing the column (audit G4), so a user-client
+ * update here would be silently ignored and the notice would repeat on every resubmission.
  */
-async function clearReopenSnapshot(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-  jobId: string,
-) {
-  const { error } = await supabase.from("jobs").update({ reopen_snapshot: null }).eq("id", jobId);
+async function clearReopenSnapshot(jobId: string) {
+  const { error } = await createAdminClient()
+    .from("jobs")
+    .update({ reopen_snapshot: null })
+    .eq("id", jobId);
   if (error) logger.warn({ err: error.message, jobId }, "reopen_snapshot_clear_failed");
 }
 
@@ -323,32 +321,15 @@ export async function changeJobStatus(
   };
   const status = next[action];
   if (!status) return err(ERR.conflict);
-  // Withdrawing to draft: remember the material terms while there are applicants in the
-  // running, so submitJob can tell them what changed (decision 71).
-  let snapshot: Json | null = null;
-  if (action === "reopen") {
-    const { data: full } = await supabase.from("jobs").select("*").eq("id", jobId).maybeSingle();
-    const { count } = await supabase
-      .from("applications")
-      .select("id", { count: "exact", head: true })
-      .eq("job_id", jobId)
-      .in("status", [...ACTIVE_APPLICATION_STATUSES]);
-    snapshot = full && (count ?? 0) > 0 ? (snapshotMaterialTerms(full) as unknown as Json) : null;
-  }
+  // Withdrawing to draft: the database trigger snapshots the material terms while there are
+  // applicants in the running (decision 71, audit G4), so submitJob can tell them what changed.
+  // The company's client cannot write that column, on purpose.
   const { error } = await supabase
     .from("jobs")
     .update({ status, ...(status === "closed" ? { closes_at: new Date().toISOString() } : {}) })
     .eq("id", jobId);
   if (error)
     return err(error.message.includes("company_not_verified") ? "companyNotVerified" : ERR.generic);
-  if (action === "reopen") {
-    const { error: snapshotError } = await supabase
-      .from("jobs")
-      .update({ reopen_snapshot: snapshot })
-      .eq("id", jobId);
-    if (snapshotError)
-      logger.warn({ err: snapshotError.message, jobId }, "reopen_snapshot_write_failed");
-  }
   await pingJobIndexing(jobId, status === "published" ? "URL_UPDATED" : "URL_DELETED");
   revalidatePath("/[locale]/company/jobs", "page");
   revalidatePath(`/[locale]/company/jobs/${jobId}/edit`, "page");

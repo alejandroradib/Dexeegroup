@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
 
 import { isLocale, routing, type Locale } from "@/i18n/routing";
+import { canonicalRedirect } from "@/lib/canonical-host";
+import { publicEnv } from "@/lib/env";
 import { updateSession } from "@/lib/supabase/proxy";
 
 const handleI18n = createIntlMiddleware(routing);
@@ -21,6 +23,17 @@ function splitPath(pathname: string): { locale: Locale | null; segments: string[
 }
 
 export async function proxy(request: NextRequest) {
+  // One host serves the app in production (audit G2). The Vercel panel redirects the
+  // others; this backstop keeps a registration from starting on a host whose cookies the
+  // email link can never reach.
+  const canonical = canonicalRedirect({
+    url: request.nextUrl,
+    host: request.headers.get("x-forwarded-host") ?? request.headers.get("host"),
+    siteUrl: publicEnv().NEXT_PUBLIC_SITE_URL,
+    vercelEnv: process.env.VERCEL_ENV,
+  });
+  if (canonical) return NextResponse.redirect(canonical, 308);
+
   const response = handleI18n(request);
   // Redirects/rewrites from next-intl (e.g. missing locale prefix) are returned as is.
   if (response.headers.get("location")) return response;
