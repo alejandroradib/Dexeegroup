@@ -120,6 +120,36 @@ Los intentos ya validados conservan su resultado: guardan el reporte, no las pre
 `.banks/retired-hashes.json` contiene las huellas de los bancos retirados y el cargador
 rechaza cualquier ítem que las repita; consérvelo junto a los bancos.
 
+### Estado en producción
+
+Los bancos rotados se cargaron en el proyecto alojado el 21 de septiembre de 2026. Estado
+verificado tras la carga, con los ítems expuestos desactivados y conservados:
+
+| Prueba | Activas | Retiradas |
+|---|---|---|
+| english_written | 138 | 75 |
+| english_oral | 40 | 12 |
+| psychometric | 80 (50 IPIP + 30 situacionales) | 10 |
+| disc | 28 | 28 |
+
+Distribución del inglés escrito: 14 ítems por sección y banda en gramática, vocabulario y
+lectura (42 por sección, 42 por banda) y 4 consignas de escritura por banda.
+
+La carga se verificó comparando una huella de contenido calculada igual en local y en
+producción, sobre `bank_id`, enunciado, clave, sección y banda de los 236 ítems nuevos:
+
+    select count(*), md5(string_agg(sig, chr(10) order by sig)) from (
+      select (q.options->>'bank_id') || '|' || q.prompt || '|' ||
+             coalesce(q.answer_key::text,'-') || '|' || q.section || '|' ||
+             coalesce(q.band::text,'-') as sig
+      from assessment_questions q
+      where (q.options->>'bank_id') ~ '^(gr|vo|rd|wr|or2|sjt2|disc2)-'
+        and (q.options->>'bank_id') !~ '-[0-9]{3}$') s;
+
+Repita esa consulta contra el directorio de bancos si vuelve a cargar: si la huella difiere,
+algo se transcribió mal. Para revertir la rotación basta invertir la activación; los ítems
+viejos siguen en la tabla.
+
 ## Activar DISC en producción
 
 La migración `20260922000002` crea la fila de `assessments` para `disc` con `is_active = false`,
