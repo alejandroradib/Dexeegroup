@@ -7,6 +7,12 @@
  * exchange that cannot find its verifier cookie. The Vercel panel redirects the extra
  * domains; this is the in-code backstop in case that configuration drifts.
  *
+ * The `www` sibling of the canonical host is deliberately left to the panel. Vercel's
+ * domain redirect runs at the edge before this code, and the code cannot see which way it
+ * points: when the panel sent the apex to `www` and this function sent `www` back, every
+ * visitor looped until the browser gave up (DECISIONS 91). The panel owns the www/apex
+ * pair; this backstop only covers hosts the panel cannot loop with, such as `*.vercel.app`.
+ *
  * Pure so it can be unit tested. The proxy calls it before anything else.
  */
 export function canonicalRedirect(input: {
@@ -33,13 +39,21 @@ export function canonicalRedirect(input: {
   if (!isPublicHostname(canonical.hostname)) return null;
 
   const requested = normaliseHost(input.host ?? input.url.host);
-  if (!requested || requested === normaliseHost(canonical.host)) return null;
+  const canonicalHost = normaliseHost(canonical.host);
+  if (!requested || requested === canonicalHost) return null;
+  // Never fight the Vercel panel over the www/apex pair: it redirects before this runs and
+  // an opposite setting would loop. Whichever of the two the panel chooses stands.
+  if (isWwwSibling(requested, canonicalHost)) return null;
 
   return `${canonical.origin}${input.url.pathname}${input.url.search}`;
 }
 
 function normaliseHost(host: string): string {
   return host.trim().toLowerCase().replace(/\.$/, "");
+}
+
+function isWwwSibling(a: string, b: string): boolean {
+  return a === `www.${b}` || b === `www.${a}`;
 }
 
 function isPublicHostname(hostname: string): boolean {

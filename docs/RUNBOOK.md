@@ -48,6 +48,7 @@ Search Console so the canonical URLs are recrawled.
 - The application is served by Vercel. Both `dexeegroup.com` and `www.dexeegroup.com` are CNAMEs to the target Vercel prints under Settings, Domains. On Cloudflare they must be `DNS only` (grey cloud); the orange-cloud proxy breaks domain validation and can loop the certificate.
 - Email is Google Workspace and does not live in this repo's control: one MX to `smtp.google.com` priority 1, the SPF TXT on the apex, and the DKIM TXT on `google._domainkey`. Never delete these three, and recreate them **before** changing nameservers, not after.
 - Changing DNS provider: create every record listed above in the new provider first, then repoint nameservers at the registrar. Read the live values with `dns.resolveMx` / `dns.resolveTxt` before starting, since the DKIM public key is only recoverable from the current DNS or from the Google Workspace admin console.
+- Vercel, Settings, Domains: `dexeegroup.com` must be "Connect to production" and `www.dexeegroup.com` "Redirect to dexeegroup.com" with 308. The code never redirects between the two, so the panel alone decides the pair (DECISIONS 91); if the panel points the other way, visitors land on `www` and email links break, but nothing loops.
 - After any domain change: set `NEXT_PUBLIC_SITE_URL` in Vercel to the new origin and redeploy, then update Site URL and Redirect URLs in Supabase Authentication.
 
 ## Rotate keys

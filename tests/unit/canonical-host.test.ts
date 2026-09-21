@@ -5,16 +5,41 @@ import { canonicalRedirect } from "@/lib/canonical-host";
 /**
  * Guards CORRECCIONES-3 G2: in production every non-API request on a non-canonical host is
  * sent to the canonical one, path and query intact; nothing else ever redirects.
+ *
+ * Except the www/apex pair (DECISIONS 91): the Vercel panel redirects that pair at the edge
+ * before this code runs, and an opposite setting in the panel looped every visitor on
+ * 2026-09-21. The code must never redirect between a host and its `www.` sibling.
  */
 const SITE = "https://dexeegroup.com";
 const req = (href: string) => new URL(href);
 
 describe("canonical host redirect", () => {
-  it("sends www to the apex keeping path and query", () => {
+  it("leaves the www sibling to the Vercel panel, whichever of the pair is canonical", () => {
+    // Panel says apex -> www, code said www -> apex: the loop that took the site down.
     expect(
       canonicalRedirect({
         url: req("https://www.dexeegroup.com/es/sign-up?next=%2Fcandidate"),
         host: "www.dexeegroup.com",
+        siteUrl: SITE,
+        vercelEnv: "production",
+      }),
+    ).toBeNull();
+    // And the mirror image, should the canonical URL ever be the www host.
+    expect(
+      canonicalRedirect({
+        url: req("https://dexeegroup.com/es"),
+        host: "dexeegroup.com",
+        siteUrl: "https://www.dexeegroup.com",
+        vercelEnv: "production",
+      }),
+    ).toBeNull();
+  });
+
+  it("keeps path and query when it does redirect", () => {
+    expect(
+      canonicalRedirect({
+        url: req("https://dexeegroup.vercel.app/es/sign-up?next=%2Fcandidate"),
+        host: "dexeegroup.vercel.app",
         siteUrl: SITE,
         vercelEnv: "production",
       }),
@@ -70,7 +95,7 @@ describe("canonical host redirect", () => {
     expect(
       canonicalRedirect({
         url: req("https://internal/es"),
-        host: "www.dexeegroup.com",
+        host: "dexeegroup.vercel.app",
         siteUrl: SITE,
         vercelEnv: "production",
       }),
@@ -81,8 +106,8 @@ describe("canonical host redirect", () => {
     for (const bad of ["http://localhost:3000", "http://127.0.0.1:3000", "not a url"]) {
       expect(
         canonicalRedirect({
-          url: req("https://www.dexeegroup.com/es"),
-          host: "www.dexeegroup.com",
+          url: req("https://dexeegroup.vercel.app/es"),
+          host: "dexeegroup.vercel.app",
           siteUrl: bad,
           vercelEnv: "production",
         }),
