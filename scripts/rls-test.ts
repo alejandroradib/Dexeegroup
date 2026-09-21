@@ -248,9 +248,15 @@ async function main() {
       .eq("candidate_id", candidate.id);
     record("admin reads contacts", (adminContacts.data?.length ?? 0) === 1);
 
-    // Every table has RLS
-    const rls = await admin.rpc("is_admin");
-    record("service role can call access functions", !rls.error);
+    // Audit H2: the policy helpers live in the private schema and are not reachable through
+    // the API, not even with the service role. The cast is deliberate: the name is gone from
+    // the generated types, which is the point.
+    const hidden = await admin.rpc("is_admin" as never);
+    record("policy helpers are not exposed through rpc", Boolean(hidden.error));
+    const stillPublic = await admin.rpc("candidate_apply_requirements", {
+      target_candidate_id: candidate.id,
+    });
+    record("app-facing functions stay callable", !stillPublic.error);
   } finally {
     for (const fn of cleanup.reverse()) {
       try {

@@ -1590,17 +1590,9 @@ export type Database = {
       }
     }
     Functions: {
-      application_company_id: {
-        Args: { target_application_id: string }
-        Returns: string
-      }
       assessment_cooldown_ok: {
         Args: { target_assessment_id: string; target_candidate_id: string }
         Returns: string
-      }
-      attempt_is_open: {
-        Args: { target_attempt_id: string }
-        Returns: boolean
       }
       candidate_application_jobs: {
         Args: Record<PropertyKey, never>
@@ -1609,10 +1601,6 @@ export type Database = {
       candidate_apply_requirements: {
         Args: { target_candidate_id: string }
         Returns: unknown[]
-      }
-      candidate_owns_attempt: {
-        Args: { target_attempt_id: string }
-        Returns: boolean
       }
       candidate_valid_results: {
         Args: { target_candidate_id: string }
@@ -1626,41 +1614,9 @@ export type Database = {
         Args: { level: Database["public"]["Enums"]["cefr_level"] }
         Returns: number
       }
-      company_can_view_candidate: {
-        Args: { target_candidate_id: string }
-        Returns: boolean
-      }
-      company_can_view_contact: {
-        Args: { target_candidate_id: string }
-        Returns: boolean
-      }
-      compute_profile_completeness: {
-        Args: { target_candidate_id: string }
-        Returns: number
-      }
-      current_user_role: {
-        Args: Record<PropertyKey, never>
-        Returns: Database["public"]["Enums"]["user_role"]
-      }
-      is_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
-      is_company_owner: {
-        Args: { target_company_id: string }
-        Returns: boolean
-      }
-      job_is_published: {
-        Args: { target_job_id: string }
-        Returns: boolean
-      }
       slugify: {
         Args: { input: string }
         Returns: string
-      }
-      user_company_ids: {
-        Args: Record<PropertyKey, never>
-        Returns: string[]
       }
     }
     Enums: {

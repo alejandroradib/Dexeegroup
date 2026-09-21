@@ -43,7 +43,8 @@ Search Console so the canonical URLs are recrawled.
 ## Domain and DNS
 
 - Registrar: Squarespace, under `aradi@dexeegroup.com`. Renewal 11 Sep 2027.
-- Authoritative DNS as of 18 Sep 2026: Cloudflare (`vin.ns.cloudflare.com`, `sloan.ns.cloudflare.com`). The account holding the zone is not the one under `alejandroradib@gmail.com`; confirm which login owns it before editing records.
+- Authoritative DNS since 21 Sep 2026: Cloudflare, zone in the account under `alejandroradib@gmail.com`, nameservers `art.ns.cloudflare.com` and `marissa.ns.cloudflare.com`. The registry delegation changed on 19 Sep 14:16 UTC; Cloudflare activated the zone two days later, after a manual "Check nameservers now". The previous zone (`vin`/`sloan`) sits in an account nobody at Dexee controls and is no longer used.
+- Squarespace still holds the domain registration and used to host the old website. Before cancelling the website plan, check whether the Google Workspace subscription is billed through Squarespace (Squarespace domain page → Email, and `admin.google.com` → Billing → Subscriptions). If it is, move it to direct Google billing first and confirm the move, then cancel the site plan. Cancelling first can end the Workspace subscription and the mailboxes with it. Never cancel the domain registration itself.
 - The application is served by Vercel. Both `dexeegroup.com` and `www.dexeegroup.com` are CNAMEs to the target Vercel prints under Settings, Domains. On Cloudflare they must be `DNS only` (grey cloud); the orange-cloud proxy breaks domain validation and can loop the certificate.
 - Email is Google Workspace and does not live in this repo's control: one MX to `smtp.google.com` priority 1, the SPF TXT on the apex, and the DKIM TXT on `google._domainkey`. Never delete these three, and recreate them **before** changing nameservers, not after.
 - Changing DNS provider: create every record listed above in the new provider first, then repoint nameservers at the registrar. Read the live values with `dns.resolveMx` / `dns.resolveTxt` before starting, since the DKIM public key is only recoverable from the current DNS or from the Google Workspace admin console.
@@ -73,7 +74,8 @@ Requests appear in `/admin/candidates/<id>` and notify admins. For deletion: exp
 
 ## Health and monitoring
 
-- `GET /api/health` checks database connectivity.
+- `GET /api/health` checks database connectivity and reports `email: configured | unconfigured` (audit G3). An unconfigured provider means every outbox row is parked as `skipped` until a key is set; nothing is silently lost, and nothing is sent either.
+- The admin dashboard shows an email delivery tile: pending rows over 15 minutes, failed in 24 hours, parked for lack of provider. Red means look.
 - Logs are structured JSON (pino) in Vercel logs. Set `SENTRY_DSN` when the Sentry project exists.
 
 ## Secrets scan
@@ -188,6 +190,79 @@ queda bloqueado por ambos a la vez. Registre cualquier cambio en `docs/DECISIONS
   `resume_unreadable` y calcula el ajuste con el perfil y los resultados.
 - El texto de la hoja de vida se anonimiza antes de salir hacia Anthropic
   (`src/lib/resume/redact.ts`). No añada campos al prompt sin pasar por esa función.
+
+## Correo transaccional (Resend, DMARC, SMTP de Auth)
+
+La aplicación envía por Resend desde `EMAIL_FROM` (`no-reply@dexeegroup.com`). Resend rechaza
+todo envío desde un dominio que no haya verificado, y Supabase Auth sin SMTP propio solo entrega
+correos a miembros del equipo del proyecto. Sin estos tres bloques configurados, ningún usuario
+real completa el registro ni recibe acuses.
+
+### 1. Verificar el dominio en Resend
+
+En Resend → Domains → Add domain, `dexeegroup.com`, región US. Resend muestra tres registros;
+créelos en la zona de Cloudflare, todos en **DNS only** (nube gris):
+
+| Tipo | Nombre | Valor | Para qué |
+|---|---|---|---|
+| TXT | `resend._domainkey` | la clave DKIM que muestra Resend (`p=MIGf...`) | firma DKIM de los correos de la aplicación |
+| MX | `send` | `feedback-smtp.us-east-1.amazonses.com`, prioridad 10 | rebotes y quejas de vuelta a Resend |
+| TXT | `send` | `v=spf1 include:amazonses.com ~all` | SPF del subdominio de envío |
+
+El SPF de la raíz (`v=spf1 include:_spf.google.com ~all`) no cambia: Google sigue enviando
+desde `@dexeegroup.com` y Resend firma con su propio selector y su subdominio `send`. Vuelva a
+Resend y pulse Verify; tarda de uno a quince minutos. Copie los valores exactos del panel de
+Resend, no de esta tabla, porque el host del MX depende de la región elegida.
+
+### 2. DMARC
+
+Hoy el dominio no tiene registro DMARC, así que cualquiera puede suplantar `@dexeegroup.com`
+sin que el receptor tenga una política que aplicar. Para una firma de reclutamiento es
+material: las ofertas de empleo falsas son de las estafas más comunes contra candidatos.
+
+1. Cree el alias `dmarc@dexeegroup.com` en Google Workspace (o un grupo que redirija a un buzón
+   que alguien lea).
+2. TXT en `_dmarc`: `v=DMARC1; p=none; rua=mailto:dmarc@dexeegroup.com; fo=1`
+3. Tres semanas después, si los reportes solo muestran Google y Resend como emisores legítimos:
+   `p=quarantine; pct=100`. Tres semanas más y sin falsos positivos: `p=reject`.
+
+Si en cualquier etapa un envío legítimo cae en spam, revise el reporte antes de retroceder:
+casi siempre es un servicio nuevo enviando desde el dominio sin SPF ni DKIM.
+
+### 3. SMTP de Supabase Auth con Resend
+
+Supabase → Authentication → Emails → SMTP Settings → Enable custom SMTP:
+
+| Campo | Valor |
+|---|---|
+| Sender email | `no-reply@dexeegroup.com` |
+| Sender name | `Dexee` |
+| Host | `smtp.resend.com` |
+| Port | `465` |
+| Username | `resend` |
+| Password | una llave de API de Resend con permiso de envío (puede ser la misma `RESEND_API_KEY`) |
+
+Guarde y, en la misma sección, confirme que Site URL sea `https://dexeegroup.com` y que las
+Redirect URLs incluyan `https://dexeegroup.com/auth/callback` y `https://dexeegroup.com/**`.
+Mientras el SMTP propio no exista, la confirmación de cuenta solo llega a miembros del equipo
+de Supabase: un candidato real no puede terminar de registrarse.
+
+### 4. Prueba de humo, cinco minutos, después de cualquier cambio de DNS
+
+1. `GET https://dexeegroup.com/api/health` debe responder `"email":"configured"`.
+2. Con un correo personal que no sea del equipo, regístrese como candidato en
+   `https://dexeegroup.com/es/sign-up/candidate`. El correo de confirmación debe llegar en menos
+   de un minuto, desde `no-reply@dexeegroup.com`, y el enlace debe empezar por
+   `https://dexeegroup.com/auth/callback`. Ese correo lo envía Supabase por el SMTP del paso 3.
+3. Envíe un brief desde el formulario de empresas en `/es/for-companies`. El acuse lo envía la
+   aplicación por Resend; debe llegar en menos de un minuto y aparecer en Resend → Emails como
+   Delivered.
+4. En el buzón receptor, abra "Mostrar original" (Gmail) y compruebe `SPF: PASS`, `DKIM: PASS`
+   con `d=dexeegroup.com`, y `DMARC: PASS` una vez exista el registro.
+5. En `/es/admin`, la tarjeta de entrega de correo debe estar en gris, sin cifras en rojo.
+
+Si el paso 2 falla pero el 3 funciona, el problema es el SMTP de Auth. Si falla el 3, revise
+primero que el dominio esté Verified en Resend y luego `RESEND_API_KEY` en Vercel.
 
 ## Correo saliente y cron
 

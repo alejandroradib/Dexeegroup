@@ -4,6 +4,7 @@ import createIntlMiddleware from "next-intl/middleware";
 import { isLocale, routing, type Locale } from "@/i18n/routing";
 import { canonicalRedirect } from "@/lib/canonical-host";
 import { publicEnv } from "@/lib/env";
+import { buildContentSecurityPolicy, generateNonce } from "@/lib/security/csp";
 import { updateSession } from "@/lib/supabase/proxy";
 
 const handleI18n = createIntlMiddleware(routing);
@@ -34,7 +35,21 @@ export async function proxy(request: NextRequest) {
   });
   if (canonical) return NextResponse.redirect(canonical, 308);
 
+  // Per-request CSP nonce (audit H1). Set on the request so Next.js stamps its own inline
+  // scripts and server components can read `x-nonce`; next-intl forwards request headers.
+  const env = publicEnv();
+  const nonce = generateNonce();
+  const csp = buildContentSecurityPolicy({
+    nonce,
+    supabaseUrl: env.NEXT_PUBLIC_SUPABASE_URL,
+    analyticsProvider: env.NEXT_PUBLIC_ANALYTICS_PROVIDER,
+    dev: process.env.NODE_ENV === "development",
+  });
+  request.headers.set("x-nonce", nonce);
+  request.headers.set("content-security-policy", csp);
+
   const response = handleI18n(request);
+  response.headers.set("Content-Security-Policy", csp);
   // Redirects/rewrites from next-intl (e.g. missing locale prefix) are returned as is.
   if (response.headers.get("location")) return response;
 

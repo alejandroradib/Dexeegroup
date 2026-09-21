@@ -6,6 +6,13 @@ import { pageLocale } from "@/i18n/server";
 
 import type { Metadata } from "next";
 
+/**
+ * Rendered per request, not at build time: the proxy issues a CSP nonce per response and
+ * Next.js can only stamp it on inline scripts when the page renders on demand (audit H1). A
+ * prerendered copy would ship scripts without the nonce and the browser would block them.
+ */
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/reset-password">): Promise<Metadata> {
