@@ -401,7 +401,7 @@
       "guarantee": "Replacement guarantee",
       "guaranteeDescription": "The replacement window, the exclusions and how to claim, written so a buyer's counsel can read them before a call.",
       "howWeVerify": "How we verify",
-      "howWeVerifyDescription": "Identity, spoken English graded by a human reviewer against CEFR, written English, two work profiles and a resume-based fit analysis. Five checks before a candidate reaches your shortlist.",
+      "howWeVerifyDescription": "Identity on a live call, spoken English graded by a human reviewer against CEFR, a written screen, two work profiles and a resume-based fit analysis. The English level a company sees is the one the reviewer assigned, never higher.",
       "sampleReport": "Sample verification report",
       "sampleReportDescription": "What a Dexee Verified report contains, on one page, with no account needed.",
       "compare": "Comparisons",
@@ -420,7 +420,7 @@
       "timelineTodayLabel": "Today",
       "timelineToday": "Post the role. Tell us the profile, the contract type and the budget.",
       "timelineDaysLabel": "In days",
-      "timelineDays": "Receive a Dexee-vetted shortlist with verified English levels and work-style profiles.",
+      "timelineDays": "Receive a Dexee-vetted shortlist with English levels assigned by a reviewer and work-style profiles.",
       "timelineWeeksLabel": "In weeks",
       "timelineWeeks": "Hire and onboard through Dexee: contracts, payroll and compliance handled in Colombia.",
       "servicesTitle": "What we do",
@@ -429,7 +429,7 @@
       "serviceStaffAug": "Staff augmentation",
       "serviceStaffAugBody": "Dedicated professionals who work exclusively for you on US hours. Dexee is the legal employer in Colombia and handles payroll, benefits and compliance.",
       "serviceEnglish": "Free English assessment",
-      "serviceEnglishBody": "Written and oral screening mapped to CEFR levels. Oral results are validated by Dexee reviewers before they reach a company.",
+      "serviceEnglishBody": "The English level rests on a recorded oral assessment that a Dexee reviewer grades against CEFR. A written screen runs alongside it and can only lower the level, never raise it.",
       "serviceWorkstyle": "Free work-style profile",
       "serviceWorkstyleBody": "A screening of working preferences and remote-work judgment. Candidates decide whether companies see the summary.",
       "foundingTitle": "Founding client program",
@@ -515,7 +515,7 @@
         },
         "english": {
           "q": "How do you verify English levels?",
-          "a": "Written English is scored on the server. Spoken English is pre-scored by a model on four rubric dimensions and then a Dexee reviewer listens to the recordings and assigns the final CEFR level. The badge shows the lower of the two levels, never the flattering one."
+          "a": "The level rests on spoken English. The candidate records answers to unseen questions, a model pre-scores four rubric dimensions, and a Dexee reviewer listens and assigns the final CEFR level. A written screen runs alongside it. The badge shows the lower of the two, so the written part can only lower the level, never raise it."
         },
         "ip": {
           "q": "Who owns the intellectual property of the work?",
@@ -599,11 +599,11 @@
         },
         "verified": {
           "name": "Dexee Verified",
-          "summary": "The verification report on its own, for candidates you found yourself.",
+          "summary": "The verification report on its own, for candidates you found yourself. The English level rests on a recorded oral assessment graded by a Dexee reviewer.",
           "includes": {
             "identity": "Government ID checked against a live session with the candidate",
-            "spokenEnglish": "Spoken English graded against CEFR by a human reviewer",
-            "writtenEnglish": "Written English assessment, scored server-side",
+            "spokenEnglish": "Spoken English graded against CEFR by a human reviewer; this is the level the report certifies",
+            "writtenEnglish": "Written English screen, scored server-side; it can only lower the certified level, never raise it",
             "workProfile": "Big Five and DISC work profiles, shared as descriptors",
             "report": "A single report you can forward to your hiring manager"
           }
@@ -691,7 +691,7 @@
     },
     "verify": {
       "title": "How we verify",
-      "subtitle": "Five checks before a candidate reaches your shortlist, and a person, not a model, assigns the English level.",
+      "subtitle": "Five checks before a candidate reaches your shortlist. The English level rests on the spoken assessment, and a person, not a model, assigns it.",
       "problemTitle": "The problem this solves",
       "problemBody": "Remote hiring across borders has an impersonation problem. It is documented, and it is the reason Dexee verifies before presenting, not after an offer.",
       "evidenceSourceLabel": "Source",
@@ -712,15 +712,15 @@
         },
         "spokenEnglish": {
           "title": "Spoken English",
-          "body": "The candidate records answers to unseen questions under a timer. The model pre-scores fluency, coherence, lexical range and grammatical accuracy out of five each. A reviewer then listens to the recordings and assigns the final level.",
+          "body": "The candidate records answers to unseen questions under a timer. The model pre-scores fluency, coherence, lexical range and grammatical accuracy out of five each. A reviewer then listens to the recordings and assigns the final level. This is the level the report certifies.",
           "produces": "A CEFR level from A1 to C2, with the four rubric scores",
-          "decidedBy": "A human reviewer. The model only pre-scores"
+          "decidedBy": "A human reviewer. The model only pre-scores, and the reviewer's level is the one the report certifies"
         },
         "writtenEnglish": {
           "title": "Written English",
-          "body": "A timed assessment with multiple-choice items and a written response, scored on the server. The answer key never reaches the browser, so the score cannot be reverse-engineered from the page.",
-          "produces": "A CEFR level and the raw score",
-          "decidedBy": "Server-side scoring, reviewed when the two parts disagree"
+          "body": "A timed screen with multiple-choice items and a written response, scored on the server. An unsupervised written test is not proof of level on its own, so Dexee does not treat it as one: the verified level is the lower of the written and spoken results, and the written part can only lower it.",
+          "produces": "A CEFR level and the raw score, used as a floor check against the spoken level",
+          "decidedBy": "Server-side scoring. It never raises the level above what the reviewer assigned"
         },
         "workProfile": {
           "title": "Work profiles",
@@ -736,10 +736,10 @@
         }
       },
       "humanTitle": "What a model on its own cannot do",
-      "humanBody": "An automated screen can score a transcript. It cannot tell you whether the person on the call is the person who will do the work. A Dexee reviewer sits on the identity session, listens to the recorded answers and signs the final CEFR level. Where the reviewer disagrees with the model, the reviewer wins and the report says so.",
+      "humanBody": "An automated screen can score a transcript, and an unsupervised written test cannot tell you who answered it. Neither can tell you whether the person on the call is the person who will do the work. A Dexee reviewer sits on the identity session, listens to the recorded answers and signs the final CEFR level. Where the reviewer disagrees with the model, the reviewer wins and the report says so.",
       "humanPoints": {
         "impersonation": "Identity is checked on a live call, against the same face that appears in the recorded answers.",
-        "override": "The reviewer can move the English level up or down, and the report records who decided.",
+        "override": "The reviewer can move the English level up or down, and the report records who decided. The written screen can only lower it.",
         "keys": "Answer keys stay on the server, so a candidate cannot read them from the page.",
         "reuse": "A report is issued once per candidate and dated, so you know how fresh it is."
       },
@@ -749,7 +749,7 @@
     },
     "sampleReport": {
       "title": "Sample verification report",
-      "subtitle": "What a Dexee Verified report contains, on one page, with no account needed.",
+      "subtitle": "What a Dexee Verified report contains, on one page, with no account needed. The English level is the one a reviewer assigned after listening to the candidate.",
       "illustrativeNotice": "This is a worked example, not a real person. Dexee has not yet issued a report it could anonymize and publish, so the figures here were written to show the layout and the rubric. A real report has the same structure and the same fields.",
       "candidateTitle": "Candidate",
       "referenceLabel": "Reference",
@@ -816,7 +816,7 @@
       "fitSummary": "Five years in inbound support for US healthcare clients, three of them leading a small team. Written and spoken English at the level the role requires. The main gap is the ticketing platform named in the brief, which the candidate has not used.",
       "fitStrengths": {
         "1": "Led a four-person support team with published SLAs",
-        "2": "Verified B2 in both written and spoken English",
+        "2": "B2 in spoken English, assigned by a Dexee reviewer and matched by the written screen",
         "3": "Experience with US healthcare clients and HIPAA-adjacent processes"
       },
       "fitGaps": {

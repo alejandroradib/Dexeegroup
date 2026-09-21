@@ -88,6 +88,24 @@ not yet a considered margin decision.
 | Managed staffing, all in | from USD 4,500 per month                            | LATAM band USD 4,500 to 13,000 by seniority                  |
 | Dexee Verified report    | USD 149 per candidate, free with a placement        | Background checks USD 30 to 150; English tests USD 70 to 325 |
 
+## What Dexee Verified certifies
+
+The English level on a Dexee Verified report is the CEFR level a Dexee reviewer assigns after
+listening to the candidate's recorded oral answers. The written assessment is a screen that
+runs alongside it: `english_verified_level` is the lower of the written and spoken levels
+(SPEC section 8, rule 6), so the written part can lower the certified level and never raise
+it. An unsupervised multiple-choice test does not resist a candidate with a language model
+open in another window, leaked bank or not, and the public copy must not present it as proof
+of level.
+
+This is a claim about how the product works, not a measurement, so it needs no source. It
+does need to stay true: `VERIFIED_LEVEL_RESTS_ON` in `src/content/pricing.ts` records which
+check certifies and which one only lowers, and `tests/unit/proof.test.ts` holds the pricing
+line, the `/how-we-verify` written check, the buyer FAQ and the sample report to it in both
+locales. Surfaces that carry the statement: `/pricing` (product line and includes),
+`/how-we-verify` (subtitle, spoken and written checks, "what a model cannot do"), the buyer
+FAQ on `/for-companies`, the home services block and `/sample-report`.
+
 ## Guarantee terms
 
 Published on `/guarantee` from `GUARANTEE` in `src/content/pricing.ts`. These are
@@ -115,6 +133,7 @@ does not limit its liability below the placement fee paid.
 | 2026-09-20 | Four prices                | Added as provisional, market-anchored                              | Claude, Phase 9.1  |
 | 2026-09-20 | "Role skills" assessment   | Removed, never existed; replaced by work profiles and fit analysis | Claude, Phase 10.5 |
 | 2026-09-20 | Four assessments, 90 days  | Added; matches `assessments` seed and `validity_days`              | Claude, Phase 10.5 |
+| 2026-09-21 | Dexee Verified level       | Copy re-anchored on the reviewer-graded oral assessment; written part described as a floor check only, in EN and ES | Claude, decision 3 after audit 3 |
 
 ---
 

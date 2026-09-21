@@ -39,8 +39,9 @@ export const SAMPLE_CANDIDATE = {
 
 export const SAMPLE_CHECKS: readonly SampleCheck[] = [
   { id: "identity", result: "verified", decidedBy: "reviewer" },
-  { id: "writtenEnglish", result: "B2", score: 42, outOf: 50, decidedBy: "system" },
+  // Spoken before written: the reviewer-assigned spoken level is what the report certifies.
   { id: "spokenEnglish", result: "B2", score: 15.5, outOf: 20, decidedBy: "reviewer" },
+  { id: "writtenEnglish", result: "B2", score: 42, outOf: 50, decidedBy: "system" },
   { id: "workProfile", result: "shared", decidedBy: "system" },
 ] as const;
 

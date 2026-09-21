@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import en from "@/../messages/en.json";
 import es from "@/../messages/es.json";
 
+import { VERIFIED_LEVEL_RESTS_ON, productById } from "@/content/pricing";
 import {
   CLAIMS,
   EVIDENCE,
@@ -11,6 +12,7 @@ import {
   consentedTestimonials,
   verifiedClaims,
 } from "@/content/proof";
+import { SAMPLE_CHECKS } from "@/content/sample-report";
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -162,6 +164,61 @@ describe("no unverified cadence claims in public copy", () => {
         found,
         `these strings promise how often Dexee publishes; record the number in CLAIMS with a source or remove the promise:\n${found.join("\n")}`,
       ).toEqual([]);
+    });
+  }
+});
+
+/**
+ * Guards DECISIONS 89: the level Dexee Verified certifies is the reviewer-graded spoken
+ * assessment. An unsupervised written test is a screen that can only lower that level, and
+ * the public copy has to say so wherever it describes the written part, in both locales.
+ *
+ * The check is on the authoring surfaces a buyer reads first: the product line on
+ * `/pricing`, the written check on `/how-we-verify` and the order of the sample report.
+ */
+const LOWER_ONLY = /\b(lower|floor|bajar|menor|piso)\b/i;
+const REVIEWER = /\b(reviewer|revisor)\b/i;
+const SPOKEN = /\b(spoken|oral|hablad[oa])\b/i;
+
+describe("Dexee Verified rests on the spoken assessment", () => {
+  const verified = productById("verified");
+
+  it("lists the certifying check first and the written screen after it", () => {
+    expect(verified).toBeDefined();
+    const includes = verified?.includes ?? [];
+    expect(includes[0]).toBe(VERIFIED_LEVEL_RESTS_ON.certifies);
+    expect(includes.indexOf(VERIFIED_LEVEL_RESTS_ON.floorCheck)).toBeGreaterThan(0);
+  });
+
+  it("the sample report shows the certifying check before the written screen", () => {
+    const ids = SAMPLE_CHECKS.map((c) => c.id);
+    expect(ids.indexOf(VERIFIED_LEVEL_RESTS_ON.certifies)).toBeLessThan(
+      ids.indexOf(VERIFIED_LEVEL_RESTS_ON.floorCheck),
+    );
+  });
+
+  for (const [locale, messages] of [
+    ["en", en],
+    ["es", es],
+  ] as const) {
+    const pricing = messages.marketing.pricing.products.verified;
+    const written = messages.marketing.verify.checks.writtenEnglish;
+
+    it(`${locale}: the product summary names the spoken assessment and the reviewer`, () => {
+      expect(pricing.summary).toMatch(SPOKEN);
+      expect(pricing.summary).toMatch(REVIEWER);
+      expect(pricing.includes.spokenEnglish).toMatch(REVIEWER);
+    });
+
+    it(`${locale}: every description of the written part says it can only lower the level`, () => {
+      expect(pricing.includes.writtenEnglish).toMatch(LOWER_ONLY);
+      expect(written.body).toMatch(LOWER_ONLY);
+      expect(written.decidedBy).not.toMatch(/\b(final|definitiv[oa])\b/i);
+    });
+
+    it(`${locale}: the FAQ answer states the lower-of-two rule`, () => {
+      expect(messages.marketing.companies.faq.english.a).toMatch(LOWER_ONLY);
+      expect(messages.marketing.companies.faq.english.a).toMatch(REVIEWER);
     });
   }
 });

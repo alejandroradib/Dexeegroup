@@ -401,7 +401,7 @@
       "guarantee": "Garantía de reemplazo",
       "guaranteeDescription": "La ventana de reemplazo, las exclusiones y cómo reclamar, escritas para que el abogado del comprador las lea antes de una llamada.",
       "howWeVerify": "Cómo verificamos",
-      "howWeVerifyDescription": "Identidad, inglés hablado calificado por un revisor humano contra el MCER, inglés escrito, dos perfiles de trabajo y un análisis de ajuste sobre la hoja de vida. Cinco chequeos antes de que un candidato llegue a su terna.",
+      "howWeVerifyDescription": "Identidad en una llamada en vivo, inglés hablado calificado por un revisor humano contra el MCER, un filtro escrito, dos perfiles de trabajo y un análisis de ajuste sobre la hoja de vida. El nivel de inglés que ve una empresa es el que asignó el revisor, nunca uno más alto.",
       "sampleReport": "Reporte de verificación de muestra",
       "sampleReportDescription": "Lo que contiene un reporte Dexee Verified, en una página y sin necesidad de cuenta.",
       "compare": "Comparaciones",
@@ -420,7 +420,7 @@
       "timelineTodayLabel": "Hoy",
       "timelineToday": "Publique el rol. Cuéntenos el perfil, el tipo de contrato y el presupuesto.",
       "timelineDaysLabel": "En días",
-      "timelineDays": "Reciba una lista corta verificada por Dexee con niveles de inglés validados y perfiles de estilo de trabajo.",
+      "timelineDays": "Reciba una lista corta verificada por Dexee con niveles de inglés asignados por un revisor y perfiles de estilo de trabajo.",
       "timelineWeeksLabel": "En semanas",
       "timelineWeeks": "Contrate e incorpore a través de Dexee: contratos, nómina y cumplimiento resueltos en Colombia.",
       "servicesTitle": "Qué hacemos",
@@ -429,7 +429,7 @@
       "serviceStaffAug": "Equipos dedicados",
       "serviceStaffAugBody": "Profesionales que trabajan en exclusiva para usted en horario de EE. UU. Dexee es el empleador legal en Colombia y gestiona nómina, prestaciones y cumplimiento.",
       "serviceEnglish": "Evaluación de inglés gratuita",
-      "serviceEnglishBody": "Tamizaje escrito y oral con niveles CEFR. Los resultados orales los valida un revisor de Dexee antes de llegar a una empresa.",
+      "serviceEnglishBody": "El nivel de inglés se apoya en una evaluación oral grabada que un revisor de Dexee califica contra el MCER. Un filtro escrito corre en paralelo y solo puede bajar el nivel, nunca subirlo.",
       "serviceWorkstyle": "Perfil de estilo de trabajo gratuito",
       "serviceWorkstyleBody": "Un tamizaje de preferencias de trabajo y criterio en trabajo remoto. El candidato decide si las empresas ven el resumen.",
       "foundingTitle": "Programa de clientes fundadores",
@@ -515,7 +515,7 @@
         },
         "english": {
           "q": "¿Cómo verifican el nivel de inglés?",
-          "a": "El inglés escrito se califica en el servidor. El hablado lo precalifica un modelo en cuatro dimensiones de rúbrica y luego un revisor de Dexee escucha las grabaciones y asigna el nivel MCER final. La insignia muestra el menor de los dos niveles, nunca el más favorable."
+          "a": "El nivel se apoya en el inglés hablado. El candidato graba respuestas a preguntas que no conoce, un modelo precalifica cuatro dimensiones de rúbrica y un revisor de Dexee escucha y asigna el nivel MCER final. Un filtro escrito corre en paralelo. La insignia muestra el menor de los dos, así que la parte escrita solo puede bajar el nivel, nunca subirlo."
         },
         "ip": {
           "q": "¿Quién es dueño de la propiedad intelectual del trabajo?",
@@ -599,11 +599,11 @@
         },
         "verified": {
           "name": "Dexee Verified",
-          "summary": "El reporte de verificación por separado, para candidatos que usted mismo encontró.",
+          "summary": "El reporte de verificación por separado, para candidatos que usted mismo encontró. El nivel de inglés se apoya en una evaluación oral grabada que califica un revisor de Dexee.",
           "includes": {
             "identity": "Documento de identidad contrastado con una sesión en vivo con el candidato",
-            "spokenEnglish": "Inglés hablado calificado contra el MCER por un revisor humano",
-            "writtenEnglish": "Evaluación de inglés escrito, calificada en el servidor",
+            "spokenEnglish": "Inglés hablado calificado contra el MCER por un revisor humano; este es el nivel que certifica el reporte",
+            "writtenEnglish": "Filtro de inglés escrito, calificado en el servidor; solo puede bajar el nivel certificado, nunca subirlo",
             "workProfile": "Perfiles de trabajo Big Five y DISC, compartidos como descriptores",
             "report": "Un solo reporte que puede reenviar a su gerente de contratación"
           }
@@ -691,7 +691,7 @@
     },
     "verify": {
       "title": "Cómo verificamos",
-      "subtitle": "Cinco chequeos antes de que un candidato llegue a su terna, y una persona, no un modelo, asigna el nivel de inglés.",
+      "subtitle": "Cinco chequeos antes de que un candidato llegue a su terna. El nivel de inglés se apoya en la evaluación hablada, y una persona, no un modelo, lo asigna.",
       "problemTitle": "El problema que esto resuelve",
       "problemBody": "La contratación remota entre países tiene un problema de suplantación. Está documentado, y es la razón por la que Dexee verifica antes de presentar, no después de una oferta.",
       "evidenceSourceLabel": "Fuente",
@@ -712,15 +712,15 @@
         },
         "spokenEnglish": {
           "title": "Inglés hablado",
-          "body": "El candidato graba respuestas a preguntas que no ha visto, con cronómetro. El modelo precalifica fluidez, coherencia, rango léxico y precisión gramatical, cada una sobre cinco. Luego un revisor escucha las grabaciones y asigna el nivel final.",
+          "body": "El candidato graba respuestas a preguntas que no conoce, con cronómetro. El modelo precalifica fluidez, coherencia, rango léxico y precisión gramatical, cada una sobre cinco. Luego un revisor escucha las grabaciones y asigna el nivel final. Este es el nivel que certifica el reporte.",
           "produces": "Un nivel MCER de A1 a C2, con las cuatro notas de la rúbrica",
-          "decidedBy": "Un revisor humano. El modelo solo precalifica"
+          "decidedBy": "Un revisor humano. El modelo solo precalifica, y el nivel del revisor es el que certifica el reporte"
         },
         "writtenEnglish": {
           "title": "Inglés escrito",
-          "body": "Una evaluación cronometrada con preguntas de selección múltiple y una respuesta escrita, calificada en el servidor. La clave de respuestas nunca llega al navegador, así que el puntaje no se puede deducir desde la página.",
-          "produces": "Un nivel MCER y el puntaje bruto",
-          "decidedBy": "Calificación en el servidor, revisada cuando las dos partes no concuerdan"
+          "body": "Un filtro cronometrado con preguntas de selección múltiple y una respuesta escrita, calificado en el servidor. Una prueba escrita sin supervisión no demuestra el nivel por sí sola, y Dexee no la trata como si lo hiciera: el nivel verificado es el menor entre el resultado escrito y el hablado, y la parte escrita solo puede bajarlo.",
+          "produces": "Un nivel MCER y el puntaje bruto, usados como piso de contraste frente al nivel hablado",
+          "decidedBy": "Calificación en el servidor. Nunca sube el nivel por encima del que asignó el revisor"
         },
         "workProfile": {
           "title": "Perfiles de trabajo",
@@ -736,10 +736,10 @@
         }
       },
       "humanTitle": "Lo que un modelo por sí solo no puede hacer",
-      "humanBody": "Una revisión automática puede calificar una transcripción. No puede decirle si la persona en la llamada es la persona que va a hacer el trabajo. Un revisor de Dexee está en la sesión de identidad, escucha las respuestas grabadas y firma el nivel MCER final. Cuando el revisor no coincide con el modelo, manda el revisor y el reporte lo dice.",
+      "humanBody": "Una revisión automática puede calificar una transcripción, y una prueba escrita sin supervisión no puede decirle quién la respondió. Ninguna de las dos puede decirle si la persona en la llamada es la persona que va a hacer el trabajo. Un revisor de Dexee está en la sesión de identidad, escucha las respuestas grabadas y firma el nivel MCER final. Cuando el revisor no coincide con el modelo, manda el revisor y el reporte lo dice.",
       "humanPoints": {
         "impersonation": "La identidad se verifica en una llamada en vivo, contra el mismo rostro que aparece en las respuestas grabadas.",
-        "override": "El revisor puede subir o bajar el nivel de inglés, y el reporte registra quién decidió.",
+        "override": "El revisor puede subir o bajar el nivel de inglés, y el reporte registra quién decidió. El filtro escrito solo puede bajarlo.",
         "keys": "Las claves de respuestas quedan en el servidor, así que un candidato no puede leerlas desde la página.",
         "reuse": "El reporte se emite una vez por candidato y va fechado, para que usted sepa qué tan reciente es."
       },
@@ -749,7 +749,7 @@
     },
     "sampleReport": {
       "title": "Reporte de verificación de muestra",
-      "subtitle": "Lo que contiene un reporte Dexee Verified, en una página y sin necesidad de cuenta.",
+      "subtitle": "Lo que contiene un reporte Dexee Verified, en una página y sin necesidad de cuenta. El nivel de inglés es el que asignó un revisor después de escuchar al candidato.",
       "illustrativeNotice": "Este es un ejemplo construido, no una persona real. Dexee todavía no ha emitido un reporte que pudiera anonimizar y publicar, así que las cifras se escribieron para mostrar el formato y la rúbrica. Un reporte real tiene la misma estructura y los mismos campos.",
       "candidateTitle": "Candidato",
       "referenceLabel": "Referencia",
@@ -816,7 +816,7 @@
       "fitSummary": "Cinco años en soporte entrante para clientes de salud en Estados Unidos, tres de ellos liderando un equipo pequeño. Inglés escrito y hablado en el nivel que exige el rol. La brecha principal es la plataforma de tiquetes que nombra el brief, que el candidato no ha usado.",
       "fitStrengths": {
         "1": "Lideró un equipo de soporte de cuatro personas con SLA publicados",
-        "2": "B2 verificado en inglés escrito y hablado",
+        "2": "B2 en inglés hablado, asignado por un revisor de Dexee y confirmado por el filtro escrito",
         "3": "Experiencia con clientes de salud en EE. UU. y procesos cercanos a HIPAA"
       },
       "fitGaps": {

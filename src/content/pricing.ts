@@ -11,6 +11,11 @@
  * in `docs/CLAIMS.md`. Clear `provisional` only when Alejandro sets the final number.
  *
  * Salaries and fees are USD. Monthly figures are per month, per person.
+ *
+ * What Dexee Verified certifies: the English level a reviewer assigns after listening to the
+ * candidate's recorded oral answers. The written assessment is a screen; the product copy
+ * must never present it as the source of the level. `VERIFIED_LEVEL_RESTS_ON` records this
+ * so `tests/unit/proof.test.ts` can hold the copy to it.
  */
 
 export type PriceUnit = "oneTime" | "perPersonMonth" | "perCandidate";
@@ -73,7 +78,10 @@ export const PRICING: readonly PricedProduct[] = [
     id: "verified",
     amountUsd: 149,
     unit: "perCandidate",
-    includes: ["identity", "spokenEnglish", "writtenEnglish", "workProfile", "report"],
+    // Order is the pitch: the certified level is the reviewer-graded spoken assessment.
+    // The written screen is listed after it and described as a floor check, because an
+    // unsupervised multiple-choice test is not proof of level on its own (DECISIONS 89).
+    includes: ["spokenEnglish", "identity", "writtenEnglish", "workProfile", "report"],
     provisional: true,
     marketAnchor:
       "US background checks run USD 30 to 150; standardized English tests run USD 70 (Duolingo) to USD 195-325 (TOEFL, IELTS).",
@@ -118,6 +126,16 @@ export const CALCULATOR_DEFAULTS = {
   dexeeEmployerLoadPct: 35,
   /** Horizon of the comparison, in months. */
   months: 12,
+} as const;
+
+/**
+ * The check whose result the Dexee Verified report certifies as the English level, and the
+ * check that may only lower it. `english_verified_level` in the database is the lower of the
+ * two (SPEC 34), so this is a statement of fact about the product, not a marketing choice.
+ */
+export const VERIFIED_LEVEL_RESTS_ON = {
+  certifies: "spokenEnglish",
+  floorCheck: "writtenEnglish",
 } as const;
 
 export function productById(id: ProductId): PricedProduct | undefined {
