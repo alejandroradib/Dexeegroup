@@ -1,0 +1,220 @@
+{
+ "version": 0,
+ "source": "Deliberately fake fixture content. Never an exam: the real banks live outside the repository (audit E1).",
+ "scale": {
+  "min": 1,
+  "max": 5,
+  "labels_en": [
+   "Very unlike me",
+   "Somewhat unlike me",
+   "Neither",
+   "Somewhat like me",
+   "Very like me"
+  ],
+  "labels_es": [
+   "Muy distinto a mi",
+   "Algo distinto a mi",
+   "Ni lo uno ni lo otro",
+   "Algo parecido a mi",
+   "Muy parecido a mi"
+  ]
+ },
+ "items": [
+  {
+   "id": "fx-disc-d-01",
+   "style": "D",
+   "reverse": false,
+   "text_en": "Fixture statement D1. Not a real item.",
+   "text_es": "Afirmacion ficticia D1. No es un item real."
+  },
+  {
+   "id": "fx-disc-d-02",
+   "style": "D",
+   "reverse": false,
+   "text_en": "Fixture statement D2. Not a real item.",
+   "text_es": "Afirmacion ficticia D2. No es un item real."
+  },
+  {
+   "id": "fx-disc-d-03",
+   "style": "D",
+   "reverse": false,
+   "text_en": "Fixture statement D3. Not a real item.",
+   "text_es": "Afirmacion ficticia D3. No es un item real."
+  },
+  {
+   "id": "fx-disc-d-04",
+   "style": "D",
+   "reverse": false,
+   "text_en": "Fixture statement D4. Not a real item.",
+   "text_es": "Afirmacion ficticia D4. No es un item real."
+  },
+  {
+   "id": "fx-disc-d-05",
+   "style": "D",
+   "reverse": false,
+   "text_en": "Fixture statement D5. Not a real item.",
+   "text_es": "Afirmacion ficticia D5. No es un item real."
+  },
+  {
+   "id": "fx-disc-d-06",
+   "style": "D",
+   "reverse": true,
+   "text_en": "Fixture statement D6. Not a real item.",
+   "text_es": "Afirmacion ficticia D6. No es un item real."
+  },
+  {
+   "id": "fx-disc-d-07",
+   "style": "D",
+   "reverse": true,
+   "text_en": "Fixture statement D7. Not a real item.",
+   "text_es": "Afirmacion ficticia D7. No es un item real."
+  },
+  {
+   "id": "fx-disc-i-01",
+   "style": "I",
+   "reverse": false,
+   "text_en": "Fixture statement I1. Not a real item.",
+   "text_es": "Afirmacion ficticia I1. No es un item real."
+  },
+  {
+   "id": "fx-disc-i-02",
+   "style": "I",
+   "reverse": false,
+   "text_en": "Fixture statement I2. Not a real item.",
+   "text_es": "Afirmacion ficticia I2. No es un item real."
+  },
+  {
+   "id": "fx-disc-i-03",
+   "style": "I",
+   "reverse": false,
+   "text_en": "Fixture statement I3. Not a real item.",
+   "text_es": "Afirmacion ficticia I3. No es un item real."
+  },
+  {
+   "id": "fx-disc-i-04",
+   "style": "I",
+   "reverse": false,
+   "text_en": "Fixture statement I4. Not a real item.",
+   "text_es": "Afirmacion ficticia I4. No es un item real."
+  },
+  {
+   "id": "fx-disc-i-05",
+   "style": "I",
+   "reverse": false,
+   "text_en": "Fixture statement I5. Not a real item.",
+   "text_es": "Afirmacion ficticia I5. No es un item real."
+  },
+  {
+   "id": "fx-disc-i-06",
+   "style": "I",
+   "reverse": true,
+   "text_en": "Fixture statement I6. Not a real item.",
+   "text_es": "Afirmacion ficticia I6. No es un item real."
+  },
+  {
+   "id": "fx-disc-i-07",
+   "style": "I",
+   "reverse": true,
+   "text_en": "Fixture statement I7. Not a real item.",
+   "text_es": "Afirmacion ficticia I7. No es un item real."
+  },
+  {
+   "id": "fx-disc-s-01",
+   "style": "S",
+   "reverse": false,
+   "text_en": "Fixture statement S1. Not a real item.",
+   "text_es": "Afirmacion ficticia S1. No es un item real."
+  },
+  {
+   "id": "fx-disc-s-02",
+   "style": "S",
+   "reverse": false,
+   "text_en": "Fixture statement S2. Not a real item.",
+   "text_es": "Afirmacion ficticia S2. No es un item real."
+  },
+  {
+   "id": "fx-disc-s-03",
+   "style": "S",
+   "reverse": false,
+   "text_en": "Fixture statement S3. Not a real item.",
+   "text_es": "Afirmacion ficticia S3. No es un item real."
+  },
+  {
+   "id": "fx-disc-s-04",
+   "style": "S",
+   "reverse": false,
+   "text_en": "Fixture statement S4. Not a real item.",
+   "text_es": "Afirmacion ficticia S4. No es un item real."
+  },
+  {
+   "id": "fx-disc-s-05",
+   "style": "S",
+   "reverse": false,
+   "text_en": "Fixture statement S5. Not a real item.",
+   "text_es": "Afirmacion ficticia S5. No es un item real."
+  },
+  {
+   "id": "fx-disc-s-06",
+   "style": "S",
+   "reverse": true,
+   "text_en": "Fixture statement S6. Not a real item.",
+   "text_es": "Afirmacion ficticia S6. No es un item real."
+  },
+  {
+   "id": "fx-disc-s-07",
+   "style": "S",
+   "reverse": true,
+   "text_en": "Fixture statement S7. Not a real item.",
+   "text_es": "Afirmacion ficticia S7. No es un item real."
+  },
+  {
+   "id": "fx-disc-c-01",
+   "style": "C",
+   "reverse": false,
+   "text_en": "Fixture statement C1. Not a real item.",
+   "text_es": "Afirmacion ficticia C1. No es un item real."
+  },
+  {
+   "id": "fx-disc-c-02",
+   "style": "C",
+   "reverse": false,
+   "text_en": "Fixture statement C2. Not a real item.",
+   "text_es": "Afirmacion ficticia C2. No es un item real."
+  },
+  {
+   "id": "fx-disc-c-03",
+   "style": "C",
+   "reverse": false,
+   "text_en": "Fixture statement C3. Not a real item.",
+   "text_es": "Afirmacion ficticia C3. No es un item real."
+  },
+  {
+   "id": "fx-disc-c-04",
+   "style": "C",
+   "reverse": false,
+   "text_en": "Fixture statement C4. Not a real item.",
+   "text_es": "Afirmacion ficticia C4. No es un item real."
+  },
+  {
+   "id": "fx-disc-c-05",
+   "style": "C",
+   "reverse": false,
+   "text_en": "Fixture statement C5. Not a real item.",
+   "text_es": "Afirmacion ficticia C5. No es un item real."
+  },
+  {
+   "id": "fx-disc-c-06",
+   "style": "C",
+   "reverse": true,
+   "text_en": "Fixture statement C6. Not a real item.",
+   "text_es": "Afirmacion ficticia C6. No es un item real."
+  },
+  {
+   "id": "fx-disc-c-07",
+   "style": "C",
+   "reverse": true,
+   "text_en": "Fixture statement C7. Not a real item.",
+   "text_es": "Afirmacion ficticia C7. No es un item real."
+  }
+ ]
+}

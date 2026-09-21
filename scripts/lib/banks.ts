@@ -1,6 +1,34 @@
 /** Reads the JSON question banks and normalizes them into assessment_questions rows. */
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+
+import { bankTexts, hashBankText, type RetiredHashes } from "./bank-hashes";
+
+/** Banks that are public domain by nature and may stay in the repository (audit E1). */
+const PUBLIC_DOMAIN_BANKS = new Set(["ipip50.json"]);
+const REPO_BANKS = "supabase/seed";
+const FIXTURE_BANKS = "tests/fixtures/banks";
+
+/**
+ * Where the real question banks live (audit E1). The banks carry the answer keys, so they
+ * are kept outside version control and read from ASSESSMENT_BANKS_DIR. There is no silent
+ * fallback to a sample bank: a caller that needs real items and has no directory configured
+ * stops with an explanation. Tests and the migration harness opt into the fixtures instead.
+ */
+export function resolveBanksDir(options: { allowFixtures?: boolean } = {}): string {
+  const configured = process.env.ASSESSMENT_BANKS_DIR?.trim();
+  if (configured) return path.resolve(configured);
+  if (options.allowFixtures) return path.resolve(process.cwd(), FIXTURE_BANKS);
+  throw new Error(
+    [
+      "ASSESSMENT_BANKS_DIR is not set.",
+      "The assessment banks hold the answer keys and are not stored in this repository.",
+      "Point the variable at the directory that holds them, for example:",
+      "  ASSESSMENT_BANKS_DIR=./.banks npm run db:seed",
+      "The fixtures under tests/fixtures/banks are deliberately fake and are only for tests.",
+    ].join("\n"),
+  );
+}
 
 export type BankQuestion = {
   bank_id: string;
@@ -76,7 +104,20 @@ const BAND_LEVEL: Record<"band1" | "band2" | "band3", "B1" | "B2" | "C1"> = {
 };
 
 export function loadBanks(dir: string) {
-  const read = <T>(name: string): T => JSON.parse(readFileSync(path.join(dir, name), "utf8")) as T;
+  const read = <T>(name: string): T => {
+    const primary = path.join(dir, name);
+    // A public-domain bank may live in the repository; a keyed one must come from `dir`.
+    const file =
+      existsSync(primary) || !PUBLIC_DOMAIN_BANKS.has(name)
+        ? primary
+        : path.resolve(process.cwd(), REPO_BANKS, name);
+    if (!existsSync(file)) {
+      throw new Error(`Assessment bank ${name} not found at ${file}. See resolveBanksDir().`);
+    }
+    const parsed = JSON.parse(readFileSync(file, "utf8")) as T;
+    assertNotRetired(dir, name, parsed);
+    return parsed;
+  };
   const written = read<WrittenBank>("english_written.json");
   const oral = read<OralBank>("english_oral.json");
   const ipip = read<IpipBank>("ipip50.json");
@@ -172,4 +213,23 @@ export function loadBanks(dir: string) {
   }));
 
   return { english_written, english_oral, psychometric, disc };
+}
+
+/**
+ * Refuses a bank that reuses an item from the banks exposed in the public repository
+ * (audit E2). `.banks/retired-hashes.json` holds the fingerprints; without that file the
+ * check is skipped, which is the case for the fixtures.
+ */
+function assertNotRetired(dir: string, name: string, bank: unknown) {
+  const file = path.join(dir, "retired-hashes.json");
+  if (!existsSync(file)) return;
+  const retired = new Set((JSON.parse(readFileSync(file, "utf8")) as RetiredHashes).hashes);
+  for (const text of bankTexts(bank)) {
+    if (retired.has(hashBankText(text))) {
+      throw new Error(
+        `Assessment bank ${name} reuses a retired item: "${text.slice(0, 60)}...". ` +
+          "Items from the exposed banks must not come back.",
+      );
+    }
+  }
 }

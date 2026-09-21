@@ -57,3 +57,6 @@ coverage
 
 # The template is documentation, not a secret file (CLAUDE.md rule 6)
 !.env.example
+
+# Assessment banks live outside version control (audit E1)
+.banks/

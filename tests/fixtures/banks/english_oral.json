@@ -1,0 +1,102 @@
+{
+ "version": 0,
+ "source": "Deliberately fake fixture content. Never an exam: the real banks live outside the repository (audit E1).",
+ "prompts": [
+  {
+   "id": "fx-or-01",
+   "category": "introduce",
+   "prompt": "Fixture oral prompt 1. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  },
+  {
+   "id": "fx-or-02",
+   "category": "situation",
+   "prompt": "Fixture oral prompt 2. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  },
+  {
+   "id": "fx-or-03",
+   "category": "process",
+   "prompt": "Fixture oral prompt 3. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  },
+  {
+   "id": "fx-or-04",
+   "category": "complaint",
+   "prompt": "Fixture oral prompt 4. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  },
+  {
+   "id": "fx-or-05",
+   "category": "introduce",
+   "prompt": "Fixture oral prompt 5. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  },
+  {
+   "id": "fx-or-06",
+   "category": "situation",
+   "prompt": "Fixture oral prompt 6. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  },
+  {
+   "id": "fx-or-07",
+   "category": "process",
+   "prompt": "Fixture oral prompt 7. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  },
+  {
+   "id": "fx-or-08",
+   "category": "complaint",
+   "prompt": "Fixture oral prompt 8. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  },
+  {
+   "id": "fx-or-09",
+   "category": "introduce",
+   "prompt": "Fixture oral prompt 9. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  },
+  {
+   "id": "fx-or-10",
+   "category": "situation",
+   "prompt": "Fixture oral prompt 10. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  },
+  {
+   "id": "fx-or-11",
+   "category": "process",
+   "prompt": "Fixture oral prompt 11. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  },
+  {
+   "id": "fx-or-12",
+   "category": "complaint",
+   "prompt": "Fixture oral prompt 12. Say anything; this is not an exam prompt.",
+   "prep_seconds": 20,
+   "min_seconds": 60,
+   "max_seconds": 90
+  }
+ ]
+}

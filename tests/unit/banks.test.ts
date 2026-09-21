@@ -1,10 +1,11 @@
-import path from "node:path";
-
 import { describe, expect, it } from "vitest";
 
-import { loadBanks } from "../../scripts/lib/banks";
+import { loadBanks, resolveBanksDir } from "../../scripts/lib/banks";
 
-const banks = loadBanks(path.resolve(process.cwd(), "supabase/seed"));
+// CI has no real banks: they hold the answer keys and live outside the repository (audit E1).
+// These assertions check the structural contract against the fixtures. The stronger
+// rotation minimums are checked below, and only when a real bank directory is configured.
+const banks = loadBanks(resolveBanksDir({ allowFixtures: true }));
 
 describe("question banks", () => {
   it("has at least 60 MCQ items with band quotas and a writing bank of at least 6 prompts", () => {
@@ -31,7 +32,7 @@ describe("question banks", () => {
     const likert = banks.psychometric.filter((q) => q.question_type === "likert");
     const sjt = banks.psychometric.filter((q) => q.question_type === "situational");
     expect(likert).toHaveLength(50);
-    expect(sjt).toHaveLength(10);
+    expect(sjt.length).toBeGreaterThanOrEqual(10);
     for (const factor of [
       "extraversion",
       "agreeableness",
@@ -53,5 +54,39 @@ describe("question banks", () => {
       (q) => q.bank_id,
     );
     expect(new Set(ids).size).toBe(ids.length);
+  });
+});
+
+/**
+ * Audit E2: the rotated banks are larger than the SPEC minimum so that two candidates share
+ * few items and memorising the whole set is impractical. Skipped unless the real banks are
+ * available, which is never the case in CI.
+ */
+const real = process.env.ASSESSMENT_BANKS_DIR?.trim();
+describe.skipIf(!real)("rotated bank size", () => {
+  const rotated = real ? loadBanks(resolveBanksDir()) : banks;
+  it("draws 40 written items from at least 120, with at least 12 writing prompts", () => {
+    const mcq = rotated.english_written.filter((q) => q.question_type === "mcq");
+    const writing = rotated.english_written.filter((q) => q.question_type === "writing");
+    expect(mcq.length).toBeGreaterThanOrEqual(120);
+    expect(writing.length).toBeGreaterThanOrEqual(12);
+    for (const band of ["band1", "band2", "band3"]) {
+      expect(
+        mcq.filter((q) => (q.options as { band: string }).band === band).length,
+      ).toBeGreaterThanOrEqual(36);
+    }
+  });
+  it("draws 4 oral prompts from at least 40", () => {
+    expect(rotated.english_oral.length).toBeGreaterThanOrEqual(40);
+  });
+  it("draws 10 situational items from at least 30", () => {
+    expect(
+      rotated.psychometric.filter((q) => q.question_type === "situational").length,
+    ).toBeGreaterThanOrEqual(30);
+  });
+  it("keeps seven DISC items per style", () => {
+    for (const style of ["D", "I", "S", "C"]) {
+      expect(rotated.disc.filter((q) => q.factor === style)).toHaveLength(7);
+    }
   });
 });

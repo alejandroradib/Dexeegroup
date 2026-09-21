@@ -10,7 +10,7 @@ import path from "node:path";
 
 import { createClient } from "@supabase/supabase-js";
 
-import { loadBanks, type BankQuestion } from "./lib/banks";
+import { loadBanks, resolveBanksDir, type BankQuestion } from "./lib/banks";
 
 import type { Database, Json } from "../src/types/database";
 
@@ -68,7 +68,7 @@ async function main() {
       "Apply supabase/seed.sql with `supabase db reset` or psql; the JS client cannot run raw SQL.",
     );
   }
-  const banks = loadBanks(path.resolve(process.cwd(), "supabase/seed"));
+  const banks = loadBanks(resolveBanksDir());
   const { data: assessments, error } = await supabase.from("assessments").select("id, type");
   if (error) throw error;
   for (const type of ["english_written", "english_oral", "psychometric", "disc"] as const) {

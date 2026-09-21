@@ -3,9 +3,8 @@
  * activates the four assessments. Idempotent: rows are matched by options->>'bank_id'.
  * Used by scripts/demo/setup-db.sh:  npx tsx scripts/demo/load-banks.ts | psql ...
  */
-import path from "node:path";
 
-import { type BankQuestion, loadBanks } from "../lib/banks";
+import { loadBanks, resolveBanksDir, type BankQuestion } from "../lib/banks";
 
 const TYPES = ["english_written", "english_oral", "psychometric", "disc"] as const;
 
@@ -34,7 +33,7 @@ function insertFor(type: (typeof TYPES)[number], q: BankQuestion): string {
 }
 
 function main() {
-  const banks = loadBanks(path.resolve(process.cwd(), "supabase/seed"));
+  const banks = loadBanks(resolveBanksDir());
   const out: string[] = ["begin;"];
   let count = 0;
   for (const type of TYPES) {

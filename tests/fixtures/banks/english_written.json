@@ -1,0 +1,1942 @@
+{
+ "version": 0,
+ "source": "Deliberately fake fixture content. Never an exam: the real banks live outside the repository (audit E1).",
+ "mcq": [
+  {
+   "id": "fx-mcq-001",
+   "section": "grammar",
+   "band": "band1",
+   "prompt": "Fixture item 1 (grammar, band1). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-002",
+   "section": "grammar",
+   "band": "band1",
+   "prompt": "Fixture item 2 (grammar, band1). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-003",
+   "section": "grammar",
+   "band": "band1",
+   "prompt": "Fixture item 3 (grammar, band1). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-004",
+   "section": "grammar",
+   "band": "band1",
+   "prompt": "Fixture item 4 (grammar, band1). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-005",
+   "section": "grammar",
+   "band": "band1",
+   "prompt": "Fixture item 5 (grammar, band1). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-006",
+   "section": "grammar",
+   "band": "band1",
+   "prompt": "Fixture item 6 (grammar, band1). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-007",
+   "section": "grammar",
+   "band": "band1",
+   "prompt": "Fixture item 7 (grammar, band1). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-008",
+   "section": "grammar",
+   "band": "band1",
+   "prompt": "Fixture item 8 (grammar, band1). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-009",
+   "section": "vocabulary",
+   "band": "band1",
+   "prompt": "Fixture item 9 (vocabulary, band1). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-010",
+   "section": "vocabulary",
+   "band": "band1",
+   "prompt": "Fixture item 10 (vocabulary, band1). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-011",
+   "section": "vocabulary",
+   "band": "band1",
+   "prompt": "Fixture item 11 (vocabulary, band1). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-012",
+   "section": "vocabulary",
+   "band": "band1",
+   "prompt": "Fixture item 12 (vocabulary, band1). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-013",
+   "section": "vocabulary",
+   "band": "band1",
+   "prompt": "Fixture item 13 (vocabulary, band1). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-014",
+   "section": "vocabulary",
+   "band": "band1",
+   "prompt": "Fixture item 14 (vocabulary, band1). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-015",
+   "section": "vocabulary",
+   "band": "band1",
+   "prompt": "Fixture item 15 (vocabulary, band1). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-016",
+   "section": "vocabulary",
+   "band": "band1",
+   "prompt": "Fixture item 16 (vocabulary, band1). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-017",
+   "section": "reading",
+   "band": "band1",
+   "prompt": "Fixture item 17 (reading, band1). Choose option B.",
+   "passage_id": "fx-p1",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-018",
+   "section": "reading",
+   "band": "band1",
+   "prompt": "Fixture item 18 (reading, band1). Choose option C.",
+   "passage_id": "fx-p1",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-019",
+   "section": "reading",
+   "band": "band1",
+   "prompt": "Fixture item 19 (reading, band1). Choose option D.",
+   "passage_id": "fx-p1",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-020",
+   "section": "reading",
+   "band": "band1",
+   "prompt": "Fixture item 20 (reading, band1). Choose option A.",
+   "passage_id": "fx-p1",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-021",
+   "section": "reading",
+   "band": "band1",
+   "prompt": "Fixture item 21 (reading, band1). Choose option B.",
+   "passage_id": "fx-p1",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-022",
+   "section": "reading",
+   "band": "band1",
+   "prompt": "Fixture item 22 (reading, band1). Choose option C.",
+   "passage_id": "fx-p1",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-023",
+   "section": "reading",
+   "band": "band1",
+   "prompt": "Fixture item 23 (reading, band1). Choose option D.",
+   "passage_id": "fx-p1",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-024",
+   "section": "reading",
+   "band": "band1",
+   "prompt": "Fixture item 24 (reading, band1). Choose option A.",
+   "passage_id": "fx-p1",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-025",
+   "section": "grammar",
+   "band": "band2",
+   "prompt": "Fixture item 25 (grammar, band2). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-026",
+   "section": "grammar",
+   "band": "band2",
+   "prompt": "Fixture item 26 (grammar, band2). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-027",
+   "section": "grammar",
+   "band": "band2",
+   "prompt": "Fixture item 27 (grammar, band2). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-028",
+   "section": "grammar",
+   "band": "band2",
+   "prompt": "Fixture item 28 (grammar, band2). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-029",
+   "section": "grammar",
+   "band": "band2",
+   "prompt": "Fixture item 29 (grammar, band2). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-030",
+   "section": "grammar",
+   "band": "band2",
+   "prompt": "Fixture item 30 (grammar, band2). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-031",
+   "section": "grammar",
+   "band": "band2",
+   "prompt": "Fixture item 31 (grammar, band2). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-032",
+   "section": "grammar",
+   "band": "band2",
+   "prompt": "Fixture item 32 (grammar, band2). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-033",
+   "section": "vocabulary",
+   "band": "band2",
+   "prompt": "Fixture item 33 (vocabulary, band2). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-034",
+   "section": "vocabulary",
+   "band": "band2",
+   "prompt": "Fixture item 34 (vocabulary, band2). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-035",
+   "section": "vocabulary",
+   "band": "band2",
+   "prompt": "Fixture item 35 (vocabulary, band2). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-036",
+   "section": "vocabulary",
+   "band": "band2",
+   "prompt": "Fixture item 36 (vocabulary, band2). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-037",
+   "section": "vocabulary",
+   "band": "band2",
+   "prompt": "Fixture item 37 (vocabulary, band2). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-038",
+   "section": "vocabulary",
+   "band": "band2",
+   "prompt": "Fixture item 38 (vocabulary, band2). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-039",
+   "section": "vocabulary",
+   "band": "band2",
+   "prompt": "Fixture item 39 (vocabulary, band2). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-040",
+   "section": "vocabulary",
+   "band": "band2",
+   "prompt": "Fixture item 40 (vocabulary, band2). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-041",
+   "section": "reading",
+   "band": "band2",
+   "prompt": "Fixture item 41 (reading, band2). Choose option B.",
+   "passage_id": "fx-p2",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-042",
+   "section": "reading",
+   "band": "band2",
+   "prompt": "Fixture item 42 (reading, band2). Choose option C.",
+   "passage_id": "fx-p2",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-043",
+   "section": "reading",
+   "band": "band2",
+   "prompt": "Fixture item 43 (reading, band2). Choose option D.",
+   "passage_id": "fx-p2",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-044",
+   "section": "reading",
+   "band": "band2",
+   "prompt": "Fixture item 44 (reading, band2). Choose option A.",
+   "passage_id": "fx-p2",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-045",
+   "section": "reading",
+   "band": "band2",
+   "prompt": "Fixture item 45 (reading, band2). Choose option B.",
+   "passage_id": "fx-p2",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-046",
+   "section": "reading",
+   "band": "band2",
+   "prompt": "Fixture item 46 (reading, band2). Choose option C.",
+   "passage_id": "fx-p2",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-047",
+   "section": "reading",
+   "band": "band2",
+   "prompt": "Fixture item 47 (reading, band2). Choose option D.",
+   "passage_id": "fx-p2",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-048",
+   "section": "reading",
+   "band": "band2",
+   "prompt": "Fixture item 48 (reading, band2). Choose option A.",
+   "passage_id": "fx-p2",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-049",
+   "section": "grammar",
+   "band": "band3",
+   "prompt": "Fixture item 49 (grammar, band3). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-050",
+   "section": "grammar",
+   "band": "band3",
+   "prompt": "Fixture item 50 (grammar, band3). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-051",
+   "section": "grammar",
+   "band": "band3",
+   "prompt": "Fixture item 51 (grammar, band3). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-052",
+   "section": "grammar",
+   "band": "band3",
+   "prompt": "Fixture item 52 (grammar, band3). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-053",
+   "section": "grammar",
+   "band": "band3",
+   "prompt": "Fixture item 53 (grammar, band3). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-054",
+   "section": "grammar",
+   "band": "band3",
+   "prompt": "Fixture item 54 (grammar, band3). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-055",
+   "section": "grammar",
+   "band": "band3",
+   "prompt": "Fixture item 55 (grammar, band3). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-056",
+   "section": "grammar",
+   "band": "band3",
+   "prompt": "Fixture item 56 (grammar, band3). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-057",
+   "section": "vocabulary",
+   "band": "band3",
+   "prompt": "Fixture item 57 (vocabulary, band3). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-058",
+   "section": "vocabulary",
+   "band": "band3",
+   "prompt": "Fixture item 58 (vocabulary, band3). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-059",
+   "section": "vocabulary",
+   "band": "band3",
+   "prompt": "Fixture item 59 (vocabulary, band3). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-060",
+   "section": "vocabulary",
+   "band": "band3",
+   "prompt": "Fixture item 60 (vocabulary, band3). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-061",
+   "section": "vocabulary",
+   "band": "band3",
+   "prompt": "Fixture item 61 (vocabulary, band3). Choose option B.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-062",
+   "section": "vocabulary",
+   "band": "band3",
+   "prompt": "Fixture item 62 (vocabulary, band3). Choose option C.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-063",
+   "section": "vocabulary",
+   "band": "band3",
+   "prompt": "Fixture item 63 (vocabulary, band3). Choose option D.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-064",
+   "section": "vocabulary",
+   "band": "band3",
+   "prompt": "Fixture item 64 (vocabulary, band3). Choose option A.",
+   "passage_id": null,
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-065",
+   "section": "reading",
+   "band": "band3",
+   "prompt": "Fixture item 65 (reading, band3). Choose option B.",
+   "passage_id": "fx-p3",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-066",
+   "section": "reading",
+   "band": "band3",
+   "prompt": "Fixture item 66 (reading, band3). Choose option C.",
+   "passage_id": "fx-p3",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-067",
+   "section": "reading",
+   "band": "band3",
+   "prompt": "Fixture item 67 (reading, band3). Choose option D.",
+   "passage_id": "fx-p3",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-068",
+   "section": "reading",
+   "band": "band3",
+   "prompt": "Fixture item 68 (reading, band3). Choose option A.",
+   "passage_id": "fx-p3",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  },
+  {
+   "id": "fx-mcq-069",
+   "section": "reading",
+   "band": "band3",
+   "prompt": "Fixture item 69 (reading, band3). Choose option B.",
+   "passage_id": "fx-p3",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "b"
+  },
+  {
+   "id": "fx-mcq-070",
+   "section": "reading",
+   "band": "band3",
+   "prompt": "Fixture item 70 (reading, band3). Choose option C.",
+   "passage_id": "fx-p3",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "c"
+  },
+  {
+   "id": "fx-mcq-071",
+   "section": "reading",
+   "band": "band3",
+   "prompt": "Fixture item 71 (reading, band3). Choose option D.",
+   "passage_id": "fx-p3",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "d"
+  },
+  {
+   "id": "fx-mcq-072",
+   "section": "reading",
+   "band": "band3",
+   "prompt": "Fixture item 72 (reading, band3). Choose option A.",
+   "passage_id": "fx-p3",
+   "options": [
+    {
+     "id": "a",
+     "text": "Option A"
+    },
+    {
+     "id": "b",
+     "text": "Option B"
+    },
+    {
+     "id": "c",
+     "text": "Option C"
+    },
+    {
+     "id": "d",
+     "text": "Option D"
+    }
+   ],
+   "correct": "a"
+  }
+ ],
+ "passages": [
+  {
+   "id": "fx-p1",
+   "band": "band1",
+   "title": "Fixture passage 1",
+   "text": "Fixture passage 1 for band1. This text exists only so the loader has something to attach reading items to. It is not an exam passage."
+  },
+  {
+   "id": "fx-p2",
+   "band": "band2",
+   "title": "Fixture passage 2",
+   "text": "Fixture passage 2 for band2. This text exists only so the loader has something to attach reading items to. It is not an exam passage."
+  },
+  {
+   "id": "fx-p3",
+   "band": "band3",
+   "title": "Fixture passage 3",
+   "text": "Fixture passage 3 for band3. This text exists only so the loader has something to attach reading items to. It is not an exam passage."
+  }
+ ],
+ "writing_prompts": [
+  {
+   "id": "fx-wr-01",
+   "band": "B1",
+   "prompt": "Fixture writing prompt 1. Write anything; this is not an exam task.",
+   "min_words": 150,
+   "max_words": 200
+  },
+  {
+   "id": "fx-wr-02",
+   "band": "B2",
+   "prompt": "Fixture writing prompt 2. Write anything; this is not an exam task.",
+   "min_words": 150,
+   "max_words": 200
+  },
+  {
+   "id": "fx-wr-03",
+   "band": "C1",
+   "prompt": "Fixture writing prompt 3. Write anything; this is not an exam task.",
+   "min_words": 150,
+   "max_words": 200
+  },
+  {
+   "id": "fx-wr-04",
+   "band": "B1",
+   "prompt": "Fixture writing prompt 4. Write anything; this is not an exam task.",
+   "min_words": 150,
+   "max_words": 200
+  },
+  {
+   "id": "fx-wr-05",
+   "band": "B2",
+   "prompt": "Fixture writing prompt 5. Write anything; this is not an exam task.",
+   "min_words": 150,
+   "max_words": 200
+  },
+  {
+   "id": "fx-wr-06",
+   "band": "C1",
+   "prompt": "Fixture writing prompt 6. Write anything; this is not an exam task.",
+   "min_words": 150,
+   "max_words": 200
+  }
+ ]
+}

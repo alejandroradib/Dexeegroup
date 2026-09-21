@@ -8,7 +8,7 @@ import path from "node:path";
 
 import { PGlite } from "@electric-sql/pglite";
 
-import { loadBanks } from "./banks";
+import { loadBanks, resolveBanksDir } from "./banks";
 
 export const MIGRATIONS_DIR = path.resolve(process.cwd(), "supabase/migrations");
 export const SEED_FILE = path.resolve(process.cwd(), "supabase/seed.sql");
@@ -130,7 +130,7 @@ export async function createTestDatabase(options: { seed?: boolean; banks?: bool
 
 /** Inserts the JSON question banks the same way scripts/seed.ts does against a real project. */
 export async function loadBanksInto(db: PGlite): Promise<number> {
-  const banks = loadBanks(path.resolve(process.cwd(), "supabase/seed"));
+  const banks = loadBanks(resolveBanksDir({ allowFixtures: true }));
   const { rows } = await db.query<{ id: string; type: string }>(
     "select id, type from public.assessments",
   );

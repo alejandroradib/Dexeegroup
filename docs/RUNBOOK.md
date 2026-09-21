@@ -90,6 +90,36 @@ Supabase, pasando el contenido del archivo y su nombre lógico, y después confi
 consulta al catálogo que las columnas, los triggers y las vistas quedaron. Corra
 `npm run db:verify` antes, que es la verificación real del esquema y sí usa los archivos.
 
+## Bancos de evaluación
+
+Los bancos con las claves no están en el repositorio (decisión 74). Viven en un directorio
+que usted controla, por ejemplo `.banks/` en su equipo, y el cargador lo lee de
+`ASSESSMENT_BANKS_DIR`. Sin esa variable los scripts terminan con un mensaje; no cargan un
+banco de ejemplo por su cuenta.
+
+Para cargar o actualizar los bancos en un entorno:
+
+    ASSESSMENT_BANKS_DIR=/ruta/a/.banks npx tsx scripts/demo/load-banks.ts > banks.sql
+
+Eso imprime inserciones idempotentes, que coinciden por `options->>'bank_id'`, de modo que
+volver a correrlo no duplica preguntas. Aplique el SQL con psql o, en el proyecto alojado,
+con `execute_sql` del MCP de Supabase por partes, porque el archivo excede el tamaño de una
+llamada. Después confirme el conteo:
+
+    select a.type, count(*) from assessment_questions q
+      join assessments a on a.id = q.assessment_id
+     where q.is_active group by a.type order by a.type;
+
+Cuando rote un banco, retire primero las preguntas anteriores de ese tipo, porque el
+cargador solo agrega:
+
+    update assessment_questions set is_active = false
+     where assessment_id = (select id from assessments where type = 'english_written');
+
+Los intentos ya validados conservan su resultado: guardan el reporte, no las preguntas.
+`.banks/retired-hashes.json` contiene las huellas de los bancos retirados y el cargador
+rechaza cualquier ítem que las repita; consérvelo junto a los bancos.
+
 ## Activar DISC en producción
 
 La migración `20260922000002` crea la fila de `assessments` para `disc` con `is_active = false`,

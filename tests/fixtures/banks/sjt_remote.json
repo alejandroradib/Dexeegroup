@@ -1,0 +1,354 @@
+{
+ "version": 0,
+ "source": "Deliberately fake fixture content. Never an exam: the real banks live outside the repository (audit E1).",
+ "items": [
+  {
+   "id": "fx-sjt-01",
+   "theme": "written_communication",
+   "prompt_en": "Fixture situation 1. The best option is A.",
+   "prompt_es": "Situacion ficticia 1. La mejor opcion es A.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "a"
+  },
+  {
+   "id": "fx-sjt-02",
+   "theme": "autonomy",
+   "prompt_en": "Fixture situation 2. The best option is B.",
+   "prompt_es": "Situacion ficticia 2. La mejor opcion es B.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "b"
+  },
+  {
+   "id": "fx-sjt-03",
+   "theme": "reliability",
+   "prompt_en": "Fixture situation 3. The best option is C.",
+   "prompt_es": "Situacion ficticia 3. La mejor opcion es C.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "c"
+  },
+  {
+   "id": "fx-sjt-04",
+   "theme": "handling_ambiguity",
+   "prompt_en": "Fixture situation 4. The best option is D.",
+   "prompt_es": "Situacion ficticia 4. La mejor opcion es D.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "d"
+  },
+  {
+   "id": "fx-sjt-05",
+   "theme": "client_orientation",
+   "prompt_en": "Fixture situation 5. The best option is A.",
+   "prompt_es": "Situacion ficticia 5. La mejor opcion es A.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "a"
+  },
+  {
+   "id": "fx-sjt-06",
+   "theme": "written_communication",
+   "prompt_en": "Fixture situation 6. The best option is B.",
+   "prompt_es": "Situacion ficticia 6. La mejor opcion es B.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "b"
+  },
+  {
+   "id": "fx-sjt-07",
+   "theme": "autonomy",
+   "prompt_en": "Fixture situation 7. The best option is C.",
+   "prompt_es": "Situacion ficticia 7. La mejor opcion es C.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "c"
+  },
+  {
+   "id": "fx-sjt-08",
+   "theme": "reliability",
+   "prompt_en": "Fixture situation 8. The best option is D.",
+   "prompt_es": "Situacion ficticia 8. La mejor opcion es D.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "d"
+  },
+  {
+   "id": "fx-sjt-09",
+   "theme": "handling_ambiguity",
+   "prompt_en": "Fixture situation 9. The best option is A.",
+   "prompt_es": "Situacion ficticia 9. La mejor opcion es A.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "a"
+  },
+  {
+   "id": "fx-sjt-10",
+   "theme": "client_orientation",
+   "prompt_en": "Fixture situation 10. The best option is B.",
+   "prompt_es": "Situacion ficticia 10. La mejor opcion es B.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "b"
+  },
+  {
+   "id": "fx-sjt-11",
+   "theme": "written_communication",
+   "prompt_en": "Fixture situation 11. The best option is C.",
+   "prompt_es": "Situacion ficticia 11. La mejor opcion es C.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "c"
+  },
+  {
+   "id": "fx-sjt-12",
+   "theme": "autonomy",
+   "prompt_en": "Fixture situation 12. The best option is D.",
+   "prompt_es": "Situacion ficticia 12. La mejor opcion es D.",
+   "options": [
+    {
+     "id": "a",
+     "text_en": "Option A",
+     "text_es": "Opcion A"
+    },
+    {
+     "id": "b",
+     "text_en": "Option B",
+     "text_es": "Opcion B"
+    },
+    {
+     "id": "c",
+     "text_en": "Option C",
+     "text_es": "Opcion C"
+    },
+    {
+     "id": "d",
+     "text_en": "Option D",
+     "text_es": "Opcion D"
+    }
+   ],
+   "best": "d"
+  }
+ ]
+}
