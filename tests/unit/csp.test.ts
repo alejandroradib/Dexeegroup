@@ -9,7 +9,7 @@ import { buildContentSecurityPolicy, generateNonce, supabaseOrigins } from "@/li
 const prod = (over: Partial<Parameters<typeof buildContentSecurityPolicy>[0]> = {}) =>
   buildContentSecurityPolicy({
     nonce: "abc123",
-    supabaseUrl: "https://cvvilveklqsznsefaaek.supabase.co",
+    supabaseUrl: "https://abcdefghijklmnopqrst.supabase.co",
     analyticsProvider: "none",
     dev: false,
     ...over,
@@ -37,8 +37,8 @@ describe("content security policy", () => {
 
   it("connects only to the configured Supabase project, over https and wss", () => {
     const connect = directive(prod(), "connect-src");
-    expect(connect).toContain("https://cvvilveklqsznsefaaek.supabase.co");
-    expect(connect).toContain("wss://cvvilveklqsznsefaaek.supabase.co");
+    expect(connect).toContain("https://abcdefghijklmnopqrst.supabase.co");
+    expect(connect).toContain("wss://abcdefghijklmnopqrst.supabase.co");
     expect(connect).not.toContain("plausible");
     expect(connect).not.toContain("google");
   });
