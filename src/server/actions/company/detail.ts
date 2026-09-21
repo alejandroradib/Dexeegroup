@@ -16,6 +16,9 @@ export async function fetchApplicantDetail(
   if (!company) return err(ERR.notFound);
   const detail = await getApplicantDetail(applicationId, company.id);
   if (!detail) return err(ERR.notFound);
-  const workstyleBands = await getVisibleWorkstyleBands(detail.application.candidate_id);
+  // No card means RLS hid the candidate (dexee_only); nothing about them leaves the server.
+  const workstyleBands = detail.card
+    ? await getVisibleWorkstyleBands(detail.application.candidate_id)
+    : null;
   return ok({ ...detail, workstyleBands });
 }

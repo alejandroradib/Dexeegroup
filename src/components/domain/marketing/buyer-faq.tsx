@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/accordion";
 import { Link } from "@/i18n/navigation";
 import { buildFaqPageJsonLd } from "@/lib/seo/faq-page";
+import { serializeJsonLd } from "@/lib/seo/json-ld";
 
 /**
  * The buyer FAQ (PHASES-GTM 9.3). Each answer that has a page behind it links to it, so a
@@ -43,7 +44,7 @@ export async function BuyerFaq() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <Accordion type="single" collapsible>
         {items.map((item) => (

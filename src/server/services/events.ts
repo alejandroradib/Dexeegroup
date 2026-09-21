@@ -230,7 +230,7 @@ async function applicationContext(applicationId: string) {
   const { data } = await admin
     .from("applications")
     .select(
-      "id, status, job_id, candidate_id, jobs (id, title, slug, company_id, companies (id, name)), candidates (first_name, last_name)",
+      "id, status, job_id, candidate_id, jobs (id, title, slug, company_id, companies (id, name)), candidates (first_name, last_name, visibility)",
     )
     .eq("id", applicationId)
     .maybeSingle();
@@ -244,6 +244,7 @@ async function applicationContext(applicationId: string) {
     company: data.jobs.companies,
     candidateId: data.candidate_id,
     candidateName,
+    candidateVisibility: data.candidates?.visibility ?? null,
   };
 }
 
@@ -336,15 +337,22 @@ export async function dispatchEvent(event: PlatformEvent): Promise<void> {
         const ctx = await applicationContext(event.applicationId);
         if (!ctx) return;
         const hour = new Date().toISOString().slice(0, 13);
+        // A dexee_only candidate is invisible to the company (RLS), so Dexee is told instead
+        // and intermediates (decision 60).
+        const dexeeOnly = ctx.candidateVisibility === "dexee_only";
         await deliver(event.type, {
-          recipients: await companyRecipients(ctx.job.company_id),
+          recipients: dexeeOnly
+            ? await adminRecipients()
+            : await companyRecipients(ctx.job.company_id),
           key: "new_application",
           vars: {
             job: ctx.job.title,
             candidate: ctx.candidateName,
             company: ctx.company?.name ?? "",
           },
-          link: `/company/jobs/${ctx.job.id}/pipeline`,
+          link: dexeeOnly
+            ? `/admin/candidates/${ctx.candidateId}`
+            : `/company/jobs/${ctx.job.id}/pipeline`,
           template: "new-application",
           dedupeKey: (r) => `new-application:${ctx.job.id}:${r.userId}:${hour}`,
         });

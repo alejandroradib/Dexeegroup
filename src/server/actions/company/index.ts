@@ -176,7 +176,17 @@ export async function createDraftJob(title?: string): Promise<Result<{ jobId: st
   return ok({ jobId: data.id });
 }
 
-/** Autosave: accepts any subset of the wizard fields. Only drafts and changes_requested jobs can be edited freely. */
+/** States in which a company may edit a job's content. Mirrored by the jobs_before_write trigger. */
+const EDITABLE_JOB_STATES: Database["public"]["Enums"]["job_status"][] = [
+  "draft",
+  "changes_requested",
+];
+
+/**
+ * Autosave: accepts any subset of the wizard fields. Only drafts and changes_requested jobs
+ * can be edited; a published, paused, closed or pending job has to be withdrawn to draft
+ * first (changeJobStatus "reopen"). The trigger enforces the same rule for direct writes.
+ */
 export async function patchJobDraft(jobId: string, input: unknown): Promise<Result<null>> {
   const user = await requireCompanyUser();
   if (!user) return err(ERR.unauthorized);
@@ -189,10 +199,12 @@ export async function patchJobDraft(jobId: string, input: unknown): Promise<Resu
     .eq("id", jobId)
     .maybeSingle();
   if (!job) return err(ERR.notFound);
+  if (!EDITABLE_JOB_STATES.includes(job.status)) return err("jobLocked");
   const update: Database["public"]["Tables"]["jobs"]["Update"] = { ...parsed.data };
   if (parsed.data.title && parsed.data.title.trim() === "") delete update.title;
   const { error } = await supabase.from("jobs").update(update).eq("id", jobId);
   if (error) {
+    if (error.message.includes("job_locked_for_edit")) return err("jobLocked");
     logger.warn({ err: error.message, jobId }, "job_patch_failed");
     return err(ERR.generic);
   }
@@ -270,9 +282,15 @@ export async function refreshJobFit(jobId: string): Promise<Result<{ computed: n
   return ok({ computed: ids.length });
 }
 
+/**
+ * Status transitions a company may make. "reopen" withdraws a live, paused or pending job to
+ * draft so its content can be edited again; the public page and the Google index entry go
+ * away until it is resubmitted through submitJob, which applies the same publish gate as the
+ * first time (decision 59).
+ */
 export async function changeJobStatus(
   jobId: string,
-  action: "pause" | "resume" | "close",
+  action: "pause" | "resume" | "close" | "reopen",
 ): Promise<Result<null>> {
   const user = await requireCompanyUser();
   if (!user) return err(ERR.unauthorized);
@@ -287,6 +305,7 @@ export async function changeJobStatus(
     pause: job.status === "published" ? "paused" : null,
     resume: job.status === "paused" ? "published" : null,
     close: job.status !== "closed" ? "closed" : null,
+    reopen: ["published", "paused", "pending_review"].includes(job.status) ? "draft" : null,
   };
   const status = next[action];
   if (!status) return err(ERR.conflict);
@@ -298,6 +317,7 @@ export async function changeJobStatus(
     return err(error.message.includes("company_not_verified") ? "companyNotVerified" : ERR.generic);
   await pingIndexing(jobId, status === "published" ? "URL_UPDATED" : "URL_DELETED");
   revalidatePath("/[locale]/company/jobs", "page");
+  revalidatePath(`/[locale]/company/jobs/${jobId}/edit`, "page");
   revalidatePath("/[locale]/jobs", "page");
   return ok(null);
 }

@@ -1280,6 +1280,13 @@
         "published": "Vacante publicada.",
         "queued": "Vacante enviada. Dexee la revisará pronto.",
         "companyNotVerified": "Su empresa debe estar verificada antes de publicar."
+      },
+      "locked": {
+        "title": "Esta vacante está bloqueada para edición",
+        "body": "Una vacante publicada, pausada o en revisión no se reescribe en el sitio. Para editarla, retírela a borrador: sale del tablero y del índice de Google, y al reenviarla pasa por el mismo paso de publicación que la primera vez.",
+        "closedBody": "Una vacante cerrada no se edita. Duplíquela desde la lista de vacantes para publicarla de nuevo.",
+        "action": "Retirar a borrador y editar",
+        "reopened": "La vacante volvió a borrador. Ya puede editarla."
       }
     },
     "pipeline": {
@@ -1643,7 +1650,7 @@
         "discToggle": "Compartir mi resumen DISC con las empresas",
         "discNone": "Todavía no ha completado el perfil DISC.",
         "visibilityTitle": "Visibilidad del perfil",
-        "visibilityBody": "Solo Dexee: tu perfil es visible para Dexee pero no para las empresas, incluso cuando te postulas.",
+        "visibilityBody": "Solo Dexee: tu perfil y tus postulaciones son visibles para Dexee, no para las empresas. Dexee revisa cada postulación y te contacta antes de presentarte a la empresa, o puedes volver a visible aquí.",
         "visibilityToggle": "Visible para las empresas a las que me postulo",
         "dataTitle": "Tus datos",
         "dataBody": "Según la Ley 1581 de 2012 puedes solicitar acceso, corrección o eliminación de tus datos personales. La eliminación cierra tu cuenta cuando Dexee procesa la solicitud.",

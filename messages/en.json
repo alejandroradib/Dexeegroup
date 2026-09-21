@@ -1280,6 +1280,13 @@
         "published": "Vacancy published.",
         "queued": "Vacancy submitted. Dexee will review it shortly.",
         "companyNotVerified": "Your company must be verified before publishing."
+      },
+      "locked": {
+        "title": "This job is locked for editing",
+        "body": "A job that is live, paused or under review cannot be rewritten in place. Withdraw it to draft to edit it: it leaves the job board and the Google index, and when you resubmit it goes through the same publishing step as the first time.",
+        "closedBody": "A closed job cannot be edited. Duplicate it from the jobs list to post it again.",
+        "action": "Withdraw to draft and edit",
+        "reopened": "The job is a draft again. You can edit it now."
       }
     },
     "pipeline": {
@@ -1643,7 +1650,7 @@
         "discToggle": "Share my DISC summary with companies",
         "discNone": "You have not completed the DISC profile yet.",
         "visibilityTitle": "Profile visibility",
-        "visibilityBody": "Dexee only: your profile is visible to Dexee but not to companies, even when you apply.",
+        "visibilityBody": "Dexee only: your profile and your applications are visible to Dexee, not to companies. Dexee reviews each application and contacts you before presenting you to the company, or you can switch back to visible here.",
         "visibilityToggle": "Visible to companies I apply to",
         "dataTitle": "Your data",
         "dataBody": "Under Law 1581 of 2012 you can request access to, correction of, or deletion of your personal data. Deletion closes your account once Dexee processes the request.",

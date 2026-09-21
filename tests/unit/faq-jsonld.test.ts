@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 
+
 import en from "@/../messages/en.json";
 import es from "@/../messages/es.json";
 
 import { buildFaqPageJsonLd } from "@/lib/seo/faq-page";
+import { serializeJsonLd } from "@/lib/seo/json-ld";
 
 const LOCALES = { en, es };
 
@@ -75,5 +77,15 @@ describe("buyer FAQ content", () => {
     const enKeys = Object.keys(en.marketing.companies.faq);
     const esKeys = Object.keys(es.marketing.companies.faq);
     expect(esKeys).toEqual(enKeys);
+  });
+});
+
+describe("FAQ script sink", () => {
+  it("serializes a question containing a closing script tag without breaking out", () => {
+    const rendered = serializeJsonLd(
+      buildFaqPageJsonLd([{ question: "</script><b>x</b>", answer: "a & b" }]),
+    );
+    expect(rendered).not.toContain("</script>");
+    expect(rendered).not.toMatch(/[<>&]/);
   });
 });

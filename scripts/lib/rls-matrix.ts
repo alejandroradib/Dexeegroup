@@ -1128,6 +1128,142 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
       ),
   );
 
+  // Audit A3: content of a job is locked once it leaves draft / changes_requested ------------
+  await expectError(
+    "company cannot edit the title of a published job",
+    harborOwner,
+    "update public.jobs set title = 'Edited after publication' where id = $1",
+    [SEED.jobs.seniorAccountant],
+    "job_locked_for_edit",
+  );
+  await expectError(
+    "company cannot edit the salary of a published job",
+    harborOwner,
+    "update public.jobs set salary_max_usd = 9000 where id = $1",
+    [SEED.jobs.seniorAccountant],
+    "job_locked_for_edit",
+  );
+  await expectError(
+    "company cannot edit a job that is pending review",
+    northwindOwner,
+    "update public.jobs set description = 'rewritten' where id = $1",
+    [SEED.jobs.dispatchPending],
+    "job_locked_for_edit",
+  );
+  await check("company withdraws a published job to draft and then edits it", async () =>
+    asUser(
+      db,
+      harborOwner,
+      async (tx) => {
+        await tx.query("update public.jobs set status = 'draft' where id = $1", [
+          SEED.jobs.seniorAccountant,
+        ]);
+        await tx.query("update public.jobs set title = 'Edited as a draft' where id = $1", [
+          SEED.jobs.seniorAccountant,
+        ]);
+        const res = await tx.query<{ title: string; status: string }>(
+          "select title, status from public.jobs where id = $1",
+          [SEED.jobs.seniorAccountant],
+        );
+        return res.rows[0]?.title === "Edited as a draft" && res.rows[0]?.status === "draft";
+      },
+      { commit: false },
+    ),
+  );
+  await expectOk(
+    "company pauses a published job (status-only change)",
+    harborOwner,
+    "update public.jobs set status = 'paused' where id = $1",
+    [SEED.jobs.seniorAccountant],
+  );
+  await expectOk(
+    "admin edits a published job",
+    admin,
+    "update public.jobs set title = 'Edited by Dexee' where id = $1",
+    [SEED.jobs.seniorAccountant],
+  );
+
+  // Audit A4: dexee_only hides the candidate from the hiring company ----------------------
+  await check(
+    "company cannot read a dexee_only candidate, their profile, results or fit",
+    async () =>
+      asUser(
+        db,
+        admin,
+        async (tx) => {
+          await asService(
+            tx,
+            async () => {
+              await tx.query(
+                "update public.candidates set visibility = 'dexee_only' where id = $1",
+                [SEED.candidates.laura],
+              );
+              await tx.query(
+                "insert into public.application_fit (application_id, status, score) values ($1, 'ready', 80)",
+                [SEED.applications.lauraAccountant],
+              );
+            },
+            admin,
+          );
+          const n = async (sql: string) =>
+            (
+              await asAnother(tx, harborOwner, () =>
+                tx.query<{ n: number }>(`select count(*)::int as n from (${sql}) q`, [
+                  SEED.candidates.laura,
+                ]),
+              )
+            ).rows[0]?.n;
+          const hidden = [
+            await n("select 1 from public.candidates where id = $1"),
+            await n("select 1 from public.candidate_cards where id = $1"),
+            await n("select 1 from public.candidate_experience where candidate_id = $1"),
+            await n("select 1 from public.candidate_education where candidate_id = $1"),
+            await n("select 1 from public.candidate_valid_results($1)"),
+            await n(
+              "select 1 from public.application_fit f join public.applications a on a.id = f.application_id where a.candidate_id = $1",
+            ),
+          ];
+          // The application row is hidden as well (its policy reuses the same gate): the promise
+          // is "not visible to companies, even when you apply". The candidate and Dexee see it.
+          const applicationHidden = await n(
+            "select 1 from public.applications where candidate_id = $1",
+          );
+          const ownApplication = (
+            await asAnother(tx, laura, () =>
+              tx.query<{ n: number }>(
+                "select count(*)::int as n from public.applications where candidate_id = $1",
+                [SEED.candidates.laura],
+              ),
+            )
+          ).rows[0]?.n;
+          const adminSees = (
+            await tx.query<{ n: number }>(
+              "select count(*)::int as n from public.applications where candidate_id = $1",
+              [SEED.candidates.laura],
+            )
+          ).rows[0]?.n;
+          await asService(
+            tx,
+            () =>
+              tx.query(
+                "update public.candidates set visibility = 'visible_to_companies' where id = $1",
+                [SEED.candidates.laura],
+              ),
+            admin,
+          );
+          const visibleAgain = await n("select 1 from public.candidates where id = $1");
+          return (
+            hidden.every((count) => count === 0) &&
+            applicationHidden === 0 &&
+            ownApplication === 1 &&
+            adminSees === 1 &&
+            visibleAgain === 1
+          );
+        },
+        { commit: false },
+      ),
+  );
+
   await check(
     "consent_flags default to empty object",
     async () =>

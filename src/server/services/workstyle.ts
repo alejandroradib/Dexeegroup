@@ -11,6 +11,14 @@ export async function getVisibleWorkstyleBands(
   candidateId: string,
 ): Promise<Record<string, string> | null> {
   const admin = createAdminClient();
+  // Service-role read: the candidate's visibility choice has to be honoured here explicitly,
+  // since RLS is not in the path (audit A4).
+  const { data: candidate } = await admin
+    .from("candidates")
+    .select("visibility")
+    .eq("id", candidateId)
+    .maybeSingle();
+  if (candidate?.visibility !== "visible_to_companies") return null;
   const { data } = await admin
     .from("assessment_attempts")
     .select("report, assessments!inner (type)")

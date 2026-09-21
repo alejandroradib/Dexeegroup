@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import { JobWizard } from "@/components/domain/company/job-wizard";
+import { ReopenJobNotice } from "@/components/domain/company/reopen-job-notice";
 import { PageHeader } from "@/components/layout/page-header";
 import { StatusChip } from "@/components/shared/status-chip";
 import { redirect } from "@/i18n/navigation";
@@ -29,7 +30,11 @@ export default async function EditJobPage({
         eyebrow={t("title")}
         actions={<StatusChip kind="job" status={job.status} />}
       />
-      <JobWizard key={job.id} job={job} company={company!} skillSuggestions={suggestions} />
+      {job.status === "draft" || job.status === "changes_requested" ? (
+        <JobWizard key={job.id} job={job} company={company!} skillSuggestions={suggestions} />
+      ) : (
+        <ReopenJobNotice jobId={job.id} status={job.status} />
+      )}
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { buildJobPostingJsonLd } from "@/lib/seo/job-posting";
+import { serializeJsonLd } from "@/lib/seo/json-ld";
 import type { PublicJob } from "@/server/services/public-jobs";
 
 const base: PublicJob = {
@@ -170,5 +171,42 @@ describe("Rich Results structure check", () => {
       { siteUrl: "https://dexeegroup.com", locale: "en" },
     );
     expectValidStructure(ld);
+  });
+});
+
+/**
+ * Audit A2: the block is serialized into a <script> tag. JSON.stringify escapes quotes but
+ * not "<", so a title containing "</script>" would close the tag and run as HTML.
+ */
+describe("script injection through JobPosting fields", () => {
+  const payload = "</script><img src=x onerror=alert(1)>";
+  const opts = { siteUrl: "https://dexeegroup.com", locale: "en" };
+
+  it("escapes the title", () => {
+    const ld = buildJobPostingJsonLd({ ...base, title: payload }, opts);
+    expect(ld.title).not.toContain("<");
+    expect(ld.title).toContain("&lt;/script&gt;");
+  });
+
+  it("escapes the hiring organization name", () => {
+    const ld = buildJobPostingJsonLd({ ...base, company_name: payload }, opts);
+    expect(ld.hiringOrganization.name).not.toContain("<");
+  });
+
+  it("escapes the url", () => {
+    const ld = buildJobPostingJsonLd({ ...base, slug: payload }, opts);
+    expect(ld.url).not.toContain("<");
+  });
+
+  it("never emits a closing script tag whatever the fields hold", () => {
+    const ld = buildJobPostingJsonLd(
+      { ...base, title: payload, company_name: payload, slug: payload, description: payload },
+      opts,
+    );
+    const rendered = serializeJsonLd(ld);
+    expect(rendered).not.toContain("</script>");
+    expect(rendered).not.toMatch(/[<>&]/);
+    // Still valid JSON carrying the same data once parsed.
+    expect(JSON.parse(rendered)).toEqual(ld);
   });
 });

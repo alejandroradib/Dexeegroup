@@ -13,6 +13,7 @@ import { getSessionUser } from "@/lib/auth/session";
 import { publicEnv } from "@/lib/env";
 import { buildAlternates } from "@/lib/seo/alternates";
 import { buildJobPostingJsonLd } from "@/lib/seo/job-posting";
+import { serializeJsonLd } from "@/lib/seo/json-ld";
 import {
   getClosedPublicJobBySlug,
   getPublicJobBySlug,
@@ -83,7 +84,7 @@ export default async function JobPage({ params }: PageProps<"/[locale]/jobs/[slu
       <TrackView event="view_job" props={{ role_family: job.role_family ?? "unknown" }} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <Button asChild variant="link" className="mb-6 px-0">
         <Link href="/jobs">

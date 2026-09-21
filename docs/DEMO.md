@@ -106,8 +106,9 @@ title, headline and summary says it is demo data.
 Apply with psql or, for the hosted project, with the Supabase MCP `execute_sql` one part at a
 time (the full file exceeds its size limit). Passwords are hashed in the database with
 `extensions.crypt`, so pgcrypto must be installed in the `extensions` schema, as it is on
-Supabase. Loaded into `cvvilveklqsznsefaaek` on 2026-09-21; the accounts and password are in
-the handover notes, not in this file.
+Supabase. Loaded into the hosted project on 2026-09-21; the project identifier, the accounts
+and the password are in the handover notes, not in this file. The script reads the password
+from `DEMO_SEED_PASSWORD` and refuses to run without it.
 
 Fit rows are marked `model = 'demo-seed'`. The refresh action only recomputes applications
 without a ready row, so they survive a click; a real `ANTHROPIC_API_KEY` recomputes only new

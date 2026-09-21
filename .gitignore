@@ -54,3 +54,6 @@ coverage
 
 # local demo stack (postgres data, postgrest binary, storage files)
 .demo/
+
+# The template is documentation, not a secret file (CLAUDE.md rule 6)
+!.env.example

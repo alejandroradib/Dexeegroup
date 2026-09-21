@@ -30,7 +30,17 @@ import {
 } from "../src/lib/assessments/workstyle";
 import { workstyleReport } from "../src/lib/assessments/workstyle-report";
 
-export const DEMO_PASSWORD = "DemoDexee2026";
+/**
+ * The accounts' password comes from the environment and is never written to the repo. The
+ * value used before this rule is in git history and is treated as burned (decision 57).
+ */
+const DEMO_PASSWORD = process.env.DEMO_SEED_PASSWORD;
+if (!DEMO_PASSWORD || DEMO_PASSWORD.length < 12) {
+  console.error(
+    "DEMO_SEED_PASSWORD is not set (or is shorter than 12 characters). Set it in the environment before running this script, for example:\n  DEMO_SEED_PASSWORD='<a new random value>' npx tsx scripts/seed-demo.ts > demo.sql\nKeep the value in the handover notes, not in the repository.",
+  );
+  process.exit(1);
+}
 const P = "dd000000-0000-4000-8000-0000000000";
 const id = (suffix: string) => `${P}${suffix.padStart(2, "0")}`;
 /** 24 chars plus 8 zeros: room for a marker, the person number and a type digit. */
@@ -287,7 +297,10 @@ function writtenAttempt(level: "B1" | "B2" | "C1") {
     for (let i = 0; i < total; i += 1) {
       const qid = `${band}-${i}`;
       items.push({ id: qid, band, correct: "a" });
-      answers.push({ question_id: qid, selected_option: i < (profile.correct[bi] ?? 0) ? "a" : "b" });
+      answers.push({
+        question_id: qid,
+        selected_option: i < (profile.correct[bi] ?? 0) ? "a" : "b",
+      });
     }
   });
   const mcq = scoreMcq(items, answers);
