@@ -37,12 +37,15 @@ export function ApplyButton({
   existing,
   profileComplete,
   requirements,
+  dexeeOnly,
 }: {
   jobId: string;
   jobTitle: string;
   existing: Existing;
   profileComplete: boolean;
   requirements: ApplyRequirement[];
+  /** The candidate keeps their profile hidden from companies; applying goes through Dexee. */
+  dexeeOnly: boolean;
 }) {
   const t = useTranslations("candidate.jobs");
   const tc = useTranslations("common");
@@ -167,8 +170,21 @@ export function ApplyButton({
         <DialogContent closeLabel={tc("actions.close")}>
           <DialogHeader>
             <DialogTitle>{t("applyTitle", { job: jobTitle })}</DialogTitle>
-            <DialogDescription>{t("applyBody")}</DialogDescription>
+            <DialogDescription>
+              {/* The default line promises the company sees the profile; for a hidden
+                  candidate that is simply untrue, so it is replaced, not stacked. */}
+              {dexeeOnly ? t("applyBodyDexeeOnly") : t("applyBody")}
+            </DialogDescription>
           </DialogHeader>
+          {dexeeOnly ? (
+            <Alert variant="warning">
+              <p className="font-medium">{t("dexeeOnlyTitle")}</p>
+              <p className="mt-1">{t("dexeeOnlyBody")}</p>
+              <Link href="/candidate/settings" className="text-link mt-1 inline-block underline">
+                {t("dexeeOnlySettings")}
+              </Link>
+            </Alert>
+          ) : null}
           <div className="grid gap-1.5">
             <Label htmlFor="cover_note">{t("coverNote")}</Label>
             <Textarea

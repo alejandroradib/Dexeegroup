@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/table";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
+import { DEXEE_HOLD_OVERDUE_DAYS, daysWaiting } from "@/lib/candidates/dexee-hold";
 import { PAGE_SIZE, pageRange, parsePage, totalPages } from "@/lib/pagination";
 import { cn } from "@/lib/utils";
 import { APPLICATION_STATUSES } from "@/lib/validation/enums";
@@ -39,6 +40,7 @@ export default async function AdminApplicationsPage({
     getTranslations("common"),
     getFormatter(),
   ]);
+  const tab = query.tab === "dexee" ? "dexee" : "all";
   const page = parsePage(query.page);
   const status =
     typeof query.status === "string" &&
@@ -49,11 +51,18 @@ export default async function AdminApplicationsPage({
     query.contact === "requested" || query.contact === "released" ? query.contact : undefined;
   const q = typeof query.q === "string" ? query.q : undefined;
   const highlight = typeof query.application === "string" ? query.application : undefined;
-  const { rows, total } = await listAdminApplications({ status, contact, q }, pageRange(page));
+  // The Dexee queue is one fixed slice (dexee_only, still in applied); status and contact
+  // would only narrow it into something that no longer answers "who is waiting on us".
+  const { rows, total } = await listAdminApplications(
+    tab === "dexee" ? { q, dexeeOnly: true } : { status, contact, q },
+    pageRange(page),
+  );
+  const now = new Date();
   const hrefFor = (p: number) => {
     const s = new URLSearchParams();
-    if (status) s.set("status", status);
-    if (contact) s.set("contact", contact);
+    if (tab === "dexee") s.set("tab", tab);
+    if (tab === "all" && status) s.set("status", status);
+    if (tab === "all" && contact) s.set("contact", contact);
     if (q) s.set("q", q);
     if (p > 1) s.set("page", String(p));
     return `/admin/applications${s.size ? `?${s}` : ""}`;
@@ -61,30 +70,56 @@ export default async function AdminApplicationsPage({
   return (
     <>
       <PageHeader title={t("title")} />
+      <div className="bg-mist mb-4 inline-flex rounded-[10px] p-1">
+        {(["all", "dexee"] as const).map((k) => (
+          <Link
+            key={k}
+            href={k === "all" ? "/admin/applications" : "/admin/applications?tab=dexee"}
+            className={cn(
+              "rounded-[8px] px-3 py-1.5 text-sm font-medium",
+              tab === k ? "text-navy bg-white shadow-sm" : "text-muted-foreground",
+            )}
+          >
+            {t(`tabs.${k}`)}
+          </Link>
+        ))}
+      </div>
+      {tab === "dexee" ? (
+        <p className="text-muted-foreground mb-4 max-w-prose text-sm">{t("dexeeBody")}</p>
+      ) : null}
       <FilterBar>
+        {tab === "dexee" ? <input type="hidden" name="tab" value="dexee" /> : null}
         <FilterField label={t("search")}>
           <input name="q" defaultValue={q ?? ""} className={filterInputClass} />
         </FilterField>
-        <FilterField label={t("status")}>
-          <select name="status" defaultValue={status ?? ""} className={filterInputClass}>
-            <option value="">{tf("any")}</option>
-            {APPLICATION_STATUSES.map((s) => (
-              <option key={s} value={s}>
-                {te(`application_status.${s}`)}
-              </option>
-            ))}
-          </select>
-        </FilterField>
-        <FilterField label={t("contact")}>
-          <select name="contact" defaultValue={contact ?? ""} className={filterInputClass}>
-            <option value="">{t("contactAny")}</option>
-            <option value="requested">{t("contactRequested")}</option>
-            <option value="released">{t("contactReleased")}</option>
-          </select>
-        </FilterField>
+        {tab === "dexee" ? null : (
+          <FilterField label={t("status")}>
+            <select name="status" defaultValue={status ?? ""} className={filterInputClass}>
+              <option value="">{tf("any")}</option>
+              {APPLICATION_STATUSES.map((s) => (
+                <option key={s} value={s}>
+                  {te(`application_status.${s}`)}
+                </option>
+              ))}
+            </select>
+          </FilterField>
+        )}
+        {tab === "dexee" ? null : (
+          <FilterField label={t("contact")}>
+            <select name="contact" defaultValue={contact ?? ""} className={filterInputClass}>
+              <option value="">{t("contactAny")}</option>
+              <option value="requested">{t("contactRequested")}</option>
+              <option value="released">{t("contactReleased")}</option>
+            </select>
+          </FilterField>
+        )}
       </FilterBar>
       {rows.length === 0 ? (
-        <EmptyState icon={FileTextIcon} title={t("empty")} />
+        <EmptyState
+          icon={FileTextIcon}
+          title={tab === "dexee" ? t("dexeeEmpty") : t("empty")}
+          description={tab === "dexee" ? t("dexeeEmptyBody") : undefined}
+        />
       ) : (
         <Table>
           <TableHeader>
@@ -94,6 +129,7 @@ export default async function AdminApplicationsPage({
               <TableHead>{t("columns.status")}</TableHead>
               <TableHead>{t("columns.contact")}</TableHead>
               <TableHead>{t("columns.applied")}</TableHead>
+              {tab === "dexee" ? <TableHead>{t("columns.waiting")}</TableHead> : null}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -153,6 +189,28 @@ export default async function AdminApplicationsPage({
                   )}
                 </TableCell>
                 <TableCell>{format.dateTime(new Date(a.created_at), "short")}</TableCell>
+                {tab === "dexee"
+                  ? (() => {
+                      const days = daysWaiting(a.created_at, now);
+                      return (
+                        <TableCell>
+                          <span
+                            className={cn(
+                              "text-sm",
+                              days > DEXEE_HOLD_OVERDUE_DAYS && "text-danger font-medium",
+                            )}
+                          >
+                            {t("waitingDays", { days })}
+                          </span>
+                          {days > DEXEE_HOLD_OVERDUE_DAYS ? (
+                            <Badge variant="danger" className="ml-2">
+                              {t("overdue")}
+                            </Badge>
+                          ) : null}
+                        </TableCell>
+                      );
+                    })()
+                  : null}
               </TableRow>
             ))}
           </TableBody>

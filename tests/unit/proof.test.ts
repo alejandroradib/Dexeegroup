@@ -127,3 +127,41 @@ describe("evidence is published in both languages", () => {
     }
   });
 });
+
+/**
+ * Guards PHASES-GTM 9.0 on the message files, not just on `proof.ts`.
+ *
+ * A claim can enter the site through a translation string without ever touching the
+ * `CLAIMS` array, which is how "New roles are published every week" shipped on an empty
+ * job board. A publication-cadence promise is a measurable claim about Dexee: it belongs
+ * in `CLAIMS` with a source and a date, or it does not belong on a public page.
+ *
+ * The pattern is deliberately narrow — it targets how often something is published or
+ * posted, not every use of "month" (salaries are quoted per month everywhere).
+ */
+const CADENCE_CLAIM =
+  /(published|posted|publicamos|publicadas?|nuevas vacantes|new (roles|jobs))[^.]{0,40}\b(every (week|day|month)|each (week|day|month)|weekly|daily|cada (semana|d[ií]a|mes)|semanal(mente)?|a diario)\b/i;
+
+function publicStrings(node: unknown, path: string, out: [string, string][]) {
+  if (typeof node === "string") out.push([path, node]);
+  else if (node && typeof node === "object")
+    for (const [key, value] of Object.entries(node)) publicStrings(value, `${path}.${key}`, out);
+}
+
+describe("no unverified cadence claims in public copy", () => {
+  for (const [locale, messages] of [
+    ["en", en],
+    ["es", es],
+  ] as const) {
+    it(`${locale} marketing copy promises no publication frequency`, () => {
+      const found: string[] = [];
+      const strings: [string, string][] = [];
+      publicStrings(messages.marketing, "marketing", strings);
+      for (const [path, value] of strings) if (CADENCE_CLAIM.test(value)) found.push(`${path}: ${value}`);
+      expect(
+        found,
+        `these strings promise how often Dexee publishes; record the number in CLAIMS with a source or remove the promise:\n${found.join("\n")}`,
+      ).toEqual([]);
+    });
+  }
+});

@@ -367,6 +367,7 @@ export type AdminApplicationRow = Tables["applications"]["Row"] & {
     first_name: string;
     last_name: string;
     english_verified_level: Enums["cefr_level"] | null;
+    visibility: Enums["candidate_visibility"];
   } | null;
 };
 
@@ -376,18 +377,27 @@ export async function listAdminApplications(
     contact?: "requested" | "released";
     q?: string;
     jobId?: string;
+    /** Applications from candidates who hid their profile: nothing moves until Dexee acts. */
+    dexeeOnly?: boolean;
   },
   range: { from: number; to: number },
 ) {
   const supabase = await createClient();
+  // An inner join is what lets PostgREST filter on the embedded candidate row. It is only
+  // used for the Dexee-only queue; elsewhere the outer join keeps rows whose candidate the
+  // admin cannot resolve, so nothing silently disappears from the list.
+  const candidateEmbed = filter.dexeeOnly
+    ? "candidates!inner (first_name, last_name, english_verified_level, visibility)"
+    : "candidates (first_name, last_name, english_verified_level, visibility)";
   let query = supabase
     .from("applications")
-    .select(
-      "*, jobs (id, title, companies (id, name)), candidates (first_name, last_name, english_verified_level)",
-      { count: "exact" },
-    )
-    .order("created_at", { ascending: false })
+    .select(`*, jobs (id, title, companies (id, name)), ${candidateEmbed}`, { count: "exact" })
+    // The queue is worked oldest first: the point of it is the applicant who has waited longest.
+    .order("created_at", { ascending: !!filter.dexeeOnly })
     .range(range.from, range.to);
+  if (filter.dexeeOnly) {
+    query = query.eq("candidates.visibility", "dexee_only").eq("status", "applied");
+  }
   if (filter.status) query = query.eq("status", filter.status);
   if (filter.jobId) query = query.eq("job_id", filter.jobId);
   if (filter.contact === "requested")

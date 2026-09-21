@@ -934,7 +934,7 @@
       "englishRequired": "Inglés {level}",
       "hoursPerWeek": "{hours} h / semana",
       "emptyTitle": "Ninguna vacante coincide con los filtros",
-      "emptyBody": "Prueba quitando un filtro o vuelve pronto. Publicamos vacantes nuevas cada semana.",
+      "emptyBody": "Prueba quitando un filtro. Mientras tanto, completa tu perfil y presenta las cuatro evaluaciones gratuitas para postular apenas aparezca una vacante que encaje.",
       "applyCta": "Postularme",
       "applySignUp": "Crea tu perfil para postularte",
       "aboutRole": "Sobre el rol",
@@ -1588,7 +1588,11 @@
       "requirementExpired": "Vencida, vuelva a presentarla",
       "requirementMissing": "Pendiente",
       "requirementGo": "Ir",
-      "requirementsMissingError": "Todavía no puede aplicar: {items}. Complételo y vuelva; la vacante sigue abierta para usted."
+      "requirementsMissingError": "Todavía no puede aplicar: {items}. Complételo y vuelva; la vacante sigue abierta para usted.",
+      "dexeeOnlyTitle": "Tu perfil está en modo Solo Dexee",
+      "dexeeOnlyBody": "Esta postulación no llega directo a la empresa. Dexee la revisa, te contacta y te presenta solo si la vacante encaja. Eso toma más tiempo. Cámbialo en ajustes de privacidad si prefieres que las empresas vean tu perfil cuando postulas.",
+      "dexeeOnlySettings": "Ajustes de privacidad",
+      "applyBodyDexeeOnly": "Dexee revisa esta postulación antes de que cualquier empresa la vea. Tus datos de contacto siguen privados hasta que Dexee los libere."
     },
     "applications": {
       "title": "Postulaciones",
@@ -1603,7 +1607,9 @@
       "jobUpdating": "La empresa está actualizando esta vacante. Te avisaremos si cambian las condiciones.",
       "jobPaused": "Vacante pausada por la empresa",
       "jobClosed": "Vacante cerrada",
-      "jobUnavailable": "Vacante ya no disponible"
+      "jobUnavailable": "Vacante ya no disponible",
+      "dexeeOnlyHold": "En espera de Dexee. Tu perfil está en modo Solo Dexee, así que la empresa no ve esta postulación. Dexee la revisa y te presenta.",
+      "dexeeOnlyHoldLink": "Cambiar la visibilidad del perfil"
     },
     "assessments": {
       "title": "Evaluaciones",
@@ -1849,7 +1855,8 @@
         "company": "Empresa",
         "status": "Estado",
         "contact": "Contacto",
-        "applied": "Postulado"
+        "applied": "Postulado",
+        "waiting": "En espera"
       },
       "empty": "Ninguna postulación coincide",
       "release": "Liberar datos de contacto",
@@ -1859,7 +1866,16 @@
       "requestedOn": "Solicitados el {date}",
       "notRequested": "No solicitados",
       "changeStatus": "Cambiar estado",
-      "statusChanged": "Estado actualizado."
+      "statusChanged": "Estado actualizado.",
+      "tabs": {
+        "all": "Todas",
+        "dexee": "Solo Dexee por intermediar"
+      },
+      "dexeeBody": "Candidatos en modo Solo Dexee. La empresa nunca vio estas postulaciones. Revisa cada una, contacta al candidato y preséntalo, o recházala. Primero las más antiguas.",
+      "dexeeEmpty": "Nada pendiente de Dexee",
+      "dexeeEmptyBody": "Ninguna postulación de un candidato en modo Solo Dexee está en estado postulado.",
+      "waitingDays": "{days, plural, =0 {Hoy} one {# día} other {# días}}",
+      "overdue": "Vencida"
     },
     "leads": {
       "title": "Leads",

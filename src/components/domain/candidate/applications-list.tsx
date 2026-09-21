@@ -4,13 +4,21 @@ import { useFormatter, useTranslations } from "next-intl";
 
 import { ConfirmButton } from "@/components/shared/confirm-button";
 import { StatusChip } from "@/components/shared/status-chip";
+import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/toast";
 import { Link, useRouter } from "@/i18n/navigation";
+import { isOnDexeeHold } from "@/lib/candidates/dexee-hold";
 import { withdrawApplication } from "@/server/actions/candidate";
 import type { CandidateApplication } from "@/server/services/candidates";
 
-export function ApplicationsList({ applications }: { applications: CandidateApplication[] }) {
+export function ApplicationsList({
+  applications,
+  visibility,
+}: {
+  applications: CandidateApplication[];
+  visibility: "visible_to_companies" | "dexee_only" | null;
+}) {
   const t = useTranslations("candidate.applications");
   const tj = useTranslations("candidate.jobs");
   const tc = useTranslations("common");
@@ -23,6 +31,7 @@ export function ApplicationsList({ applications }: { applications: CandidateAppl
     <ul className="grid gap-4">
       {applications.map((a) => {
         const canWithdraw = ["applied", "screening", "shortlisted", "interview"].includes(a.status);
+        const onHold = isOnDexeeHold({ visibility, status: a.status });
         return (
           <li key={a.id} className="border-border rounded-[12px] border bg-white p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
@@ -59,6 +68,14 @@ export function ApplicationsList({ applications }: { applications: CandidateAppl
                 <StatusChip kind="application" status={a.status} />
               </div>
             </div>
+            {onHold ? (
+              <Alert variant="warning" className="mt-4 text-xs">
+                {t("dexeeOnlyHold")}{" "}
+                <Link href="/candidate/settings" className="text-link underline">
+                  {t("dexeeOnlyHoldLink")}
+                </Link>
+              </Alert>
+            ) : null}
             <ol className="mt-4 flex flex-wrap gap-2" aria-label={t("timeline")}>
               {a.events.map((e) => (
                 <li key={e.id} className="bg-mist text-navy rounded-full px-3 py-1 text-xs">

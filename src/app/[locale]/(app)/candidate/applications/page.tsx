@@ -8,15 +8,19 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { pageLocale } from "@/i18n/server";
 import { getSessionUser } from "@/lib/auth/session";
-import { listCandidateApplications } from "@/server/services/candidates";
+import {
+  getCurrentCandidateProfile,
+  listCandidateApplications,
+} from "@/server/services/candidates";
 
 export default async function CandidateApplicationsPage({
   params,
 }: PageProps<"/[locale]/candidate/applications">) {
   await pageLocale(params);
   const user = await getSessionUser();
-  const [applications, t] = await Promise.all([
+  const [applications, profile, t] = await Promise.all([
     listCandidateApplications(user!.id),
+    getCurrentCandidateProfile(user!.id),
     getTranslations("candidate.applications"),
   ]);
   return (
@@ -34,7 +38,10 @@ export default async function CandidateApplicationsPage({
           }
         />
       ) : (
-        <ApplicationsList applications={applications} />
+        <ApplicationsList
+          applications={applications}
+          visibility={profile?.candidate.visibility ?? null}
+        />
       )}
     </>
   );

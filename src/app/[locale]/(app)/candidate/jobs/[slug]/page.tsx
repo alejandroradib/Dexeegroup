@@ -50,6 +50,7 @@ export default async function CandidateJobPage({
               existing={existing}
               profileComplete={(profile?.candidate.profile_completeness ?? 0) >= 60}
               requirements={requirements}
+              dexeeOnly={profile?.candidate.visibility === "dexee_only"}
             />
           }
         />

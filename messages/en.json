@@ -934,7 +934,7 @@
       "englishRequired": "English {level}",
       "hoursPerWeek": "{hours} h / week",
       "emptyTitle": "No roles match your filters",
-      "emptyBody": "Try removing a filter or come back soon. New roles are published every week.",
+      "emptyBody": "Try removing a filter. In the meantime, complete your profile and take the four free assessments so you are ready to apply the moment a role fits.",
       "applyCta": "Apply",
       "applySignUp": "Create a profile to apply",
       "aboutRole": "About the role",
@@ -1588,7 +1588,11 @@
       "requirementExpired": "Expired, take it again",
       "requirementMissing": "Pending",
       "requirementGo": "Go",
-      "requirementsMissingError": "You cannot apply yet: {items}. Complete them and come back; the role stays open for you."
+      "requirementsMissingError": "You cannot apply yet: {items}. Complete them and come back; the role stays open for you.",
+      "dexeeOnlyTitle": "Your profile is set to Dexee only",
+      "dexeeOnlyBody": "This application does not reach the company directly. Dexee reviews it, contacts you, and presents you only if the role fits. That adds time. Change it in privacy settings if you prefer companies to see your profile when you apply.",
+      "dexeeOnlySettings": "Privacy settings",
+      "applyBodyDexeeOnly": "Dexee reviews this application before any company sees it. Your contact details stay private until Dexee releases them."
     },
     "applications": {
       "title": "Applications",
@@ -1603,7 +1607,9 @@
       "jobUpdating": "The company is updating this vacancy. You will be notified if the conditions change.",
       "jobPaused": "Vacancy paused by the company",
       "jobClosed": "Vacancy closed",
-      "jobUnavailable": "Vacancy no longer available"
+      "jobUnavailable": "Vacancy no longer available",
+      "dexeeOnlyHold": "Waiting on Dexee. Your profile is set to Dexee only, so the company does not see this application. Dexee reviews it and presents you.",
+      "dexeeOnlyHoldLink": "Change profile visibility"
     },
     "assessments": {
       "title": "Assessments",
@@ -1849,7 +1855,8 @@
         "company": "Company",
         "status": "Status",
         "contact": "Contact",
-        "applied": "Applied"
+        "applied": "Applied",
+        "waiting": "Waiting"
       },
       "empty": "No applications match",
       "release": "Release contact details",
@@ -1859,7 +1866,16 @@
       "requestedOn": "Requested {date}",
       "notRequested": "Not requested",
       "changeStatus": "Change status",
-      "statusChanged": "Status updated."
+      "statusChanged": "Status updated.",
+      "tabs": {
+        "all": "All",
+        "dexee": "Dexee to intermediate"
+      },
+      "dexeeBody": "Candidates in Dexee only mode. The company never saw these applications. Review each one, contact the candidate and present them, or reject it. Oldest first.",
+      "dexeeEmpty": "Nothing waiting on Dexee",
+      "dexeeEmptyBody": "No application from a Dexee only candidate is sitting in applied status.",
+      "waitingDays": "{days, plural, =0 {Today} one {# day} other {# days}}",
+      "overdue": "Overdue"
     },
     "leads": {
       "title": "Leads",
