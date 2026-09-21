@@ -175,38 +175,41 @@ describe("Rich Results structure check", () => {
 });
 
 /**
- * Audit A2: the block is serialized into a <script> tag. JSON.stringify escapes quotes but
- * not "<", so a title containing "</script>" would close the tag and run as HTML.
+ * Audit A2 / D3: the block is serialized into a <script> tag. JSON.stringify escapes quotes
+ * but not "<", so a title containing "</script>" would close the tag and run as HTML. The
+ * serializer is the control; the text fields themselves are plain text in JSON-LD and must
+ * reach Google unchanged, ampersands included.
  */
 describe("script injection through JobPosting fields", () => {
   const payload = "</script><img src=x onerror=alert(1)>";
+  const amp = "Accounts Payable & Receivable Specialist";
   const opts = { siteUrl: "https://dexeegroup.com", locale: "en" };
 
-  it("escapes the title", () => {
-    const ld = buildJobPostingJsonLd({ ...base, title: payload }, opts);
-    expect(ld.title).not.toContain("<");
-    expect(ld.title).toContain("&lt;/script&gt;");
-  });
+  for (const value of [payload, amp]) {
+    it(`keeps the title "${value.slice(0, 20)}" byte-identical after serialization`, () => {
+      const ld = buildJobPostingJsonLd({ ...base, title: value, company_name: value }, opts);
+      const rendered = serializeJsonLd(ld);
+      expect(rendered).not.toContain("</script>");
+      expect(rendered).not.toMatch(/[<>&]/);
+      const parsed = JSON.parse(rendered) as typeof ld;
+      expect(parsed.title).toBe(value);
+      expect(parsed.hiringOrganization.name).toBe(value);
+    });
+  }
 
-  it("escapes the hiring organization name", () => {
-    const ld = buildJobPostingJsonLd({ ...base, company_name: payload }, opts);
-    expect(ld.hiringOrganization.name).not.toContain("<");
-  });
-
-  it("escapes the url", () => {
+  it("keeps the url intact and free of markup", () => {
     const ld = buildJobPostingJsonLd({ ...base, slug: payload }, opts);
-    expect(ld.url).not.toContain("<");
-  });
-
-  it("never emits a closing script tag whatever the fields hold", () => {
-    const ld = buildJobPostingJsonLd(
-      { ...base, title: payload, company_name: payload, slug: payload, description: payload },
-      opts,
-    );
     const rendered = serializeJsonLd(ld);
     expect(rendered).not.toContain("</script>");
-    expect(rendered).not.toMatch(/[<>&]/);
-    // Still valid JSON carrying the same data once parsed.
-    expect(JSON.parse(rendered)).toEqual(ld);
+    expect((JSON.parse(rendered) as typeof ld).url).toBe(
+      `https://dexeegroup.com/en/jobs/${payload}`,
+    );
+  });
+
+  it("still HTML-escapes the description, which Google renders as HTML", () => {
+    const ld = buildJobPostingJsonLd({ ...base, description: payload }, opts);
+    expect(ld.description).not.toContain("<script>");
+    expect(ld.description).toContain("&lt;/script&gt;");
+    expect(JSON.parse(serializeJsonLd(ld))).toEqual(ld);
   });
 });

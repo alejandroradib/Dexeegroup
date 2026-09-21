@@ -69,20 +69,20 @@ export function buildJobPostingJsonLd(
   const posted = job.published_at ?? new Date().toISOString();
   const validThrough =
     job.closes_at ?? new Date(new Date(posted).getTime() + 60 * 24 * 3600 * 1000).toISOString();
-  // Text fields are HTML-escaped as well as unicode-escaped by serializeJsonLd(): the block
-  // lands inside a <script> tag, and neither control alone should be the only one (audit A2).
+  // Text fields stay plain: JSON-LD text is not HTML, and Google would show "&amp;" literally.
+  // serializeJsonLd() closes the script-injection path at the sink (audits A2 and D3).
   const hiring: JobPostingJsonLd["hiringOrganization"] = job.confidential_company
     ? { "@type": "Organization", name: "Dexee" }
     : {
         "@type": "Organization",
-        name: escapeHtml(job.company_name ?? "Dexee"),
+        name: job.company_name ?? "Dexee",
         ...(opts.publicLogoUrl ? { logo: opts.publicLogoUrl } : {}),
       };
 
   const jsonLd: JobPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "JobPosting",
-    title: escapeHtml(job.title ?? ""),
+    title: job.title ?? "",
     description: description || `<p>${escapeHtml(job.title ?? "")}</p>`,
     datePosted: posted,
     validThrough,
@@ -92,7 +92,7 @@ export function buildJobPostingJsonLd(
     applicantLocationRequirements: { "@type": "Country", name: "Colombia" },
     identifier: { "@type": "PropertyValue", name: "Dexee", value: job.id ?? "" },
     directApply: true,
-    url: escapeHtml(`${opts.siteUrl}/${opts.locale}/jobs/${job.slug}`),
+    url: `${opts.siteUrl}/${opts.locale}/jobs/${job.slug}`,
   };
 
   if (job.show_salary && (job.salary_min_usd !== null || job.salary_max_usd !== null)) {

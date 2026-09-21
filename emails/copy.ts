@@ -6,6 +6,7 @@ export type TemplateName =
   | "job-status"
   | "new-application"
   | "application-status"
+  | "job-terms-changed"
   | "contact-released"
   | "recommendation"
   | "assessment-result"
@@ -68,6 +69,20 @@ export const EMAIL_COPY: Record<TemplateName, Record<EmailLocale, TemplateCopy>>
       subject: "Tu postulación para {job} pasó a {status}",
       heading: "Novedad de postulación",
       body: "{company} movió tu postulación para {job} a {status}.",
+      cta: "Ver postulaciones",
+    },
+  },
+  "job-terms-changed": {
+    en: {
+      subject: "The conditions of {job} changed",
+      heading: "A vacancy you applied to was updated",
+      body: "{company} updated {job}. Changes: {changes_en}. Your application stays active; withdraw it from your applications page if the new conditions do not suit you.",
+      cta: "View applications",
+    },
+    es: {
+      subject: "Cambiaron las condiciones de {job}",
+      heading: "Se actualizó una vacante a la que te postulaste",
+      body: "{company} actualizó {job}. Cambios: {changes_es}. Tu postulación sigue activa; retírala desde tus postulaciones si las nuevas condiciones no te convienen.",
       cta: "Ver postulaciones",
     },
   },

@@ -2,6 +2,11 @@ import "server-only";
 
 import { after } from "next/server";
 
+import {
+  ACTIVE_APPLICATION_STATUSES,
+  describeChanges,
+  type TermChange,
+} from "@/lib/jobs/material-terms";
 import { logger } from "@/lib/logger";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { processOutbox } from "@/server/services/outbox";
@@ -19,6 +24,7 @@ export type PlatformEvent =
       message?: string;
     }
   | { type: "new_application"; applicationId: string }
+  | { type: "job_terms_changed"; jobId: string; changes: TermChange[] }
   | {
       type: "application_status";
       applicationId: string;
@@ -62,6 +68,10 @@ const COPY: Record<Locale, Record<string, { title: string; body: string }>> = {
     },
     job_changes_requested: { title: "Changes requested: {job}", body: "{message}" },
     new_application: { title: "New application: {job}", body: "{candidate} applied." },
+    job_terms_changed: {
+      title: "The conditions of {job} changed",
+      body: "{company} updated the vacancy you applied to. Changes: {changes_en}. Your application stays active; you can withdraw it if the new conditions do not suit you.",
+    },
     application_status: {
       title: "Your application moved to {status}",
       body: "{company} updated your application for {job}.",
@@ -132,6 +142,10 @@ const COPY: Record<Locale, Record<string, { title: string; body: string }>> = {
     job_approved: { title: "Vacante aprobada: {job}", body: "Dexee aprobó y publicó la vacante." },
     job_changes_requested: { title: "Cambios solicitados: {job}", body: "{message}" },
     new_application: { title: "Nueva postulación: {job}", body: "{candidate} se postuló." },
+    job_terms_changed: {
+      title: "Cambiaron las condiciones de {job}",
+      body: "{company} actualizó la vacante a la que te postulaste. Cambios: {changes_es}. Tu postulación sigue activa; puedes retirarla si las nuevas condiciones no te convienen.",
+    },
     application_status: {
       title: "Tu postulación pasó a {status}",
       body: "{company} actualizó tu postulación para {job}.",
@@ -353,6 +367,40 @@ export async function dispatchEvent(event: PlatformEvent): Promise<void> {
               ? `/company/jobs/${job.id}/edit`
               : `/company/jobs/${job.id}/pipeline`,
           template: "job-status",
+        });
+        return;
+      }
+      case "job_terms_changed": {
+        const { data: job } = await admin
+          .from("jobs")
+          .select("id, title, confidential_company, companies (name)")
+          .eq("id", event.jobId)
+          .maybeSingle();
+        if (!job) return;
+        const { data: active } = await admin
+          .from("applications")
+          .select("candidate_id")
+          .eq("job_id", event.jobId)
+          .in("status", [...ACTIVE_APPLICATION_STATUSES]);
+        const recipients = (
+          await Promise.all(
+            [...new Set((active ?? []).map((a) => a.candidate_id))].map((id) =>
+              candidateRecipient(id),
+            ),
+          )
+        ).filter((r): r is Recipient => r !== null);
+        if (recipients.length === 0) return;
+        await deliver(event.type, {
+          recipients,
+          key: "job_terms_changed",
+          vars: {
+            job: job.title,
+            company: job.confidential_company ? "Dexee" : (job.companies?.name ?? "Dexee"),
+            changes_en: describeChanges(event.changes, "en"),
+            changes_es: describeChanges(event.changes, "es"),
+          },
+          link: "/candidate/applications",
+          template: "job-terms-changed",
         });
         return;
       }

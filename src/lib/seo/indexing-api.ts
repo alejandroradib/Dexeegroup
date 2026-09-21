@@ -1,6 +1,7 @@
 import "server-only";
 
 import { logger } from "@/lib/logger";
+import { jobIndexingUrls } from "@/lib/seo/job-urls";
 
 /**
  * Google Indexing API ping for job pages (PHASES-GTM 9.5).
@@ -130,6 +131,6 @@ export async function notifyJobIndexed(
   locales: readonly string[] = ["en", "es"],
 ): Promise<void> {
   await Promise.all(
-    locales.map((locale) => notifyIndexing(`${siteUrl}/${locale}/jobs/${slug}`, action)),
+    jobIndexingUrls(siteUrl, slug, locales).map((url) => notifyIndexing(url, action)),
   );
 }

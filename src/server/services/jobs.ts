@@ -1,3 +1,4 @@
+import { ACTIVE_APPLICATION_STATUSES } from "@/lib/jobs/material-terms";
 import { createClient } from "@/lib/supabase/server";
 import { listFitForApplications, type FitRow } from "@/server/services/fit";
 import type { Database } from "@/types/database";
@@ -42,6 +43,17 @@ export async function listCompanyJobs(companyId: string): Promise<JobWithCounts[
     const c = counts.get(job.id) ?? EMPTY_COUNTS();
     return { ...job, counts: c, total: Object.values(c).reduce((s, n) => s + n, 0) };
   });
+}
+
+/** Applicants still in the running for a job; the ones told when its terms change. */
+export async function countActiveApplicants(jobId: string): Promise<number> {
+  const supabase = await createClient();
+  const { count } = await supabase
+    .from("applications")
+    .select("id", { count: "exact", head: true })
+    .eq("job_id", jobId)
+    .in("status", [...ACTIVE_APPLICATION_STATUSES]);
+  return count ?? 0;
 }
 
 export async function getCompanyJob(jobId: string): Promise<Job | null> {

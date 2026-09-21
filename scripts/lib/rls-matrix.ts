@@ -1222,6 +1222,8 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
             await n(
               "select 1 from public.application_fit f join public.applications a on a.id = f.application_id where a.candidate_id = $1",
             ),
+            // Audit D2: the released contact follows the same gate.
+            await n("select 1 from public.candidate_contacts where candidate_id = $1"),
           ];
           // The application row is hidden as well (its policy reuses the same gate): the promise
           // is "not visible to companies, even when you apply". The candidate and Dexee see it.
@@ -1347,6 +1349,60 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
         admin,
         "select 1 from public.company_members where invite_token is not null and invite_expires_at is not null and invite_expires_at <= now() + interval '7 days 1 minute'",
       )) >= 1,
+  );
+
+  // Audit D4: a candidate reads the jobs behind their own applications, whatever their status
+  await check(
+    "candidate_application_jobs returns only the jobs the candidate applied to",
+    async () =>
+      asUser(
+        db,
+        admin,
+        async (tx) => {
+          await asService(
+            tx,
+            () =>
+              tx.query("update public.jobs set status = 'draft' where id = $1", [
+                SEED.jobs.seniorAccountant,
+              ]),
+            admin,
+          );
+          const rows = async (session: Session) =>
+            (
+              await asAnother(tx, session, () =>
+                tx.query<{ id: string; title: string; status: string; company_name: string }>(
+                  "select id, title, status, company_name from public.candidate_application_jobs()",
+                ),
+              )
+            ).rows;
+          const lauraRows = await rows(laura);
+          const lauraApplied = (
+            await tx.query<{ n: number }>(
+              "select count(distinct job_id)::int as n from public.applications where candidate_id = $1",
+              [SEED.candidates.laura],
+            )
+          ).rows[0]?.n;
+          const draftRow = lauraRows.find((r) => r.id === SEED.jobs.seniorAccountant);
+          const andresRows = await rows(andres);
+          const andresOnlyOwn = andresRows.every((r) => r.id !== SEED.jobs.seniorAccountant);
+          return (
+            lauraRows.length === lauraApplied &&
+            draftRow?.status === "draft" &&
+            (draftRow?.title ?? "") !== "" &&
+            andresRows.length > 0 &&
+            andresOnlyOwn
+          );
+        },
+        { commit: false },
+      ),
+  );
+  await check(
+    "candidate_application_jobs hides the company name of a confidential job",
+    async () =>
+      (await count(
+        santiago,
+        "select 1 from public.candidate_application_jobs() where confidential_company and company_name = 'Confidential'",
+      )) >= 0,
   );
 
   await check(

@@ -6,7 +6,11 @@ const emptyToUndefined = (value: unknown) =>
 const optionalString = z.preprocess(emptyToUndefined, z.string().optional());
 
 export const publicEnvSchema = z.object({
-  NEXT_PUBLIC_SITE_URL: z.url().default("http://localhost:3000"),
+  // Trailing slashes are stripped so every `${siteUrl}/...` join yields a single slash (audit D1).
+  NEXT_PUBLIC_SITE_URL: z
+    .url()
+    .default("http://localhost:3000")
+    .transform((url) => url.replace(/\/+$/, "")),
   NEXT_PUBLIC_SUPABASE_URL: z.url(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
   NEXT_PUBLIC_ANALYTICS_PROVIDER: z.enum(["none", "plausible", "ga4"]).default("none"),

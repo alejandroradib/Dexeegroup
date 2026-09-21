@@ -2,10 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useTransition } from "react";
 
+import { ConfirmButton } from "@/components/shared/confirm-button";
 import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { changeJobStatus } from "@/server/actions/company";
 import type { Database } from "@/types/database";
@@ -14,14 +13,22 @@ type JobStatus = Database["public"]["Enums"]["job_status"];
 
 /**
  * Shown in place of the wizard when a job's content is locked (audit A3). A company edits a
- * live job by withdrawing it to draft first; closed jobs are duplicated instead.
+ * live job by withdrawing it to draft first; applicants in the running are told if the terms
+ * change when it is resubmitted (audit D4). Closed jobs are duplicated instead.
  */
-export function ReopenJobNotice({ jobId, status }: { jobId: string; status: JobStatus }) {
+export function ReopenJobNotice({
+  jobId,
+  status,
+  activeApplicants,
+}: {
+  jobId: string;
+  status: JobStatus;
+  activeApplicants: number;
+}) {
   const t = useTranslations("company.wizard.locked");
   const tc = useTranslations("common");
   const { toast } = useToast();
   const router = useRouter();
-  const [pending, start] = useTransition();
   const canReopen = status === "published" || status === "paused" || status === "pending_review";
 
   return (
@@ -32,23 +39,23 @@ export function ReopenJobNotice({ jobId, status }: { jobId: string; status: JobS
       </Alert>
       {canReopen ? (
         <div>
-          <Button
+          <ConfirmButton
             variant="accent"
-            disabled={pending}
-            onClick={() =>
-              start(async () => {
-                const result = await changeJobStatus(jobId, "reopen");
-                if (result.ok) {
-                  toast({ title: t("reopened"), variant: "success" });
-                  router.refresh();
-                } else {
-                  toast({ title: tc("errors.generic"), variant: "danger" });
-                }
-              })
-            }
+            title={t("confirmTitle")}
+            description={t("confirmBody", { count: activeApplicants })}
+            confirmLabel={t("action")}
+            onConfirm={async () => {
+              const result = await changeJobStatus(jobId, "reopen");
+              if (result.ok) {
+                toast({ title: t("reopened"), variant: "success" });
+                router.refresh();
+              } else {
+                toast({ title: tc("errors.generic"), variant: "danger" });
+              }
+            }}
           >
             {t("action")}
-          </Button>
+          </ConfirmButton>
         </div>
       ) : null}
     </div>

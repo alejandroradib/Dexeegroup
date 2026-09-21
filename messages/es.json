@@ -1287,7 +1287,9 @@
         "body": "Una vacante publicada, pausada o en revisión no se reescribe en el sitio. Para editarla, retírela a borrador: sale del tablero y del índice de Google, y al reenviarla pasa por el mismo paso de publicación que la primera vez.",
         "closedBody": "Una vacante cerrada no se edita. Duplíquela desde la lista de vacantes para publicarla de nuevo.",
         "action": "Retirar a borrador y editar",
-        "reopened": "La vacante volvió a borrador. Ya puede editarla."
+        "reopened": "La vacante volvió a borrador. Ya puede editarla.",
+        "confirmTitle": "¿Retirar esta vacante a borrador?",
+        "confirmBody": "{count, plural, =0 {No tiene postulantes activos.} =1 {Tiene 1 postulante activo, a quien se avisará si cambian el salario, el contrato, el horario o los requisitos al reenviarla.} other {Tiene # postulantes activos, a quienes se avisará si cambian el salario, el contrato, el horario o los requisitos al reenviarla.}} Sale del tablero y del índice de Google hasta que la reenvíe."
       }
     },
     "pipeline": {
@@ -1597,7 +1599,11 @@
       "timeline": "Historial",
       "appliedOn": "Postulado el {date}",
       "recommendedBy": "Recomendado por Dexee",
-      "withdraw": "Retirar"
+      "withdraw": "Retirar",
+      "jobUpdating": "La empresa está actualizando esta vacante. Te avisaremos si cambian las condiciones.",
+      "jobPaused": "Vacante pausada por la empresa",
+      "jobClosed": "Vacante cerrada",
+      "jobUnavailable": "Vacante ya no disponible"
     },
     "assessments": {
       "title": "Evaluaciones",

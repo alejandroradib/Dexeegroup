@@ -1,3 +1,4 @@
+import { logger } from "@/lib/logger";
 import { createClient } from "@/lib/supabase/server";
 import { CEFR_RANK } from "@/lib/validation/enums";
 import type { Database } from "@/types/database";
@@ -47,11 +48,19 @@ export async function getCurrentCandidateProfile(userId: string): Promise<Candid
   };
 }
 
+/** Job behind an application, whatever its status (candidate_application_jobs, audit D4). */
+export type ApplicationJob = {
+  id: string;
+  title: string;
+  slug: string | null;
+  company_name: string | null;
+  confidential_company: boolean;
+  contract_type: Database["public"]["Enums"]["contract_type"] | null;
+  status: Database["public"]["Enums"]["job_status"];
+};
+
 export type CandidateApplication = Tables["applications"]["Row"] & {
-  job: Pick<
-    PublicJob,
-    "id" | "title" | "slug" | "company_name" | "confidential_company" | "contract_type"
-  > | null;
+  job: ApplicationJob | null;
   events: Tables["application_events"]["Row"][];
 };
 
@@ -64,12 +73,9 @@ export async function listCandidateApplications(userId: string): Promise<Candida
     .order("created_at", { ascending: false });
   const rows = applications ?? [];
   if (rows.length === 0) return [];
-  const jobIds = rows.map((a) => a.job_id);
-  const [{ data: jobs }, { data: events }] = await Promise.all([
-    supabase
-      .from("public_jobs")
-      .select("id, title, slug, company_name, confidential_company, contract_type")
-      .in("id", jobIds),
+  const [jobsResult, { data: events }] = await Promise.all([
+    // Not public_jobs: a withdrawn, paused or closed job must keep its title here.
+    supabase.rpc("candidate_application_jobs"),
     supabase
       .from("application_events")
       .select("*")
@@ -79,7 +85,33 @@ export async function listCandidateApplications(userId: string): Promise<Candida
       )
       .order("created_at", { ascending: true }),
   ]);
-  const jobById = new Map((jobs ?? []).map((j) => [j.id, j]));
+  let jobs = (jobsResult.data ?? []) as unknown as ApplicationJob[];
+  if (jobsResult.error) {
+    // The function is added by migration 20260923000004. Until it is applied in an
+    // environment, published jobs still resolve through the public view and the rest show as
+    // unavailable, which is the behaviour this change replaces. Remove this fallback once
+    // every environment carries the function.
+    logger.warn({ err: jobsResult.error.message }, "application_jobs_rpc_failed");
+    const { data: published } = await supabase
+      .from("public_jobs")
+      .select("id, title, slug, company_name, confidential_company, contract_type")
+      .in(
+        "id",
+        rows.map((a) => a.job_id),
+      );
+    jobs = (published ?? [])
+      .filter((j): j is typeof j & { id: string } => Boolean(j.id))
+      .map((j) => ({
+        id: j.id,
+        title: j.title ?? "",
+        slug: j.slug,
+        company_name: j.company_name,
+        confidential_company: Boolean(j.confidential_company),
+        contract_type: j.contract_type,
+        status: "published" as const,
+      }));
+  }
+  const jobById = new Map(jobs.map((j) => [j.id, j]));
   return rows.map((a) => ({
     ...a,
     job: jobById.get(a.job_id) ?? null,

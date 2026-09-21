@@ -12,6 +12,7 @@ describe("email templates", () => {
       "job-status",
       "new-application",
       "application-status",
+      "job-terms-changed",
       "contact-released",
       "recommendation",
       "assessment-result",

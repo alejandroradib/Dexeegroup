@@ -1287,7 +1287,9 @@
         "body": "A job that is live, paused or under review cannot be rewritten in place. Withdraw it to draft to edit it: it leaves the job board and the Google index, and when you resubmit it goes through the same publishing step as the first time.",
         "closedBody": "A closed job cannot be edited. Duplicate it from the jobs list to post it again.",
         "action": "Withdraw to draft and edit",
-        "reopened": "The job is a draft again. You can edit it now."
+        "reopened": "The job is a draft again. You can edit it now.",
+        "confirmTitle": "Withdraw this vacancy to draft?",
+        "confirmBody": "{count, plural, =0 {It has no active applicants.} =1 {It has 1 active applicant, who will be notified if the salary, contract, schedule or requirements change when you resubmit.} other {It has # active applicants, who will be notified if the salary, contract, schedule or requirements change when you resubmit.}} It leaves the job board and the Google index until you resubmit it."
       }
     },
     "pipeline": {
@@ -1597,7 +1599,11 @@
       "timeline": "Timeline",
       "appliedOn": "Applied {date}",
       "recommendedBy": "Recommended by Dexee",
-      "withdraw": "Withdraw"
+      "withdraw": "Withdraw",
+      "jobUpdating": "The company is updating this vacancy. You will be notified if the conditions change.",
+      "jobPaused": "Vacancy paused by the company",
+      "jobClosed": "Vacancy closed",
+      "jobUnavailable": "Vacancy no longer available"
     },
     "assessments": {
       "title": "Assessments",

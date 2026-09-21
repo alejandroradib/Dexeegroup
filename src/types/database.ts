@@ -1125,6 +1125,7 @@ export type Database = {
           created_by: string | null
           created_at: string
           updated_at: string
+          reopen_snapshot: Json | null
         }
         Insert: {
           id?: string
@@ -1155,6 +1156,7 @@ export type Database = {
           created_by?: string | null
           created_at?: string
           updated_at?: string
+          reopen_snapshot?: Json | null
         }
         Update: {
           id?: string
@@ -1185,6 +1187,7 @@ export type Database = {
           created_by?: string | null
           created_at?: string
           updated_at?: string
+          reopen_snapshot?: Json | null
         }
         Relationships: [
           {
@@ -1614,6 +1617,10 @@ export type Database = {
       attempt_is_open: {
         Args: { target_attempt_id: string }
         Returns: boolean
+      }
+      candidate_application_jobs: {
+        Args: Record<PropertyKey, never>
+        Returns: unknown[]
       }
       candidate_apply_requirements: {
         Args: { target_candidate_id: string }

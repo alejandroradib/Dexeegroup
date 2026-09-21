@@ -28,14 +28,23 @@ export function ApplicationsList({ applications }: { applications: CandidateAppl
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h3 className="text-base">
-                  {a.job?.slug ? (
+                  {a.job?.slug && a.job.status === "published" ? (
                     <Link href={`/candidate/jobs/${a.job.slug}`} className="hover:underline">
                       {a.job.title}
                     </Link>
                   ) : (
-                    (a.job?.title ?? "—")
+                    (a.job?.title ?? t("jobUnavailable"))
                   )}
                 </h3>
+                {a.job && a.job.status !== "published" ? (
+                  <p className="text-warning text-xs font-medium">
+                    {a.job.status === "closed"
+                      ? t("jobClosed")
+                      : a.job.status === "paused"
+                        ? t("jobPaused")
+                        : t("jobUpdating")}
+                  </p>
+                ) : null}
                 <p className="text-muted-foreground text-sm">
                   {a.job?.confidential_company ? tc("labels.confidential") : a.job?.company_name}
                 </p>

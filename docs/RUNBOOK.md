@@ -33,6 +33,13 @@ Operational procedures for the Dexee Talent Platform. Assumes a Vercel project a
 - Application: redeploy the previous Vercel deployment.
 - Database: migrations are forward-only. Write a new migration that reverts the change; never edit an applied migration.
 
+## Site URL
+
+`NEXT_PUBLIC_SITE_URL` goes without a trailing slash (`https://dexeegroup.com`, never
+`https://dexeegroup.com/`). The code strips trailing slashes since phase D, but the value in
+Vercel should be clean as well. After the domain switch, resubmit `sitemap.xml` in Google
+Search Console so the canonical URLs are recrawled.
+
 ## Domain and DNS
 
 - Registrar: Squarespace, under `aradi@dexeegroup.com`. Renewal 11 Sep 2027.
