@@ -152,6 +152,26 @@ Repita esa consulta contra el directorio de bancos si vuelve a cargar: si la hue
 algo se transcribió mal. Para revertir la rotación basta invertir la activación; los ítems
 viejos siguen en la tabla.
 
+### Revisión experta de los bancos de inglés
+
+Los ítems los escribió Claude y ningún profesional de la enseñanza del inglés los ha revisado
+(decisión 76). Antes de cobrar el reporte Dexee Verified, contrate esa revisión. El brief
+para el revisor está en `.banks/REVIEW-BRIEF.md`, fuera del repositorio, junto a los
+bancos: explica la estructura del examen y los umbrales, fija siete criterios por ítem
+escrito y cinco por consigna oral, pide la distribución de posiciones de la clave, incluye
+el ítem `gr-b1-05` que hay que reescribir, y define el entregable (una hoja por ítem con
+veredicto, motivo y corrección propuesta más un resumen de una página).
+
+Envíe al revisor solo tres archivos: el brief, `english_written.json` y `english_oral.json`.
+Ni `load-into-production.sql` ni `retired-hashes.json` le sirven y contienen más de lo que
+necesita. Perfil sugerido: docente o evaluador con experiencia en escalas MCER (CELTA o DELTA,
+o examinador de Cambridge o IELTS), 6 a 8 horas de trabajo.
+
+Cuando llegue la revisión: aplique los cambios en los JSON, vuelva a correr la guarda de
+textos retirados y las cuotas por banda y sección (`npm run db:seed` con
+`ASSESSMENT_BANKS_DIR` las verifica), regenere `load-into-production.sql` y cargue en una
+sola transacción como se describe arriba. Anote en `docs/DECISIONS.md` quién revisó y cuándo.
+
 ## Activar DISC en producción
 
 La migración `20260922000002` crea la fila de `assessments` para `disc` con `is_active = false`,
