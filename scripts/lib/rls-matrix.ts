@@ -838,6 +838,97 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
       { commit: false },
     ),
   );
+  // Conversational interview (DECISIONS 92): the transcript is server-authored ---------------
+  await check(
+    "candidate cannot write the transcript, job or turn counter of an open interview",
+    async () =>
+      asUser(
+        db,
+        laura,
+        async (tx) => {
+          await tx.query(
+            "insert into public.mock_interviews (candidate_id, role_family, questions) values ($1, 'sales_sdr', '[]'::jsonb)",
+            [SEED.candidates.laura],
+          );
+          await tx.query(
+            'update public.mock_interviews set transcript = \'[{"role":"interviewer","text":"forged","at":"x"}]\'::jsonb, candidate_turns = 9, job_id = $2 where candidate_id = $1',
+            [SEED.candidates.laura, SEED.jobs.seniorAccountant],
+          );
+          const res = await tx.query<{ n: number }>(
+            "select count(*)::int as n from public.mock_interviews where candidate_id = $1 and transcript = '[]'::jsonb and candidate_turns = 0 and job_id is null",
+            [SEED.candidates.laura],
+          );
+          return Number(res.rows[0]?.n) === 1;
+        },
+        { commit: false },
+      ),
+  );
+  await check("candidate cannot tie an interview to a job they cannot see", async () =>
+    asUser(
+      db,
+      laura,
+      async (tx) => {
+        try {
+          await tx.query(
+            "insert into public.mock_interviews (candidate_id, role_family, questions, job_id) values ($1, 'sales_sdr', '[]'::jsonb, $2)",
+            [SEED.candidates.laura, SEED.jobs.designerDraft],
+          );
+          return false;
+        } catch (error) {
+          return (error as Error).message.includes("job_not_visible");
+        }
+      },
+      { commit: false },
+    ),
+  );
+  await check(
+    "candidate ties an interview to a published job and its transcript starts empty",
+    async () =>
+      asUser(
+        db,
+        laura,
+        async (tx) => {
+          await tx.query(
+            'insert into public.mock_interviews (candidate_id, role_family, questions, job_id, transcript, candidate_turns) values ($1, \'sales_sdr\', \'[]\'::jsonb, $2, \'[{"role":"interviewer","text":"forged","at":"x"}]\'::jsonb, 5)',
+            [SEED.candidates.laura, SEED.jobs.seniorAccountant],
+          );
+          const res = await tx.query<{ n: number }>(
+            "select count(*)::int as n from public.mock_interviews where candidate_id = $1 and job_id = $2 and transcript = '[]'::jsonb and candidate_turns = 0",
+            [SEED.candidates.laura, SEED.jobs.seniorAccountant],
+          );
+          return Number(res.rows[0]?.n) === 1;
+        },
+        { commit: false },
+      ),
+  );
+  await check("service role writes the transcript of an open interview", async () =>
+    asUser(
+      db,
+      laura,
+      async (tx) => {
+        await tx.query(
+          "insert into public.mock_interviews (candidate_id, role_family, questions) values ($1, 'sales_sdr', '[]'::jsonb)",
+          [SEED.candidates.laura],
+        );
+        await asService(
+          tx,
+          () =>
+            tx.query(
+              'update public.mock_interviews set transcript = \'[{"role":"interviewer","text":"Hello","at":"x"}]\'::jsonb where candidate_id = $1',
+              [SEED.candidates.laura],
+            ),
+          laura,
+        );
+        const res = await tx.query<{ n: number }>(
+          "select count(*)::int as n from public.mock_interviews where candidate_id = $1 and jsonb_array_length(transcript) = 1",
+          [SEED.candidates.laura],
+        );
+        return Number(res.rows[0]?.n) === 1;
+      },
+      { commit: false },
+    ),
+  );
+
   // Leads (contact_requests) ----------------------------------------------------------------
   await expectError(
     "anon cannot read contact_requests",

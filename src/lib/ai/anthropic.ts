@@ -38,24 +38,42 @@ export async function completeJson<T>(
   user: string,
   options: CompleteJsonOptions,
 ): Promise<T> {
+  return completeJsonChat(schema, system, [{ role: "user", content: user }], options);
+}
+
+const JSON_ONLY = "Respond with a single JSON object and nothing else. No markdown fences.";
+
+/**
+ * Multi-turn variant: the caller owns the message history (a conversation the model takes
+ * part in) and still gets one validated JSON object back. The system prompt is marked for
+ * prompt caching because it is identical on every turn of the same conversation.
+ */
+export async function completeJsonChat<T>(
+  schema: z.ZodType<T>,
+  system: string,
+  messages: Anthropic.MessageParam[],
+  options: CompleteJsonOptions,
+): Promise<T> {
   const env = serverEnv();
   const retries = options.retries ?? 1;
   let lastError: unknown;
   for (let attempt = 0; attempt <= retries; attempt += 1) {
+    const history = [...messages];
+    const last = history[history.length - 1];
+    if (attempt > 0 && last && last.role === "user" && typeof last.content === "string") {
+      history[history.length - 1] = {
+        role: "user",
+        content: `${last.content}\n\nYour previous answer was not valid JSON for the schema. Return only the JSON object.`,
+      };
+    }
     const response = await getClient().messages.create({
       model: env.ANTHROPIC_MODEL,
       max_tokens: options.maxTokens ?? 2048,
       temperature: options.temperature ?? 0,
-      system: `${system}\n\nRespond with a single JSON object and nothing else. No markdown fences.`,
-      messages: [
-        {
-          role: "user",
-          content:
-            attempt === 0
-              ? user
-              : `${user}\n\nYour previous answer was not valid JSON for the schema. Return only the JSON object.`,
-        },
+      system: [
+        { type: "text", text: `${system}\n\n${JSON_ONLY}`, cache_control: { type: "ephemeral" } },
       ],
+      messages: history,
     });
     await logUsage(
       options.feature,

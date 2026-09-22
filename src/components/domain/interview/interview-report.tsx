@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import type { InterviewReport as Report } from "@/lib/ai/prompts/mock-interview";
+import { parseTranscript } from "@/lib/interview/conversation";
 import type { InterviewQuestion } from "@/lib/interview/questions";
 import { interviewBand } from "@/lib/interview/scoring";
 import type { MockInterview } from "@/server/services/interviews";
@@ -12,7 +13,17 @@ export function InterviewReportView({ interview }: { interview: MockInterview })
   const report = interview.report as Report | null;
   const questions = (interview.questions as unknown as InterviewQuestion[]) ?? [];
   const answers = (interview.answers as Record<string, string> | null) ?? {};
+  const transcript = parseTranscript(interview.transcript);
   if (!report) return <Alert variant="danger">{t("failed")}</Alert>;
+  // Interviewer turns are numbered q1, q2... in the grader input; comments attach by number.
+  const exchanges = transcript.map((turn, index) => {
+    if (turn.role !== "interviewer") return { turn, comment: null as string | null };
+    const number = transcript.slice(0, index + 1).filter((x) => x.role === "interviewer").length;
+    return {
+      turn,
+      comment: report.per_question.find((c) => c.id === `q${number}`)?.comment ?? null,
+    };
+  });
   const band = interviewBand(report.overall);
   return (
     <div className="grid gap-6 lg:grid-cols-[300px_1fr]">
@@ -66,7 +77,45 @@ export function InterviewReportView({ interview }: { interview: MockInterview })
             </ul>
           </section>
         </div>
-        <section className="border-border rounded-[12px] border bg-white p-5">
+        {report.language_note ? (
+          <section className="border-border rounded-[12px] border bg-white p-5">
+            <h2 className="text-base">{t("languageNote")}</h2>
+            <p className="mt-2 text-sm">{report.language_note}</p>
+          </section>
+        ) : null}
+        {transcript.length > 0 ? (
+          <section className="border-border rounded-[12px] border bg-white p-5">
+            <h2 className="text-base">{t("transcript")}</h2>
+            <ol className="mt-3 grid gap-3">
+              {exchanges.map(({ turn, comment }, i) => (
+                <li
+                  key={`${turn.at}-${i}`}
+                  className={
+                    turn.role === "interviewer"
+                      ? "bg-mist rounded-[10px] p-4 text-sm"
+                      : "border-border rounded-[10px] border p-4 text-sm"
+                  }
+                >
+                  <p className="text-muted-foreground text-xs font-semibold uppercase">
+                    {turn.role === "interviewer" ? t("interviewer") : t("yourAnswer")}
+                  </p>
+                  <p className="mt-1 whitespace-pre-line">{turn.text}</p>
+                  {comment ? (
+                    <p className="border-border text-navy mt-2 border-t pt-2">
+                      <span className="font-medium">{t("feedbackLabel")}: </span>
+                      {comment}
+                    </p>
+                  ) : null}
+                </li>
+              ))}
+            </ol>
+          </section>
+        ) : null}
+        <section
+          className={
+            questions.length === 0 ? "hidden" : "border-border rounded-[12px] border bg-white p-5"
+          }
+        >
           <h2 className="text-base">{t("perQuestion")}</h2>
           <ol className="mt-3 grid gap-4">
             {questions.map((q, i) => {

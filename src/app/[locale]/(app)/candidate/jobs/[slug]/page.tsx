@@ -33,6 +33,7 @@ export default async function CandidateJobPage({
     getApplyRequirements(user!.id),
     getTranslations("marketing.jobs"),
   ]);
+  const tj = await getTranslations("candidate.jobs");
   return (
     <>
       <Button asChild variant="link" className="mb-4 px-0">
@@ -44,14 +45,21 @@ export default async function CandidateJobPage({
         <JobDetail
           job={job}
           applyAction={
-            <ApplyButton
-              jobId={job.id ?? ""}
-              jobTitle={job.title ?? ""}
-              existing={existing}
-              profileComplete={(profile?.candidate.profile_completeness ?? 0) >= 60}
-              requirements={requirements}
-              dexeeOnly={profile?.candidate.visibility === "dexee_only"}
-            />
+            <div className="grid gap-3">
+              <ApplyButton
+                jobId={job.id ?? ""}
+                jobTitle={job.title ?? ""}
+                existing={existing}
+                profileComplete={(profile?.candidate.profile_completeness ?? 0) >= 60}
+                requirements={requirements}
+                dexeeOnly={profile?.candidate.visibility === "dexee_only"}
+              />
+              <Button asChild variant="outline" className="w-full">
+                <Link href={{ pathname: "/candidate/interview", query: { job: job.id ?? "" } }}>
+                  {tj("practiceInterview")}
+                </Link>
+              </Button>
+            </div>
           }
         />
       </div>

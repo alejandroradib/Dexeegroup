@@ -1223,6 +1223,9 @@ export type Database = {
           processing_attempts: number
           created_at: string
           updated_at: string
+          job_id: string | null
+          transcript: Json
+          candidate_turns: number
         }
         Insert: {
           id?: string
@@ -1240,6 +1243,9 @@ export type Database = {
           processing_attempts?: number
           created_at?: string
           updated_at?: string
+          job_id?: string | null
+          transcript?: Json
+          candidate_turns?: number
         }
         Update: {
           id?: string
@@ -1257,6 +1263,9 @@ export type Database = {
           processing_attempts?: number
           created_at?: string
           updated_at?: string
+          job_id?: string | null
+          transcript?: Json
+          candidate_turns?: number
         }
         Relationships: [
           {
@@ -1264,6 +1273,13 @@ export type Database = {
             columns: ["candidate_id"]
             isOneToOne: false
             referencedRelation: "candidates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mock_interviews_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
             referencedColumns: ["id"]
           }
         ]

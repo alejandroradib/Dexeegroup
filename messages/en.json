@@ -1592,7 +1592,8 @@
       "dexeeOnlyTitle": "Your profile is set to Dexee only",
       "dexeeOnlyBody": "This application does not reach the company directly. Dexee reviews it, contacts you, and presents you only if the role fits. That adds time. Change it in privacy settings if you prefer companies to see your profile when you apply.",
       "dexeeOnlySettings": "Privacy settings",
-      "applyBodyDexeeOnly": "Dexee reviews this application before any company sees it. Your contact details stay private until Dexee releases them."
+      "applyBodyDexeeOnly": "Dexee reviews this application before any company sees it. Your contact details stay private until Dexee releases them.",
+      "practiceInterview": "Practice an interview for this role"
     },
     "applications": {
       "title": "Applications",
@@ -2190,23 +2191,30 @@
   },
   "interview": {
     "title": "Practice interview",
-    "subtitle": "Six written questions, feedback from Dexee's AI recruiter. Free, and a strong signal for our team when we shortlist.",
+    "subtitle": "A conversation with an AI interviewer, in the language of the role, followed by written feedback. Free, and a strong signal for our team when we shortlist.",
     "nav": "Practice interview",
     "intro": {
       "roleFamily": "Role you are preparing for",
       "language": "Interview language",
       "start": "Start practice interview",
-      "starting": "Preparing your questions",
+      "starting": "Opening the interview",
       "cooldown": "You can practice again on {date}.",
       "continue": "Continue interview",
       "rules": "How it works",
-      "rule1": "Six questions: four about your experience and two specific to the role.",
-      "rule2": "Answer in writing, about 60 to 150 words each. Concrete situations, actions and results score best.",
-      "rule3": "You have two hours; answers save as you type.",
-      "rule4": "You receive scores on communication, clarity of achievements, structure and relevance, plus recommendations. Dexee keeps the scores to match you with roles.",
+      "rule1": "The interviewer asks one question at a time and follows up when an answer is vague, like a real first interview.",
+      "rule2": "Pick a role you applied to and the interview runs in the language of that role, with its real brief. Or practice by role family in the language you choose.",
+      "rule3": "Answer in writing, in your own words. Concrete situations, actions and results land best. Up to ten replies; you can end after four.",
+      "rule4": "You have two hours from the start.",
       "history": "Previous interviews",
       "noHistory": "No interviews yet.",
-      "viewReport": "View report"
+      "viewReport": "View report",
+      "job": "Role to rehearse for",
+      "jobHint": "Roles you applied to. The interviewer knows the brief and asks about it.",
+      "generalOption": "General practice by role family",
+      "jobLanguageEn": "This role requires English, so the interview is in English.",
+      "jobLanguageEs": "This role has no English requirement at B1 or above, so the interview is in Spanish.",
+      "rule5": "At the end you receive scores on communication, clarity of achievements, structure and relevance, a comment on each question and, for English interviews, a note on your English. Dexee keeps the scores to match you with roles.",
+      "aiUnavailable": "The interviewer is not available in this environment."
     },
     "runner": {
       "question": "Question {current} of {total}",
@@ -2251,11 +2259,15 @@
       "summary": "Summary",
       "failed": "The feedback could not be generated.",
       "practiceAgain": "Practice again",
-      "notice": "This is practice feedback from Dexee's AI recruiter, not an evaluation by a company."
+      "notice": "This is practice feedback from Dexee's AI recruiter, not an evaluation by a company.",
+      "transcript": "The interview",
+      "interviewer": "Interviewer",
+      "feedbackLabel": "Feedback",
+      "languageNote": "Your English in this interview"
     },
     "dashboard": {
       "title": "Practice interview",
-      "body": "Rehearse six interview questions and get written feedback. Dexee uses the scores when shortlisting.",
+      "body": "Rehearse a first interview with an AI interviewer, in the language of the role, and get written feedback. Dexee uses the scores when shortlisting.",
       "cta": "Practice now",
       "lastScore": "Last score {score}/20"
     },
@@ -2270,6 +2282,35 @@
       "completed": "Completed",
       "failed": "Feedback pending",
       "expired": "Expired"
+    },
+    "chat": {
+      "titleForJob": "Interview for {job}",
+      "inEnglish": "This interview is conducted in English.",
+      "inSpanish": "This interview is conducted in Spanish.",
+      "transcriptLabel": "Interview transcript",
+      "interviewer": "Interviewer",
+      "you": "You",
+      "typing": "The interviewer is writing",
+      "replyLabel": "Your reply",
+      "placeholder": "Write your answer",
+      "wait": "Wait for the interviewer",
+      "sendHint": "Ctrl+Enter sends",
+      "send": "Send",
+      "finish": "End interview and get feedback",
+      "finishConfirm": "End the interview now? The feedback is generated from what has been said so far.",
+      "finishing": "Preparing your feedback",
+      "closing": "The interviewer has closed the interview. Your feedback is being prepared.",
+      "remaining": "{count, plural, =0 {No replies left} one {# reply left} other {# replies left}}",
+      "tip": "Answer as you would speak: what the situation was, what you did and what came of it.",
+      "errors": {
+        "aiUnavailable": "The interviewer is not available in this environment.",
+        "aiFailed": "The interviewer could not reply. Send your message again.",
+        "interviewClosed": "This interview is no longer open.",
+        "turnsExhausted": "You have used all your replies. End the interview to get your feedback.",
+        "rateLimited": "Too many messages in a short time. Wait a few minutes.",
+        "incomplete": "Answer at least four questions before ending the interview.",
+        "generic": "Something went wrong. Try again."
+      }
     }
   }
 }

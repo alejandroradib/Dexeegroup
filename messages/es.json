@@ -1592,7 +1592,8 @@
       "dexeeOnlyTitle": "Tu perfil está en modo Solo Dexee",
       "dexeeOnlyBody": "Esta postulación no llega directo a la empresa. Dexee la revisa, te contacta y te presenta solo si la vacante encaja. Eso toma más tiempo. Cámbialo en ajustes de privacidad si prefieres que las empresas vean tu perfil cuando postulas.",
       "dexeeOnlySettings": "Ajustes de privacidad",
-      "applyBodyDexeeOnly": "Dexee revisa esta postulación antes de que cualquier empresa la vea. Tus datos de contacto siguen privados hasta que Dexee los libere."
+      "applyBodyDexeeOnly": "Dexee revisa esta postulación antes de que cualquier empresa la vea. Tus datos de contacto siguen privados hasta que Dexee los libere.",
+      "practiceInterview": "Practicar una entrevista para esta vacante"
     },
     "applications": {
       "title": "Postulaciones",
@@ -2190,23 +2191,30 @@
   },
   "interview": {
     "title": "Entrevista de práctica",
-    "subtitle": "Seis preguntas escritas con retroalimentación del reclutador IA de Dexee. Gratis, y una señal valiosa para nuestro equipo al armar listas cortas.",
+    "subtitle": "Una conversación con un entrevistador de IA, en el idioma de la vacante, seguida de retroalimentación escrita. Gratis, y una señal fuerte para nuestro equipo al armar ternas.",
     "nav": "Entrevista de práctica",
     "intro": {
       "roleFamily": "Rol para el que te preparas",
       "language": "Idioma de la entrevista",
       "start": "Comenzar entrevista de práctica",
-      "starting": "Preparando tus preguntas",
+      "starting": "Abriendo la entrevista",
       "cooldown": "Podrás practicar de nuevo el {date}.",
       "continue": "Continuar entrevista",
       "rules": "Cómo funciona",
-      "rule1": "Seis preguntas: cuatro sobre tu experiencia y dos específicas del rol.",
-      "rule2": "Responde por escrito, entre 60 y 150 palabras por pregunta. Las situaciones, acciones y resultados concretos puntúan mejor.",
-      "rule3": "Tienes dos horas; las respuestas se guardan mientras escribes.",
-      "rule4": "Recibes puntajes de comunicación, claridad de logros, estructura y relevancia, más recomendaciones. Dexee conserva los puntajes para conectarte con roles.",
+      "rule1": "El entrevistador hace una pregunta a la vez y repregunta cuando una respuesta es vaga, como en una primera entrevista real.",
+      "rule2": "Elige una vacante a la que postulaste y la entrevista corre en el idioma de esa vacante, con su descripción real. O practica por familia de rol en el idioma que elijas.",
+      "rule3": "Responde por escrito, con tus palabras. Las situaciones, acciones y resultados concretos funcionan mejor. Hasta diez respuestas; puedes terminar a partir de la cuarta.",
+      "rule4": "Tienes dos horas desde el inicio.",
       "history": "Entrevistas anteriores",
       "noHistory": "Aún no hay entrevistas.",
-      "viewReport": "Ver informe"
+      "viewReport": "Ver informe",
+      "job": "Vacante para la que te preparas",
+      "jobHint": "Vacantes a las que postulaste. El entrevistador conoce la descripción y pregunta sobre ella.",
+      "generalOption": "Práctica general por familia de rol",
+      "jobLanguageEn": "Esta vacante exige inglés, así que la entrevista es en inglés.",
+      "jobLanguageEs": "Esta vacante no exige inglés B1 o superior, así que la entrevista es en español.",
+      "rule5": "Al terminar recibes puntajes de comunicación, claridad de logros, estructura y relevancia, un comentario por cada pregunta y, si la entrevista fue en inglés, una nota sobre tu inglés. Dexee conserva los puntajes para conectarte con roles.",
+      "aiUnavailable": "El entrevistador no está disponible en este entorno."
     },
     "runner": {
       "question": "Pregunta {current} de {total}",
@@ -2251,11 +2259,15 @@
       "summary": "Resumen",
       "failed": "No se pudo generar la retroalimentación.",
       "practiceAgain": "Practicar de nuevo",
-      "notice": "Esta es retroalimentación de práctica del reclutador IA de Dexee, no una evaluación de una empresa."
+      "notice": "Esta es retroalimentación de práctica del reclutador IA de Dexee, no una evaluación de una empresa.",
+      "transcript": "La entrevista",
+      "interviewer": "Entrevistador",
+      "feedbackLabel": "Retroalimentación",
+      "languageNote": "Tu inglés en esta entrevista"
     },
     "dashboard": {
       "title": "Entrevista de práctica",
-      "body": "Ensaya seis preguntas de entrevista y recibe retroalimentación escrita. Dexee usa los puntajes al armar listas cortas.",
+      "body": "Ensaya una primera entrevista con un entrevistador de IA, en el idioma de la vacante, y recibe retroalimentación escrita. Dexee usa los puntajes al armar ternas.",
       "cta": "Practicar ahora",
       "lastScore": "Último puntaje {score}/20"
     },
@@ -2270,6 +2282,35 @@
       "completed": "Completada",
       "failed": "Retroalimentación pendiente",
       "expired": "Expirada"
+    },
+    "chat": {
+      "titleForJob": "Entrevista para {job}",
+      "inEnglish": "Esta entrevista se realiza en inglés.",
+      "inSpanish": "Esta entrevista se realiza en español.",
+      "transcriptLabel": "Transcripción de la entrevista",
+      "interviewer": "Entrevistador",
+      "you": "Tú",
+      "typing": "El entrevistador está escribiendo",
+      "replyLabel": "Tu respuesta",
+      "placeholder": "Escribe tu respuesta",
+      "wait": "Espera al entrevistador",
+      "sendHint": "Ctrl+Enter envía",
+      "send": "Enviar",
+      "finish": "Terminar y recibir retroalimentación",
+      "finishConfirm": "¿Terminar la entrevista ahora? La retroalimentación se genera con lo dicho hasta aquí.",
+      "finishing": "Preparando tu retroalimentación",
+      "closing": "El entrevistador cerró la entrevista. Tu retroalimentación se está preparando.",
+      "remaining": "{count, plural, =0 {No quedan respuestas} one {Queda # respuesta} other {Quedan # respuestas}}",
+      "tip": "Responde como hablarías: cuál era la situación, qué hiciste y qué resultó.",
+      "errors": {
+        "aiUnavailable": "El entrevistador no está disponible en este entorno.",
+        "aiFailed": "El entrevistador no pudo responder. Envía tu mensaje de nuevo.",
+        "interviewClosed": "Esta entrevista ya no está abierta.",
+        "turnsExhausted": "Usaste todas tus respuestas. Termina la entrevista para recibir tu retroalimentación.",
+        "rateLimited": "Demasiados mensajes en poco tiempo. Espera unos minutos.",
+        "incomplete": "Responde al menos cuatro preguntas antes de terminar la entrevista.",
+        "generic": "Algo salió mal. Inténtalo de nuevo."
+      }
     }
   }
 }

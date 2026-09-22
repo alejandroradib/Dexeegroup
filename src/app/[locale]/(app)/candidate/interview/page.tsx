@@ -11,16 +11,20 @@ import { pageLocale } from "@/i18n/server";
 import { getSessionUser } from "@/lib/auth/session";
 import { interviewBand } from "@/lib/interview/scoring";
 import { getCurrentCandidateProfile } from "@/server/services/candidates";
-import { getInterviewOverview } from "@/server/services/interviews";
+import { getInterviewOverview, listInterviewJobOptions } from "@/server/services/interviews";
 
 export default async function InterviewPage({
   params,
+  searchParams,
 }: PageProps<"/[locale]/candidate/interview">) {
   await pageLocale(params);
   const user = await getSessionUser();
-  const [overview, profile, t, tr, te, format] = await Promise.all([
+  const query = await searchParams;
+  const requestedJob = typeof query.job === "string" ? query.job : null;
+  const [overview, profile, jobs, t, tr, te, format] = await Promise.all([
     getInterviewOverview(user!.id),
     getCurrentCandidateProfile(user!.id),
+    listInterviewJobOptions(user!.id, requestedJob),
     getTranslations("interview"),
     getTranslations("interview.report"),
     getTranslations("enums"),
@@ -35,7 +39,13 @@ export default async function InterviewPage({
             <h2 className="text-base">{t("intro.rules")}</h2>
             <ChevronList
               className="mt-4 text-sm"
-              items={[t("intro.rule1"), t("intro.rule2"), t("intro.rule3"), t("intro.rule4")]}
+              items={[
+                t("intro.rule1"),
+                t("intro.rule2"),
+                t("intro.rule3"),
+                t("intro.rule4"),
+                t("intro.rule5"),
+              ]}
             />
           </section>
           <section className="border-border rounded-[12px] border bg-white p-6">
@@ -89,7 +99,11 @@ export default async function InterviewPage({
               })}
             </Alert>
           ) : (
-            <InterviewStartForm defaultRoleFamily={profile?.candidate.role_family ?? null} />
+            <InterviewStartForm
+              defaultRoleFamily={profile?.candidate.role_family ?? null}
+              jobs={jobs}
+              preselectedJobId={requestedJob}
+            />
           )}
         </aside>
       </div>
