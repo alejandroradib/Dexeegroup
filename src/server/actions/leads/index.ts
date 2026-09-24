@@ -66,12 +66,9 @@ export async function createLead(input: unknown): Promise<Result<{ id: string }>
         to: parsed.data.email,
         template: "lead-acknowledgement",
         locale,
-        payload: {
-          name: parsed.data.name,
-          company: parsed.data.company,
-          role: parsed.data.role_to_fill,
-          link: "/pricing",
-        },
+        // Neutral acknowledgement (audit I16): nothing the sender typed is echoed back, so the
+        // form cannot be used to deliver arbitrary text from Dexee's domain.
+        payload: { link: "/pricing" },
         dedupe_key: `lead:${data.id}`,
       },
     ],

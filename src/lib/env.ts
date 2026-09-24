@@ -17,6 +17,20 @@ export const publicEnvSchema = z.object({
   NEXT_PUBLIC_ANALYTICS_ID: optionalString,
 });
 
+/**
+ * A cron secret has to be random: 32 characters or more and none of the placeholders that
+ * ship in examples (audit I17). `openssl rand -hex 32` produces a valid one.
+ */
+const CRON_SECRET_PLACEHOLDER = /change[-_]?me|placeholder|example|dummy|xxx/i;
+const SINGLE_CHARACTER = /^(.)\1+$/;
+export const cronSecretSchema = z
+  .string()
+  .min(32, "CRON_SECRET must have at least 32 characters (openssl rand -hex 32)")
+  .refine(
+    (value) => !CRON_SECRET_PLACEHOLDER.test(value) && !SINGLE_CHARACTER.test(value),
+    "CRON_SECRET looks like a placeholder; generate a random value (openssl rand -hex 32)",
+  );
+
 export const serverEnvSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   SUPABASE_DB_URL: optionalString,
@@ -25,7 +39,7 @@ export const serverEnvSchema = z.object({
   OPENAI_API_KEY: optionalString,
   RESEND_API_KEY: optionalString,
   EMAIL_FROM: z.string().default("Dexee <no-reply@dexeegroup.com>"),
-  CRON_SECRET: z.string().min(8),
+  CRON_SECRET: cronSecretSchema,
   UPSTASH_REDIS_REST_URL: optionalString,
   UPSTASH_REDIS_REST_TOKEN: optionalString,
   SENTRY_DSN: optionalString,

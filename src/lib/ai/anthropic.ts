@@ -8,12 +8,20 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 import type { z } from "zod";
 
+/** Per-request timeout. Grading calls return a few hundred tokens; drafting is the longest. */
+const AI_TIMEOUT_MS = 90_000;
+
 let client: Anthropic | undefined;
 
 function getClient(): Anthropic {
   const env = serverEnv();
   if (!env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY is not configured");
-  client ??= new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+  // Explicit ceilings (audit I14): a hung request must not hold a serverless function open.
+  client ??= new Anthropic({
+    apiKey: env.ANTHROPIC_API_KEY,
+    timeout: AI_TIMEOUT_MS,
+    maxRetries: 2,
+  });
   return client;
 }
 
