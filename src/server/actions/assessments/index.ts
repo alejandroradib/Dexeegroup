@@ -247,6 +247,11 @@ export async function getAudioPlaybackUrl(
     .eq("question_id", questionId)
     .maybeSingle();
   if (!answer?.audio_path) return err(ERR.notFound);
+  // Never sign a stored path that does not sit under this attempt's folder (audit I9).
+  if (!isAttemptAudioPath(attemptId, answer.audio_path)) {
+    logger.warn({ attemptId, questionId }, "audio_path_mismatch");
+    return err(ERR.notFound);
+  }
   const { data, error } = await admin.storage
     .from("assessment-audio")
     .createSignedUrl(answer.audio_path, 600);
