@@ -971,105 +971,108 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
         { commit: false },
       ),
   );
-  await check("candidate answers only questions of their attempt, without server columns (audit I3)", async () =>
-    asUser(
-      db,
-      laura,
-      async (tx) => {
-        const own = "11111111-0000-4000-8000-000000000003";
-        const other = "11111111-0000-4000-8000-000000000004";
-        let inAttempt = "";
-        let foreign = "";
-        await asService(
-          tx,
-          async () => {
-            const q = await tx.query<{ id: string }>(
-              "select id from public.assessment_questions where assessment_id = $1 and is_active order by id limit 2",
-              [SEED.assessments.written],
-            );
-            inAttempt = q.rows[0]!.id;
-            const f = await tx.query<{ id: string }>(
-              "select id from public.assessment_questions where assessment_id <> $1 order by id limit 1",
-              [SEED.assessments.written],
-            );
-            foreign = f.rows[0]!.id;
-            await tx.query(
-              "insert into public.assessment_attempts (id, assessment_id, candidate_id, question_ids) values ($1, $2, $3, $4::uuid[])",
-              [own, SEED.assessments.written, SEED.candidates.laura, [inAttempt, q.rows[1]!.id]],
-            );
-          },
-          laura,
-        );
-        // Server-owned columns are ignored on insert.
-        await tx.query(
-          "insert into public.assessment_answers (attempt_id, question_id, answer_text, transcript, ai_feedback, audio_duration_seconds) values ($1, $2, 'my answer', 'forged transcript', '{\"total\": 20}'::jsonb, 99)",
-          [own, inAttempt],
-        );
-        const clean = await tx.query<{ n: number }>(
-          "select count(*)::int as n from public.assessment_answers where attempt_id = $1 and answer_text = 'my answer' and transcript is null and ai_feedback is null and audio_duration_seconds is null",
-          [own],
-        );
-        // Each expected failure runs under a savepoint so the transaction stays usable.
-        const rejectedWith = async (sql: string, params: unknown[], fragment: string) => {
-          await tx.exec("savepoint guard_probe");
-          try {
-            await tx.query(sql, params);
-            await tx.exec("release savepoint guard_probe");
-            return false;
-          } catch (error) {
-            await tx.exec("rollback to savepoint guard_probe");
-            return (error as Error).message.includes(fragment);
-          }
-        };
-        // A question outside the attempt is rejected.
-        const foreignRejected = await rejectedWith(
-          "insert into public.assessment_answers (attempt_id, question_id, answer_text) values ($1, $2, 'x')",
-          [own, foreign],
-          "question_not_in_attempt",
-        );
-        // An audio path under another attempt is rejected; the own folder is accepted.
-        const pathRejected = await rejectedWith(
-          "update public.assessment_answers set audio_path = $2 where attempt_id = $1",
-          [own, `attempts/${other}/answer.webm`],
-          "audio_path_invalid",
-        );
-        await tx.query("update public.assessment_answers set audio_path = $2 where attempt_id = $1", [
-          own,
-          `attempts/${own}/${inAttempt}.webm`,
-        ]);
-        // The transcript the server wrote survives a candidate update.
-        await asService(
-          tx,
-          () =>
-            tx.query("update public.assessment_answers set transcript = 'real' where attempt_id = $1", [
-              own,
-            ]),
-          laura,
-        );
-        await tx.query(
-          "update public.assessment_answers set answer_text = 'edited', transcript = 'forged again' where attempt_id = $1",
-          [own],
-        );
-        const kept = await tx.query<{ n: number }>(
-          "select count(*)::int as n from public.assessment_answers where attempt_id = $1 and answer_text = 'edited' and transcript = 'real' and audio_path = $2",
-          [own, `attempts/${own}/${inAttempt}.webm`],
-        );
-        // The length ceiling matches the zod schema.
-        const tooLongRejected = await rejectedWith(
-          "update public.assessment_answers set answer_text = repeat('a', 6001) where attempt_id = $1",
-          [own],
-          "assessment_answers_text_length",
-        );
-        return (
-          Number(clean.rows[0]?.n) === 1 &&
-          foreignRejected &&
-          pathRejected &&
-          Number(kept.rows[0]?.n) === 1 &&
-          tooLongRejected
-        );
-      },
-      { commit: false },
-    ),
+  await check(
+    "candidate answers only questions of their attempt, without server columns (audit I3)",
+    async () =>
+      asUser(
+        db,
+        laura,
+        async (tx) => {
+          const own = "11111111-0000-4000-8000-000000000003";
+          const other = "11111111-0000-4000-8000-000000000004";
+          let inAttempt = "";
+          let foreign = "";
+          await asService(
+            tx,
+            async () => {
+              const q = await tx.query<{ id: string }>(
+                "select id from public.assessment_questions where assessment_id = $1 and is_active order by id limit 2",
+                [SEED.assessments.written],
+              );
+              inAttempt = q.rows[0]!.id;
+              const f = await tx.query<{ id: string }>(
+                "select id from public.assessment_questions where assessment_id <> $1 order by id limit 1",
+                [SEED.assessments.written],
+              );
+              foreign = f.rows[0]!.id;
+              await tx.query(
+                "insert into public.assessment_attempts (id, assessment_id, candidate_id, question_ids) values ($1, $2, $3, $4::uuid[])",
+                [own, SEED.assessments.written, SEED.candidates.laura, [inAttempt, q.rows[1]!.id]],
+              );
+            },
+            laura,
+          );
+          // Server-owned columns are ignored on insert.
+          await tx.query(
+            "insert into public.assessment_answers (attempt_id, question_id, answer_text, transcript, ai_feedback, audio_duration_seconds) values ($1, $2, 'my answer', 'forged transcript', '{\"total\": 20}'::jsonb, 99)",
+            [own, inAttempt],
+          );
+          const clean = await tx.query<{ n: number }>(
+            "select count(*)::int as n from public.assessment_answers where attempt_id = $1 and answer_text = 'my answer' and transcript is null and ai_feedback is null and audio_duration_seconds is null",
+            [own],
+          );
+          // Each expected failure runs under a savepoint so the transaction stays usable.
+          const rejectedWith = async (sql: string, params: unknown[], fragment: string) => {
+            await tx.exec("savepoint guard_probe");
+            try {
+              await tx.query(sql, params);
+              await tx.exec("release savepoint guard_probe");
+              return false;
+            } catch (error) {
+              await tx.exec("rollback to savepoint guard_probe");
+              return (error as Error).message.includes(fragment);
+            }
+          };
+          // A question outside the attempt is rejected.
+          const foreignRejected = await rejectedWith(
+            "insert into public.assessment_answers (attempt_id, question_id, answer_text) values ($1, $2, 'x')",
+            [own, foreign],
+            "question_not_in_attempt",
+          );
+          // An audio path under another attempt is rejected; the own folder is accepted.
+          const pathRejected = await rejectedWith(
+            "update public.assessment_answers set audio_path = $2 where attempt_id = $1",
+            [own, `attempts/${other}/answer.webm`],
+            "audio_path_invalid",
+          );
+          await tx.query(
+            "update public.assessment_answers set audio_path = $2 where attempt_id = $1",
+            [own, `attempts/${own}/${inAttempt}.webm`],
+          );
+          // The transcript the server wrote survives a candidate update.
+          await asService(
+            tx,
+            () =>
+              tx.query(
+                "update public.assessment_answers set transcript = 'real' where attempt_id = $1",
+                [own],
+              ),
+            laura,
+          );
+          await tx.query(
+            "update public.assessment_answers set answer_text = 'edited', transcript = 'forged again' where attempt_id = $1",
+            [own],
+          );
+          const kept = await tx.query<{ n: number }>(
+            "select count(*)::int as n from public.assessment_answers where attempt_id = $1 and answer_text = 'edited' and transcript = 'real' and audio_path = $2",
+            [own, `attempts/${own}/${inAttempt}.webm`],
+          );
+          // The length ceiling matches the zod schema.
+          const tooLongRejected = await rejectedWith(
+            "update public.assessment_answers set answer_text = repeat('a', 6001) where attempt_id = $1",
+            [own],
+            "assessment_answers_text_length",
+          );
+          return (
+            Number(clean.rows[0]?.n) === 1 &&
+            foreignRejected &&
+            pathRejected &&
+            Number(kept.rows[0]?.n) === 1 &&
+            tooLongRejected
+          );
+        },
+        { commit: false },
+      ),
   );
   await expectError(
     "candidate cannot point resume_path at another candidate's file (audit I4)",
