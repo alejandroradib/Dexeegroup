@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
 
 import { isLocale, routing, type Locale } from "@/i18n/routing";
+import { nextPathWithoutLocale } from "@/lib/auth/next-path";
 import { canonicalRedirect } from "@/lib/canonical-host";
 import { publicEnv } from "@/lib/env";
 import { buildContentSecurityPolicy, generateNonce } from "@/lib/security/csp";
@@ -64,7 +65,10 @@ export async function proxy(request: NextRequest) {
   if (area && !user) {
     const url = request.nextUrl.clone();
     url.pathname = `/${currentLocale}/sign-in`;
-    url.search = `?next=${encodeURIComponent(request.nextUrl.pathname + request.nextUrl.search)}`;
+    // Without the locale prefix: the sign-in action adds the user's locale itself (audit I18).
+    url.search = `?next=${encodeURIComponent(
+      nextPathWithoutLocale(request.nextUrl.pathname, request.nextUrl.search, isLocale),
+    )}`;
     return NextResponse.redirect(url);
   }
 

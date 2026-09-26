@@ -6,51 +6,55 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
 import { serverEnv } from "@/lib/env";
+import { logger } from "@/lib/logger";
+import {
+  createRateLimit,
+  MemoryRateLimiter,
+  windowKey,
+  type RateWindow,
+  type SharedLimiter,
+} from "@/lib/rate-limit-core";
 
-type Window = { limit: number; windowSeconds: number };
+export type { RateWindow } from "@/lib/rate-limit-core";
 
-const memory = new Map<string, { count: number; resetAt: number }>();
+const limiters = new Map<string, Ratelimit>();
+let redis: Redis | undefined;
 
-function memoryLimit(
-  key: string,
-  { limit, windowSeconds }: Window,
-): { success: boolean; remaining: number } {
-  const now = Date.now();
-  const entry = memory.get(key);
-  if (!entry || entry.resetAt < now) {
-    memory.set(key, { count: 1, resetAt: now + windowSeconds * 1000 });
-    return { success: true, remaining: limit - 1 };
-  }
-  entry.count += 1;
-  return { success: entry.count <= limit, remaining: Math.max(0, limit - entry.count) };
-}
-
-let upstash: Ratelimit | undefined;
-function upstashLimiter(window: Window): Ratelimit | undefined {
+/** One Upstash limiter per window (audit I12): the old single instance applied the first window it saw to every scope. */
+function upstashLimiter(window: RateWindow): SharedLimiter | undefined {
   const env = serverEnv();
   if (!env.UPSTASH_REDIS_REST_URL || !env.UPSTASH_REDIS_REST_TOKEN) return undefined;
-  upstash ??= new Ratelimit({
-    redis: new Redis({ url: env.UPSTASH_REDIS_REST_URL, token: env.UPSTASH_REDIS_REST_TOKEN }),
-    limiter: Ratelimit.slidingWindow(window.limit, `${window.windowSeconds} s`),
-    prefix: "dexee",
-  });
-  return upstash;
+  const key = windowKey(window);
+  let limiter = limiters.get(key);
+  if (!limiter) {
+    redis ??= new Redis({ url: env.UPSTASH_REDIS_REST_URL, token: env.UPSTASH_REDIS_REST_TOKEN });
+    limiter = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(window.limit, `${window.windowSeconds} s`),
+      prefix: `dexee:${key}`,
+    });
+    limiters.set(key, limiter);
+  }
+  const shared = limiter;
+  return {
+    limit: async (id) => {
+      const res = await shared.limit(id);
+      return { success: res.success, remaining: res.remaining };
+    },
+  };
 }
 
-/** Sliding-window rate limit: Upstash when configured, in-memory fallback otherwise. */
-export async function rateLimit(
-  scope: string,
-  identifier: string,
-  window: Window,
-): Promise<{ success: boolean; remaining: number }> {
-  const key = `${scope}:${identifier}`;
-  const limiter = upstashLimiter(window);
-  if (limiter) {
-    const res = await limiter.limit(key);
-    return { success: res.success, remaining: res.remaining };
-  }
-  return memoryLimit(key, window);
-}
+/**
+ * Sliding-window rate limit. Upstash when configured; in-memory per process otherwise, except
+ * in production, where a missing store denies the request and logs an error, because one
+ * process's memory cannot enforce a limit across instances.
+ */
+export const rateLimit = createRateLimit({
+  shared: upstashLimiter,
+  memory: new MemoryRateLimiter(),
+  production: process.env.VERCEL_ENV === "production",
+  onStoreMissing: (scope) => logger.error({ scope }, "rate_limit_store_missing_in_production"),
+});
 
 export function hashIdentifier(value: string): string {
   return createHash("sha256").update(value).digest("hex").slice(0, 32);

@@ -55,7 +55,7 @@ Search Console so the canonical URLs are recrawled.
 
 1. Supabase service role: rotate in Project settings, update `SUPABASE_SERVICE_ROLE_KEY` in Vercel and redeploy.
 2. Anthropic, OpenAI, Resend: create the new key, update the environment variable, redeploy, revoke the old key.
-3. `CRON_SECRET`: update in Vercel; cron requests pick it up on the next run.
+3. `CRON_SECRET`: generate a new value with `openssl rand -hex 32` (at least 32 random characters; `env.ts` rejects shorter values and placeholders such as `change-me`), update it in Vercel for Production and Preview, and redeploy. Vercel Cron sends the current value as the bearer token on the next run.
 
 ## Promote an admin
 
@@ -75,13 +75,36 @@ Requests appear in `/admin/candidates/<id>` and notify admins. For deletion: exp
 
 ## Health and monitoring
 
-- `GET /api/health` checks database connectivity and reports `email: configured | unconfigured` (audit G3). An unconfigured provider means every outbox row is parked as `skipped` until a key is set; nothing is silently lost, and nothing is sent either.
+- `GET /api/health` checks database connectivity and reports `email: configured | unconfigured` (audit G3). An unconfigured provider means every outbox row is parked as `skipped` until a key is set; nothing is silently lost, and nothing is sent either. A failure answers `status: degraded` with no detail; the reason is in the Vercel log under `health_check_failed` (audit I19).
+- Rate limiting needs Upstash in production. Without `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`, every limited action (sign-in, sign-up, password reset, leads, contact form, interview messages, AI drafting, fit refresh) is denied and the log shows `rate_limit_store_missing_in_production` (audit I12). Outside production the limiter falls back to process memory.
+- The `process-attempts` cron first recovers attempts a dead worker left behind (`requeued`, `rescored` in its log line), then grades pending oral attempts, then fills in missing fit analyses.
 - The admin dashboard shows an email delivery tile: pending rows over 15 minutes, failed in 24 hours, parked for lack of provider. Red means look.
 - Logs are structured JSON (pino) in Vercel logs. Set `SENTRY_DSN` when the Sentry project exists.
 
 ## Secrets scan
 
-CI runs gitleaks on every pull request. Never commit `.env.local`.
+CI runs gitleaks on every pull request with a read-only token and actions pinned to commit SHAs. Never commit `.env.local`.
+
+## Fase I (auditoría del 23-sep-2026): antes de desplegar el PR 1
+
+Dos variables cambian de exigencia y, si no se ajustan antes del despliegue, producen una caída:
+
+1. `CRON_SECRET` en Vercel debe tener 32 caracteres o más y no ser un valor de ejemplo. Si el actual es más corto, cada petición al servidor falla al validar el entorno. Genere uno con `openssl rand -hex 32`, cárguelo en Production y Preview y redespliegue.
+2. `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` deben existir en Production. Sin ellos el limitador de tasa deniega registro, inicio de sesión, recuperación de contraseña, leads, contacto, mensajes de entrevista y borradores con IA. Cree una base Redis gratuita en Upstash, copie las dos credenciales REST y redespliegue.
+
+Consultas de verificación previa a la migración `20260924000001_audit_i_write_guards.sql` (solo lectura, en el editor SQL del panel):
+
+    -- sitios web que la restricción nueva rechazaría (se normalizan las URL sin esquema)
+    select id, website from public.companies
+     where website is not null and website <> '' and website !~* '^https?://\S+$';
+    -- rutas de hoja de vida fuera de la carpeta del candidato (informativo: la guarda solo actúa al cambiar el valor)
+    select candidate_id, resume_path from public.candidate_contacts
+     where resume_path is not null and resume_path not like 'candidates/' || candidate_id::text || '/%';
+    -- rutas de audio fuera de la carpeta del intento (deberían ser cero)
+    select a.id, a.audio_path from public.assessment_answers a
+     where a.audio_path is not null and a.audio_path !~ ('^attempts/' || a.attempt_id::text || '/[A-Za-z0-9_-]+\.[a-z0-9]+$');
+
+Después del despliegue: `/api/health` responde `ok`; un inicio de sesión funciona (si responde "demasiados intentos" de inmediato, falta Upstash); una empresa sube un logo PNG; un candidato guarda una respuesta de evaluación y confirma una grabación; el cron `process-attempts` registra `requeued` y `rescored`.
 
 ## Aplicar una migración al proyecto remoto
 
@@ -92,6 +115,10 @@ intentaría reaplicar todo. Aplique cada migración nueva con `apply_migration` 
 Supabase, pasando el contenido del archivo y su nombre lógico, y después confirme con una
 consulta al catálogo que las columnas, los triggers y las vistas quedaron. Corra
 `npm run db:verify` antes, que es la verificación real del esquema y sí usa los archivos.
+
+## Semillas
+
+`npm run db:seed` carga `supabase/seed.sql` y los bancos; desde la fase I rechaza cualquier `NEXT_PUBLIC_SUPABASE_URL` que no sea local (loopback, red privada, `kong`, `host.docker.internal`). El administrador de la semilla es `admin@example.com`. `scripts/seed-demo.ts` no conecta con ningún proyecto: emite SQL que el operador revisa y aplica.
 
 ## Bancos de evaluación
 
@@ -128,12 +155,12 @@ rechaza cualquier ítem que las repita; consérvelo junto a los bancos.
 Los bancos rotados se cargaron en el proyecto alojado el 21 de septiembre de 2026. Estado
 verificado tras la carga, con los ítems expuestos desactivados y conservados:
 
-| Prueba | Activas | Retiradas |
-|---|---|---|
-| english_written | 138 | 75 |
-| english_oral | 40 | 12 |
-| psychometric | 80 (50 IPIP + 30 situacionales) | 10 |
-| disc | 28 | 28 |
+| Prueba          | Activas                         | Retiradas |
+| --------------- | ------------------------------- | --------- |
+| english_written | 138                             | 75        |
+| english_oral    | 40                              | 12        |
+| psychometric    | 80 (50 IPIP + 30 situacionales) | 10        |
+| disc            | 28                              | 28        |
 
 Distribución del inglés escrito: 14 ítems por sección y banda en gramática, vocabulario y
 lectura (42 por sección, 42 por banda) y 4 consignas de escritura por banda.
@@ -224,11 +251,11 @@ real completa el registro ni recibe acuses.
 En Resend → Domains → Add domain, `dexeegroup.com`, región US. Resend muestra tres registros;
 créelos en la zona de Cloudflare, todos en **DNS only** (nube gris):
 
-| Tipo | Nombre | Valor | Para qué |
-|---|---|---|---|
-| TXT | `resend._domainkey` | la clave DKIM que muestra Resend (`p=MIGf...`) | firma DKIM de los correos de la aplicación |
-| MX | `send` | `feedback-smtp.us-east-1.amazonses.com`, prioridad 10 | rebotes y quejas de vuelta a Resend |
-| TXT | `send` | `v=spf1 include:amazonses.com ~all` | SPF del subdominio de envío |
+| Tipo | Nombre              | Valor                                                 | Para qué                                   |
+| ---- | ------------------- | ----------------------------------------------------- | ------------------------------------------ |
+| TXT  | `resend._domainkey` | la clave DKIM que muestra Resend (`p=MIGf...`)        | firma DKIM de los correos de la aplicación |
+| MX   | `send`              | `feedback-smtp.us-east-1.amazonses.com`, prioridad 10 | rebotes y quejas de vuelta a Resend        |
+| TXT  | `send`              | `v=spf1 include:amazonses.com ~all`                   | SPF del subdominio de envío                |
 
 El SPF de la raíz (`v=spf1 include:_spf.google.com ~all`) no cambia: Google sigue enviando
 desde `@dexeegroup.com` y Resend firma con su propio selector y su subdominio `send`. Vuelva a
@@ -254,14 +281,14 @@ casi siempre es un servicio nuevo enviando desde el dominio sin SPF ni DKIM.
 
 Supabase → Authentication → Emails → SMTP Settings → Enable custom SMTP:
 
-| Campo | Valor |
-|---|---|
-| Sender email | `no-reply@dexeegroup.com` |
-| Sender name | `Dexee` |
-| Host | `smtp.resend.com` |
-| Port | `465` |
-| Username | `resend` |
-| Password | una llave de API de Resend con permiso de envío (puede ser la misma `RESEND_API_KEY`) |
+| Campo        | Valor                                                                                 |
+| ------------ | ------------------------------------------------------------------------------------- |
+| Sender email | `no-reply@dexeegroup.com`                                                             |
+| Sender name  | `Dexee`                                                                               |
+| Host         | `smtp.resend.com`                                                                     |
+| Port         | `465`                                                                                 |
+| Username     | `resend`                                                                              |
+| Password     | una llave de API de Resend con permiso de envío (puede ser la misma `RESEND_API_KEY`) |
 
 Guarde y, en la misma sección, confirme que Site URL sea `https://dexeegroup.com` y que las
 Redirect URLs incluyan `https://dexeegroup.com/auth/callback` y `https://dexeegroup.com/**`.

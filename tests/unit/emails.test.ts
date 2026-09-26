@@ -24,6 +24,13 @@ describe("email templates", () => {
       expect(EMAIL_COPY[template as keyof typeof EMAIL_COPY].es.subject).toBeTruthy();
     }
   });
+  // Audit I16: the acknowledgement never echoes what the visitor typed.
+  it("lead acknowledgement carries no sender text", () => {
+    for (const locale of ["en", "es"] as const) {
+      const copy = EMAIL_COPY["lead-acknowledgement"][locale];
+      expect(`${copy.subject} ${copy.heading} ${copy.body}`).not.toMatch(/\{/);
+    }
+  });
   it("fills placeholders and drops missing ones", () => {
     expect(fillTemplate("Hello {name}, {missing} done", { name: "Ana" })).toBe("Hello Ana, done");
   });

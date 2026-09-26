@@ -17,6 +17,9 @@ import {
   type MaterialTerms,
 } from "@/lib/jobs/material-terms";
 import { logger } from "@/lib/logger";
+import { hashIdentifier, rateLimit } from "@/lib/rate-limit";
+import { AI_LIMITS } from "@/lib/rate-limit-policies";
+import { isCandidateResumePath } from "@/lib/storage/upload-path";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -258,6 +261,20 @@ export async function submitJob(
   return ok({ status });
 }
 
+/** Per-user and per-company ceilings on model calls (audit I13); true when either is spent. */
+async function aiCallLimited(
+  feature: keyof typeof AI_LIMITS,
+  userId: string,
+  companyId: string,
+): Promise<boolean> {
+  const policy = AI_LIMITS[feature];
+  const [perUser, perCompany] = await Promise.all([
+    rateLimit(`${feature}:user`, hashIdentifier(userId), policy.user),
+    rateLimit(`${feature}:company`, hashIdentifier(companyId), policy.company),
+  ]);
+  return !perUser.success || !perCompany.success;
+}
+
 /**
  * Computes the missing fit analyses for one of the company's jobs, a few at a time, so the
  * recommended panel fills in without waiting for the daily cron.
@@ -267,6 +284,7 @@ export async function refreshJobFit(jobId: string): Promise<Result<{ computed: n
   if (!user) return err(ERR.unauthorized);
   const company = await getCurrentCompany();
   if (!company) return err(ERR.notFound);
+  if (await aiCallLimited("job_fit", user.id, company.id)) return err(ERR.rateLimited);
   const supabase = await createClient();
   const { data: job } = await supabase
     .from("jobs")
@@ -386,6 +404,9 @@ export async function draftJobWithAi(
   const parsed = jobDraftRequestSchema.safeParse(input);
   if (!parsed.success) return err(ERR.validation, fieldErrors(parsed.error));
   if (!aiConfigured()) return err("aiUnavailable");
+  const company = await getCurrentCompany();
+  if (!company) return err(ERR.notFound);
+  if (await aiCallLimited("job_draft", user.id, company.id)) return err(ERR.rateLimited);
   try {
     const draft = await completeJson(
       jobDraftSchema,
@@ -577,10 +598,14 @@ export async function getApplicantResumeUrl(
     .eq("candidate_id", application.candidate_id)
     .maybeSingle();
   if (!contact?.resume_path) return err(ERR.notFound);
+  // The path is built from the application's candidate, never read back from the stored value
+  // (audit I8): a candidate cannot steer a company to another candidate's file.
+  const path = `candidates/${application.candidate_id}/resume.pdf`;
+  if (!isCandidateResumePath(application.candidate_id, contact.resume_path)) {
+    logger.warn({ applicationId, candidateId: application.candidate_id }, "resume_path_mismatch");
+  }
   const admin = createAdminClient();
-  const { data, error } = await admin.storage
-    .from("resumes")
-    .createSignedUrl(contact.resume_path, 600);
-  if (error || !data) return err(ERR.generic);
+  const { data, error } = await admin.storage.from("resumes").createSignedUrl(path, 600);
+  if (error || !data) return err(ERR.notFound);
   return ok({ url: data.signedUrl });
 }

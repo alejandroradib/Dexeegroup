@@ -23,7 +23,7 @@ Password for all: `DexeeSeed2026!`
 
 | Role                     | Email                                                         |
 | ------------------------ | ------------------------------------------------------------- |
-| Admin                    | admin@dexeegroup.com                                          |
+| Admin                    | admin@example.com                                          |
 | Company owner (pending)  | owner@northwind-logistics.example.com                         |
 | Company owner (verified) | owner@harborhealth.example.com                                |
 | Company owner (verified) | owner@brightline.example.com                                  |

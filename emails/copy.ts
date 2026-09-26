@@ -146,15 +146,15 @@ export const EMAIL_COPY: Record<TemplateName, Record<EmailLocale, TemplateCopy>>
   // pricing page rather than a dashboard they cannot reach.
   "lead-acknowledgement": {
     en: {
-      subject: "We have your request for {role}",
+      subject: "We have your request",
       heading: "Your request reached Dexee",
-      body: "Thank you for the detail on {role} at {company}. A partner is reviewing it now and will write back within one business day with whether we can fill the role, in what timeframe and at what cost. If the answer is no, we will say so and tell you why. Meanwhile, our prices and our replacement guarantee are published in full.",
+      body: "Thank you for writing to Dexee. A partner is reviewing your request now and will write back within one business day with whether we can fill the role, in what timeframe and at what cost. If the answer is no, we will say so and tell you why. Meanwhile, our prices and our replacement guarantee are published in full.",
       cta: "See pricing and guarantee",
     },
     es: {
-      subject: "Recibimos su solicitud para {role}",
+      subject: "Recibimos su solicitud",
       heading: "Su solicitud llegó a Dexee",
-      body: "Gracias por el detalle sobre {role} en {company}. Un socio la está revisando y le escribirá dentro de un día hábil para decirle si podemos cubrir el rol, en qué plazo y a qué costo. Si la respuesta es que no, se lo diremos y le explicaremos por qué. Mientras tanto, nuestros precios y nuestra garantía de reemplazo están publicados completos.",
+      body: "Gracias por escribir a Dexee. Un socio está revisando su solicitud y le escribirá dentro de un día hábil para decirle si podemos cubrir el rol, en qué plazo y a qué costo. Si la respuesta es que no, se lo diremos y le explicaremos por qué. Mientras tanto, nuestros precios y nuestra garantía de reemplazo están publicados completos.",
       cta: "Ver precios y garantía",
     },
   },
