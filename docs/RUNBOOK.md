@@ -27,6 +27,8 @@ Operational procedures for the Dexee Talent Platform. Assumes a Vercel project a
 - Pull requests run lint, typecheck, unit tests, `db:verify` (migrations and RLS matrix on PGlite) and `next build`.
 - Production deploy is a Vercel promotion of `main`. Apply migrations first: `supabase db push --linked` with the production ref from CI (`SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD` secrets), then deploy.
 - Cron jobs are declared in `vercel.json` and authenticate with `CRON_SECRET`. On the Vercel Hobby plan they run once a day (see DECISIONS 22); on Pro, set `process-attempts` and `process-outbox` back to `*/5 * * * *`.
+- A deployment that fails in under a second with `BUILD_FAILED` / "Resource provisioning failed" and an empty build log never reached the build: a Marketplace integration connected to the project with a required deployment action could not be prepared. On 26 Sep 2026 the cause was a second Supabase database (`supabase-indigo-castle`, created from the Vercel Marketplace, never used by the code) that Supabase had paused; its `branch-project` action ran before every build. The connection was removed under the project's Storage tab, which also removed its sixteen `dexeegroup_*` variables. The application reads only `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY`, set by hand. Check Storage before touching code when this error appears.
+- Commits must be authored by the owner of the Vercel Hobby account (`git config user.email 57686582+alejandroradib@users.noreply.github.com`) once the repository is private; Hobby does not deploy commits from other authors of a private repository.
 
 ## Rollback
 
