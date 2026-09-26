@@ -1,8 +1,11 @@
+import { randomBytes } from "node:crypto";
+
 import { describe, expect, it } from "vitest";
 
 import { parsePublicEnv, parseServerEnv } from "@/lib/env";
 
-const RANDOM_SECRET = "7f3a9c1e5b2d8a4f6c0e9b7d3a1f5c8e2b6d4a0c";
+// Generated per run so no secret-shaped literal lives in the repository (gitleaks).
+const RANDOM_SECRET = randomBytes(20).toString("hex");
 
 describe("env validation", () => {
   it("fails fast with a readable message when a required variable is missing", () => {
