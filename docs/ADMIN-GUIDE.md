@@ -19,7 +19,7 @@
 
 ## Seed accounts (dev only)
 
-Password for all: `DexeeSeed2026!`
+Password for all: the value of `SEED_PASSWORD` in your local environment, applied by `npm run db:seed` (or the demo setup). The repository never carries it.
 
 | Role                     | Email                                                         |
 | ------------------------ | ------------------------------------------------------------- |

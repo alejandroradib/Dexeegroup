@@ -21,8 +21,8 @@ Database (linked Supabase project):
 ```bash
 supabase link --project-ref <ref>
 npm run db:push                   # apply supabase/migrations
-psql "$SUPABASE_DB_URL" -f supabase/seed.sql   # dev seed (accounts use DexeeSeed2026!)
-npm run db:seed                   # load JSON question banks
+psql "$SUPABASE_DB_URL" -f supabase/seed.sql   # local dev seed only; accounts get an unknown password
+npm run db:seed                   # banks, and SEED_PASSWORD (from .env.local) for the seed accounts
 npm run db:types                  # regenerate src/types/database.ts
 npm run promote-admin -- --email info@dexeegroup.com
 npm run rls:test                  # access matrix against the linked project

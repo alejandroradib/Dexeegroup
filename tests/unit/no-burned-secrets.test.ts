@@ -12,12 +12,19 @@ import { describe, expect, it } from "vitest";
 const BURNED = new Set([
   "bba930997fdca86af8968e5c5b715df00402cf9bfb55d2913e022ab495292bd1", // demo accounts password
   "6ee68b57239147f3203f42792d44087781f8ea6e725d749544d9608d31173b1d", // hosted project identifier
+  "1a0ee4abc9a4380ebcaa551a607ef112ed5e5aa4b796e1ea6130769e7f04689f", // seed accounts password (Fase J, 0.2)
+  "11d8207c60a7517d8f02f69a35b474e40108799aa64089813759717eb9005a67", // seed admin email at the real domain (Fase J, 0.2)
 ]);
 
 const TEXT = /\.(ts|tsx|js|mjs|json|md|mdx|sql|toml|yml|yaml|example|txt|css|html)$/;
 
+/** Alphanumeric runs (secrets, identifiers) plus email addresses, lowercased. */
 function tokens(text: string): string[] {
-  return text.match(/[A-Za-z0-9]{12,40}/g) ?? [];
+  const words = text.match(/[A-Za-z0-9]{12,40}/g) ?? [];
+  const emails = (text.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g) ?? []).map((e) =>
+    e.toLowerCase(),
+  );
+  return [...words, ...emails];
 }
 
 describe("burned secrets never return", () => {

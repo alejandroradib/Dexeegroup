@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
 
+// The seed password lives only in the local environment (Fase J, 0.2).
+const seedPassword = process.env.SEED_PASSWORD ?? "";
+
 test.describe("authentication", () => {
   test("candidate sign-up requires the Law 1581 consent", async ({ page }) => {
     await page.goto("/es/sign-up/candidate");
@@ -12,19 +15,25 @@ test.describe("authentication", () => {
   });
 
   test("sign-in with seeded admin lands on the admin dashboard", async ({ page }) => {
-    test.skip(!process.env.E2E_SEEDED, "requires a seeded Supabase project");
+    test.skip(
+      !process.env.E2E_SEEDED || !seedPassword,
+      "requires a seeded Supabase project and SEED_PASSWORD",
+    );
     await page.goto("/en/sign-in");
     await page.getByLabel("Email").fill("admin@example.com");
-    await page.getByLabel("Password").fill("DexeeSeed2026!");
+    await page.getByLabel("Password").fill(seedPassword);
     await page.getByRole("button", { name: "Sign in" }).click();
     await expect(page).toHaveURL(/\/en\/admin$/);
   });
 
   test("company pipeline drawer never leaks contact data before release", async ({ page }) => {
-    test.skip(!process.env.E2E_SEEDED, "requires a seeded Supabase project");
+    test.skip(
+      !process.env.E2E_SEEDED || !seedPassword,
+      "requires a seeded Supabase project and SEED_PASSWORD",
+    );
     await page.goto("/en/sign-in");
     await page.getByLabel("Email").fill("owner@brightline.example.com");
-    await page.getByLabel("Password").fill("DexeeSeed2026!");
+    await page.getByLabel("Password").fill(seedPassword);
     await page.getByRole("button", { name: "Sign in" }).click();
     await page.waitForURL(/\/en\/company/);
     const payloads: string[] = [];

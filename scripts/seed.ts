@@ -12,6 +12,8 @@ import { createClient } from "@supabase/supabase-js";
 
 import { loadBanks, resolveBanksDir, type BankQuestion } from "./lib/banks";
 import { assertLocalSupabaseUrl } from "./lib/local-only";
+import { SEED } from "./lib/seed-ids";
+import { readSeedPassword } from "./lib/seed-password";
 
 import type { Database, Json } from "../src/types/database";
 
@@ -65,7 +67,23 @@ async function upsertQuestions(assessmentId: string, questions: BankQuestion[]) 
   return { inserted, updated };
 }
 
+/** Gives every seed account the local SEED_PASSWORD; without it they keep an unknown password. */
+async function setSeedPasswords() {
+  const password = readSeedPassword();
+  if (!password) {
+    console.log("SEED_PASSWORD is not set: seed accounts keep a password nobody knows.");
+    return;
+  }
+  const ids = [SEED.admin, ...Object.values(SEED.owners), ...Object.values(SEED.candidates)];
+  for (const id of ids) {
+    const { error } = await supabase.auth.admin.updateUserById(id, { password });
+    if (error) throw error;
+  }
+  console.log(`Seed accounts: password set for ${ids.length} users.`);
+}
+
 async function main() {
+  await setSeedPasswords();
   if (process.argv.includes("--sql")) {
     console.log(
       "Apply supabase/seed.sql with `supabase db reset` or psql; the JS client cannot run raw SQL.",
