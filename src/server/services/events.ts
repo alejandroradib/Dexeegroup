@@ -1,7 +1,5 @@
 import "server-only";
 
-import { after } from "next/server";
-
 import {
   ACTIVE_APPLICATION_STATUSES,
   describeChanges,
@@ -9,7 +7,7 @@ import {
 } from "@/lib/jobs/material-terms";
 import { logger } from "@/lib/logger";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { processOutbox } from "@/server/services/outbox";
+import { enqueueEmails } from "@/server/services/outbox";
 import type { Database, Json } from "@/types/database";
 
 type Locale = Database["public"]["Enums"]["locale"];
@@ -301,32 +299,7 @@ async function deliver(type: string, outbound: Outbound) {
         payload: { ...outbound.vars, ...outbound.payload, link: outbound.link } as Json,
         dedupe_key: outbound.dedupeKey?.(r) ?? null,
       }));
-    if (emails.length > 0) {
-      const { error } = await admin
-        .from("email_outbox")
-        .upsert(emails, { onConflict: "dedupe_key", ignoreDuplicates: true });
-      if (error) logger.error({ err: error.message, type }, "outbox_insert_failed");
-      else scheduleOutboxFlush();
-    }
-  }
-}
-
-/**
- * Sends what was just queued once the response is out, so an acknowledgement or an invite
- * leaves within seconds instead of at the next daily cron (audit C8). The cron stays as the
- * retry path. `after()` only works inside a request; elsewhere the cron picks the rows up.
- */
-function scheduleOutboxFlush() {
-  try {
-    after(async () => {
-      try {
-        await processOutbox(20);
-      } catch (error) {
-        logger.warn({ err: (error as Error).message }, "outbox_flush_failed");
-      }
-    });
-  } catch {
-    // Outside a request scope (scripts, tests): the cron remains the delivery path.
+    await enqueueEmails(emails);
   }
 }
 
@@ -528,25 +501,29 @@ export async function dispatchEvent(event: PlatformEvent): Promise<void> {
           .maybeSingle();
         if (!member?.invited_email) return;
         const locale = member.profiles?.locale ?? "en";
-        await admin.from("email_outbox").insert({
-          to: member.invited_email,
-          template: "invite",
-          locale,
-          payload: {
-            company: member.companies?.name ?? "Dexee",
-            link: `/${locale}/invite/${event.token}`,
-            kind: "company",
-          } as Json,
-        });
+        await enqueueEmails([
+          {
+            to: member.invited_email,
+            template: "invite",
+            locale,
+            payload: {
+              company: member.companies?.name ?? "Dexee",
+              link: `/${locale}/invite/${event.token}`,
+              kind: "company",
+            } as Json,
+          },
+        ]);
         return;
       }
       case "admin_invite": {
-        await admin.from("email_outbox").insert({
-          to: event.email,
-          template: "invite",
-          locale: event.locale,
-          payload: { company: "Dexee", link: `/${event.locale}/sign-in`, kind: "admin" } as Json,
-        });
+        await enqueueEmails([
+          {
+            to: event.email,
+            template: "invite",
+            locale: event.locale,
+            payload: { company: "Dexee", link: `/${event.locale}/sign-in`, kind: "admin" } as Json,
+          },
+        ]);
         return;
       }
       case "placement_pending": {

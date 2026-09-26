@@ -22,7 +22,7 @@ jobs:
       NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-anon-key
       SUPABASE_SERVICE_ROLE_KEY: ci-service-role-key
-      EMAIL_FROM: Dexee <no-reply@dexeegroup.com>
+      EMAIL_FROM: Dexee <info@dexeegroup.com>
       NEXT_TELEMETRY_DISABLED: 1
     steps:
       # Actions are pinned to commit SHAs (audit I21); the comment records the tag they resolve.

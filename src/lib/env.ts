@@ -38,7 +38,7 @@ export const serverEnvSchema = z.object({
   ANTHROPIC_MODEL: z.string().default("claude-sonnet-5"),
   OPENAI_API_KEY: optionalString,
   RESEND_API_KEY: optionalString,
-  EMAIL_FROM: z.string().default("Dexee <no-reply@dexeegroup.com>"),
+  EMAIL_FROM: z.string().default("Dexee <info@dexeegroup.com>"),
   CRON_SECRET: cronSecretSchema,
   UPSTASH_REDIS_REST_URL: optionalString,
   UPSTASH_REDIS_REST_TOKEN: optionalString,

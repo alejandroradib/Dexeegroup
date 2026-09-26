@@ -243,7 +243,7 @@ queda bloqueado por ambos a la vez. Registre cualquier cambio en `docs/DECISIONS
 
 ## Correo transaccional (Resend, DMARC, SMTP de Auth)
 
-La aplicación envía por Resend desde `EMAIL_FROM` (`no-reply@dexeegroup.com`). Resend rechaza
+La aplicación envía por Resend desde `EMAIL_FROM` (`info@dexeegroup.com`). Resend rechaza
 todo envío desde un dominio que no haya verificado, y Supabase Auth sin SMTP propio solo entrega
 correos a miembros del equipo del proyecto. Sin estos tres bloques configurados, ningún usuario
 real completa el registro ni recibe acuses.
@@ -285,7 +285,7 @@ Supabase → Authentication → Emails → SMTP Settings → Enable custom SMTP:
 
 | Campo        | Valor                                                                                 |
 | ------------ | ------------------------------------------------------------------------------------- |
-| Sender email | `no-reply@dexeegroup.com`                                                             |
+| Sender email | `info@dexeegroup.com`                                                                 |
 | Sender name  | `Dexee`                                                                               |
 | Host         | `smtp.resend.com`                                                                     |
 | Port         | `465`                                                                                 |
@@ -302,7 +302,7 @@ de Supabase: un candidato real no puede terminar de registrarse.
 1. `GET https://dexeegroup.com/api/health` debe responder `"email":"configured"`.
 2. Con un correo personal que no sea del equipo, regístrese como candidato en
    `https://dexeegroup.com/es/sign-up/candidate`. El correo de confirmación debe llegar en menos
-   de un minuto, desde `no-reply@dexeegroup.com`, y el enlace debe empezar por
+   de un minuto, desde `info@dexeegroup.com`, y el enlace debe empezar por
    `https://dexeegroup.com/auth/callback`. Ese correo lo envía Supabase por el SMTP del paso 3.
 3. Envíe un brief desde el formulario de empresas en `/es/for-companies`. El acuse lo envía la
    aplicación por Resend; debe llegar en menos de un minuto y aparecer en Resend → Emails como
