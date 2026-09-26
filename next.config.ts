@@ -1,5 +1,7 @@
 import createNextIntlPlugin from "next-intl/plugin";
 
+import { legacyRedirects } from "./src/lib/seo/legacy-redirects";
+
 import type { NextConfig } from "next";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
@@ -40,6 +42,10 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
+  },
+  // Pages of the previous site; redirects run before the proxy, so the locale logic never sees them.
+  async redirects() {
+    return legacyRedirects();
   },
   serverExternalPackages: ["pino", "@react-pdf/renderer"],
 };
