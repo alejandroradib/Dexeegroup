@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { getSessionUser } from "@/lib/auth/session";
+import { csvCell } from "@/lib/csv";
 import { logger } from "@/lib/logger";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -325,15 +326,8 @@ export async function exportCandidatesCsv(
     "linkedin_url",
     "created_at",
   ];
-  const escape = (value: unknown) => {
-    const text =
-      value === null || value === undefined
-        ? ""
-        : Array.isArray(value)
-          ? value.join("; ")
-          : String(value);
-    return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
-  };
+  // Quoting plus formula-injection guard (audit I15).
+  const escape = csvCell;
   const lines = [header.join(",")];
   for (const c of candidates ?? []) {
     const contact = contactById.get(c.id);

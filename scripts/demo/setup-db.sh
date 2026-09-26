@@ -146,6 +146,16 @@ done
 # 7. seed --------------------------------------------------------------------
 echo "== seed.sql"
 $PSQL -d $DBNAME -f "$ROOT/supabase/seed.sql"
+# Seed accounts are created with an unknown password; SEED_PASSWORD (12+ characters) sets it.
+if [ -n "${SEED_PASSWORD:-}" ]; then
+  SEED_HASH=$(cd "$ROOT" && node -e 'const p=process.env.SEED_PASSWORD; if(p.length<12){console.error("SEED_PASSWORD needs 12+ characters");process.exit(1)} console.log(require("bcryptjs").hashSync(p,10))')
+  $PSQL -d $DBNAME -v hash="$SEED_HASH" <<'SQL'
+update auth.users set encrypted_password = :'hash' where email like '%example.com';
+SQL
+  echo "== seed accounts use SEED_PASSWORD"
+else
+  echo "== SEED_PASSWORD not set: seed accounts keep an unknown password"
+fi
 
 echo "== question banks"
 BANKS_SQL="$ROOT/.demo/banks.sql"

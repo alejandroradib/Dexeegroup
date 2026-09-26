@@ -1,0 +1,5 @@
+# Test-only values committed in 687208f and replaced in the next commit by values generated at
+# run time. Listed here because gitleaks scans every commit of the pull request and history is
+# not rewritten.
+687208f87f9dccf33ea1078e76b97746453d5841:tests/unit/env.test.ts:generic-api-key:5
+687208f87f9dccf33ea1078e76b97746453d5841:.github/workflows/ci.yml:generic-api-key:26

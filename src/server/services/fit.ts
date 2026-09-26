@@ -10,6 +10,7 @@ import {
   candidateFitUser,
   type CandidateFitInput,
 } from "@/lib/ai/prompts/candidate-fit";
+import { boundFitScore, FIT_ADJUSTMENT_MAX } from "@/lib/fit/bound-score";
 import { logger } from "@/lib/logger";
 import { extractResumeText } from "@/lib/resume/extract";
 import { redactResumeText, stripContactData } from "@/lib/resume/redact";
@@ -193,14 +194,27 @@ export async function computeApplicationFit(
         maxTokens: 1200,
       },
     );
+    // The stored score is bound to the sub-scores the model reported (audit I11).
+    const bounded = boundFitScore(fit.evidence, fit.score);
+    if (bounded.drift > FIT_ADJUSTMENT_MAX) {
+      logger.warn(
+        { applicationId, modelScore: fit.score, baseScore: bounded.base, drift: bounded.drift },
+        "fit_score_out_of_bounds",
+      );
+    }
     const { error } = await admin.from("application_fit").upsert({
       application_id: applicationId,
       status: "ready",
-      score: fit.score,
+      score: bounded.score,
       summary: stripContactData(fit.summary),
       strengths: fit.strengths.map(stripContactData),
       gaps: fit.gaps.map(stripContactData),
-      evidence: { ...fit.evidence, resume_note: resumeNote } as Json,
+      evidence: {
+        ...fit.evidence,
+        resume_note: resumeNote,
+        model_score: fit.score,
+        base_score: bounded.base,
+      } as Json,
       model: process.env.ANTHROPIC_MODEL ?? null,
       prompt_version: CANDIDATE_FIT_PROMPT_VERSION,
       inputs_hash: inputsHash,

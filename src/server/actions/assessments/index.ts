@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { getSessionUser } from "@/lib/auth/session";
 import { logger } from "@/lib/logger";
+import { isAttemptAudioPath } from "@/lib/storage/upload-path";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { ASSESSMENT_TYPES } from "@/lib/validation/enums";
@@ -33,7 +34,8 @@ const audioSchema = z.object({
   attempt_id: z.uuid(),
   question_id: z.uuid(),
   path: z.string().min(5).max(300),
-  duration_seconds: z.number().min(0).max(600),
+  /** Measured by the browser. Accepted for compatibility and ignored: the transcription sets the duration (audit I3). */
+  duration_seconds: z.number().min(0).max(600).optional(),
 });
 
 async function requireCandidate() {
@@ -131,26 +133,43 @@ export async function recordTabLeave(attemptId: string): Promise<Result<null>> {
   return ok(null);
 }
 
+/**
+ * Records an uploaded answer recording. Runs with the service role after checking, explicitly,
+ * that the attempt is the caller's, still open, and asks this question, and that the path has
+ * the shape the upload route signs under this attempt (audit I3, I9). The database guard
+ * enforces the same rules for any other writer; the duration is left for the transcription.
+ */
 export async function confirmAudioUpload(input: unknown): Promise<Result<null>> {
   const user = await requireCandidate();
   if (!user) return err(ERR.unauthorized);
   const parsed = audioSchema.safeParse(input);
   if (!parsed.success) return err(ERR.validation);
-  if (!parsed.data.path.startsWith(`attempts/${parsed.data.attempt_id}/`))
-    return err(ERR.forbidden);
-  const supabase = await createClient();
-  const { error } = await supabase.from("assessment_answers").upsert(
+  if (!isAttemptAudioPath(parsed.data.attempt_id, parsed.data.path)) return err(ERR.forbidden);
+  const admin = createAdminClient();
+  const { data: attempt } = await admin
+    .from("assessment_attempts")
+    .select("*")
+    .eq("id", parsed.data.attempt_id)
+    .eq("candidate_id", user.id)
+    .maybeSingle();
+  if (!attempt) return err(ERR.notFound);
+  if (attempt.status !== "in_progress" || isExpired(attempt)) return err("attemptClosed");
+  if (!attempt.question_ids.includes(parsed.data.question_id)) return err(ERR.validation);
+  const { error } = await admin.from("assessment_answers").upsert(
     {
       attempt_id: parsed.data.attempt_id,
       question_id: parsed.data.question_id,
       audio_path: parsed.data.path,
-      audio_duration_seconds: parsed.data.duration_seconds,
+      audio_duration_seconds: null,
       transcript: null,
       ai_feedback: null,
     },
     { onConflict: "attempt_id,question_id" },
   );
-  if (error) return err(error.code === "42501" ? "attemptClosed" : ERR.generic);
+  if (error) {
+    logger.warn({ err: error.message, attemptId: attempt.id }, "audio_confirm_failed");
+    return err(ERR.generic);
+  }
   return ok(null);
 }
 
@@ -228,6 +247,11 @@ export async function getAudioPlaybackUrl(
     .eq("question_id", questionId)
     .maybeSingle();
   if (!answer?.audio_path) return err(ERR.notFound);
+  // Never sign a stored path that does not sit under this attempt's folder (audit I9).
+  if (!isAttemptAudioPath(attemptId, answer.audio_path)) {
+    logger.warn({ attemptId, questionId }, "audio_path_mismatch");
+    return err(ERR.notFound);
+  }
   const { data, error } = await admin.storage
     .from("assessment-audio")
     .createSignedUrl(answer.audio_path, 600);

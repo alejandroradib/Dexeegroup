@@ -1,16 +1,62 @@
 import "server-only";
 
+import { after } from "next/server";
+
 import { isTemplateName } from "@emails/copy";
 
 import { backoffMinutes, MAX_SEND_ATTEMPTS } from "@/lib/email/backoff";
 import { emailConfigured, sendTemplateEmail } from "@/lib/email/send";
 import { logger } from "@/lib/logger";
 import { createAdminClient } from "@/lib/supabase/admin";
+import type { Database } from "@/types/database";
 
 /** `last_error` value that marks a row parked for lack of a provider, so it can be requeued. */
 export const NO_PROVIDER = "no_provider";
 
 export type OutboxRun = { sent: number; failed: number; skipped: number; requeued: number };
+
+export type OutboxRow = Database["public"]["Tables"]["email_outbox"]["Insert"];
+
+/**
+ * The only way the application queues email (Fase J, 0.6). Rows with a `dedupe_key` are ignored
+ * when that key already exists. Once the rows are in, the send runs right after the response
+ * through `after()`, so an acknowledgement, invite or admin alert leaves within seconds; the
+ * daily cron of the Hobby plan stays as the retry path. Returns false when the insert failed.
+ */
+export async function enqueueEmails(rows: OutboxRow[]): Promise<boolean> {
+  if (rows.length === 0) return true;
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from("email_outbox")
+    .upsert(rows, { onConflict: "dedupe_key", ignoreDuplicates: true });
+  if (error) {
+    logger.error(
+      { err: error.message, templates: rows.map((r) => r.template) },
+      "outbox_insert_failed",
+    );
+    return false;
+  }
+  scheduleOutboxFlush();
+  return true;
+}
+
+/**
+ * Sends what was just queued once the response is out (audit C8). `after()` only works inside a
+ * request; elsewhere (scripts, tests, the cron itself) the cron remains the delivery path.
+ */
+export function scheduleOutboxFlush(): void {
+  try {
+    after(async () => {
+      try {
+        await processOutbox(20);
+      } catch (error) {
+        logger.warn({ err: (error as Error).message }, "outbox_flush_failed");
+      }
+    });
+  } catch {
+    // Outside a request scope.
+  }
+}
 
 /**
  * Sends pending outbox rows. Each row is claimed with an optimistic lock on `attempts`, so two

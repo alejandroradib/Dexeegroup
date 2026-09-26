@@ -488,8 +488,8 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
       ])) === 0,
   );
   await check(
-    "company reads candidate rows of applicants",
-    async () => (await count(harborOwner, "select * from public.candidates")) === 3,
+    "company reads no row of the candidates table, only cards (audit I6)",
+    async () => (await count(harborOwner, "select * from public.candidates")) === 0,
   );
   await check(
     "company reads candidate_cards of applicants",
@@ -752,11 +752,25 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
     "insert into public.mock_interviews (candidate_id, role_family, questions) values ($1, 'sales_sdr', '[]'::jsonb)",
     [SEED.candidates.andres],
   );
-  await expectError(
-    "candidate cannot insert an already completed interview",
-    laura,
-    "insert into public.mock_interviews (candidate_id, role_family, status, questions) values ($1, 'sales_sdr', 'completed', '[]'::jsonb)",
-    [SEED.candidates.laura],
+  await check(
+    "candidate cannot pre-set status, report, score, questions or expiry on an interview (audit I5)",
+    async () =>
+      asUser(
+        db,
+        laura,
+        async (tx) => {
+          await tx.query(
+            "insert into public.mock_interviews (candidate_id, role_family, status, questions, report, overall_score, completed_at, expires_at, processing_attempts) values ($1, 'sales_sdr', 'completed', '[{\"id\":\"g1\"}]'::jsonb, '{\"overall\":20}'::jsonb, 20, now(), now() + interval '30 days', 5)",
+            [SEED.candidates.laura],
+          );
+          const res = await tx.query<{ n: number }>(
+            "select count(*)::int as n from public.mock_interviews where candidate_id = $1 and status = 'in_progress' and questions = '[]'::jsonb and report is null and overall_score is null and completed_at is null and processing_attempts = 0 and expires_at <= now() + interval '3 hours'",
+            [SEED.candidates.laura],
+          );
+          return Number(res.rows[0]?.n) === 1;
+        },
+        { commit: false },
+      ),
   );
   await check("candidate runs an interview but cannot close or read another's", async () =>
     asUser(
@@ -927,6 +941,195 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
       },
       { commit: false },
     ),
+  );
+
+  // Audit I, block 1: write guards --------------------------------------------------------
+  await expectError(
+    "candidate cannot insert their own candidates row; the server creates it (audit I1)",
+    laura,
+    "insert into public.candidates (id, first_name, last_name, data_consent_at, data_consent_version, english_verified_level, candidate_tags) values ($1, 'L', 'G', now(), 'v1', 'C2', array['vip'])",
+    [SEED.candidates.laura],
+    "row-level security",
+  );
+  await check(
+    "candidate cannot pre-set timing, questions, visibility or results on an attempt (audit I2)",
+    async () =>
+      asUser(
+        db,
+        laura,
+        async (tx) => {
+          await tx.query(
+            "insert into public.assessment_attempts (assessment_id, candidate_id, cooldown_waived, expires_at, question_ids, visible_to_companies, final_level, report, started_at, integrity) values ($1, $2, true, now() + interval '30 days', array['00000000-0000-4000-8000-00000000abcd']::uuid[], true, 'C2', '{\"x\":1}'::jsonb, now() - interval '1 day', '{\"tab_leaves\": 99}'::jsonb)",
+            [SEED.assessments.written, SEED.candidates.laura],
+          );
+          const res = await tx.query<{ n: number }>(
+            "select count(*)::int as n from public.assessment_attempts where candidate_id = $1 and status = 'in_progress' and cooldown_waived = false and question_ids = '{}' and visible_to_companies = false and final_level is null and report is null and started_at > now() - interval '1 minute' and expires_at <= now() + interval '1 day' and (integrity->>'tab_leaves') = '0'",
+            [SEED.candidates.laura],
+          );
+          return Number(res.rows[0]?.n) === 1;
+        },
+        { commit: false },
+      ),
+  );
+  await check(
+    "candidate answers only questions of their attempt, without server columns (audit I3)",
+    async () =>
+      asUser(
+        db,
+        laura,
+        async (tx) => {
+          const own = "11111111-0000-4000-8000-000000000003";
+          const other = "11111111-0000-4000-8000-000000000004";
+          let inAttempt = "";
+          let foreign = "";
+          await asService(
+            tx,
+            async () => {
+              const q = await tx.query<{ id: string }>(
+                "select id from public.assessment_questions where assessment_id = $1 and is_active order by id limit 2",
+                [SEED.assessments.written],
+              );
+              inAttempt = q.rows[0]!.id;
+              const f = await tx.query<{ id: string }>(
+                "select id from public.assessment_questions where assessment_id <> $1 order by id limit 1",
+                [SEED.assessments.written],
+              );
+              foreign = f.rows[0]!.id;
+              await tx.query(
+                "insert into public.assessment_attempts (id, assessment_id, candidate_id, question_ids) values ($1, $2, $3, $4::uuid[])",
+                [own, SEED.assessments.written, SEED.candidates.laura, [inAttempt, q.rows[1]!.id]],
+              );
+            },
+            laura,
+          );
+          // Server-owned columns are ignored on insert.
+          await tx.query(
+            "insert into public.assessment_answers (attempt_id, question_id, answer_text, transcript, ai_feedback, audio_duration_seconds) values ($1, $2, 'my answer', 'forged transcript', '{\"total\": 20}'::jsonb, 99)",
+            [own, inAttempt],
+          );
+          const clean = await tx.query<{ n: number }>(
+            "select count(*)::int as n from public.assessment_answers where attempt_id = $1 and answer_text = 'my answer' and transcript is null and ai_feedback is null and audio_duration_seconds is null",
+            [own],
+          );
+          // Each expected failure runs under a savepoint so the transaction stays usable.
+          const rejectedWith = async (sql: string, params: unknown[], fragment: string) => {
+            await tx.exec("savepoint guard_probe");
+            try {
+              await tx.query(sql, params);
+              await tx.exec("release savepoint guard_probe");
+              return false;
+            } catch (error) {
+              await tx.exec("rollback to savepoint guard_probe");
+              return (error as Error).message.includes(fragment);
+            }
+          };
+          // A question outside the attempt is rejected.
+          const foreignRejected = await rejectedWith(
+            "insert into public.assessment_answers (attempt_id, question_id, answer_text) values ($1, $2, 'x')",
+            [own, foreign],
+            "question_not_in_attempt",
+          );
+          // An audio path under another attempt is rejected; the own folder is accepted.
+          const pathRejected = await rejectedWith(
+            "update public.assessment_answers set audio_path = $2 where attempt_id = $1",
+            [own, `attempts/${other}/answer.webm`],
+            "audio_path_invalid",
+          );
+          await tx.query(
+            "update public.assessment_answers set audio_path = $2 where attempt_id = $1",
+            [own, `attempts/${own}/${inAttempt}.webm`],
+          );
+          // The transcript the server wrote survives a candidate update.
+          await asService(
+            tx,
+            () =>
+              tx.query(
+                "update public.assessment_answers set transcript = 'real' where attempt_id = $1",
+                [own],
+              ),
+            laura,
+          );
+          await tx.query(
+            "update public.assessment_answers set answer_text = 'edited', transcript = 'forged again' where attempt_id = $1",
+            [own],
+          );
+          const kept = await tx.query<{ n: number }>(
+            "select count(*)::int as n from public.assessment_answers where attempt_id = $1 and answer_text = 'edited' and transcript = 'real' and audio_path = $2",
+            [own, `attempts/${own}/${inAttempt}.webm`],
+          );
+          // The length ceiling matches the zod schema.
+          const tooLongRejected = await rejectedWith(
+            "update public.assessment_answers set answer_text = repeat('a', 6001) where attempt_id = $1",
+            [own],
+            "assessment_answers_text_length",
+          );
+          return (
+            Number(clean.rows[0]?.n) === 1 &&
+            foreignRejected &&
+            pathRejected &&
+            Number(kept.rows[0]?.n) === 1 &&
+            tooLongRejected
+          );
+        },
+        { commit: false },
+      ),
+  );
+  await expectError(
+    "candidate cannot point resume_path at another candidate's file (audit I4)",
+    laura,
+    "update public.candidate_contacts set resume_path = 'candidates/' || $2::text || '/resume.pdf' where candidate_id = $1",
+    [SEED.candidates.laura, SEED.candidates.andres],
+    "resume_path_invalid",
+  );
+  await expectOk(
+    "candidate sets resume_path under their own folder",
+    laura,
+    "update public.candidate_contacts set resume_path = 'candidates/' || $1::text || '/resume.pdf' where candidate_id = $1",
+    [SEED.candidates.laura],
+  );
+  await expectError(
+    "candidate cannot query another candidate's cooldown (audit I7)",
+    laura,
+    "select public.assessment_cooldown_ok($1, $2)",
+    [SEED.assessments.written, SEED.candidates.andres],
+    "forbidden",
+  );
+  await expectOk(
+    "candidate queries their own cooldown",
+    laura,
+    "select public.assessment_cooldown_ok($1, $2)",
+    [SEED.assessments.written, SEED.candidates.laura],
+  );
+  await expectError(
+    "company note must name the candidate of its application (audit I7)",
+    harborOwner,
+    "insert into public.notes (candidate_id, application_id, author_user_id, body, visibility) values ($1, $2, $3, 'note', 'company')",
+    [SEED.candidates.laura, SEED.applications.camilaSupport, SEED.owners.harbor],
+  );
+  await expectError(
+    "owner cannot insert an accepted member row directly (audit I7)",
+    brightlineOwner,
+    "insert into public.company_members (company_id, user_id, invited_email, invite_token, invited_by, accepted_at) values ($1, $2, 'x@y.com', 'tok2', $3, now())",
+    [SEED.companies.brightline, SEED.owners.northwind, SEED.owners.brightline],
+  );
+  await check(
+    "logos bucket no longer accepts SVG (audit I7)",
+    async () =>
+      (await count(
+        admin,
+        "select * from storage.buckets where id = 'logos' and 'image/svg+xml' = any(allowed_mime_types)",
+      )) === 0 &&
+      (await count(
+        admin,
+        "select * from storage.buckets where id = 'logos' and 'image/png' = any(allowed_mime_types)",
+      )) === 1,
+  );
+  await expectError(
+    "company website must be an http(s) URL (audit I7)",
+    harborOwner,
+    "update public.companies set website = 'javascript:alert(1)' where id = $1",
+    [SEED.companies.harbor],
+    "companies_website_scheme",
   );
 
   // Leads (contact_requests) ----------------------------------------------------------------
@@ -1462,7 +1665,7 @@ export async function runAccessMatrix(db: PGlite): Promise<MatrixSummary> {
               ),
             admin,
           );
-          const visibleAgain = await n("select 1 from public.candidates where id = $1");
+          const visibleAgain = await n("select 1 from public.candidate_cards where id = $1");
           return (
             hidden.every((count) => count === 0) &&
             applicationHidden === 0 &&

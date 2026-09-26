@@ -60,17 +60,20 @@ Auth details worth knowing:
   `inviteUserByEmail` respond successfully but send nothing; password recovery and email links
   do not work in the demo. Use the admin API or `psql` to change a password instead.
 - `signInWithPassword` verifies bcrypt hashes in `auth.users.encrypted_password`, so the seed
-  accounts work with their seeded password.
+  accounts work once `SEED_PASSWORD` has set their password (see below).
 - Storage does not enforce the `storage.objects` RLS policies: the app always goes through the
   service-role client for storage, and the signed-upload route authorizes paths before signing.
 
 ## Seed accounts
 
-Every account uses the password `DexeeSeed2026!`.
+The seed creates every account with a password nobody knows. Set `SEED_PASSWORD` (12 or more
+characters, kept in your local environment, never committed) before `npm run demo:db`, and every
+account below uses it. The password that earlier versions of this file printed is burned and
+rejected by `tests/unit/no-burned-secrets.test.ts`.
 
 | Role      | Email                                   | Notes                                                   |
 | --------- | --------------------------------------- | ------------------------------------------------------- |
-| Admin     | `admin@dexeegroup.com`                  | Dexee Admin                                             |
+| Admin     | `admin@example.com`                  | Dexee Admin                                             |
 | Company   | `owner@northwind-logistics.example.com` | Owner of Northwind Logistics (pending review)           |
 | Company   | `owner@harborhealth.example.com`        | Owner of Harbor Health Admin (verified)                 |
 | Company   | `owner@brightline.example.com`          | Owner of Brightline SaaS (verified)                     |

@@ -13,6 +13,7 @@ import { createClient } from "@/lib/supabase/server";
 import { leadSchema } from "@/lib/validation/lead";
 import { logAdminActivity } from "@/server/services/admin-activity";
 import { dispatchEvent } from "@/server/services/events";
+import { enqueueEmails } from "@/server/services/outbox";
 import { ERR, err, ok, type Result } from "@/server/services/result";
 
 /**
@@ -60,26 +61,19 @@ export async function createLead(input: unknown): Promise<Result<{ id: string }>
   }
 
   // From here the lead is safe. Nothing below can fail the submission.
-  const { error: outboxError } = await admin.from("email_outbox").upsert(
-    [
-      {
-        to: parsed.data.email,
-        template: "lead-acknowledgement",
-        locale,
-        payload: {
-          name: parsed.data.name,
-          company: parsed.data.company,
-          role: parsed.data.role_to_fill,
-          link: "/pricing",
-        },
-        dedupe_key: `lead:${data.id}`,
-      },
-    ],
-    { onConflict: "dedupe_key", ignoreDuplicates: true },
-  );
-  if (outboxError) {
-    logger.error({ err: outboxError.message, lead: data.id }, "lead_acknowledgement_queue_failed");
-  }
+  // Neutral acknowledgement (audit I16): nothing the sender typed is echoed back, so the form
+  // cannot be used to deliver arbitrary text from Dexee's domain. It leaves right after the
+  // response (Fase J, 0.6); a failure here never fails the submission.
+  const queued = await enqueueEmails([
+    {
+      to: parsed.data.email,
+      template: "lead-acknowledgement",
+      locale,
+      payload: { link: "/pricing" },
+      dedupe_key: `lead:${data.id}`,
+    },
+  ]);
+  if (!queued) logger.error({ lead: data.id }, "lead_acknowledgement_queue_failed");
   await dispatchEvent({ type: "lead_received", leadId: data.id });
 
   return ok({ id: data.id });
