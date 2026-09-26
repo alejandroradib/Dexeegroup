@@ -11,6 +11,7 @@ import path from "node:path";
 import { createClient } from "@supabase/supabase-js";
 
 import { loadBanks, resolveBanksDir, type BankQuestion } from "./lib/banks";
+import { assertLocalSupabaseUrl } from "./lib/local-only";
 
 import type { Database, Json } from "../src/types/database";
 
@@ -20,6 +21,8 @@ if (!url || !key) {
   console.error("NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required");
   process.exit(1);
 }
+// Fixed passwords and sample data never reach a hosted project (audit I20).
+assertLocalSupabaseUrl(url, "db:seed");
 const supabase = createClient<Database>(url, key, { auth: { persistSession: false } });
 
 async function upsertQuestions(assessmentId: string, questions: BankQuestion[]) {

@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { isAuthorizedCron } from "@/lib/cron";
 import { logger } from "@/lib/logger";
-import { processPendingAttempts } from "@/server/services/assessments";
+import { processPendingAttempts, recoverStuckAttempts } from "@/server/services/assessments";
 import { processPendingFit } from "@/server/services/fit";
 
 export const dynamic = "force-dynamic";
@@ -12,11 +12,13 @@ export async function GET(request: NextRequest) {
   if (!isAuthorizedCron(request))
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   try {
+    // Attempts a dead worker left behind go first, so this run can pick them up (audit I14).
+    const recovered = await recoverStuckAttempts();
     const result = await processPendingAttempts();
     // Fit analyses the apply-time hook did not finish. Same daily slot on the Hobby plan.
     const fit = await processPendingFit(10);
-    logger.info({ ...result, fit: fit.processed }, "cron_process_attempts");
-    return NextResponse.json({ ok: true, ...result, fit: fit.processed });
+    logger.info({ ...result, ...recovered, fit: fit.processed }, "cron_process_attempts");
+    return NextResponse.json({ ok: true, ...result, ...recovered, fit: fit.processed });
   } catch (error) {
     logger.error({ err: (error as Error).message }, "cron_process_attempts_failed");
     return NextResponse.json({ ok: false, error: (error as Error).message }, { status: 500 });

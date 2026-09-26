@@ -9,7 +9,8 @@ import { createClient } from "@/lib/supabase/server";
 const LIMITS = {
   logos: {
     maxBytes: 2 * 1024 * 1024,
-    types: ["image/png", "image/jpeg", "image/svg+xml", "image/webp"],
+    // SVG can carry script and is served from a public bucket; raster formats only (audit I7).
+    types: ["image/png", "image/jpeg", "image/webp"],
   },
   resumes: { maxBytes: 5 * 1024 * 1024, types: ["application/pdf"] },
   "assessment-audio": {

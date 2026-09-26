@@ -24,5 +24,5 @@ export const POSTGREST_RELEASE =
 export const JWT_SECRET = "dexee-local-demo-jwt-secret-do-not-use-in-production-0123456789";
 export const JWT_ISSUER = `${GATEWAY_URL}/auth/v1`;
 export const ACCESS_TOKEN_TTL_SECONDS = 3600;
-export const CRON_SECRET = "demo-cron-secret-12345678";
+export const CRON_SECRET = "demo-cron-4b7e2c9a1f6d8e3b5c0a7d9f2e4b6c8a1d3f5e7b";
 export const EMAIL_FROM = "Dexee <no-reply@dexeegroup.com>";

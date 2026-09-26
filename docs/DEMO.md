@@ -70,7 +70,7 @@ Every account uses the password `DexeeSeed2026!`.
 
 | Role      | Email                                   | Notes                                                   |
 | --------- | --------------------------------------- | ------------------------------------------------------- |
-| Admin     | `admin@dexeegroup.com`                  | Dexee Admin                                             |
+| Admin     | `admin@example.com`                  | Dexee Admin                                             |
 | Company   | `owner@northwind-logistics.example.com` | Owner of Northwind Logistics (pending review)           |
 | Company   | `owner@harborhealth.example.com`        | Owner of Harbor Health Admin (verified)                 |
 | Company   | `owner@brightline.example.com`          | Owner of Brightline SaaS (verified)                     |

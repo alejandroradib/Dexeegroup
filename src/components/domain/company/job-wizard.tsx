@@ -364,7 +364,12 @@ function RoleStep({
         toast({ title: t("aiDone"), variant: "success" });
       } else {
         toast({
-          title: result.error === "aiUnavailable" ? t("aiUnavailable") : t("aiFailed"),
+          title:
+            result.error === "aiUnavailable"
+              ? t("aiUnavailable")
+              : result.error === "rateLimited"
+                ? tc("errors.rateLimited")
+                : t("aiFailed"),
           variant: "danger",
         });
       }

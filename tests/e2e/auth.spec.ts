@@ -14,7 +14,7 @@ test.describe("authentication", () => {
   test("sign-in with seeded admin lands on the admin dashboard", async ({ page }) => {
     test.skip(!process.env.E2E_SEEDED, "requires a seeded Supabase project");
     await page.goto("/en/sign-in");
-    await page.getByLabel("Email").fill("admin@dexeegroup.com");
+    await page.getByLabel("Email").fill("admin@example.com");
     await page.getByLabel("Password").fill("DexeeSeed2026!");
     await page.getByRole("button", { name: "Sign in" }).click();
     await expect(page).toHaveURL(/\/en\/admin$/);

@@ -14,10 +14,10 @@ import {
   writingGradeSchema,
 } from "@/lib/ai/prompts/english-writing";
 import { transcribe, transcriptionConfigured } from "@/lib/ai/transcription";
-import type { Cefr } from "@/lib/assessments/cefr";
 import { scoreDisc, type Style } from "@/lib/assessments/disc";
 import { discReport } from "@/lib/assessments/disc-report";
-import { oralLevel, wordsPerMinute } from "@/lib/assessments/english-oral";
+import { normalizeOralGrade, oralLevel, wordsPerMinute } from "@/lib/assessments/english-oral";
+import { normalizeWritingGrade } from "@/lib/assessments/english-writing";
 import {
   combineWrittenLevels,
   DEFAULT_THRESHOLDS,
@@ -33,6 +33,7 @@ import { toPublicQuestion, type PublicQuestion } from "@/lib/assessments/public-
 import { scoreWorkstyle, type Factor } from "@/lib/assessments/workstyle";
 import { workstyleReport } from "@/lib/assessments/workstyle-report";
 import { logger } from "@/lib/logger";
+import { isAttemptAudioPath } from "@/lib/storage/upload-path";
 import { createAdminClient } from "@/lib/supabase/admin";
 import type { Database, Json } from "@/types/database";
 
@@ -246,11 +247,12 @@ export async function scoreWrittenAttempt(
             maxTokens: 800,
           },
         );
-        writing = { ...graded, level: graded.level as Cefr };
+        // Total and level come from the four criteria, not from the model's arithmetic (audit I11).
+        writing = normalizeWritingGrade(graded);
         writingStatus = "graded";
         await admin
           .from("assessment_answers")
-          .update({ ai_feedback: graded as unknown as Json })
+          .update({ ai_feedback: writing as unknown as Json })
           .eq("id", writingAnswer.id);
       } catch (error) {
         logger.error(
@@ -409,12 +411,19 @@ export async function processOralAttempt(attemptId: string): Promise<void> {
     .select("*")
     .eq("id", attemptId)
     .maybeSingle();
-  if (!attempt || !["submitted", "processing", "failed"].includes(attempt.status)) return;
+  if (!attempt || !["submitted", "failed"].includes(attempt.status)) return;
   if (attempt.processing_attempts >= MAX_PROCESSING_ATTEMPTS && attempt.status === "failed") return;
-  await admin
+  // Compare-and-set claim (audit I10): the row moves to processing only if it is still in the
+  // state we read, so a cron run and the post-submit hook can never grade the same attempt twice.
+  const { data: claimed } = await admin
     .from("assessment_attempts")
     .update({ status: "processing", processing_attempts: attempt.processing_attempts + 1 })
-    .eq("id", attemptId);
+    .eq("id", attemptId)
+    .in("status", ["submitted", "failed"])
+    .eq("processing_attempts", attempt.processing_attempts)
+    .select("id")
+    .maybeSingle();
+  if (!claimed) return;
 
   try {
     if (!transcriptionConfigured() || !aiConfigured()) throw new Error("ai_not_configured");
@@ -432,24 +441,23 @@ export async function processOralAttempt(attemptId: string): Promise<void> {
     }[] = [];
     for (const answer of answers ?? []) {
       if (!answer.audio_path) continue;
-      let transcript = answer.transcript ?? "";
-      let duration = Number(answer.audio_duration_seconds ?? 0);
-      if (!transcript) {
-        const { data: signed, error } = await admin.storage
-          .from("assessment-audio")
-          .createSignedUrl(answer.audio_path, 600);
-        if (error || !signed) throw new Error("audio_sign_failed");
-        const result = await transcribe(
-          signed.signedUrl,
-          answer.audio_path.split("/").pop() ?? "answer.webm",
-        );
-        transcript = result.text;
-        duration = duration || result.durationSeconds;
-        await admin
-          .from("assessment_answers")
-          .update({ transcript, audio_duration_seconds: duration })
-          .eq("id", answer.id);
-      }
+      // A stored path outside this attempt's folder is tampering, not a recording (audit I9).
+      if (!isAttemptAudioPath(attemptId, answer.audio_path)) throw new Error("audio_path_invalid");
+      // Always transcribe from the audio; a stored transcript is never reused (audit I10).
+      const { data: signed, error } = await admin.storage
+        .from("assessment-audio")
+        .createSignedUrl(answer.audio_path, 600);
+      if (error || !signed) throw new Error("audio_sign_failed");
+      const result = await transcribe(
+        signed.signedUrl,
+        answer.audio_path.split("/").pop() ?? "answer.webm",
+      );
+      const transcript = result.text;
+      const duration = result.durationSeconds;
+      await admin
+        .from("assessment_answers")
+        .update({ transcript, audio_duration_seconds: duration })
+        .eq("id", answer.id);
       const question = (questions ?? []).find((q) => q.id === answer.question_id);
       graded.push({
         question_id: answer.question_id,
@@ -471,16 +479,17 @@ export async function processOralAttempt(attemptId: string): Promise<void> {
         maxTokens: 1500,
       },
     );
-    const computed = oralLevel(
-      grade.answers.map((a) => ({
-        fluency: a.fluency,
-        coherence: a.coherence,
-        lexical_range: a.lexical_range,
-        grammatical_accuracy: a.grammatical_accuracy,
-        total: a.total,
-      })),
+    // Only the questions that were sent count, once each; totals, average and level are
+    // recomputed from the sub-scores (audit I11).
+    const normalized = normalizeOralGrade(
+      grade,
+      graded.map((g) => g.question_id),
     );
-    for (const a of grade.answers) {
+    if (normalized.dropped.length > 0) {
+      logger.warn({ attemptId, dropped: normalized.dropped }, "oral_grade_unknown_questions");
+    }
+    const computed = oralLevel(normalized.answers);
+    for (const a of normalized.answers) {
       await admin
         .from("assessment_answers")
         .update({ ai_feedback: a as unknown as Json })
@@ -494,7 +503,11 @@ export async function processOralAttempt(attemptId: string): Promise<void> {
         ai_level: computed.level,
         ai_result: {
           ...grade,
+          answers: normalized.answers,
+          average: computed.average,
+          level: computed.level,
           computed,
+          dropped_question_ids: normalized.dropped,
           wpm: graded.map((g) => ({ question_id: g.question_id, wpm: g.wpm })),
         } as unknown as Json,
       })
@@ -532,7 +545,7 @@ export async function processPendingAttempts(): Promise<{ expired: number; proce
   const { data: pending } = await admin
     .from("assessment_attempts")
     .select("id, assessments!inner (type)")
-    .in("status", ["submitted", "processing"])
+    .eq("status", "submitted")
     .eq("assessments.type", "english_oral")
     .limit(20);
   let processed = 0;
@@ -541,6 +554,86 @@ export async function processPendingAttempts(): Promise<{ expired: number; proce
     processed += 1;
   }
   return { expired: expired?.length ?? 0, processed };
+}
+
+const STUCK_PROCESSING_MINUTES = 15;
+const STUCK_SUBMITTED_MINUTES = 10;
+
+/**
+ * Cron: attempts that never finished scoring (audit I14). Oral attempts left in `processing`
+ * by a worker that died go back to `submitted`, or to `failed` once the retries are spent, so
+ * the claim in processOralAttempt can pick them up again. Written, work-style and DISC
+ * attempts left in `submitted` because the request died after the status change are scored
+ * again from their saved answers.
+ */
+export async function recoverStuckAttempts(): Promise<{ requeued: number; rescored: number }> {
+  const admin = createAdminClient();
+  const processingCutoff = new Date(Date.now() - STUCK_PROCESSING_MINUTES * 60_000).toISOString();
+  const { data: stale } = await admin
+    .from("assessment_attempts")
+    .select("id, processing_attempts")
+    .eq("status", "processing")
+    .lt("updated_at", processingCutoff)
+    .limit(50);
+  let requeued = 0;
+  for (const row of stale ?? []) {
+    const next = row.processing_attempts >= MAX_PROCESSING_ATTEMPTS ? "failed" : "submitted";
+    const { data } = await admin
+      .from("assessment_attempts")
+      .update({ status: next })
+      .eq("id", row.id)
+      .eq("status", "processing")
+      .select("id")
+      .maybeSingle();
+    if (data) requeued += 1;
+  }
+
+  const submittedCutoff = new Date(Date.now() - STUCK_SUBMITTED_MINUTES * 60_000).toISOString();
+  const { data: stuck } = await admin
+    .from("assessment_attempts")
+    .select("*, assessments!inner (*)")
+    .eq("status", "submitted")
+    .neq("assessments.type", "english_oral")
+    .lt("submitted_at", submittedCutoff)
+    .lt("processing_attempts", MAX_PROCESSING_ATTEMPTS)
+    .limit(20);
+  let rescored = 0;
+  for (const row of stuck ?? []) {
+    const assessment = row.assessments;
+    if (!assessment) continue;
+    // Claim by bumping the counter; a concurrent scorer loses the race and skips.
+    const { data: claimed } = await admin
+      .from("assessment_attempts")
+      .update({ processing_attempts: row.processing_attempts + 1 })
+      .eq("id", row.id)
+      .eq("status", "submitted")
+      .eq("processing_attempts", row.processing_attempts)
+      .select("*")
+      .maybeSingle();
+    if (!claimed) continue;
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("locale")
+      .eq("id", row.candidate_id)
+      .maybeSingle();
+    const locale = profile?.locale === "es" ? "es" : "en";
+    try {
+      if (assessment.type === "english_written") {
+        await scoreWrittenAttempt(claimed, assessment, locale);
+      } else if (assessment.type === "psychometric") {
+        await scorePsychometricAttempt(claimed, assessment);
+      } else if (assessment.type === "disc") {
+        await scoreDiscAttempt(claimed, assessment);
+      }
+      rescored += 1;
+    } catch (error) {
+      logger.error(
+        { err: (error as Error).message, attemptId: row.id },
+        "stuck_attempt_rescore_failed",
+      );
+    }
+  }
+  return { requeued, rescored };
 }
 
 /** Retention: delete assessment audio 12 months after validation (SPEC 15). */

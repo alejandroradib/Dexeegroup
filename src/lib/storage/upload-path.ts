@@ -31,3 +31,19 @@ export function validateUploadPath(bucket: UploadBucket, path: string): UploadPa
   if (!attemptId || !UUID.test(attemptId) || !file || !FILE.test(file)) return { ok: false };
   return { ok: true, ownerId: attemptId };
 }
+
+/**
+ * True when `path` is a recording stored under this attempt's own folder, with no dot segments
+ * and a plain file name. Every server path that signs, reads or stores an audio path goes
+ * through this check, so a stored value can never name another attempt's file (audit I9).
+ */
+export function isAttemptAudioPath(attemptId: string, path: string): boolean {
+  const shape = validateUploadPath("assessment-audio", path);
+  return shape.ok && shape.ownerId === attemptId;
+}
+
+/** True when `path` is the resume stored under this candidate's own folder (audit I8). */
+export function isCandidateResumePath(candidateId: string, path: string): boolean {
+  const shape = validateUploadPath("resumes", path);
+  return shape.ok && shape.ownerId === candidateId;
+}

@@ -4,6 +4,9 @@ import OpenAI from "openai";
 
 import { serverEnv } from "@/lib/env";
 
+const TRANSCRIPTION_TIMEOUT_MS = 120_000;
+const DOWNLOAD_TIMEOUT_MS = 60_000;
+
 export type Transcription = { text: string; durationSeconds: number };
 
 export interface TranscriptionProvider {
@@ -14,7 +17,8 @@ export interface TranscriptionProvider {
 class WhisperProvider implements TranscriptionProvider {
   private client: OpenAI;
   constructor(apiKey: string) {
-    this.client = new OpenAI({ apiKey });
+    // Explicit ceilings (audit I14); a 3 MB upload transcribes in well under two minutes.
+    this.client = new OpenAI({ apiKey, timeout: TRANSCRIPTION_TIMEOUT_MS, maxRetries: 2 });
   }
   async transcribe(file: Blob, filename: string): Promise<Transcription> {
     const upload = new File([file], filename, { type: file.type || "audio/webm" });
@@ -48,7 +52,7 @@ export async function transcribe(
   fileUrl: string,
   filename = "answer.webm",
 ): Promise<Transcription> {
-  const response = await fetch(fileUrl);
+  const response = await fetch(fileUrl, { signal: AbortSignal.timeout(DOWNLOAD_TIMEOUT_MS) });
   if (!response.ok) throw new Error(`audio_download_failed_${response.status}`);
   const blob = await response.blob();
   return getTranscriptionProvider().transcribe(blob, filename);

@@ -123,7 +123,7 @@ Demo stack is ready.
 Next, in another terminal:
   cp .env.demo .env.local && npm run dev
 
-Seed accounts (password "DexeeSeed2026!"): admin@dexeegroup.com, owner@northwind-logistics.example.com,
+Seed accounts (password "DexeeSeed2026!"): admin@example.com, owner@northwind-logistics.example.com,
 laura.gomez@example.com. See docs/DEMO.md for the full list. Press Ctrl+C to stop PostgREST and the gateway.
 `);
 
