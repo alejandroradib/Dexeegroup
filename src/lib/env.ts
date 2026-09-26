@@ -42,6 +42,9 @@ export const serverEnvSchema = z.object({
   CRON_SECRET: cronSecretSchema,
   UPSTASH_REDIS_REST_URL: optionalString,
   UPSTASH_REDIS_REST_TOKEN: optionalString,
+  /** Names the Upstash integration of the Vercel Marketplace creates; read when the UPSTASH_* pair is absent. */
+  KV_REST_API_URL: optionalString,
+  KV_REST_API_TOKEN: optionalString,
   SENTRY_DSN: optionalString,
   /** Booking link. Optional: when unset the "book a call" buttons are not rendered. */
   CALENDLY_URL: optionalString,
@@ -50,6 +53,25 @@ export const serverEnvSchema = z.object({
 
 export type PublicEnv = z.infer<typeof publicEnvSchema>;
 export type ServerEnv = z.infer<typeof serverEnvSchema>;
+
+/**
+ * REST credentials of the shared rate-limit store. A manual setup provides UPSTASH_REDIS_REST_*;
+ * the Vercel Marketplace integration provides KV_REST_API_*. A pair is used only when complete.
+ */
+export function redisRestCredentials(
+  env: Pick<
+    ServerEnv,
+    "UPSTASH_REDIS_REST_URL" | "UPSTASH_REDIS_REST_TOKEN" | "KV_REST_API_URL" | "KV_REST_API_TOKEN"
+  >,
+): { url: string; token: string } | undefined {
+  if (env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) {
+    return { url: env.UPSTASH_REDIS_REST_URL, token: env.UPSTASH_REDIS_REST_TOKEN };
+  }
+  if (env.KV_REST_API_URL && env.KV_REST_API_TOKEN) {
+    return { url: env.KV_REST_API_URL, token: env.KV_REST_API_TOKEN };
+  }
+  return undefined;
+}
 
 function formatIssues(scope: string, error: z.ZodError): string {
   const lines = error.issues.map((issue) => `  - ${issue.path.join(".")}: ${issue.message}`);

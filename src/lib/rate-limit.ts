@@ -5,7 +5,7 @@ import { createHash } from "node:crypto";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
-import { serverEnv } from "@/lib/env";
+import { redisRestCredentials, serverEnv } from "@/lib/env";
 import { logger } from "@/lib/logger";
 import {
   createRateLimit,
@@ -22,12 +22,12 @@ let redis: Redis | undefined;
 
 /** One Upstash limiter per window (audit I12): the old single instance applied the first window it saw to every scope. */
 function upstashLimiter(window: RateWindow): SharedLimiter | undefined {
-  const env = serverEnv();
-  if (!env.UPSTASH_REDIS_REST_URL || !env.UPSTASH_REDIS_REST_TOKEN) return undefined;
+  const credentials = redisRestCredentials(serverEnv());
+  if (!credentials) return undefined;
   const key = windowKey(window);
   let limiter = limiters.get(key);
   if (!limiter) {
-    redis ??= new Redis({ url: env.UPSTASH_REDIS_REST_URL, token: env.UPSTASH_REDIS_REST_TOKEN });
+    redis ??= new Redis(credentials);
     limiter = new Ratelimit({
       redis,
       limiter: Ratelimit.slidingWindow(window.limit, `${window.windowSeconds} s`),

@@ -78,7 +78,7 @@ Requests appear in `/admin/candidates/<id>` and notify admins. For deletion: exp
 ## Health and monitoring
 
 - `GET /api/health` checks database connectivity and reports `email: configured | unconfigured` (audit G3). An unconfigured provider means every outbox row is parked as `skipped` until a key is set; nothing is silently lost, and nothing is sent either. A failure answers `status: degraded` with no detail; the reason is in the Vercel log under `health_check_failed` (audit I19).
-- Rate limiting needs Upstash in production. Without `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`, every limited action (sign-in, sign-up, password reset, leads, contact form, interview messages, AI drafting, fit refresh) is denied and the log shows `rate_limit_store_missing_in_production` (audit I12). Outside production the limiter falls back to process memory.
+- Rate limiting needs Upstash in production. Without `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` (or `KV_REST_API_URL` and `KV_REST_API_TOKEN`, the names the Vercel Marketplace integration creates), every limited action (sign-in, sign-up, password reset, leads, contact form, interview messages, AI drafting, fit refresh) is denied and the log shows `rate_limit_store_missing_in_production` (audit I12). Outside production the limiter falls back to process memory.
 - The `process-attempts` cron first recovers attempts a dead worker left behind (`requeued`, `rescored` in its log line), then grades pending oral attempts, then fills in missing fit analyses.
 - The admin dashboard shows an email delivery tile: pending rows over 15 minutes, failed in 24 hours, parked for lack of provider. Red means look.
 - Logs are structured JSON (pino) in Vercel logs. Set `SENTRY_DSN` when the Sentry project exists.
@@ -92,7 +92,7 @@ CI runs gitleaks on every pull request with a read-only token and actions pinned
 Dos variables cambian de exigencia y, si no se ajustan antes del despliegue, producen una caída:
 
 1. `CRON_SECRET` en Vercel debe tener 32 caracteres o más y no ser un valor de ejemplo. Si el actual es más corto, cada petición al servidor falla al validar el entorno. Genere uno con `openssl rand -hex 32`, cárguelo en Production y Preview y redespliegue.
-2. `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` deben existir en Production. Sin ellos el limitador de tasa deniega registro, inicio de sesión, recuperación de contraseña, leads, contacto, mensajes de entrevista y borradores con IA. Cree una base Redis gratuita en Upstash, copie las dos credenciales REST y redespliegue.
+2. `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` deben existir en Production (o `KV_REST_API_URL` y `KV_REST_API_TOKEN`, que crea la integración de Upstash del Marketplace de Vercel en la pestaña Storage). Sin ellos el limitador de tasa deniega registro, inicio de sesión, recuperación de contraseña, leads, contacto, mensajes de entrevista y borradores con IA. Cree una base Redis gratuita en Upstash, copie las dos credenciales REST y redespliegue.
 
 Consultas de verificación previa a la migración `20260924000001_audit_i_write_guards.sql` (solo lectura, en el editor SQL del panel):
 

@@ -2,7 +2,7 @@ import { randomBytes } from "node:crypto";
 
 import { describe, expect, it } from "vitest";
 
-import { parsePublicEnv, parseServerEnv } from "@/lib/env";
+import { parsePublicEnv, parseServerEnv, redisRestCredentials } from "@/lib/env";
 
 // Generated per run so no secret-shaped literal lives in the repository (gitleaks).
 const RANDOM_SECRET = randomBytes(20).toString("hex");
@@ -51,5 +51,19 @@ describe("env validation", () => {
         } as unknown as NodeJS.ProcessEnv),
       ).toThrow(/CRON_SECRET/);
     }
+  });
+
+  it("reads the rate-limit store from UPSTASH_* first and from the Marketplace KV_* names otherwise", () => {
+    const kv = { KV_REST_API_URL: "https://kv.upstash.io", KV_REST_API_TOKEN: "kv-token" };
+    expect(redisRestCredentials(kv)).toEqual({ url: "https://kv.upstash.io", token: "kv-token" });
+    expect(
+      redisRestCredentials({
+        ...kv,
+        UPSTASH_REDIS_REST_URL: "https://manual.upstash.io",
+        UPSTASH_REDIS_REST_TOKEN: "manual-token",
+      }),
+    ).toEqual({ url: "https://manual.upstash.io", token: "manual-token" });
+    expect(redisRestCredentials({ KV_REST_API_URL: "https://kv.upstash.io" })).toBeUndefined();
+    expect(redisRestCredentials({})).toBeUndefined();
   });
 });
